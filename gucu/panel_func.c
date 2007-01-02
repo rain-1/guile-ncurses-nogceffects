@@ -3,9 +3,12 @@
 #include <curses.h>
 #include <panel.h>
 #include <config.h>
+
 #include "panel_func.h"
 #include "type.h"
 #include "panel_type.h"
+#include "compat.h"
+
 #define _GNU_SOURCE
 #define cstring_t cchar_t
 

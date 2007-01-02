@@ -1,8 +1,10 @@
 #include <libguile.h>
 #include <curses.h>
 #include <config.h>
+
 #include "slk_func.h"
 #include "type.h"
+#include "compat.h"
 
 
 SCM

@@ -78,7 +78,7 @@
 	    is-linetouched?
 	    is-wintouched?
 	    isendwin?
-	    key-defined
+	    key-defined  ; FIXME: depends on curses version
 	    key-f
 	    keyname
 	    keypad!
@@ -279,7 +279,7 @@
 	    KEY_UNDO
 	    KEY_MOUSE
 	    KEY_RESIZE
-	    KEY_EVENT
+	    ;; KEY_EVENT       ; FIXME: Depends on curses version
 	    BUTTON1_PRESSED
 	    BUTTON1_RELEASED
 	    BUTTON1_CLICKED

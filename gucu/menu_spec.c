@@ -3,9 +3,11 @@
 #include <libguile.h>
 #include <config.h>
 #include <menu.h>
+
 #include "type.h"
 #include "menu_type.h"
 #include "menu_spec.h"
+#include "compat.h"
 
 
 // Return the minimum size of a window necessary to contain the MENU

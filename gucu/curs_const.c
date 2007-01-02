@@ -1,9 +1,11 @@
-
 #include <curses.h>
 #include <libguile.h>
 #include <wchar.h>
+
 #include "curs_const.h"
 #include "type.h"
+#include "compat.h"
+
 #define _GNU_SOURCE
 SCM gucu_EOF;
 SCM gucu_ERR;
@@ -130,7 +132,9 @@ SCM gucu_KEY_SUSPEND;
 SCM gucu_KEY_UNDO;
 SCM gucu_KEY_MOUSE;
 SCM gucu_KEY_RESIZE;
+#ifdef HAS_KEY_EVENT
 SCM gucu_KEY_EVENT;
+#endif
 SCM gucu_BUTTON1_PRESSED;
 SCM gucu_BUTTON1_RELEASED;
 SCM gucu_BUTTON1_CLICKED;
@@ -285,7 +289,9 @@ gucu_init_constant ()
 	gucu_KEY_UNDO = scm_permanent_object (scm_c_define ("KEY_UNDO", scm_from_int (KEY_UNDO)));
 	gucu_KEY_MOUSE = scm_permanent_object (scm_c_define ("KEY_MOUSE", scm_from_int (KEY_MOUSE)));
 	gucu_KEY_RESIZE = scm_permanent_object (scm_c_define ("KEY_RESIZE", scm_from_int (KEY_RESIZE)));
+#ifdef HAS_KEY_EVENT
 	gucu_KEY_EVENT = scm_permanent_object (scm_c_define ("KEY_EVENT", scm_from_int (KEY_EVENT)));
+#endif
 	gucu_BUTTON1_PRESSED = scm_permanent_object (scm_c_define ("BUTTON1_PRESSED", scm_from_uint (BUTTON1_PRESSED)));
 	gucu_BUTTON1_RELEASED = scm_permanent_object (scm_c_define ("BUTTON1_RELEASED", scm_from_uint (BUTTON1_RELEASED)));
 	gucu_BUTTON1_CLICKED = scm_permanent_object (scm_c_define ("BUTTON1_CLICKED", scm_from_uint (BUTTON1_CLICKED)));

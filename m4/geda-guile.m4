@@ -20,7 +20,7 @@ dnl Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 AC_DEFUN([AX_CHECK_GUILE],
 [
-  AC_PREREQ([2.60])dnl
+  # AC_PREREQ([2.60])dnl
 
   # Argument is the minimum guile version.  For example
   # AX_CHECK_GUILE([1.8.0]) makes sure we have at least version 1.8.0

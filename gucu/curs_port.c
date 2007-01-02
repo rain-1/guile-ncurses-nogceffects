@@ -9,6 +9,7 @@
 #include <unistd.h>
 #include "type.h"
 #include "curs_port.h"
+#include "compat.h"
 
 #ifdef HAVE_FOPENCOOKIE
 

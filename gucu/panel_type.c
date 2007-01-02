@@ -10,6 +10,7 @@
 
 #include "type.h"
 #include "panel_type.h"
+#include "compat.h"
 
 scm_t_bits panel_tag;
 
@@ -198,7 +199,12 @@ gucu_new_panel (SCM win)
       scm_misc_error ("new-panel", "Bad window", SCM_BOOL_F);
     }
   gp->window = win;
+
+#ifdef HAVE_SCM_GUARDIAN_GREEDY_P
+  gp->win_guard = scm_make_guardian (SCM_BOOL_F);
+#else
   gp->win_guard = scm_make_guardian ();
+#endif
  
   scm_call_1 (gp->win_guard, win);
      

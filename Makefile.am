@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-ACLOCAL_AMFLAGS = -I m4 --install
+ACLOCAL_AMFLAGS = -I m4
 
 # Distcheck flags for GNU/Linux
 # DISTCHECK_CONFIGURE_FLAGS = 
@@ -9,8 +9,10 @@ ACLOCAL_AMFLAGS = -I m4 --install
 --with-cygwin-curses-acs-bug-fix
 ### FLAGS ###
 
+# -Wextra depends on the gcc version
+
 if WARN
-WARN_FLAGS = -std=c99 -pedantic -Werror -Wall -Wextra			\
+WARN_FLAGS = -std=c99 -pedantic -Wall                                   \
 -Wstrict-prototypes -Wmissing-prototypes -Wpointer-arith -Wreturn-type	\
 -Wcast-qual -Wswitch -Wshadow -Wcast-align -Wwrite-strings		\
 -Wchar-subscripts -Winline -Wnested-externs -Wredundant-decls -Wunused	\
@@ -20,11 +22,9 @@ WARN_FLAGS =
 endif
 
 gucu_libguile_gucu_la_CPPFLAGS = \
-	$(WARN_FLAGS) \
-	$(GUILE_CFLAGS)
+	$(WARN_FLAGS) 
 
-tools_testbed_CPPFLAGS = \
-	$(GUILE_CFLAGS)
+tools_testbed_CPPFLAGS = 
 
 if WIDE
 gucu_libguile_gucu_la_CPPFLAGS += \
@@ -65,11 +65,6 @@ dist_pkgguilesite_DATA = \
 	gucu/eti.scm \
 	gucu/slk.scm \
 	gucu/lib.scm
-
-if WIDE
-dist_pkgguilesite_DATA += \
-	gucu/curses-wide.scm
-endif
 
 ### SOURCES ###
 
@@ -116,34 +111,20 @@ gucu_libguile_gucu_la_SOURCES = \
  	gucu/menu_type.h \
  	gucu/menu_spec.c \
  	gucu/menu_spec.h \
- 	gucu/menu_main.c 
-
-if WIDE
-# gucu_libguile_gucu_la_SOURCES += \
-# 	gucu/cursw_const.c \
-# 	gucu/cursw_const.h \
-# 	gucu/cursw_func.c \
-# 	gucu/cursw_func.h \
-# 	gucu/typew.c \
-# 	gucu/typew.h \
-# 	gucu/cursw_spec.c \
-# 	gucu/cursw_spec.h \
-# 	gucu/cursw_main.c
-endif
+ 	gucu/menu_main.c \
+        gucu/compat.c \
+        gucu/compat.h
 
 tools_gucushell_SOURCES = \
 	tools/shell.c
 
 ### LINKER ###
 
-gucu_libguile_gucu_la_LIBADD = \
-	@LIBMENU@ @LIBPANEL@ @LIBFORM@ @LIBNCURSES@ $(GUILE_LIBS)
+gucu_libguile_gucu_la_LIBADD = 
 
-tools_gucushell_LDADD = \
-	@LIBNCURSES@ -lutil -ltinfo $(GUILE_LIBS)
+tools_gucushell_LDADD = -lutil
 
-tools_testbed_LDADD = \
-	$(GUILE_LIBS) @LIBNCURSES@ 
+tools_testbed_LDADD =
 
 ### OTHER RULES ###
 

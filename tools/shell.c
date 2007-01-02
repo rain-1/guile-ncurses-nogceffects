@@ -5,7 +5,6 @@
 /* libc and libutil */
 #include <ctype.h>
 #include <locale.h>
-#include <pty.h>
 #include <signal.h>
 #include <stdio.h>
 #include <string.h>
@@ -14,9 +13,21 @@
 #include <sys/ioctl.h>
 #include <sys/types.h>
 
+#ifdef HAVE_UTIL_H
+#include <util.h>      /* openbsd: openpty; */
+#endif
+
+#ifdef HAVE_PTY_H
+#include <pty.h>       /* cygwin, fedora: openpty */
+#endif
+
+#ifdef HAVE_PROCESS_H
+#include <process.h>   /* cygwin: execlp; */
+#endif
+
 /* curses and guile */
-#include <curses.h>
-#include <libguile.h>
+#include <curses.h>    /* all: newterm; */
+#include <libguile.h>  /* all: scm_shell; */
 
 int open_terminal (char *, int, int);
 int is_unix98_pty (const char *);
@@ -206,9 +217,7 @@ open_terminal (char *pseudo_terminal_slave_name,
 }
 
 static void
-inner_main (void *data    __attribute__ ((unused)), 
-	    int  argc, 
-	    char **argv)
+inner_main (void *data, int argc, char **argv)
 {
   int master, slave;
   pid_t pid;

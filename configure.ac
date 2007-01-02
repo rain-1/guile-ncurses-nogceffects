@@ -2,7 +2,7 @@
 
 ##################
 # Package info
-AC_PREREQ(2.61)
+AC_PREREQ(2.59)
 AC_INIT([gucu],[0.3],[spk121@yahoo.com])
 AC_CONFIG_AUX_DIR([build_aux])
 AM_INIT_AUTOMAKE([gnu std-options -Wall])
@@ -24,7 +24,11 @@ AC_PROG_CC
 
 AC_CANONICAL_HOST
 AC_PROG_INSTALL
-AC_PROG_MKDIR_P
+
+# AC_PROG_MKDIR_P is the current version of the macro
+# AM_PROG_MKDIR_P is deprecated
+AM_PROG_MKDIR_P
+
 #NCURSESW_PROGS
 
 ##################
@@ -42,13 +46,10 @@ AC_PROG_LIBTOOL
 # Initial guess of platform specific options
 case $host in
 *-*-cygwin)
-	[with_ncursesw=no]
 	[enable_acs_map_fix=yes] ;;
 *-*-linux*)
-	[with_ncursesw=yes]
 	[enable_acs_map_fix=no] ;;
 *)
-	[with_ncursesw=yes]
 	[enable_acs_map_fix=no] ;;
 esac
 
@@ -56,139 +57,37 @@ esac
 ##################
 # Check for libraries
 
-AX_CHECK_GUILE([1.8.0])
+AC_CHECK_LIB([guile],	
+             [scm_version], ,
+             # if guile is not ok
+             [AC_MSG_ERROR([libguile not found])])
 
-AC_ARG_ENABLE([ndebug],
-              [AS_HELP_STRING([--enable-ndebug],
-                              [use the debug version of the curses libraries])],
+
+AC_ARG_ENABLE([ncursesw],
+              [AS_HELP_STRING([--with-ncursesw],
+                              [use the wide version of the curses libraries])],
               # if option is selected
-              [libncurses="ncurses_g"
-	       libform="form_g"
-	       libpanel="panel_g"
-	       libmenu="menu_g"
-	       libncursesw="ncursesw_g"
-	       libformw="formw_g"
-	       libpanelw="panelw_g"
-	       libmenuw="menuw_g"],
+              [libncurses="ncursesw"
+	       libform="formw"
+	       libpanel="panelw"
+	       libmenu="menuw"],
               # if option is not selected
               [libncurses="ncurses"
 	       libform="form"
 	       libpanel="panel"
-	       libmenu="menu"
-	       libncursesw="ncursesw"
-	       libformw="formw"
-	       libpanelw="panelw"
-	       libmenuw="menuw"])
+	       libmenu="menu"])
 	     
-AC_ARG_WITH([ncursesw],
-            [AS_HELP_STRING([--with-ncursesw],
-                            [enable support for wide curses])])
-LIBNCURSES=
-AS_IF(
-      # if
-      [test "$with_ncursesw" = yes],
-      # then
-      [AC_CHECK_LIB([$libncursesw],	
-                    [initscr],
-		    # if ncursesw is ok
-		    [AC_SUBST([LIBNCURSES], ["-l$libncursesw"])
-		     AC_DEFINE([HAVE_LIBNCURSESW], 
-                               [1],
-                               [Define if you have libncursesw])
-                    ],
-		    # if ncursesw is not ok
-                    [AC_MSG_WARN([Wide NCurses not found.  Trying standard curses.])
-		     with_ncursesw=no])])
-
-AS_IF(
-      # if 
-      [test "$with_ncursesw" = no],
-      # then
-      [AC_CHECK_LIB([$libncurses],	
-                    [initscr],
-		    # if ncurses is ok
-		    [AC_SUBST([LIBNCURSES], ["-l$libncurses"])],
-		    # if ncurses is not ok
-                    [AC_MSG_ERROR([ncurses not found])])])
-
-# When WIDE is defined, sub-makefiles should try to build the wide
-# curses library
+# A conditional to use in the makefiles
 AM_CONDITIONAL([WIDE], [test "$with_ncursesw" = yes])
 
 # The menu, panel, and form libraries should either use the wide or
 # the narrow forms to match the version of the ncurses library being
 # used.
-LIBMENU=
-AS_IF(
-      # if
-      [test "$with_ncursesw" = yes],
-      # then
-      [AC_CHECK_LIB([$libmenuw],	
-                    [new_menu],
-		    # if menuw is ok
-		    [AC_SUBST([LIBMENU], ["-l$libmenuw"])],
-		    # if menuw is not ok
-                    [AC_MSG_ERROR([The wide ncurses menu library was not found.])],
-                    dnl this test requires ncurses
-                    [-l$libncursesw])],
-      # else
-      [AC_CHECK_LIB([$libmenu],	
-                    [new_menu],
-		    # if menuw is ok
-		    [AC_SUBST([LIBMENU], ["-l$libmenu"])],
-		    # if menuw is not ok
-                    [AC_MSG_ERROR([The ncurses menu library was not found.])],
-                    dnl this test requires libncurses
-                    [-l$libncurses])])
-
-
-LIBFORM=
-AS_IF(
-      # if
-      [test "$with_ncursesw" = yes],
-      # then
-      [AC_CHECK_LIB([$libformw],	
-                    [new_form],
-		    # if formw is ok
-		    [AC_SUBST([LIBFORM], ["-l$libformw"])],
-		    # if formw is not ok
-                    [AC_MSG_ERROR([The wide ncurses form library was not found.])],
-                    dnl this test requires ncurses
-                    [-l$libncursesw -ldl])],
-
-      # else
-      [AC_CHECK_LIB([$libform],	
-                    [new_form],
-		    # if ncursesw is ok
-		    [AC_SUBST([LIBFORM], ["-l$libform"])],
-		    # if ncursesw is not ok
-                    [AC_MSG_ERROR([The ncurses form library was not found.])],
-                    dnl this test requires libncurses
-                    [-l$libncurses -ldl])])
-
-LIBPANEL=
-AS_IF(
-      # if
-      [test "$with_ncursesw" = yes],
-      # then
-      [AC_CHECK_LIB([$libpanelw],	
-                    [new_panel],
-		    # if ncursesw is ok
-		    [AC_SUBST([LIBPANEL], ["-l$libpanelw"])],
-		    # if ncursesw is not ok
-                    [AC_MSG_ERROR([The wide ncurses panel library was not found.])],
-                    dnl this test requires libncursesw
-                    [-l$libncursesw])],
-      # else
-      [AC_CHECK_LIB([$libpanel],	
-                    [new_panel],
-		    # if ncursesw is ok
-		    [AC_SUBST([LIBPANEL], ["-l$libpanel"])],
-		    # if ncursesw is not ok
-                    [AC_MSG_ERROR([The ncurses panel library was not found.])],
-                    dnl this test requires libncurses
-                    [-l$libncurses])])
-
+AC_CHECK_LIB([$libncurses], [initscr], ,[AC_MSG_ERROR([ncurses not found])])
+AC_CHECK_LIB([$libmenu], [new_menu], , ,[-l$libncurses])
+AC_CHECK_LIB([$libpanel], [new_panel], , ,[-l$libncurses])
+AC_CHECK_LIB([$libform], [new_form], , ,[-l$libncurses])
+AC_CHECK_LIB([unistring], [u32_strconv_from_locale])
 
 #
 # In Cygwin NCurses v5.5.20061104, there is a bug in the acs_map table
@@ -218,17 +117,8 @@ AM_CONDITIONAL([GUCUKEY], [test "$enable_gucukey" = yes])
 
 ##################
 # Check for header files
-AC_CHECK_HEADERS([wchar.h])
-AC_CHECK_HEADERS([curses.h], , 
-                 [AC_MSG_ERROR([<curses.h> was not found])])
-AC_CHECK_HEADERS([menu.h], , 
-                 [AC_MSG_ERROR([<menu.h> was not found])])
-AC_CHECK_HEADERS([form.h], , 
-                 [AC_MSG_ERROR([<form.h> was not found])])
-AC_CHECK_HEADERS([panel.h], , 
-                 [AC_MSG_ERROR([<panel.h> was not found])])
-AC_CHECK_HEADERS([libguile.h], , 
-                 [AC_MSG_ERROR([<libguile.h> was not found])])
+AC_CHECK_HEADERS([wchar.h curses.h menu.h form.h panel.h process.h pty.h])
+AC_CHECK_HEADERS([util.h])
 
 ##################
 # Check for types, structures, compiler characteristics
@@ -242,16 +132,32 @@ AC_CHECK_SIZEOF([wint_t], ,[#include <wchar.h>])
 # AC_PROG_CC_C99
 
 ##################
-# Check for library functions
-AC_CHECK_FUNC([cfmakeraw],
-              [AC_DEFINE([HAVE_CFMAKERAW], 
-                         [1],
-                         [Define to 1 if you have cfmakeraw])])
+# Check for C library functions
+AC_CHECK_FUNCS([cfmakeraw fopencookie])
 
-AC_CHECK_FUNC([fopencookie],
-              [AC_DEFINE([HAVE_FOPENCOOKIE], 
-                         [1],
-                         [Define to 1 if you have fopencookie])])
+# Check for ncurses library functions
+AC_CHECK_FUNCS([key_defined])
+
+# Check for Guile library funcs
+AC_CHECK_FUNCS([scm_is_bool scm_from_bool scm_to_bool scm_is_true])
+AC_CHECK_FUNCS([scm_is_integer scm_from_int scm_to_int])
+AC_CHECK_FUNCS([scm_is_number])
+AC_CHECK_FUNCS([scm_from_short scm_to_short])
+AC_CHECK_FUNCS([scm_from_uint scm_to_uint scm_to_uint8])
+AC_CHECK_FUNCS([scm_from_ulong scm_to_ulong])
+AC_CHECK_FUNCS([scm_is_string scm_from_locale_string scm_to_locale_string])
+AC_CHECK_FUNCS([scm_is_symbol])
+AC_CHECK_FUNCS([scm_c_string_length scm_c_string_ref])
+AC_CHECK_FUNCS([scm_from_locale_symbol])
+AC_CHECK_FUNCS([scm_malloc scm_gc_malloc])
+AC_CHECK_FUNCS([scm_assert_smob_type])
+
+# Check to see if scm_make_guardian takes zero (1.8.x) or one (1.6.x)
+# parameters.  Until I write a proper test, I'll just go with 
+# testing for the existence of scm_guardian_greedy_p with correlates
+# with scm_make_guardian taking one parameter
+
+AC_CHECK_FUNCS([scm_guardian_greedy_p])
 
 
 # Later something should be done with this

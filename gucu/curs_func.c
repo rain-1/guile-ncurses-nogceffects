@@ -5,6 +5,7 @@
 #include "curs_func.h"
 #include "type.h"
 #include "unicode.h"
+#include "compat.h"
 
 #define RETURNTF(x) \
   if(x==ERR) \
@@ -916,7 +917,7 @@ gucu_is_linetouched_p (SCM win, SCM line)
 {
   WINDOW *c_win;
   int c_line;
-  bool ret;
+  int ret;
 
   SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "is-linetouched?");
   SCM_ASSERT (scm_is_integer (line), line, SCM_ARG2, "is-linetouched?");
@@ -936,7 +937,7 @@ SCM
 gucu_is_wintouched_p (SCM win)
 {
   WINDOW *c_win;
-  bool ret;
+  int ret;
 
   SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "is-wintouched?");
 
@@ -964,6 +965,7 @@ gucu_KEY_F (SCM n)
   return scm_from_int (ret);
 }
 
+#ifdef HAVE_KEY_DEFINED
 /* Returns the keycode bound to STR, or #f on failure */
 SCM
 gucu_key_defined (SCM str)
@@ -978,6 +980,7 @@ gucu_key_defined (SCM str)
   
   return scm_from_int (key);
 }
+#endif
 
 /* Returns a character string corresponding to the short key name */
 SCM
@@ -2219,7 +2222,7 @@ gucu_wgetch (SCM win)
   if (ret == ERR)
     return SCM_BOOL_F;
   else if (ret >= KEY_MIN)
-    return _scm_from_keycode (ret);
+    return scm_from_int (ret);
   else
     return _scm_schar_from_char (ret);
 #endif
@@ -2360,7 +2363,7 @@ gucu_winsnstr (SCM win, SCM str, SCM n)
   }
 #else
   {
-    char *c_str = _scm_sstring_to_string (str);
+    char *c_str = _scm_sstring_to_locale_string (str);
     ret = winsnstr (c_win, c_str, c_n);
     free (c_str);
   }
@@ -2564,7 +2567,9 @@ gucu_init_function ()
   scm_c_define_gsubr ("is-linetouched?", 2, 0, 0, gucu_is_linetouched_p);
   scm_c_define_gsubr ("is-wintouched?", 1, 0, 0, gucu_is_wintouched_p);
   scm_c_define_gsubr ("key-f", 1, 0, 0, gucu_KEY_F);
+#ifdef HAVE_KEY_DEFINED
   scm_c_define_gsubr ("key-defined", 1, 0, 0, gucu_key_defined);
+#endif
   scm_c_define_gsubr ("keyname", 1, 0, 0, gucu_keyname);
   scm_c_define_gsubr ("keypad!", 2, 0, 0, gucu_keypad_x);
   scm_c_define_gsubr ("killchar", 0, 0, 0, gucu_killchar);

@@ -3,9 +3,12 @@
 #include <libguile.h>
 #include <form.h>
 #include <wchar.h>
+
 #include "form_const.h"
 #include "type.h"
 #include "form_type.h"
+#include "compat.h"
+
 #define _GNU_SOURCE
 SCM gucu_NO_JUSTIFICATION;
 SCM gucu_JUSTIFY_LEFT;

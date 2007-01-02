@@ -1,7 +1,9 @@
 #include <curses.h>
 #include <libguile.h>
+
 #include "type.h"
 #include "curs_spec.h"
+#include "compat.h"
 
 #define MAXLEN 1000
 
@@ -227,13 +229,14 @@ gucu_wgetnstr (SCM win, SCM n)
   }
 #else
   {
-    c_str = (char *) scm_malloc (sizeof (char) * (c_n + 1));
+    char *c_str = (char *) scm_malloc (sizeof (char) * (c_n + 1));
 
     ret = wgetnstr (_scm_to_window (win), c_str, c_n);
     c_str[c_n] = '\0';
     if (ret == OK)
       {
-        s_str = scm_take_locale_string (c_str);
+        s_str = scm_from_locale_string (c_str);
+        free (c_str);
       }
     else
       abort ();
@@ -272,14 +275,18 @@ gucu_winchnstr (SCM win, SCM n)
     free (c_cstr);
   }
 #else  
-  ret = winchnstr (_scm_to_window (win), c_str, scm_to_int (n));
-  if (ret != ERR)
-    {
-      s_str = _scm_xstring_from_chstring (c_str);
-      free (c_str);
-    }
-  else
-    abort ();
+  {
+    int ret;
+    chtype *c_chstr = (chtype *) scm_malloc (sizeof (chtype) * (c_n + 1));
+    ret = winchnstr (_scm_to_window (win), c_chstr, scm_to_int (n));
+    if (ret != ERR)
+      {
+        s_str = _scm_xstring_from_chstring (c_chstr);
+        free (c_chstr);
+      }
+    else
+      abort ();
+  }
 #endif
 
   return s_str;
@@ -325,7 +332,8 @@ gucu_winnstr (SCM win, SCM n)
     if (ret != ERR)
       {
         c_str[c_n] = 0;
-        s_str = scm_take_locale_string (c_str);
+        s_str = scm_from_locale_string (c_str);
+        free (c_str);
       }
     else
       abort ();

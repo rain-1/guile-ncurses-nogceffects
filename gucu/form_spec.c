@@ -3,9 +3,11 @@
 #include <config.h>
 #include <errno.h>
 #include <form.h>
+
 #include "form_type.h"
 #include "form_func.h"
 #include "form_spec.h"
+#include "compat.h"
 
 // Create a copy of FIELD with a different TOPROW and LEFTCOL
 SCM

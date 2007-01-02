@@ -3,9 +3,12 @@
 #include <curses.h>
 #include <menu.h>
 #include <config.h>
+
 #include "menu_func.h"
 #include "type.h"
 #include "menu_type.h"
+#include "compat.h"
+
 #define _GNU_SOURCE
 #define cstring_t cchar_t
 

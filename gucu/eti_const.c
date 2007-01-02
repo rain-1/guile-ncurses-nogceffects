@@ -2,7 +2,9 @@
 #include <libguile.h>
 #include <form.h>
 #include <menu.h>
+
 #include "eti_const.h"
+#include "compat.h"
 
 #define _GNU_SOURCE
 SCM gucu_E_OK;

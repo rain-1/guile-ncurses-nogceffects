@@ -5,8 +5,11 @@
 #include <curses.h>
 #include <stdlib.h>
 #include <string.h>
+
+#ifdef HAVE_LIBUNISTRING
 #include <uniconv.h>
 #include <unistr.h>
+#endif
 
 #ifdef UNICODE_TEST
 #include <langinfo.h>
@@ -22,6 +25,7 @@ static const int stdc_iso_10646 = 1;
 static const int stdc_iso_10646 = 0;
 #endif
 
+#ifdef HAVE_LIBUNISTRING
 int
 locale_char_to_codepoint (char c, uint32_t *p_codepoint)
 {
@@ -184,7 +188,7 @@ codepoint_to_wchar (uint32_t codepoint, wchar_t *p_c)
   free (wchar_str);
   return 1;
 }
-
+#endif /* HAVE_LIBUNISTRING */
 
 #ifdef UNICODE_TEST
 int main(int argc, char **argv)

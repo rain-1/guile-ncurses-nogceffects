@@ -1,11 +1,9 @@
-
-#include <curses.h>
 #include <libguile.h>
 #include <menu.h>
-#include <wchar.h>
+
 #include "menu_const.h"
-#include "type.h"
-#include "menu_type.h"
+#include "compat.h"
+
 #define _GNU_SOURCE
 SCM gucu_REQ_LEFT_ITEM;
 SCM gucu_REQ_RIGHT_ITEM;

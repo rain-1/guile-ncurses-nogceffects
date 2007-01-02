@@ -10,6 +10,7 @@
 
 #include "type.h"
 #include "menu_type.h"
+#include "compat.h"
 
 scm_t_bits menu_tag;
 scm_t_bits item_tag;
@@ -375,9 +376,15 @@ gucu_new_menu (SCM items)
 	abort ();
     }
   scm_remember_upto_here_1 (items);
+#ifdef HAVE_SCM_GUARDIAN_GREEDY_P
+  gm->items_guard = scm_make_guardian (SCM_BOOL_F);
+  gm->win_guard = scm_make_guardian (SCM_BOOL_F);
+  gm->subwin_guard = scm_make_guardian (SCM_BOOL_F);
+#else
   gm->items_guard = scm_make_guardian ();
   gm->win_guard = scm_make_guardian ();
   gm->subwin_guard = scm_make_guardian ();
+#endif
 
   /* Guard the items list */
   scm_call_1 (gm->items_guard, items);

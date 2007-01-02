@@ -1,9 +1,9 @@
-This is doc/gucu.info, produced by makeinfo version 4.12 from
+This is ./doc/gucu.info, produced by makeinfo version 4.8 from
 ./doc/gucu.texi.
 
-This manual is for Gucu, a Guile Curses library, (version 0.3, 12
-September 2009).  Gucu provides bindings for the Curses library, which
-provides functionality for updating character screens.
+   This manual is for Gucu, a Guile Curses library, (version 0.3,
+28 November 2006).  Gucu provides bindings for the Curses library,
+which provides functionality for updating character screens.
 
    Copyright (C) 1998-2007 Free Software Foundation, Inc.
 Copyright (C) 2001-2005 Pradeep Padala
@@ -42,8 +42,8 @@ File: gucu.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 GuCu: a Guile Curses Library
 ****************************
 
-This manual is for Gucu, a Guile Curses library, (version 0.3, 12
-September 2009).  Gucu provides bindings for the Curses library, which
+This manual is for Gucu, a Guile Curses library, (version 0.3, 28
+November 2006).  Gucu provides bindings for the Curses library, which
 provides functionality for updating character screens.
 
    Copyright (C) 1998-2007 Free Software Foundation, Inc.
@@ -842,7 +842,7 @@ Now that we've seen how to write a simple curses program, let's get
 into the details.  There are many functions that help customize what
 you see on the screen and many features which can be put to full use.
 
-   Here we go...
+   Here we go....
 
 
 File: gucu.info,  Node: Initialization,  Next: A word about windows,  Prev: The Gory Details,  Up: Curses Tutorial
@@ -1496,7 +1496,7 @@ to cyan.
    This example also introduces us to the color world of curses.  Colors
 will be explained in detail later.  Use 0 for white on black.
 
-   Now wait...  Did you try running this little script?  Did it work?
+   Now wait....  Did you try running this little script?  Did it work?
 Blinking is one of those features that may not be implemented on your
 terminal.  As of the moment of this writing, Gnome terminal doesn't do
 blinking.  The standard xterm does do blinking, but, it doesn't blink
@@ -1693,6 +1693,7 @@ To put it clearly, if you called border as below:
              (char->integer #\+)
              (char->integer #\+))
    it produces something like this
+
    +-----+
    |     |
    |     |
@@ -3964,7 +3965,7 @@ screen, for example.
 
      (addch (acs-lequal))
 
-   The set of line-graphics characters is given in *note tab:ACS::.
+   The set of line-graphics characters is given in *Note tab:ACS::.
 
 name            default   description
 ------------------------------------------------------ 
@@ -4678,7 +4679,7 @@ Table 5.4: the keypad constants, part 2
      type recognizes a key with that value.  Note that a few values do
      not correspond to a real key, e.g., `KEY_RESIZE' and `KEY_MOUSE'.
      See `resizeterm' for more details about `KEY_RESIZE'.  For a
-     discussion of `KEY_MOUSE' see *note Mouse handling::.
+     discussion of `KEY_MOUSE' see *Note Mouse handling::.
 
 
    Use of the <ESC> key by a programmer for a single character function
@@ -4823,7 +4824,7 @@ File: gucu.info,  Node: Input options,  Next: Inserting a character before the c
      mode, so characters typed are echoed.  Authors of most interactive
      programs prefer to do their own echoing in a controlled area of
      the screen, or not to echo at all, so they disable echoing by
-     calling noecho.  See *note Getting characters from the keyboard::
+     calling noecho.  See *Note Getting characters from the keyboard::
      for a discussion of how these routines interact with `echo' and
      `noecho'.
 
@@ -5075,7 +5076,7 @@ stream.
      pointer; setting a nonzero mask may turn it on.  Whether this
      happens is device-dependent.
 
-     See *note tab:mouse:: for the mouse event types mask that may be
+     See *Note tab:mouse:: for the mouse event types mask that may be
      defined.
 
 name                     description
@@ -6097,7 +6098,7 @@ File: gucu.info,  Node: Getting characters from the keyboard (wide),  Next: Gett
      If `keypad!' is enabled, these functions respond to the pressing
      of a function key by returning a list of two elements where the
      first element it `KEY_CODE_YES' and the second is the corresponding
-     `KEY_' constant. See *note Getting characters from the keyboard::
+     `KEY_' constant. See *Note Getting characters from the keyboard::
      for the list of key codes.  If a character (such as <ESC>) that
      could be the beginning of a function key is received, curses sets
      a timer.  If the remainder of the sequence does arrive within the
@@ -6923,8 +6924,8 @@ interaction with the user.
 --------------------------------------
 
  -- Procedure: pos-form-cursor form
-     The function  `pos-form-cursor'  restores	the  cursor  to	 the
-     position required for the forms driver to continue processing
+     The function  `pos-form-cursor'  restores	the  cursor  to
+     the  position required for the forms driver to continue processing
      requests.  This is useful after curses routines have been called
      to do screen-painting  in response to a form operation.
 

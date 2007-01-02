@@ -2,9 +2,12 @@
 #include <curses.h>
 #include <form.h>
 #include <config.h>
+
 #include "form_func.h"
 #include "type.h"
 #include "form_type.h"
+#include "compat.h"
+
 #define _GNU_SOURCE
 #define cstring_t cchar_t
 

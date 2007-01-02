@@ -3,7 +3,7 @@
 /* Define if you have to explicitly declare the curses acs_map */
 #undef ENABLE_ACS_MAP_FIX
 
-/* Define to 1 if you have cfmakeraw */
+/* Define to 1 if you have the `cfmakeraw' function. */
 #undef HAVE_CFMAKERAW
 
 /* Define to 1 if you have the <curses.h> header file. */
@@ -12,7 +12,7 @@
 /* Define to 1 if you have the <dlfcn.h> header file. */
 #undef HAVE_DLFCN_H
 
-/* Define to 1 if you have fopencookie */
+/* Define to 1 if you have the `fopencookie' function. */
 #undef HAVE_FOPENCOOKIE
 
 /* Define to 1 if you have the <form.h> header file. */
@@ -21,11 +21,14 @@
 /* Define to 1 if you have the <inttypes.h> header file. */
 #undef HAVE_INTTYPES_H
 
-/* Define to 1 if you have the <libguile.h> header file. */
-#undef HAVE_LIBGUILE_H
+/* Define to 1 if you have the `key_defined' function. */
+#undef HAVE_KEY_DEFINED
 
-/* Define if you have libncursesw */
-#undef HAVE_LIBNCURSESW
+/* Define to 1 if you have the `guile' library (-lguile). */
+#undef HAVE_LIBGUILE
+
+/* Define to 1 if you have the `unistring' library (-lunistring). */
+#undef HAVE_LIBUNISTRING
 
 /* Define to 1 if you have the <memory.h> header file. */
 #undef HAVE_MEMORY_H
@@ -35,6 +38,90 @@
 
 /* Define to 1 if you have the <panel.h> header file. */
 #undef HAVE_PANEL_H
+
+/* Define to 1 if you have the <process.h> header file. */
+#undef HAVE_PROCESS_H
+
+/* Define to 1 if you have the <pty.h> header file. */
+#undef HAVE_PTY_H
+
+/* Define to 1 if you have the `scm_assert_smob_type' function. */
+#undef HAVE_SCM_ASSERT_SMOB_TYPE
+
+/* Define to 1 if you have the `scm_c_string_length' function. */
+#undef HAVE_SCM_C_STRING_LENGTH
+
+/* Define to 1 if you have the `scm_c_string_ref' function. */
+#undef HAVE_SCM_C_STRING_REF
+
+/* Define to 1 if you have the `scm_from_bool' function. */
+#undef HAVE_SCM_FROM_BOOL
+
+/* Define to 1 if you have the `scm_from_int' function. */
+#undef HAVE_SCM_FROM_INT
+
+/* Define to 1 if you have the `scm_from_locale_string' function. */
+#undef HAVE_SCM_FROM_LOCALE_STRING
+
+/* Define to 1 if you have the `scm_from_locale_symbol' function. */
+#undef HAVE_SCM_FROM_LOCALE_SYMBOL
+
+/* Define to 1 if you have the `scm_from_short' function. */
+#undef HAVE_SCM_FROM_SHORT
+
+/* Define to 1 if you have the `scm_from_uint' function. */
+#undef HAVE_SCM_FROM_UINT
+
+/* Define to 1 if you have the `scm_from_ulong' function. */
+#undef HAVE_SCM_FROM_ULONG
+
+/* Define to 1 if you have the `scm_gc_malloc' function. */
+#undef HAVE_SCM_GC_MALLOC
+
+/* Define to 1 if you have the `scm_guardian_greedy_p' function. */
+#undef HAVE_SCM_GUARDIAN_GREEDY_P
+
+/* Define to 1 if you have the `scm_is_bool' function. */
+#undef HAVE_SCM_IS_BOOL
+
+/* Define to 1 if you have the `scm_is_integer' function. */
+#undef HAVE_SCM_IS_INTEGER
+
+/* Define to 1 if you have the `scm_is_number' function. */
+#undef HAVE_SCM_IS_NUMBER
+
+/* Define to 1 if you have the `scm_is_string' function. */
+#undef HAVE_SCM_IS_STRING
+
+/* Define to 1 if you have the `scm_is_symbol' function. */
+#undef HAVE_SCM_IS_SYMBOL
+
+/* Define to 1 if you have the `scm_is_true' function. */
+#undef HAVE_SCM_IS_TRUE
+
+/* Define to 1 if you have the `scm_malloc' function. */
+#undef HAVE_SCM_MALLOC
+
+/* Define to 1 if you have the `scm_to_bool' function. */
+#undef HAVE_SCM_TO_BOOL
+
+/* Define to 1 if you have the `scm_to_int' function. */
+#undef HAVE_SCM_TO_INT
+
+/* Define to 1 if you have the `scm_to_locale_string' function. */
+#undef HAVE_SCM_TO_LOCALE_STRING
+
+/* Define to 1 if you have the `scm_to_short' function. */
+#undef HAVE_SCM_TO_SHORT
+
+/* Define to 1 if you have the `scm_to_uint' function. */
+#undef HAVE_SCM_TO_UINT
+
+/* Define to 1 if you have the `scm_to_uint8' function. */
+#undef HAVE_SCM_TO_UINT8
+
+/* Define to 1 if you have the `scm_to_ulong' function. */
+#undef HAVE_SCM_TO_ULONG
 
 /* Define to 1 if you have the <stdint.h> header file. */
 #undef HAVE_STDINT_H
@@ -57,6 +144,9 @@
 /* Define to 1 if you have the <unistd.h> header file. */
 #undef HAVE_UNISTD_H
 
+/* Define to 1 if you have the <util.h> header file. */
+#undef HAVE_UTIL_H
+
 /* Define to 1 if you have the <wchar.h> header file. */
 #undef HAVE_WCHAR_H
 
@@ -78,22 +168,22 @@
 /* Define to the version of this package. */
 #undef PACKAGE_VERSION
 
-/* The size of `attr_t', as computed by sizeof. */
+/* The size of a `attr_t', as computed by sizeof. */
 #undef SIZEOF_ATTR_T
 
-/* The size of `chtype', as computed by sizeof. */
+/* The size of a `chtype', as computed by sizeof. */
 #undef SIZEOF_CHTYPE
 
-/* The size of `int', as computed by sizeof. */
+/* The size of a `int', as computed by sizeof. */
 #undef SIZEOF_INT
 
-/* The size of `long', as computed by sizeof. */
+/* The size of a `long', as computed by sizeof. */
 #undef SIZEOF_LONG
 
-/* The size of `wchar_t', as computed by sizeof. */
+/* The size of a `wchar_t', as computed by sizeof. */
 #undef SIZEOF_WCHAR_T
 
-/* The size of `wint_t', as computed by sizeof. */
+/* The size of a `wint_t', as computed by sizeof. */
 #undef SIZEOF_WINT_T
 
 /* Define to 1 if you have the ANSI C header files. */
