@@ -1,0 +1,68 @@
+;;;; -*- Mode: scheme; -*-
+;;;; r024_outopts.test --- test suite for curses's output options
+
+(use-modules (test lib)
+	     (test lib2)
+	     ;; (gucu curses-wide)
+	     (gucu curses)
+	     (srfi srfi-1))
+
+(define test (curses-test-start))
+
+(define win (initscr))
+
+;; Should be able to move the cursor
+(with-test-prefix 
+ "outopts"
+
+ 
+ (pass-if "clearok! #f"
+	  (begin
+	    (clearok! win #f)
+	    #t))
+		  
+ (pass-if "setscrreg! #t"
+	  (begin
+	    (clear win)
+	    (setscrreg! win 0 3)
+	    (scrollok! win #t)
+	    (move win 0 0)
+	    (addstr win "aaa\n")
+	    (addstr win "bbb\n")
+	    (addstr win "ccc\n")
+	    (addstr win "ddd\n")
+	    (addstr win "eee\n")
+	    (refresh win)
+	    (let ((x1 (instr win #:y 0 #:x 0 #:n 3))
+		  (x2 (instr win #:y 1 #:x 0 #:n 3))
+		  (x3 (instr win #:y 2 #:x 0 #:n 3)))
+	      (and
+	       (string=? x1 "ccc")
+	       (string=? x2 "ddd")
+	       (string=? x3 "eee")))))
+		  
+ (pass-if "setscrreg! #f"
+	  (begin
+	    (clear win)
+	    (setscrreg! win 0 3)
+	    (scrollok! win #f)
+	    (move win 0 0)
+	    (addstr win "aaa\n")
+	    (addstr win "bbb\n")
+	    (addstr win "ccc\n")
+	    (addstr win "ddd\n")
+	    (addstr win "eee\n")
+	    (refresh win)
+	    (let ((x1 (instr win #:y 0 #:x 0 #:n 3))
+		  (x2 (instr win #:y 1 #:x 0 #:n 3))
+		  (x3 (instr win #:y 2 #:x 0 #:n 3)))
+	      (and
+	       (string=? x1 "aaa")
+	       (string=? x2 "bbb")
+	       (string=? x3 "ccc"))))))
+
+(setscrreg! win 0 (- (lines) 1))
+
+(endwin)
+
+(curses-test-end test "r024_outputs.out")		  

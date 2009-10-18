@@ -1,0 +1,112 @@
+#!/usr/bin/guile \
+-e main -s
+!#
+;;; gucukey -- examine the raw keycodes returned when keys are pressed
+
+(use-modules (ice-9 format)
+             (ice-9 getopt-long)
+	     (srfi srfi-1))
+(use-modules (gucu curses))
+
+(define (main args)
+  (let* ((option-spec '((version (single-char #\v) (value #f))
+                        (help    (single-char #\h) (value #f))))
+         (options (getopt-long args option-spec))
+         (help-wanted (option-ref options 'help #f))
+         (version-wanted (option-ref options 'version #f)))
+    (cond 
+     ((or version-wanted help-wanted)
+      (begin
+        (if version-wanted
+            (display 
+             (string-append
+              "gucukey (gucu) 0.3\n"
+              "Copyright (C) 2009 Michael Gran\n"
+              "License X11:\n"
+              "This is free software: you are free to change and redistribute it.\n"
+              "There is NO WARRANTY, to the extent permitted by law.\n")))
+        (if help-wanted
+            (display
+             (string-append 
+              "gucukey \n"
+              "\n"
+              "This interactive program help a developer find the terminal keycodes\n"
+              "for the terminal on which it is run. For each key pressed, it will report\n"
+              "the associated keycode for that key.  If no associated keycode can be\n"
+              "found, a keypress may send three or four character sequence, starting with\n"
+              "\"ESC\".\n"
+              "\n"
+              "When you see an ESC character sequence instead of a keycode, it is because\n"
+              "you have the wrong TERM environment variable set, or, the termattr\n"
+              "database is out of date.\n"
+              "\n"
+              "Report bugs to <spk121@yahoo.com>\n")))))
+     (else
+      (go)))))
+
+(define (go)
+  (let ((stdscr (initscr))
+        (keyflag #t)
+        (c #f))
+    (keypad! stdscr keyflag)
+    (cbreak)
+    (noecho)
+    (nonl)
+    (scrollok! stdscr #t)
+    (mousemask ALL_MOUSE_EVENTS)
+    
+    (move stdscr 0 0);
+    (addstr stdscr "Press any key to see its name\n")
+    (addstr stdscr "Press TAB to toggle the interpretation of function keys\n")
+    (addstr stdscr "Press Ctrl-C to quit\n")
+    (while #t
+           (begin
+             (set! c (getch stdscr))
+             (addstr stdscr (format #f "~S ~S~%" c (keyname c)))
+             (if (eqv? c 3)
+                 (break))
+             (if (eqv? c 9)
+                 (begin
+                   (set! keyflag (not keyflag))
+                   (keypad! stdscr keyflag)))
+             (if (eqv? c KEY_MOUSE)
+                 (let* ((m (getmouse))
+                        (mflag (fifth m)))
+                   (addstr stdscr (format #f "x=~a y=~a flag=~x~%" 
+                                          (second m)
+                                          (third m)
+                                          mflag))
+                   (cond
+                    ((logtest BUTTON_SHIFT mflag)
+                     (addstr stdscr "shift "))
+                    ((logtest BUTTON_CTRL mflag)
+                     (addstr stdscr "ctrl "))
+                    ((logtest BUTTON_ALT mflag)
+                     (addstr stdscr "alt "))
+                    ((logtest BUTTON1_PRESSED mflag)
+                     (addstr stdscr "button 1 pressed\n"))
+                    ((logtest BUTTON1_RELEASED mflag)
+                     (addstr stdscr "button 1 released\n"))
+                    ((logtest BUTTON1_CLICKED mflag)
+                     (addstr stdscr "button 1 clicked\n"))
+                    ((logtest BUTTON1_DOUBLE_CLICKED mflag)
+                     (addstr stdscr "button 1 double clicked\n"))
+                    ((logtest BUTTON2_PRESSED mflag)
+                     (addstr stdscr "button 2 pressed\n"))
+                    ((logtest BUTTON2_RELEASED mflag)
+                     (addstr stdscr "button 2 released\n"))
+                    ((logtest BUTTON2_CLICKED mflag)
+                     (addstr stdscr "button 2 clicked\n"))
+                    ((logtest BUTTON2_DOUBLE_CLICKED mflag)
+                     (addstr stdscr "button 2 double clicked\n"))
+                    ((logtest BUTTON3_PRESSED mflag)
+                     (addstr stdscr "button 3 pressed\n"))
+                    ((logtest BUTTON3_RELEASED mflag)
+                     (addstr stdscr "button 3 released\n"))
+                    ((logtest BUTTON3_CLICKED mflag)
+                     (addstr stdscr "button 3 clicked\n"))
+                    ((logtest BUTTON3_DOUBLE_CLICKED mflag)
+                     (addstr stdscr "button 3 double clicked\n")))))
+             (refresh stdscr)))
+    (endwin)))
+

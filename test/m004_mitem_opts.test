@@ -1,0 +1,36 @@
+;;;; -*- Mode: scheme; -*-
+;;;; m004_mitem_opts.test --- set-item-opts, item-opts-on, item-opts-off, item-opts
+
+(use-modules (test lib)
+	     (test lib2)
+	     (srfi srfi-1)
+	     (gucu curses)
+	     (gucu menu))
+
+(define test (curses-test-start))
+
+(define win (initscr))
+
+;; Should be able to make a menu
+(with-test-prefix "mitem-opts"
+
+		  (pass-if "set-item-opts"
+			   (let ((item1 (new-item "item1" "description1")))
+			     (set-item-opts! item1 0)
+			     (equal? (item-opts item1) 0)))
+
+		  (pass-if "item-opts-on"
+			   (let ((item1 (new-item "item1" "description1")))
+			     (set-item-opts! item1 0)
+			     (item-opts-on! item1 O_SELECTABLE)
+			     (equal? (item-opts item1) O_SELECTABLE)))
+				 
+		  (pass-if "item-opts-off"
+			   (let ((item1 (new-item "item1" "description1")))
+			     (set-item-opts! item1 O_SELECTABLE)
+			     (item-opts-off! item1 O_SELECTABLE)
+			     (equal? (item-opts item1) 0))))
+
+(endwin)
+
+(curses-test-end test "m004_mitem_opts.out")

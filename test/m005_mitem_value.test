@@ -1,0 +1,45 @@
+;;;; -*- Mode: scheme; -*-
+;;;; m005_mitem_value.test --- set-item-value, item-value
+
+(use-modules (test lib)
+	     (test lib2)
+	     (srfi srfi-1)
+	     (gucu curses)
+	     (gucu menu))
+
+(define test (curses-test-start))
+
+(define win (initscr))
+
+;; Should be able to make a menu
+(with-test-prefix "mitem-value"
+
+		  (pass-if "set-item-value"
+			   (let* ((item1 (new-item "item1" "description1"))
+				  (item2 (new-item "item2" "description2"))
+				  (item3 (new-item "item3" "description3"))
+				  (item4 (new-item "item4" "description4"))
+				  (item5 (new-item "item5" "description5"))
+				  (m (new-menu (list item1 item2 item3 item4 item5))))
+			     (menu-opts-off! m O_ONEVALUE)
+			     (post-menu m)
+			     (set-item-value! item1 #t)
+			     (set-item-value! item2 #f)
+			     (set-item-value! item3 #t)
+			     (set-item-value! item4 #f)
+			     (set-item-value! item5 #t)
+			     (refresh win)
+			     ;; (sleep 3)
+			     (let ((ret (and (item-value item1)
+					     (not (item-value item2))
+					     (item-value item3)
+					     (not (item-value item4))
+					     (item-value item5))))
+			       (unpost-menu m)
+			       (refresh win)
+			       ret))))
+
+
+(endwin)
+
+(curses-test-end test "m005_mitem_value.out")

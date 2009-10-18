@@ -1,0 +1,65 @@
+;;;; -*- Mode: scheme; -*-
+;;;; r031_touch.test --- test suite for curses's touch functions
+
+(use-modules (test lib)
+	     (test lib2)
+	     (gucu curses)
+	     (srfi srfi-1))
+
+(define test (curses-test-start))
+
+(define win (initscr))
+
+;; Should be able to see which lines have been touchec
+(with-test-prefix 
+ "touch"
+
+ (pass-if "is-linetouched? #f"
+	  (begin
+	    (clear win)
+	    (refresh win)
+	    (not (is-linetouched? win 0))))
+
+ (pass-if "touchline / is-linetouched?"
+	  (begin
+	    (clear win)
+	    (refresh win)
+	    (touchline win 0)
+	    (is-linetouched? win 0)))
+
+
+ (pass-if "touchline / is-linetouched?"
+	  (begin
+	    (clear win)
+	    (refresh win)
+	    (touchline win 0 1)
+	    (is-linetouched? win 0)))
+
+
+ (pass-if "is-wintouched? #f"
+	  (begin
+	    (clear win)
+	    (refresh win)
+	    (not (is-wintouched? win))))
+
+ (pass-if "touchwin / is-wintouched?"
+	  (begin
+	    (clear win)
+	    (refresh win)
+	    (touchwin win)
+	    (is-wintouched? win)))
+
+
+ (pass-if "untouchwin / is-linetouched?"
+	  (begin
+	    (clear win)
+	    (refresh win)
+	    (touchwin win)
+	    (untouchwin win)
+	    (not (is-wintouched? win))))
+
+ )
+
+(endwin)
+
+(curses-test-end test "r031_touch.out")		  

@@ -1,0 +1,79 @@
+;;;; -*- Mode: scheme; -*-
+;;;; r010_beep.test --- test suite for curses's clear and erase
+
+(use-modules (test lib)
+	     (test lib2)
+	     (srfi srfi-1)
+	     (gucu curses))
+
+
+(define test (curses-test-start))
+
+(define win (initscr))
+
+(define (mvinch y x)
+  (inch win #:y y #:x x))
+
+(define space (normal #\sp))
+
+;; Should be able to erase
+(with-test-prefix "clear"
+		  
+		  (pass-if "clear"
+			   (begin
+			     (clear win)
+			     (addstr win "xxxx" #:y 0 #:x 0)
+			     (addstr win "xxxx" #:y 1 #:x 0)
+			     (clear win)
+			     (refresh win)
+			     (let ((x1 (mvinch 0 1))
+				   (x2 (mvinch 1 1)))
+			       (and
+				(equal? x1 space)
+				(equal? x2 space)))))
+
+		  (pass-if "erase"
+			   (begin
+			     (clear win)
+			     (addstr win "xxxx" #:y 0 #:x 0)
+			     (addstr win "xxxx" #:y 1 #:x 0)
+			     (erase win)
+			     (refresh win)
+			     (let ((x1 (mvinch 0 1))
+				   (x2 (mvinch 1 1)))
+			       (and
+				(equal? x1 space)
+				(equal? x2 space)))))
+			      
+
+		  (pass-if "clrtobot"
+			   (begin
+			     (clear win)
+			     (addstr win "xxxx" #:y 0 #:x 0)
+			     (addstr win "xxxx" #:y 1 #:x 0)
+			     (move win 0 0)
+			     (clrtobot win)
+			     (refresh win)
+			     (let ((x1 (mvinch 0 1))
+				   (x2 (mvinch 1 1)))
+			       (and
+				(equal? x1 space))
+				(equal? x2 space))))
+
+		  (pass-if "clrtoeol"
+			   (begin
+			     (clear win)
+			     (addstr win "xxxx" #:y 0 #:x 0)
+			     (addstr win "xxxx" #:y 1 #:x 0)
+			     (move win 0 0)
+			     (clrtoeol win)
+			     (refresh win)
+			     (let ((x1 (mvinch 0 1))
+				   (x2 (mvinch 1 1)))
+			       (and
+				(equal? x1 space)
+				(equal? x2 (normal #\x)))))))
+
+(endwin)
+
+(curses-test-end test "r010_clear.out")

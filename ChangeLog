@@ -1,0 +1,368 @@
+2009-01-15  Mike Gran  <spike_gran@users.sourceforge.net>
+	* Everything: There is no point on keeping a changelog
+	when I'm radically recoding everything
+
+
+2008-08-01  Mike Gran  <spike_gran@users.sourceforge.net>
+
+	* test/f00*.test: Add form/menu/panel tests.
+
+	* src/raw/eti.scm.in: split shared menu/form constants into its
+	own library
+	* src/raw/eti_const.h
+	* src/raw/eti_const.c
+	* src/raw/eti_main.c
+
+	* src/raw/curs_func.c: remove debug constants
+
+	* src/raw/Makefile.am: add eti library
+
+	* m4/lt~obsolete.m4: add new m4s for autoconf/make
+	* m4/ltsugar.m4
+	* m4/ltoptions.m4
+	* m4/ltversion.m4
+
+	* m4/Makefile.am: kill reference to ncurses.m4 and guile.m4.
+	Relying out autoconf/automake now instead of ncursesw-config and
+	guile-config
+
+	* doc/Makefile.am: add menu/panel examples
+
+	* doc/gucu.texi: update for form, menu, and panel libraries
+
+	* doc/panel_example1.scm: add panel example
+
+	* doc/menu_example2.scm: add menu example
+
+	* doc/menu_example1.scm: add menu example
+
+	* build_aux/compile: should include this file from automake for
+	broken systems
+
+	* build_aux/config.sub: update to latest
+
+	* build_aux/config.guess: update to 01/23/08
+
+	* configure.ac: bump for 0.2
+
+	* configure: bump for 0.2
+
+	* TODO: Update for 0.2
+
+	* README: Update for 0.2
+
+	* NEWS: Update for 0.2
+
+2008-06-03  Mike Gran  <spike_gran@users.sourceforge.net>
+
+	* src/raw/curs_const.c: change constant naming to XXX_XXX style.
+	* src/raw/cursw_const.c:
+	* src/raw/menu_const.c:
+
+	* m4/libtool.m4: move to libtool 2.2.4
+
+	* doc/gucu.texi: add some form documentation
+
+	* build_aux/ltmain.sh: move to libtool 2.2.4
+
+	* configure.ac: Add form, panel libraries
+
+	* config.h.in: Add constants for form, panel
+
+	* aclocal.m4: Move to libtool 2.2.4
+
+2008-01-17  Mike Gran  <spike_gran@users.sourceforge.net>
+
+	* src/raw/cursw_const.c: move WEOF to wide curses
+
+	* src/raw/curs_const.c: move WEOF to wide curses 
+
+	* src/raw/curses.scm.in: move WEOF to wide curses
+
+	* src/raw/curses-wide.scm.in: remove get-wstr functions, move WEOF
+	to wide curses
+
+	* src/raw/cursw_spec.h: remove get-wstr functions
+
+	* src/raw/cursw_spec.c: remove get-wstr functions
+
+	* wrap/curs_const.txt: move WEOF to wide curses
+
+	* wrap/cursw_const.txt: move WEOF to wide curses
+
+	* wrap/cursw_spec.txt: remove get-wstr functions
+
+	* doc/gucu.texi: documentation rework
+
+2008-01-16  Mike Gran  <spike_gran@users.sourceforge.net>
+
+	* doc/gucu.texi: rework
+
+2008-01-15  Mike Gran  <spike_gran@users.sourceforge.net>
+
+	* doc/gucu.texi: rework 
+
+2008-01-14  Mike Gran  <spike_gran@users.sourceforge.net>
+
+	* tools/shell.c (is_unix98_pty): add code to deal with different
+	pty filenames
+
+	* tools/run-testbed.sh.in: removing this script
+
+	* tools/Makefile.am: removing testbed script, adding gucushell program
+
+	* tools/README: removing testbed script
+
+	* config.h.in: make acs_map fix a config.h flag.
+
+	* configure.ac: make defaults a function of $host. Make acs_map fix
+	a config.h flag.  Simplify logic
+
+	* wrap/cursw_wrap.sh: rename *-raw libraries as * libraries
+
+	* wrap/curs_wrap.sh: rename *-raw libaries as * libraries
+
+	* src/raw/cursw_spec.c: make the acs fix a config.h flag
+
+	* src/raw/Makefile.am: rename *-raw guile libraries as * libraries.
+	Make the acs fix a config.h flag.
+
+	* src/raw/cursesw.scm: renamed to curses-wide-alt.scm
+
+	* src/raw/curses-wide-raw.scm.in: renamed to curses-wide.scm.in
+
+	* src/raw/constant.c: removed due to wide/narrow split
+
+	* src/raw/curses-wide-alt.scm: renamed from cursesw.scm
+
+	* src/raw/curses-alt.scm: renamed from curses.scm
+
+	* src/raw/curses-wide.scm.in: renamed from curses-wide-raw.scm.in
+
+	* src/raw/curses.scm.in: renamed from curses-raw.scm.in
+
+2008-01-09  Mike Gran  <spike_gran@users.sourceforge.net>
+
+	* tools/shell.c:  first commit 
+
+	* doc/Makefile.in: texinfo.tex not distributed here
+
+	* Makefile.in: DISTCHECK flags
+
+2008-01-05  Mike Gran  <spike_gran@users.sourceforge.net>
+
+	* src/raw/Makefile.in: should not do -Werror
+
+	* src/raw/Makefile.am (libguile_gucu_curses_wide_v_@LIBGUILE_GUCU_CURSES_WIDE_MAJOR@_la_CPPFLAGS): should not do -Werror
+
+	* src/raw/.cvsignore: ignore built scm files
+
+	* configure (Configuration): Typo in --with-cygwin-curses-acs-bug-fix
+
+	* configure.ac: Typo in --with-cygwin-curses-acs-bug-fix name
+
+	* Makefile.in (TEXI2DVI): To make dvi files on Cygwin, had
+	to force texi2dvi to call plain tex.
+
+	* doc/Makefile.am: To make dvi files on Cygwin, had to 
+	force texi2dvi to call plain tex.
+
+	* Makefile.in (DISTCHECK_CONFIGURE_FLAGS): Added distcheck
+	configure flags
+
+	* Makefile.am (#DISTCHECK_CONFIGURE_FLAGS): Added distcheck
+	configure flags.
+
+2008-01-04  Mike Gran  <spike_gran@users.sourceforge.net>
+
+	* wrap/Makefile.am (EXTRA_DIST): shell scripts should be
+	nodist_SCRIPTS.  Wide/Narrow fixes.
+	CLEANFILES the generated sources.
+
+2008-01-03  Mike Gran  <spike_gran@users.sourceforge.net>
+
+	* test/dotest-curses-wide: Distcheck and wide/narrow fixes.
+
+	* test/dotest-curses: Distcheck fixes, and wide/narrow fixes.
+
+	* test/r038_get_wch.test ("get-wch"): Wide/narrow fixes.
+
+	* test/r021_instr.test ("instr"): Off by 1 error in innstr.
+
+	* test/r037_border_set.test: Wide/narrow fixes.
+
+	* test/r039_get_wstr.test: Wide/narrow fixes.
+
+	* test/r034_add_wchstr.test (test): Wide/narrow fixes.
+
+	* test/r036_bkgrnd.test: Ignore terminal-dependent test results.
+
+	* test/r030_termattrs.test: Ignore terminal-dependent test results.
+
+	* test/r035_addwstr.test (test): Wide/narrow fixes.
+
+	* test/r033_add_wch.test: Ignore terminal-dependent test results.
+
+	* test/r001_color.test: Ignore terminal-dependent test results.
+
+	* tools/testbed.c: Staticly link testbed.
+
+	* tools/Makefile.am: staticly link testbed 
+
+	* wrap/curs_func.txt: Wide/narrow fixes.
+
+	* wrap/cursw_func.txt: Wide/narrow fixes.
+
+	* wrap/curs_spec.txt: Wide/Narrow fixes.
+
+	* wrap/cursw_wrap.sh: Rename init functions to avoid name collision.
+
+	* configure.ac: Add a flagged bugfix for cygwin curses.  Split
+	wide string functions into wchar_t and wint_t types.
+
+	* src/raw/type.c: Remove wide string functions.
+
+	* src/raw/curses-wide-raw.scm.in: Rename init functions to avoid
+	name collision.  Duplicate and forgotton function exports.
+
+	* src/raw/typew.c (_scm_is_wchar_string): Split wide string
+	functions into wchar_t and wint_t types.
+
+	* src/raw/cursw_main.c (gucu_init): Rename init functions to avoid
+	name collision.
+
+	* src/raw/Makefile.am: Add a flagged bugfix for cygwin curses.
+	Automake cleanup on wide/narrow library split.
+	
+	* src/raw/type.h: move wstring to typew.h
+
+	* src/raw/typew.h: Split wide string functions into wchar_t and
+	wint_t types.
+
+	* src/raw/cursw_spec.h (gucu_cursw_init_special): rename init
+	functions to avoid name collision
+
+	* src/raw/curs_spec.c: Add a flagged bugfix for cygwin curses.
+	Fix off by one error in innstr funcs.
+
+2007-12-29  Mike Gran  <spike_gran@users.sourceforge.net>
+
+	* test/guile-test: improve path independence for distcheck
+
+	* test/Makefile.am (EXTRA_DIST): distcheck fixes
+
+	* src/raw/Makefile.am
+	(libguile_gucu_v_@LIBGUILE_GUCU_MAJOR@_la_SOURCES): try to improve
+	path independence for distcheck
+
+	* doc/gucu.texi: dos->unix
+
+	* doc/Makefile.am: dos -> unix
+
+	* configure.ac: rely on autoconf for library detection instead of 
+	{guile,ncurses}-config scripts
+
+	* Makefile.am: add tools directory
+
+2007-12-28  Mike Gran  <spike_gran@users.sourceforge.net>
+
+	* test/guile-test: make sure to use local source before installed source in test!
+
+	* src/raw/special.c: don't try to delwin NULL windows
+
+	* wrap/special.txt: move delwin to special
+
+	* wrap/function.txt: move delwin to special
+
+2007-12-27  Mike Gran  <spike_gran@users.sourceforge.net>
+
+	* configure.ac: add build_aux/Makefile
+
+	* doc/gucu.texi: converted from dos to unix, since this seems to confuse texinfo 4.11
+
+	* m4/Makefile.am (#EXTRA_DIST): create
+
+	* configure.ac: add m4/Makefile
+
+	* wrap/wrap.sh: remove explicit path in load library call
+
+2007-12-26  Mike Gran  <spike_gran@users.sourceforge.net>
+
+	* Makefile.am (SUBDIRS): add m4 to make
+
+	* m4/ncurses.m4: Create
+
+	* configure.ac: automake warning flags
+
+	* src/raw/raw.scm.in ("XXlibnameXX"): remove explicit path, add versioned libname
+
+	* src/raw/Makefile.am: use AM_LDFLAGS, add version info
+
+	* configure.ac: add consts for version
+
+	* .cvsignore: create
+
+	* doc/.cvsignore: create
+
+2007-12-25  Mike Gran  <spike_gran@users.sourceforge.net>
+
+	* build_aux/Makefile.am: comment
+
+	* Makefile.am: comment
+
+	* test/Makefile.am: comment
+
+	* wrap/Makefile.am: comment
+
+	* src/raw/Makefile.am: comment
+
+	* Makefile.am (SUBDIRS): add build_aux to tree
+
+	* doc/gucu.texi: add version to titlepage
+
+	* build_aux/texinfo.tex: create
+
+	* build_aux/missing: create
+
+	* build_aux/mdate-sh: create
+
+	* build_aux/ltmain.sh: create
+
+	* build_aux/install-sh: create
+
+	* build_aux/depcomp: create
+
+	* build_aux/config.sub: create
+
+	* build_aux/config.guess: create
+
+	* build_aux/compile: create
+
+	* build_aux/Makefile.am: create
+
+	* COPYING: Moved license from GPLv3 to X11
+
+2007-10-21  Mike Gran  <spike_gran@users.sourceforge.net>
+
+	* wrap/func_def.awk: don't free const strings
+
+	* wrap/wrap.sh: add term.h
+
+	* wrap/special.txt: add mouse functions
+
+	* doc/Makefile.am: new file
+
+	* doc/gucu.texi: nodes, windows, etc 
+
+2007-10-19  Mike Gran  <spike_gran@users.sourceforge.net>
+
+	* doc/gucu.texi: update: colors
+
+2007-10-18  Mike Gran  <spike_gran@users.sourceforge.net>
+
+	* doc/gucu.texi: update
+
+2007-09-02  Mike Gran  <spike_gran@users.sourceforge.net>
+
+	* All: Reorganization
+

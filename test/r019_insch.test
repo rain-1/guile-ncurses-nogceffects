@@ -1,0 +1,46 @@
+;;;; -*- Mode: scheme; -*-
+;;;; r019_insch.test --- test suite for curse's insert character functions
+
+(use-modules (test lib)
+	     (test lib2)
+	     ;; (gucu curses-wide)
+	     (gucu curses)
+	     (srfi srfi-1))
+
+(define test (curses-test-start))
+
+(define win (initscr))
+
+(define (mvinch y x)
+  (inch win #:y y #:x x))
+
+;; Should be able to change input options
+(with-test-prefix "insch"
+		  
+		  (pass-if "insch"
+			   (begin
+			     (clear win)
+			     (refresh win)
+			     (addstr win "xxx" #:y 0 #:x 0)
+			     (move win 0 0)
+			     (insch win (char->integer #\z))
+			     (let ((x1 (mvinch 0 0))
+				   (x2 (mvinch 0 1)))
+			       (and
+				(equal? x1 (char->integer #\z))
+				(equal? x2 (char->integer #\x))))))
+
+		  (pass-if "insch #:y #:x"
+			   (begin
+			     (clear win)
+			     (refresh win)
+			     (addstr win "xxx" #:y 0 #:x 0)
+			     (insch win (char->integer #\z) #:y 0 #:x 0)
+			     (let ((x1 (mvinch 0 0))
+				   (x2 (mvinch 0 1)))
+			       (and
+				(equal? x1 (char->integer #\z))
+				(equal? x2 (char->integer #\x)))))))
+(endwin)
+
+(curses-test-end test "r019_insch.out")		  

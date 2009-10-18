@@ -1,0 +1,52 @@
+;;;; -*- Mode: scheme; -*-
+;;;; r005_addstr.test --- test suite for curses's addstr
+
+(use-modules (test lib)
+	     (test lib2)
+	     (srfi srfi-1)
+	     (gucu curses))
+
+(define test (curses-test-start))
+
+(define mainwin (initscr))
+
+(with-test-prefix 
+ "addstr"
+ 
+ (pass-if "addstr"
+	  (begin
+	    (clear mainwin)
+	    (move mainwin 0 0)
+	    (addstr mainwin "hello")
+	    (refresh mainwin)
+	    (let ((w2 (instr mainwin #:y 0 #:x 0)))
+	      (string=? "hello" (string-take w2 (string-length "hello"))))))
+
+ (pass-if "addstr #:n"
+	  (begin
+	    (clear mainwin)
+	    (move mainwin 0 0)
+	    (addstr mainwin "hello" #:n 2)
+	    (refresh mainwin)
+	    (let ((w2 (instr mainwin #:y 0 #:x 0)))
+	      (string=? "he" (string-take w2 (string-length "he"))))))
+
+ (pass-if "addstr #:y #:x"
+	  (begin
+	    (clear mainwin)
+	    (addstr mainwin "bold" #:y 1 #:x 0)
+	    (refresh mainwin)
+	    (let ((x2 (instr mainwin #:y 1 #:x 0)))
+	      (string=? "bold" (string-take x2 (string-length "bold"))))))
+
+ (pass-if "addstr #:y #:x #:n"
+	  (begin
+	    (clear mainwin)
+	    (addstr mainwin "bold" #:y 1 #:x 0 #:n 2)
+	    (refresh mainwin)
+	    (let ((x2 (instr mainwin #:y 1 #:x 0)))
+	      (string=? "bo" (string-take x2 (string-length "bo")))))))
+
+(endwin)
+
+(curses-test-end test "r005_addstr.out")

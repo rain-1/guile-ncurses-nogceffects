@@ -1,0 +1,41 @@
+;;;; -*- Mode: scheme; -*-
+
+;;;; m010_menu_mark.test --- set-menu-mark menu-mark
+
+(use-modules (test lib)
+	     (test lib2)
+	     (srfi srfi-1)
+	     (gucu curses)
+	     (gucu menu))
+
+(define test (curses-test-start))
+
+(define win (initscr))
+
+;; Should be able to make a menu
+(with-test-prefix "menu-mark"
+
+		  (pass-if "(default)"
+			   (let* ((item1 (new-item "item1" "description1"))
+				  (menu (new-menu (list item1))))
+			     (post-menu menu)
+			     (refresh win)
+			     ;; (sleep 3)
+			     (unpost-menu menu)
+			     (refresh win)
+			     (string=? "-" (menu-mark menu))))
+
+		  (pass-if "set-menu-mark!"
+			   (let* ((item1 (new-item "item1" "description1"))
+				  (menu (new-menu (list item1))))
+			     (set-menu-mark! menu "-->")
+			     (post-menu menu)
+			     (refresh win)
+			     ;; (sleep 3)
+			     (unpost-menu menu)
+			     (refresh win)
+			     (string=? "-->" (menu-mark menu)))))
+
+(endwin)
+
+(curses-test-end test "m010_menu_mark.out")

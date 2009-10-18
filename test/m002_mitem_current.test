@@ -1,0 +1,85 @@
+;;;; -*- Mode: scheme; -*-
+;;;; m002_mitem_current.test --- current item, top row, item index
+
+(use-modules (test lib)
+	     (test lib2)
+	     (srfi srfi-1)
+	     (gucu curses)
+	     (gucu menu))
+
+(define test (curses-test-start))
+
+(define win (initscr))
+
+;; Should be able to make a menu
+(with-test-prefix "mitem-current"
+		  
+		  (pass-if "set-current-item!"
+			   (let* ((item1 (new-item "item1" "description1"))
+				  (item2 (new-item "item2" "description2"))
+				  (m (new-menu (list item1 item2))))
+			     (post-menu m)
+			     (set-current-item! m item2)
+			     (refresh win)
+			     ;;(sleep 1)
+			     (let ((cur (current-item m)))
+			       (unpost-menu m)
+			       (refresh win)
+			       (equal? cur item2))))
+		  
+		  (pass-if "top-row (default)"
+			   (let* ((item1 (new-item "item1" "description1"))
+				  (item2 (new-item "item2" "description2"))
+				  (item3 (new-item "item3" "description3"))
+				  (item4 (new-item "item4" "description4"))
+				  (item5 (new-item "item5" "description5"))
+				  (m (new-menu (list item1 item2 item3 item4 item5))))
+			     (post-menu m)
+			     (refresh win)
+			     ;;(sleep 1)
+			     (let ((top (top-row m)))
+			       (unpost-menu m)
+			       (refresh win)
+			       (equal? top 0))))
+		  
+		  (pass-if "set-top-row!"
+			   (let* ((item1 (new-item "item1" "description1"))
+				  (item2 (new-item "item2" "description2"))
+				  (item3 (new-item "item3" "description3"))
+				  (item4 (new-item "item4" "description4"))
+				  (item5 (new-item "item5" "description5"))
+				  (m (new-menu (list item1 item2 item3 item4 item5))))
+			     ;; Make sure the menu shows only 3 rows
+			     (set-menu-format! m 3 1)
+			     (post-menu m)
+			     (set-top-row! m 2)
+			     (refresh win)
+			     ;;(sleep 1)
+			     (let ((top (top-row m)))
+			       (unpost-menu m)
+			       (refresh win)
+			       (equal? top 2))))
+
+		  (pass-if "item-index"
+			   (let* ((item1 (new-item "item1" "description1"))
+				  (item2 (new-item "item2" "description2"))
+				  (item3 (new-item "item3" "description3"))
+				  (item4 (new-item "item4" "description4"))
+				  (item5 (new-item "item5" "description5"))
+				  (m (new-menu (list item1 item2 item3 item4 item5))))
+			     (post-menu m)
+			     (refresh win)
+			     ;;(sleep 1)
+			     (let ((ret (and (equal? (item-index item1) 0)
+					     (equal? (item-index item2) 1)
+					     (equal? (item-index item3) 2)
+					     (equal? (item-index item4) 3)
+					     (equal? (item-index item5) 4))))
+			       (unpost-menu m)
+			       (refresh win)
+			       ret))))
+
+
+(endwin)
+
+(curses-test-end test "m002_mitem_current.out")

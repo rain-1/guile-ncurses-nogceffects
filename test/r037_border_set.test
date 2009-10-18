@@ -1,0 +1,166 @@
+;;;; -*- Mode: scheme; coding: utf-8 -*-
+;;;; r037_border_set.test --- test suite for curses's border
+
+(use-modules (test lib)
+	     (test lib2)
+	     (srfi srfi-1)
+	     (gucu curses))
+
+(define test (curses-test-start))
+
+(define *sleep* #t)
+(define (maybe-sleep n)
+  (if *sleep*
+      (sleep n)))
+
+(setlocale LC_ALL "")
+(define win (initscr))
+
+;; Should be able to draw borders
+(with-test-prefix 
+ "border-set"
+		  
+ (pass-if "border default (unicode)"
+	  (begin
+	    (clear win)
+	    (border win 
+                    (normal #\│) (normal #\│) (normal #\─) (normal #\─)
+                    (normal #\┌) (normal #\┐) (normal #\└) (normal #\┘))
+	    (refresh win)
+            (maybe-sleep 3)
+	    (let ((l  (inch win #:y 1 			#:x 0))
+		  (r  (inch win #:y 1			#:x (- (cols) 1)))
+		  (t  (inch win #:y 0 			#:x 1))
+		  (b  (inch win #:y (- (lines) 1) 	#:x 1))
+		  (tl (inch win #:y 0 			#:x 0))
+		  (tr (inch win #:y 0 			#:x (- (cols) 1)))
+		  (bl (inch win #:y (- (lines) 1) 	#:x 0))
+		  (br (inch win #:y (- (lines) 1) 	#:x (- (cols) 1)))
+		  )
+              (addstr win (format #f "~a" l) #:y 0 #:x 0)
+              (addstr win (format #f "~a" r) #:y 1 #:x 0)
+              (addstr win (format #f "~a" t) #:y 2 #:x 0)
+              (addstr win (format #f "~a" b) #:y 3 #:x 0)
+              (addstr win (format #f "~a" tl) #:y 4 #:x 0)
+              (addstr win (format #f "~a" tr) #:y 5 #:x 0)
+              (addstr win (format #f "~a" bl) #:y 6 #:x 0)
+              (addstr win (format #f "~a" br) #:y 7 #:x 0)
+              (refresh win)
+              (maybe-sleep 3)
+	      (and
+	       ;; These are the unicode values
+	       ;; U+2502 BOX DRAWINGS LIGHT VERTICAL
+	       (equal? l (normal #\│))
+	       (equal? r (normal #\│))
+	       ;; U+2500 BOX DRAWINGS LIGHT HORIZONTAL
+	       (equal? t (normal #\─))
+	       (equal? b (normal #\─))
+	       ;; U+250C BOX DRAWINGS LIGHT DOWN AND RIGHT
+	       (equal? tl (normal #\┌))
+	       ;; U+2510 BOX DRAWINGS LIGHT DOWN AND LEFT
+	       (equal? tr (normal #\┐))
+	       ;; U+2514 BOX DRAWINGS LIGHT UP AND RIGHT
+	       (equal? bl (normal #\└))
+	       ;; U+2518 BOX DRAWINGS LIGHT UP AND LEFT
+	       (equal? br (normal #\┘))))))
+
+ (pass-if "border dashed (unicode)"
+	  (begin
+	    (clear win)
+	    (border win 
+			(normal (integer->char #x2506)) ; dashed vert
+			(normal (integer->char #x2506)) ; dashed vert
+			(normal (integer->char #x2504)) ; dashed horiz
+			(normal (integer->char #x2504)) ; dashed horiz
+			(normal (integer->char #x250C)) 
+			(normal (integer->char #x2510)) 
+			(normal (integer->char #x2514)) 
+			(normal (integer->char #x2518))) 
+	    (refresh win)
+            (maybe-sleep 3)
+	    (let ((l  (inch win #:y 1 		#:x 0))
+		  (r  (inch win #:y 1 		#:x (- (cols) 1)))
+		  (t  (inch win #:y 0 		#:x 1))
+		  (b  (inch win #:y (- (lines) 1) #:x 1))
+		  (tl (inch win #:y 0 		#:x 0))
+		  (tr (inch win #:y 0 		#:x (- (cols) 1)))
+		  (bl (inch win #:y (- (lines) 1) #:x 0))
+		  (br (inch win #:y (- (lines) 1) #:x (- (cols) 1)))
+		  )
+              (addstr win (format #f "~a" l) #:y 0 #:x 0)
+              (addstr win (format #f "~a" r) #:y 1 #:x 0)
+              (addstr win (format #f "~a" t) #:y 2 #:x 0)
+              (addstr win (format #f "~a" b) #:y 3 #:x 0)
+              (addstr win (format #f "~a" tl) #:y 4 #:x 0)
+              (addstr win (format #f "~a" tr) #:y 5 #:x 0)
+              (addstr win (format #f "~a" bl) #:y 6 #:x 0)
+              (addstr win (format #f "~a" br) #:y 7 #:x 0)
+              (refresh win)
+              (maybe-sleep 3)
+              
+ 	      (and
+ 	       (equal? l (normal (integer->char #x2506)))
+ 	       (equal? r (normal (integer->char #x2506)))
+ 	       (equal? t (normal (integer->char #x2504)))
+ 	       (equal? b (normal (integer->char #x2504)))
+ 	       (equal? tl (normal (integer->char #x250C)))
+ 	       (equal? tr (normal (integer->char #x2510)))
+ 	       (equal? bl (normal (integer->char #x2514)))
+ 	       (equal? br (normal (integer->char #x2518)))))))
+
+ (pass-if "hline (unicode)"
+	  (begin
+	    (clear win)
+	    (move win 1 1)
+	    (hline win (normal #\─) 2)    ; U+2500
+	    (refresh win)
+	    (let ((x1 (inch win #:y 1 #:x 1))
+		  (x2  (inch win #:y 1 #:x 2))
+		  )
+	      (and
+	       (equal? x1 (normal #\─))
+	       (equal? x2 (normal #\─))))))
+ 
+ (pass-if "vline (unicode)"
+	  (begin
+	    (clear win)
+	    (move win 1 1)
+	    (vline win (normal #\━) 2) ; U+2501
+	    (refresh win)
+	    (let ((x1  (inch win #:y 1 #:x 1))
+		  (x2  (inch win #:y 2 #:x 1))
+		  )
+	      (and
+	       (equal? x1 (normal #\━))
+	       (equal? x2 (normal #\━))))))
+ 
+ (pass-if "hline-set #:x #:y (unicode)"
+	  (begin
+	    (clear win)
+	    (hline win (normal #\┃) 2 #:y 1 #:x 1) ; U+2503
+	    (refresh win)
+	    (let ((x1  (inch win #:y 1 #:x 1))
+		  (x2  (inch win #:y 1 #:x 2))
+		  )
+	      (and
+	       (equal? x1 (normal #\┃))
+	       (equal? x2 (normal #\┃))))))
+
+ (pass-if "vline-set #:y #:x (unicode)"
+	  (begin
+	    (clear win)
+	    (vline win (normal #\─) 2 #:y 1 #:x 1) ; U+2500
+	    (refresh win)
+	    (let ((x1  (inch win #:y 1 #:x 1))
+		  (x2  (inch win #:y 2 #:x 1))
+		  )
+	      (and
+	       (equal? x1 (normal #\─))
+	       (equal? x2 (normal #\─))))))
+
+ )
+
+(endwin)
+
+(curses-test-end test "r037_border_set.out")
+

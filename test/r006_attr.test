@@ -1,0 +1,260 @@
+;;;; -*- Mode: scheme; -*-
+;;;; r006_attr.test --- test suite for curses's attr
+
+(use-modules (test lib)
+	     (test lib2)
+	     (srfi srfi-1)
+	     (ice-9 format)
+	     (gucu curses))
+
+
+(define test (curses-test-start))
+
+(define win (initscr))
+(start-color)
+
+(with-test-prefix 
+ "attr"
+ 
+ ;; clear all attributes
+ (pass-if "standend! #1"
+	  (begin
+	    (clear win)
+	    (standend! win)
+	    (addstr win "x" #:y 0 #:x 0)
+	    (refresh win)
+	    (let ((x2 (inch win #:y 0 #:x 0)))
+	      (equal? 0 (xchar-attr x2)))))
+ ;; add them one by one
+ (pass-if "attr-on! A_BLINK"
+	  (begin
+	    (attr-on! win A_BLINK)
+	    (addstr win "x" #:y 0 #:x 0)
+	    (refresh win)
+	    (let ((x2 (inch win #:y 0 #:x 0)))
+	      (equal? A_BLINK (xchar-attr x2)))))
+ 
+ (pass-if "attr-on! A_BOLD"
+	  (begin
+	    (attr-on! win A_BOLD)
+	    (addstr win "x" #:y 0 #:x 0)
+	    (refresh win)
+	    (let ((x2 (inch win #:y 0 #:x 0)))
+	      (equal? (logior A_BLINK
+			      A_BOLD)
+		      (xchar-attr x2)))))
+ 
+ (pass-if "attr-on! A_DIM"
+	  (begin
+	    (attr-on! win A_DIM)
+	    (addstr win "x" #:y 0 #:x 0)
+	    (refresh win)
+	    (let ((x2 (inch win #:y 0 #:x 0)))
+	      (equal? (logior A_BLINK
+			      A_BOLD
+			      A_DIM)
+		      (xchar-attr x2)))))
+ 
+ (pass-if "attr-on! A_INVIS"
+	  (begin
+	    (attr-on! win A_INVIS)
+	    (addstr win "x" #:y 0 #:x 0)
+	    (refresh win )
+	    (let ((x2 (inch win #:y 0 #:x 0)))
+	      (equal? (logior A_BLINK
+			      A_BOLD
+			      A_DIM
+			      A_INVIS)
+		      (xchar-attr x2)))))
+ 
+ (pass-if "attr-on! A_PROTECT"
+	  (begin
+	    (attr-on! win A_PROTECT)
+	    (addstr win "x" #:y 0 #:x 0)
+	    (refresh win )
+	    (let ((x2 (inch win #:y 0 #:x 0)))
+	      (equal? (logior A_BLINK
+			      A_BOLD
+			      A_DIM
+			      A_INVIS
+			      A_PROTECT)
+		      (xchar-attr x2)))))
+ 
+ (pass-if "attr-on! A_REVERSE"
+	  (begin
+	    (attr-on! win A_REVERSE)
+	    (addstr win "x" #:y 0 #:x 0)
+	    (refresh win )
+	    (let ((x2 (inch win #:y 0 #:x 0)))
+	      (equal? (logior A_BLINK
+			      A_BOLD
+			      A_DIM
+			      A_INVIS
+			      A_PROTECT
+			      A_REVERSE)
+		      (xchar-attr x2)))))
+ 
+ (pass-if "attr-on! A_STANDOUT"
+	  (begin
+	    (attr-on! win A_STANDOUT)
+	    (addstr win "x" #:y 0 #:x 0)
+	    (refresh win)
+	    (let ((x2 (inch win #:y 0 #:x 0)))
+	      (equal? (logior A_BLINK
+			      A_BOLD
+			      A_DIM
+			      A_INVIS
+			      A_PROTECT
+			      A_REVERSE
+			      A_STANDOUT)
+		      (xchar-attr x2)))))
+ 
+ (pass-if "attr-on! A_UNDERLINE"
+	  (begin
+	    (attr-on! win A_UNDERLINE)
+	    (addstr win "x" #:y 0 #:x 0)
+	    (refresh win )
+	    (let ((x2 (inch win #:y 0 #:x 0)))
+	      (equal? (logior A_BLINK
+			      A_BOLD
+			      A_DIM
+			      A_INVIS
+			      A_PROTECT
+			      A_REVERSE
+			      A_STANDOUT
+			      A_UNDERLINE)
+		      (xchar-attr x2)))))
+ ;; take one away
+ (pass-if "attr-off! A_UNDERLINE"
+	  (begin
+	    (attr-off! win A_UNDERLINE)
+	    (addstr win "x" #:y 0 #:x 0)
+	    (refresh win)
+	    (let ((x2 (inch win #:y 0 #:x 0)))
+	      (equal? (logior A_BLINK
+			      A_BOLD
+			      A_DIM
+			      A_INVIS
+			      A_PROTECT
+			      A_REVERSE
+			      A_STANDOUT)
+		      (xchar-attr x2)))))
+
+ ;; set the attribute to be blink alone
+ (pass-if "attr-set! A_BLINK"
+	  (begin
+	    (attr-set! win A_BLINK)
+	    (addstr win "x" #:y 0 #:x 0)
+	    (refresh win)
+	    (let ((x2 (inch win #:y 0 #:x 0)))
+	      (equal? A_BLINK (xchar-attr x2)))))
+ 
+ ;; set it to STANDOUT alone
+ (pass-if "standout!"
+	  (begin
+	    (clear win)
+	    (standout! win)
+	    (addstr win "x" #:y 0 #:x 0)
+	    (refresh win)
+	    (let ((x2 (inch win #:y 0 #:x 0)))
+	      (equal? A_STANDOUT (xchar-attr x2)))))
+ 
+ ;; reset via A_NORMAL
+ (pass-if "attr-set! A_NORMAL"
+	  (begin
+	    (clear win)
+	    (attr-set! win A_NORMAL)
+	    (addstr win "x" #:y 0 #:x 0)
+	    (refresh win)
+	    (let ((x2 (inch win #:y 0 #:x 0)))
+	      (equal? 0 (xchar-attr x2)))))
+ 
+ ;; add color via color-set!
+ (pass-if "color-set! 1"
+	  (begin
+	    (clear win)
+	    (color-set! win 1)
+	    (addstr win "x" #:y 0 #:x 0)
+	    (refresh win)
+	    (let ((x2 (inch win #:y 0 #:x 0)))
+	      (equal? (color-pair 1) (xchar-color x2)))))
+ 
+ 
+ (pass-if "standend! #2"
+	  (begin
+	    (clear win)
+	    (standend! win)
+	    (addstr win "x" #:y 0 #:x 0)
+	    (refresh win)
+	    (let ((x2 (inch win #:y 0 #:x 0)))
+	      (equal? 0 (xchar-attr x2)))))
+ 
+ (pass-if "attr-on! A_BOLD"
+	  (begin
+	    (clear win)
+	    (attr-on! win A_BOLD)
+	    (addstr win "x" #:y 0 #:x 0)
+	    (refresh win )
+	    (let ((x2 (inch win #:y 0 #:x 0)))
+	      (equal? A_BOLD (xchar-attr x2)))))
+ 
+ (pass-if "attr-off! A_BOLD"
+	  (begin
+	    (clear win )
+	    (attr-off! win A_BOLD)
+	    (addstr win "x" #:y 0 #:x 0)
+	    (refresh win)
+	    (let ((x2 (inch win #:y 0 #:x 0)))
+	      (equal? 0 (xchar-attr x2)))))
+ 
+ (pass-if "attr-set! and attr-get A_UNDERLINE color-pair1"
+	  (begin
+	    (clear win)
+	    (attr-set! win A_UNDERLINE 1)
+	    (addstr win "x" #:y 0 #:x 0)
+	    (refresh win)
+	    (let ((x2 (attr-get win)))
+	      (addstr win (format #f "~A" x2))
+	      (refresh win)
+	      ;; (sleep 1)
+	      (and
+	       (equal? (car x2) A_UNDERLINE)
+	       (equal? (cadr x2) 1)))))
+ 
+ (pass-if "chgat"
+	  (begin
+	    (clear win)
+	    (attr-set! win A_NORMAL)
+	    (addstr win "xx" #:y 0 #:x 0)
+	    (refresh win)
+	    (move win 0 0)
+	    (chgat win 2 A_BOLD 1)
+	    (refresh win)
+	    (let ((x1 (inch win #:y 0 #:x 0))
+		  (x2 (inch win #:y 0 #:x 1)))
+	      (and
+	       (equal? A_BOLD (xchar-attr x1))
+               (equal? 1 (xchar-color x1))
+	       (equal? A_BOLD (xchar-attr x2))
+               (equal? 1 (xchar-color x2))))))
+ 
+ 
+ (pass-if "chgat #:y #:x"
+	  (begin
+	    (clear win)
+	    (attr-set! win A_NORMAL)
+	    (addstr win "xx" #:y 0 #:x 0)
+	    (refresh win)
+	    (chgat win 2 A_BOLD 1 #:y 0 #:x 0)
+	    (refresh win)
+	    (let ((x1 (inch win #:y 0 #:x 0))
+		  (x2 (inch win #:y 0 #:x 1)))
+	      (and
+	       (equal? A_BOLD (xchar-attr x1))
+               (equal? 1 (xchar-color))
+	       (equal? A_BOLD (xchar-attr x2))
+               (equal? 1 (xchar-color x2))))))
+
+(endwin)
+
+(curses-test-end test "r006_attr.out")

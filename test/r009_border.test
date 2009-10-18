@@ -1,0 +1,126 @@
+;;;; -*- Mode: scheme; -*-
+;;;; r009_border.test --- test suite for curses's border
+
+(use-modules (test lib)
+	     (test lib2)
+	     (srfi srfi-1)
+	     (gucu curses))
+
+
+(define test (curses-test-start))
+
+(define win (initscr))
+
+(define (mvinch y x)
+  (inch win #:y y #:x x))
+
+;; Should be able to draw borders
+(with-test-prefix 
+ "border"
+		  
+ (pass-if "border default"
+	  (begin
+	    (clear win)
+	    (border win 0 0 0 0 0 0 0 0)
+	    (refresh win)
+	    (let ((l  (mvinch 1 	     0))
+		  (r  (mvinch 1             (- (cols) 1)))
+		  (t  (mvinch 0 	     1))
+		  (b  (mvinch (- (lines) 1) 1))
+		  (tl (mvinch 0 	     0))
+		  (tr (mvinch 0 	     (- (cols) 1)))
+		  (bl (mvinch (- (lines) 1) 0))
+		  (br (mvinch (- (lines) 1) (- (cols) 1)))
+		  )
+	      (and
+	       (equal? l (normal (acs-vline)))
+	       (equal? r (normal (acs-vline)))
+	       (equal? t (normal (acs-hline)))
+	       (equal? b (normal (acs-hline)))
+	       (equal? tl (normal (acs-ulcorner)))
+	       (equal? tr (normal (acs-urcorner)))
+	       (equal? bl (normal (acs-llcorner)))
+	       (equal? br (normal (acs-lrcorner)))))))
+ 
+ (pass-if "border"
+	  (begin
+	    (clear win)
+	    (border win (normal #\A) (normal #\B) (normal #\C) (normal #\D)
+                    (normal #\E) (normal #\F) (normal #\G) (normal #\H))
+	    (refresh win)
+	    (let ((l  (mvinch 1 	     0))
+		  (r  (mvinch 1             (- (cols) 1)))
+		  (t  (mvinch 0 	     1))
+		  (b  (mvinch (- (lines) 1) 1))
+		  (tl (mvinch 0 	     0))
+		  (tr (mvinch 0 	     (- (cols) 1)))
+		  (bl (mvinch (- (lines) 1) 0))
+		  (br (mvinch (- (lines) 1) (- (cols) 1)))
+		  )
+	      (and
+	       (equal? l (normal #\A))
+	       (equal? r (normal #\B))
+	       (equal? t (normal #\C))
+	       (equal? b (normal #\D))
+	       (equal? tl (normal #\E))
+	       (equal? tr (normal #\F))
+	       (equal? bl (normal #\G))
+	       (equal? br (normal #\H))))))
+ 
+ (pass-if "hline"
+	  (begin
+	    (clear win)
+	    (move win 1 1)
+	    (hline win (normal #\A) 2)
+	    (refresh win)
+	    (let ((x1  (mvinch 1 1))
+		  (x2  (mvinch 1 2))
+		  )
+	      (and
+	       (equal? x1 (normal #\A))
+	       (equal? x2 (normal #\A)))))
+
+ (pass-if "vline"
+	  (begin
+	    (clear win)
+	    (move win 1 1)
+	    (vline win (normal #\A) 2)
+	    (refresh win)
+	    (let ((x1  (mvinch 1 1))
+		  (x2  (mvinch 2 1))
+		  )
+	      (and
+	       (equal? x1 (normal #\A))
+	       (equal? x2 (normal #\A))))))
+ 
+ (pass-if "hline #:y #:x"
+	  (begin
+	    (clear win)
+	    (hline win (normal #\A) 2 #:y 1 #:x 1) ; A
+	    (refresh win)
+	    (let ((x1  (mvinch 1 1))
+		  (x2  (mvinch 1 2))
+		  )
+	      (and
+	       (equal? x1 (normal #\A))
+	       (equal? x2 (normal #\A))))))
+ 
+ (pass-if "vline #:y #:x"
+	  (begin
+	    (clear win)
+	    (vline win (normal #\A) 2 #:y 1 #:x 1) ; A
+	    (refresh win)
+	    (let ((x1  (mvinch 1 1))
+		  (x2  (mvinch 2 1))
+		  )
+	      (and
+	       (equal? x1 (normal #\A))
+	       (equal? x2 (normal #\A))))))
+ )
+
+(endwin)
+
+(curses-test-end test "r009_border.out")
+
+
+

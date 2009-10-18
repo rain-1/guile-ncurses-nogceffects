@@ -1,0 +1,74 @@
+;;;; -*- Mode: scheme; -*-
+;;;; r014_getnstr.test --- test suite for curses's getnstr
+
+(use-modules (test lib)
+	     (test lib2)
+	     (srfi srfi-1)
+	     (gucu curses))
+
+
+(define test (curses-test-start))
+
+(define win (initscr))
+
+;; Should be able to get strings from the keyboard
+
+(with-test-prefix "getnstr"
+		  
+		  (pass-if "getnstr"
+			   (begin
+			     (erase win)
+			     (refresh win)
+			     (ungetch #\nl)
+			     (ungetch #\p)
+			     (ungetch #\i)
+			     (ungetch #\h)
+			     (let ((s1 (getnstr win 10)))
+			       (begin
+				 (refresh win)
+				 (string=? s1 "hip")))))
+
+		  (pass-if "getnstr"
+			   (begin
+			     (erase win)
+			     (refresh win)
+			     (ungetch #\nl)
+			     (ungetch #\p)
+			     (ungetch #\i)
+			     (ungetch #\h)
+			     (let ((s1 (getnstr win 2)))
+			       (begin
+				 (refresh win)
+				 (string=? s1 "hi")))))
+
+
+		  (pass-if "getnstr #:y #:x"
+			   (begin
+			     (erase win)
+			     (refresh win)
+			     (ungetch #\nl)
+			     (ungetch #\p)
+			     (ungetch #\i)
+			     (ungetch #\h)
+			     (let ((s1 (getnstr win 10 #:y 1 #:x 1)))
+			       (begin
+				 (refresh win)
+				 (string=? s1 "hip")))))
+
+		  (pass-if "getnstr #:y #:x"
+			   (begin
+			     (erase win)
+			     (refresh win)
+			     (ungetch #\nl)
+			     (ungetch #\p)
+			     (ungetch #\i)
+			     (ungetch #\h)
+			     (let ((s1 (getnstr win 2 #:y 1 #:x 1)))
+			       (begin
+				 (refresh win)
+				 (string=? s1 "hi"))))))
+
+(endwin)
+
+(curses-test-end test "r014_getnstr.out")
+

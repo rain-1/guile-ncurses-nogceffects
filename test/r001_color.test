@@ -1,0 +1,122 @@
+;;;; -*- Mode: scheme; -*-
+;;;; r001_color.test --- test suite for curses's color functions
+
+(use-modules (test lib)
+	     (test lib2)
+	     (srfi srfi-1)
+	     (gucu curses))
+
+(define test (curses-test-start))
+
+(define scr (initscr))
+
+;;; These values are the xterm values
+
+;; Should be able to start color
+(with-test-prefix
+ "start-color"
+ (expect-fail-exception "(default)" exception:miscellaneous-error
+			(equal? OK (start-color))))
+
+;; xterm has colors
+(with-test-prefix
+ "has-colors?"
+ (pass-if "xterm default"
+	  (has-colors?)))
+
+
+;; xterm can't change color
+(with-test-prefix
+ "can-chage-color?"
+ (pass-if "xterm default"
+	  (equal? #f
+		  (can-change-color?))
+	  *unspecified*))
+
+;; xterm has 8 colors
+(with-test-prefix
+ "COLORS"
+ (pass-if "xterm default"
+	  (equal? 8
+		  (colors))))
+
+;; xterm has 64 color pairs
+(with-test-prefix
+ "COLOR-PAIRS"
+ (pass-if "xterm default"
+	  (equal? 64
+		  (color-pairs))))
+
+;; Check some colors
+(with-test-prefix
+ "COLOR-"
+ (pass-if "BLACK"
+	  (lset= equal?
+		 '(0 0 0)
+		 (color-content COLOR_BLACK)))
+ (pass-if "RED"
+	  (lset= equal?
+		 '(680 0 0)
+		 (color-content COLOR_RED)))
+ (pass-if "GREEN"
+	  (lset= equal?
+		 '(0 680 0)
+		 (color-content COLOR_GREEN)))
+ (pass-if "YELLOW"
+	  (lset= equal?
+		 '(680 680 0)
+		 (color-content COLOR_YELLOW)))
+ (pass-if "BLUE"
+	  (lset= equal?
+		 '(0 0 680)
+		 (color-content COLOR_BLUE)))
+ (pass-if "MAGENTA"
+	  (lset= equal?
+		 '(680 0 680)
+		 (color-content COLOR_MAGENTA)))
+ (pass-if "CYAN"
+	  (lset= equal?
+		 '(0 680 0)
+		 (color-content COLOR_CYAN)))
+ (pass-if "WHITE"
+	  (lset= equal?
+		 '(680 680 680)
+		 (color-content COLOR_WHITE))))
+
+;; ability to  set colors on xterm depends on how xterm was compiled
+(with-test-prefix
+ "init-color"
+ (expect-fail "set color #1"
+	      (begin
+		(false-if-exception (init-color 1 200 200 200))
+		(lset= equal?
+		       '(200 200 200)
+		       (color-content 1))
+		*unspecified*)))
+
+;; can set color pairs on xterm
+(with-test-prefix
+ "init-pair"
+ (pass-if "set pair #1"
+	  (begin
+	    (init-pair 1 COLOR_BLACK COLOR_RED)
+	    (lset= equal?
+		   (list COLOR_BLACK COLOR_RED)
+		   (pair-content 1)))))
+
+
+;; after calling use-default-colors, the special color -1 should be
+;; recognized
+(with-test-prefix
+ "default-colors"
+ (pass-if "use-default-colors"
+	  (and (use-default-colors)
+	       (init-pair 1 -1 -1)))
+
+ (pass-if "assume-default-colors"
+	  (assume-default-colors COLOR_BLACK COLOR_YELLOW)))
+
+
+(endwin)
+
+(curses-test-end test "r001_color.out")

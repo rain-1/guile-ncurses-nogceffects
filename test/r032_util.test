@@ -1,0 +1,61 @@
+;;;; -*- Mode: scheme; -*-
+;;;; r032_util.test --- test suite for curses's utility routines
+
+(use-modules (test lib)
+	     (test lib2)
+	     ;; (gucu curses-wide)
+	     (gucu curses)
+	     (srfi srfi-1))
+
+(define test (curses-test-start))
+
+(define mainwin (initscr))
+
+;; Try some of the obscure utilities
+
+(with-test-prefix "util"
+		  
+		  (pass-if "delay-output"
+			   (begin
+			     (delay-output 1)
+			     #t))
+
+		  (pass-if "curses-version"
+			   (string? (curses-version)))
+
+		  (pass-if "keyname #\\bel"
+			   (string=? "^G" (keyname (char->integer #\bel))))
+		  
+		  (pass-if "keyname x"
+			   (string=? "x" (keyname (char->integer #\x))))
+		  
+		  (pass-if "keyname home"
+			   (string=? "KEY_HOME" (keyname KEY_HOME))))
+
+(with-test-prefix 
+ "getwin/putwin"
+
+ (let ((win (newwin 5 5 5 5))
+       (windata #f))
+
+   (pass-if "putwin"
+	    (begin
+	      (addstr win "zzz" #:y 0 #:x 0)
+	      (refresh win)
+	      (set! windata (call-with-output-string
+			     (lambda (port)
+			       (putwin win port))))
+	      (not (string-null? windata))))
+   
+   (pass-if "getwin"
+	    (begin
+	      (clear mainwin)
+	      (refresh mainwin)
+	      (let ((win (call-with-input-string windata getwin)))
+		(refresh win)
+		;; (sleep 1)
+		(string=? "zzz" (instr win #:y 0 #:x 0 #:n 3)))))))
+
+(endwin)
+
+(curses-test-end test "r032_util.out")		  

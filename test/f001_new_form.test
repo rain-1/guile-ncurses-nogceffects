@@ -1,0 +1,28 @@
+;;;; -*- Mode: scheme; -*-
+;;;; f001_new_form.test --- test suite for curses's form functions
+
+(use-modules (test lib)
+	     (test lib2)
+	     (srfi srfi-1)
+	     (gucu curses)
+	     (gucu form))
+
+(define test (curses-test-start))
+
+(define stdscr (initscr))
+
+;; Should be able to make a form
+(with-test-prefix "form: new-form"
+		  
+		  (pass-if-exception "no fields" exception:wrong-type-arg
+				     (let ((f (new-form '())))
+				       (form? f)))
+		  
+		  (pass-if "one field"
+			   (let* ((field (new-field 5 5 0 0 0 0))
+				  (f (new-form (list field))))
+			     (form? f))))
+	   
+(endwin)
+
+(curses-test-end test "f001_new_form.out")

@@ -1,0 +1,42 @@
+;;;; -*- Mode: scheme; -*-
+;;;; m006_mitem_visible.test ---  item-visible
+
+(use-modules (test lib)
+	     (test lib2)
+	     (srfi srfi-1)
+	     (gucu curses)
+	     (gucu menu))
+
+(define test (curses-test-start))
+
+(define win (initscr))
+
+;; Should be able to make a menu
+(with-test-prefix "mitem-visible"
+		  
+		  ;; The last two items in this menu should be invisible
+		  ;; because the format of the menu only has 3 rows
+		  (pass-if "set-item-visible!"
+			   (let* ((item1 (new-item "item1" "description1"))
+				  (item2 (new-item "item2" "description2"))
+				  (item3 (new-item "item3" "description3"))
+				  (item4 (new-item "item4" "description4"))
+				  (item5 (new-item "item5" "description5"))
+				  (m (new-menu (list item1 item2 item3 item4 item5))))
+			     (set-menu-format! m 3 1)
+			     (post-menu m)
+			     (refresh win)
+			     ;; (sleep 3)
+			     (let ((ret (and (item-visible? item1)
+					     (item-visible? item2)
+					     (item-visible? item3)
+					     (not (item-visible? item4))
+					     (not (item-visible? item5)))))
+			       (unpost-menu m)
+			       (refresh win)
+			       ret))))
+
+
+(endwin)
+
+(curses-test-end test "m006_mitem_visible.out")

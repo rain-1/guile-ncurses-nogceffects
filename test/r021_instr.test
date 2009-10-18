@@ -1,0 +1,56 @@
+;;;; -*- Mode: scheme; -*-
+;;;; r021_instr.test --- test suite for curses's instr
+
+(use-modules (test lib)
+	     (test lib2)
+	     ;; (gucu curses-wide)
+	     (gucu curses)
+	     (srfi srfi-1))
+
+(define test (curses-test-start))
+
+(define win (initscr))
+
+(with-test-prefix 
+ "instr"
+ 
+ (pass-if "instr"
+	  (begin
+	    (clear win)
+	    (move win 0 0)
+	    (addstr win "hello")
+	    (refresh win)
+	    (move win 0 0)
+	    (let ((w2 (instr win)))
+	      (string=? "hello" (string-take w2 (string-length "hello"))))))
+
+ (pass-if "instr #:n"
+	  (begin
+	    (clear win)
+	    (move win 0 0)
+	    (addstr win "hello")
+	    (refresh win)
+	    (move win 0 0)
+	    (let ((w2 (instr win #:n 2)))
+	      (string=? "he" w2))))
+
+ (pass-if "instr #:x #:y"
+	  (begin
+	    (clear win)
+	    (move win 1 0)
+	    (addstr win "bold")
+	    (refresh win)
+	    (let ((x2 (instr win #:y 1 #:x 0)))
+	      (string=? "bold" (string-take x2 (string-length "bold"))))))
+
+ (pass-if "instr #:y #:x #:n"
+	  (begin
+	    (clear win)
+	    (move win 1 0)
+	    (addstr win "bold")
+	    (refresh win)
+	    (let ((x2 (instr win #:y 1 #:x 0 #:n 2)))
+	      (string=? "bo" x2)))))
+(endwin)
+
+(curses-test-end test "r021_instr.out")		  

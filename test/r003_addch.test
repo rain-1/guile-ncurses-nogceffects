@@ -1,0 +1,48 @@
+;;;; -*- Mode: scheme; -*-
+;;;; r003_addch.test --- test suite for curses's addch functions
+
+(use-modules (test lib)
+	     (test lib2)
+	     (srfi srfi-1)
+	     (gucu curses))
+
+
+(define test (curses-test-start))
+
+(define win (initscr))
+
+(define x_normal (normal #\x))
+(define x_bold (bold #\x))
+
+(with-test-prefix "addch"
+		  
+		  (pass-if "addch"
+			   (begin
+			     (clear win)
+			     (move win 0 0)
+			     (addch win x_normal)
+			     (refresh win)
+			     (move win 0 0)
+			     (let ((x2 (inch win)))
+			       (equal? x_normal x2))))
+                  
+		  (pass-if "addch #:y #:x"
+			   (begin
+			     (clear win)
+			     (addch win x_bold #:y 1 #:x 0)
+			     (refresh win)
+			     (let ((x2 (inch win #:y 1 #:x 0)))
+			       (equal? x_bold x2))))
+
+		  (pass-if "echochar"
+			   (begin
+			     (clear win)
+			     (move win 2 0)
+			     (echochar win x_normal)
+			     (let ((x2 (inch win #:y 2 #:x 0)))
+			       (equal? x_normal x2)))))
+			      
+(endwin)
+
+(curses-test-end test "r003_addch.out")
+

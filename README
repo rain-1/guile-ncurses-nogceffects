@@ -1,1 +1,34 @@
+The README file for Guile Curses
+$Id: README,v 1.5 2009/01/18 07:01:11 spike_gran Exp $
+
+
+This is gucu v0.3, the curses library from the Gano project.  It
+provides functionality to allow programs written in Guile to interact
+with character screens in a terminal-independent manner.  It is a
+wrapper to the underlying curses library.
+
+This library can be found at http://gano.sourceforge.net .
+
+This distribution has the following subdirectories:
+- src: the source code for the library
+- test: test scripts to verify that the library functions correctly
+- doc: documentation for the library source to generate it
+- build_aux: files used by the configuration and building programs
+- tools: some executable programs that might be useful
+
+For an explanation of the installation of the package, see the INSTALL
+file.
+
+For an explanation of the copying restrictions for this package, see
+COPYING.
+
+
+
+Local Variables:
+mode: text
+fill-column: 70
+mode: auto-fill
+End:
+
+
 

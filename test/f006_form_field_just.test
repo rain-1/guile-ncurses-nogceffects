@@ -1,0 +1,33 @@
+;;;; -*- Mode: scheme; -*-
+;;;; f006_form_field_just.test --- test suite for curses's field justification funcs
+
+(use-modules (test lib)
+	     (test lib2)
+	     (srfi srfi-1)
+	     (gucu curses)
+	     (gucu form))
+
+(define test (curses-test-start))
+
+(initscr)
+
+;; Should be able to make a form with pages
+(with-test-prefix "form: field just"
+		  
+		  ;; Check that the form's field can be set by reference
+		  (pass-if "set-field-just"
+			   (let ((field1 (new-field 1 10 0 0 0 0))
+				 (field2 (new-field 1 10 1 0 0 0))
+				 (field3 (new-field 1 10 2 0 0 0))
+				 (field4 (new-field 1 10 3 0 0 0)))
+			     (set-field-just! field1 NO_JUSTIFICATION)
+			     (set-field-just! field2 JUSTIFY_RIGHT)
+			     (set-field-just! field3 JUSTIFY_LEFT)
+			     (set-field-just! field4 JUSTIFY_CENTER)
+			     (and (eqv? (field-just field1) NO_JUSTIFICATION)
+				  (eqv? (field-just field2) JUSTIFY_RIGHT)
+				  (eqv? (field-just field3) JUSTIFY_LEFT)
+				  (eqv? (field-just field4) JUSTIFY_CENTER)))))
+(endwin)
+
+(curses-test-end test "f005_form_field_just.out")

@@ -1,0 +1,35 @@
+;;;; -*- Mode: scheme; -*-
+
+;;;; m009_menu_format.test --- set-menu-format menu-format
+
+(use-modules (test lib)
+	     (test lib2)
+	     (srfi srfi-1)
+	     (gucu curses)
+	     (gucu menu))
+
+(define test (curses-test-start))
+
+(define win (initscr))
+
+;; Should be able to make a menu
+(with-test-prefix "menu-cursor"
+
+		  (pass-if "(default)"
+			   (let* ((item1 (new-item "item1" "description1"))
+				  (menu (new-menu (list item1))))
+			     (set-menu-format! menu 3 2)
+			     (post-menu menu)
+			     (refresh win)
+			     ;; (sleep 3)
+			     (let* ((rowcol (menu-format menu))
+				    (row (first rowcol))
+				    (col (second rowcol)))
+			       (unpost-menu menu)
+			       (refresh win)
+			       (and (equal? row 3)
+				    (equal? col 2))))))
+
+(endwin)
+
+(curses-test-end test "m009_menu_format.out")

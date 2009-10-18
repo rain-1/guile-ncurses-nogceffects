@@ -1,0 +1,106 @@
+;;;; -*- Mode: scheme; -*-
+;;;; f002_data.test --- test suite for curses's form data-ahead and data-behind
+
+(use-modules (test lib)
+	     (test lib2)
+	     (srfi srfi-1)
+	     (gucu curses)
+	     (gucu form))
+
+(define test (curses-test-start))
+
+(define stdscr (initscr))
+
+;; Create a two-page form.  Set the form to the first page.  Thus data-ahead
+;; should be true and data behind should be false
+; (with-test-prefix "form: data"
+; 		  (pass-if "first page"
+; 			   (let* ((field1 (new-field 1 10 0 0 0 0))
+; 				  (field2 (new-field 1 10 1 0 0 0)))
+; 			     (let* (
+; 				    ;; Make the fields with underlines
+; 				    (ret1 (set-field-back field1 A_UNDERLINE))
+; 				    (ret2 (set-field-back field2 A_UNDERLINE))
+; 				    ;; Make field 2 the start of a new page
+; 				    (ret3 (set-new-page field2 #t))
+; 				    ;; Add text to the fields, so they can be
+; 				    ;; distinguished
+; 				    (ret4 (set-field-buffer field1 0 "Buffer 1"))
+; 				    (ret5 (set-field-buffer field2 0 "Buffer 2"))
+				    
+; 				    ;; Post that form
+; 				    (frm (new-form (list field1 field2)))
+; 				    (ret6 (post-form frm))
+; 				    ;; Paint it
+; 				    (ret7 (refresh))
+; 				    ;; Check if there are unprinted chars to the right
+; 				    ;; of the field
+; 				    (ret8 (data-ahead frm)))
+; 			       (mvaddstr 3 0 (format #f "~a ~a ~a ~a ~a ~a ~a ~a" 
+; 						     ret1 ret2 ret3 ret4 ret5 ret6 ret7 ret8))
+; 			       (refresh)
+; 			       (sleep 1)
+; 			       (eqv? ret8 #t)))))
+
+(with-test-prefix 
+ "form: data"
+
+ (pass-if "data-behind?"
+	  (let* ((field1 (new-field 1 10 0 0 0 0)))
+	    (let* (
+		   ;; Let the field have more text than the visible
+		   (ret1 (field-opts-off! field1 O_STATIC))
+		   ;; Add text to the fields.  More
+		   ;; than the screen box can hold
+		   (ret2 (set-field-buffer! field1 0 "ABCDEFGHIJLKMNOPQRSTUVWXYZ"))
+		   ;; Post that form
+		   (frm (new-form (list field1)))
+		   (ret3 (post-form frm))
+		   ;; Paint it
+		   (ret4 (refresh stdscr))
+		   ;; Advance the cursor to the end of the field
+		   (ret5 (form-driver frm REQ_END_FIELD))
+		   ;; Paint it
+		   (ret6 (refresh stdscr))
+		   ;; Check if there are characters to the left of the field (yes)
+		   (ret7 (data-behind? frm))
+		   ;; Check if there are characters to the right of the field (no)
+		   (ret8 (data-ahead? frm)))
+	      
+	      (addstr stdscr (format #f "~a ~a ~a ~a ~a ~a ~a ~a" 
+				     ret1 ret2 ret3 ret4 ret5 ret6 ret7 ret8)
+		      #:y 3 #:x 0)
+	      (refresh stdscr)
+	      ;;(sleep 1)
+	      ;; pass if data-behind returned true and data-ahead is false
+	      (and ret7 (not ret8)))))
+ 
+ (pass-if "data-ahead?"
+	  (let* ((field1 (new-field 1 10 0 0 0 0)))
+	    (let* (
+		   ;; Let the field have more text than the visible
+		   (ret1 (field-opts-off! field1 O_STATIC))
+		   ;; Add text to the fields.  More
+		   ;; than the screen box can hold
+		   (ret2 (set-field-buffer! field1 0 "ABCDEFGHIJLKMNOPQRSTUVWXYZ"))
+		   
+		   ;; Post that form
+		   (frm (new-form (list field1)))
+		   (ret3 (post-form frm))
+		   ;; Paint it
+		   (ret4 (refresh stdscr))
+		   ;; Check if there are characters to the left of the field (no)
+		   (ret5 (data-behind? frm))
+		   ;; Check if there are characters to the right of the field (yes)
+		   (ret6 (data-ahead? frm)))
+	      (addstr stdscr (format #f "~a ~a ~a ~a ~a ~a" 
+				     ret1 ret2 ret3 ret4 ret5 ret6)
+		      #:y 3 #:x 0)
+	      (refresh stdscr)
+	      ;;(sleep 1)
+	      ;; pass if data-ahead returned true
+	      (and (not ret5) ret6)))))
+
+(endwin)
+
+(curses-test-end test "f002_data.out")

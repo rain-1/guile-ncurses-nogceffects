@@ -1,0 +1,80 @@
+;;;; -*- Mode: scheme; -*-
+;;;; r018_inopts.test --- test suite for curse's input options
+
+(use-modules (test lib)
+	     (test lib2)
+	     ;; (gucu curses-wide)
+	     (gucu curses)
+	     (srfi srfi-1))
+
+(define test (curses-test-start))
+
+(define win (initscr))
+
+;; Should be able to change input options
+(with-test-prefix "inopts"
+		  
+		  (pass-if "cbreak"
+			   (begin
+			     (clear win)
+			     (refresh win)
+			     (cbreak)
+			     (nodelay! win #t)
+			     (equal? #f (getch win))))
+
+		  (pass-if "halfdelay"
+			   (begin
+			     (halfdelay 1)
+			     (equal? #f (getch win))))
+		  
+		  ;; This test shows that 8-bit characters are not
+		  ;; truncated when meta is true
+ 		  (pass-if "meta"
+ 			   (begin
+ 			     (nodelay! win #t)
+ 			     (meta #t)
+ 			     (ungetch (+ 128 (char->integer #\A)))
+ 			     (let ((k1 (getch win)))
+ 			       (addstr win (format #f "~s~%" k1))
+ 			       (refresh win)
+ 			       (equal? k1 (+ 128 (char->integer #\A))))))
+
+		  ;; This test *SHOULD* show that 8-bit characters are
+		  ;; truncated when meta is false, but, ncurses
+		  ;; doesn't to that yet.
+ 		  (pass-if "meta"
+ 			   (begin
+ 			     (meta #f)
+ 			     (ungetch (+ 128 (char->integer #\A)))
+ 			     (let ((k1 (getch win)))
+ 			       (addstr win (format #f "~s~%" k1))
+ 			       (refresh win)
+ 			       (equal? k1 (char->integer #\A))
+			       *unspecified*)))
+
+; 		  (pass-if "keypad!"
+; 			   (begin
+; 			     (cbreak)
+; 			     (keypad! (stdscr) #t)
+; 			     (ungetch (char->integer #\A))
+; 			     (ungetch (char->integer #\[))
+; 			     (ungetch (char->integer #\esc))
+; 			     (let ((k1 (getch))
+; 				   (k2 (getch))
+; 				   (k3 (getch)))
+; 			       (addstr (format #f "~s~%" k1))
+; 			       (addstr (format #f "~s~%" k2))
+; 			       (addstr (format #f "~s~%" k3))
+; 			       (addstr (format #f "~s~%" KEY_UP))
+; 			       (refresh)
+; 			       (sleep 5)
+; 			       (equal? k1 KEY_UP))))
+
+
+)
+
+
+
+(endwin)
+
+(curses-test-end test "r018_inopts.out")		  

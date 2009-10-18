@@ -1,0 +1,76 @@
+;;;; -*- Mode: scheme; coding: utf-8 -*-
+;;;; r039_getstr.test --- test suite for curses's get_wstr
+
+(use-modules (test lib)
+	     (test lib2)
+	     (gucu curses))
+
+(define test (curses-test-start))
+
+(define win (initscr))
+(set! *sleep* #t)
+
+(setlocale LC_ALL "")
+
+;; Should be able to get strings from the keyboard
+
+(with-test-prefix 
+ "ungetch/getnstr"
+ 
+ (pass-if "HI"
+	  (begin
+	    (erase win)
+	    (refresh win)
+            (noecho!)
+            (let ((str "HI\n"))
+              (map (lambda (c)
+                     (addstr win (format #f "ungetch: ~s\n" c))
+                     (ungetch c))
+                   (string->list (string-reverse str)))
+              (let* ((str2 (getnstr win 3))
+                     (pass (string=? str2 "HI")))
+                (addstr win (format #f "getnstr: ~s\n" str2))
+                (if pass (addstr win "PASS") (addstr win "FAIL"))
+                (refresh win)
+                (maybe-sleep 3)
+                pass))))
+
+ (pass-if "ĤĨ"
+	  (begin
+	    (erase win)
+	    (refresh win)
+            (noecho!)
+            (let ((str "ĤĨ\n"))
+              (map (lambda (c)
+                     (addstr win (format #f "ungetch: ~s\n" c))
+                     (ungetch c))
+                   (string->list (string-reverse str)))
+              (let* ((str2 (getnstr win 3))
+                     (pass (string=? str2 "ĤĨ")))
+                (addstr win (format #f "getnstr: ~s\n" str2))
+                (if pass (addstr win "PASS") (addstr win "FAIL"))
+                (refresh win)
+                (maybe-sleep 3)
+                ;; This functionality is broken in ncurses prior to
+                ;; 20091010.
+                pass))))
+
+ (pass-if "getnstr #:y #:x (wide)"
+	  (begin
+	    (erase win)
+	    (refresh win)
+	    (ungetch #\nl)
+	    (ungetch #\P)
+	    (ungetch #\Ĩ)
+	    (ungetch #\Ĥ)
+	    (let ((s1 (getnstr win 2 #:y 1 #:x 1)))
+	      (begin
+		(refresh win)
+		(string=? s1 "ĤĨ")
+                ;; This functionality is broken in ncurses.  Tested
+                ;; with ncurses-5.7-20090808
+                *unspecified*)))))
+
+
+(endwin)
+(curses-test-end test "r039_get_wstr.out")

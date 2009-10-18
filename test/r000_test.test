@@ -1,0 +1,9 @@
+(display "Current test directory:") (newline)
+(write (getcwd)) (newline)
+(newline)
+
+(display "Load path:") (newline)
+(write %load-path) (newline)
+(newline)
+
+;; (sleep 2)

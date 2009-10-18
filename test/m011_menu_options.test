@@ -1,0 +1,49 @@
+;;;; -*- Mode: scheme; -*-
+
+;;;; m011_menu_options.test --- set-menu-opts menu-opts-on menu-opts-off menu-opts
+
+(use-modules (test lib)
+	     (test lib2)
+	     (srfi srfi-1)
+	     (gucu curses)
+	     (gucu menu))
+
+(define test (curses-test-start))
+
+(define win (initscr))
+
+;; Should be able to make a menu
+(with-test-prefix "menu-options"
+
+		  (pass-if "(default)"
+			   (let* ((item1 (new-item "item1" "description1"))
+				  (menu (new-menu (list item1))))
+			     (post-menu menu)
+			     (refresh win)
+			     ;; (sleep 3)
+			     (let ((opts (menu-opts menu)))
+			       (unpost-menu menu)
+			       (refresh win)
+			       (equal? opts (logior O_ONEVALUE
+						    O_SHOWDESC
+						    O_ROWMAJOR
+						    O_IGNORECASE
+						    O_SHOWMATCH
+						    O_NONCYCLIC)))))
+		  (pass-if "menu-opts-on"
+			   (let* ((item1 (new-item "item1" "description1"))
+				  (menu (new-menu (list item1))))
+			     (set-menu-opts! menu O_SHOWDESC)
+			     (menu-opts-on! menu O_ONEVALUE)
+			     (menu-opts-off! menu O_SHOWDESC)
+			     (post-menu menu)
+			     (refresh win)
+			     ;; (sleep 3)
+			     (let ((opts (menu-opts menu)))
+			       (unpost-menu menu)
+			       (refresh win)
+			       (equal? opts O_ONEVALUE)))))
+
+(endwin)
+
+(curses-test-end test "m010_menu_mark.out")

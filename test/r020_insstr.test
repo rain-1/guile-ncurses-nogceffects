@@ -1,0 +1,73 @@
+;;;; -*- Mode: scheme; -*-
+;;;; r020_insstr.test --- test suite for curses's insert string functions
+
+(use-modules (test lib)
+	     (test lib2)
+	     (gucu curses)
+	     (srfi srfi-1))
+
+(define test (curses-test-start))
+
+(define win (initscr))
+
+;; Should be able to change input options
+(with-test-prefix "insstr"
+		  
+		  (pass-if "insstr"
+			   (begin
+			     (clear win)
+			     (refresh win)
+			     (addstr win "xxx" #:y 0 #:x 0)
+			     (move win 0 0)
+			     (insstr win "zzz")
+			     (let ((x1 (inch win #:y 0 #:x 2))
+				   (x2 (inch win #:y 0 #:x 3)))
+			       (and
+				(equal? x1 (char->integer #\z))
+				(equal? x2 (char->integer #\x))))))
+
+		  (pass-if "insstr #:y #:x"
+			   (begin
+			     (clear win)
+			     (refresh win)
+			     (move win 0 0)
+			     (addstr win "xxx")
+			     (insstr win "zzz" #:y 0 #:x 0)
+			     (let ((x1 (inch win #:y 0 #:x 2))
+				   (x2 (inch win #:y 0 #:x 3)))
+			       (and
+				(equal? x1 (char->integer #\z))
+				(equal? x2 (char->integer #\x))))))
+
+
+		  (pass-if "insstr #:n"
+			   (begin
+			     (clear win)
+			     (refresh win)
+			     (addstr win "xxx" #:y 0 #:x 0)
+			     (move win 0 0)
+			     (insstr win "zzz" #:n 1)
+			     (let ((x1 (inch win #:y 0 #:x 0))
+				   (x2 (inch win #:y 0 #:x 1)))
+			       (and
+				(equal? x1 (char->integer #\z))
+				(equal? x2 (char->integer #\x))))))
+
+		  (pass-if "insstr #:y #:x #:n"
+			   (begin
+			     (clear win)
+			     (refresh win)
+			     (move win 0 0)
+			     (addstr win "xxx")
+			     (insstr win "zzz" #:y 0 #:x 0 #:n 1)
+			     (let ((x1 (inch win #:y 0 #:x 0))
+				   (x2 (inch win #:y 0 #:x 1)))
+			       (and
+				(equal? x1 (char->integer #\z))
+				(equal? x2 (char->integer #\x))))))
+		  )
+
+
+(endwin)
+
+(curses-test-end test "r020_insstr.out")		  

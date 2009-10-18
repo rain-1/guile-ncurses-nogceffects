@@ -1,0 +1,46 @@
+;;;; -*- Mode: scheme; -*-
+;;;; r042_mouse.test --- test suite for mouse functions
+
+(use-modules (test lib)
+	     (test lib2)
+	     (gucu curses)
+	     (srfi srfi-1))
+
+(define test (curses-test-start))
+(set! *sleep* #t)
+(define win (initscr))
+
+(with-test-prefix 
+ "mouse"
+ (pass-if "mouseinterval 1"
+          (clear win)
+          (refresh win)
+          (let* ((m (mouseinterval -1))
+                 (pass (eqv? 166 m)))
+            (addstr win (format #f "mouseinterval for ~s: ~s\n" (termname) m))
+            (addstr win "expecting 166\n")
+            (if pass
+                (addstr win "PASS\n")
+                (addstr win "FAIL\n"))
+            (refresh win)
+            (maybe-sleep 3)
+            pass))
+ 
+ (pass-if "mouseinterval 1"
+          (clear win)
+          (refresh win)
+          (mouseinterval 140)
+          (addstr win "setting mouseinterval to 140\n")
+          (let* ((m (mouseinterval -1))
+                 (pass (eqv? 140 m)))
+            (addstr win (format #f "mouseinterval for ~s: ~s\n" (termname) m))
+            (addstr win "expecting 140\n")
+            (if pass
+                (addstr win "PASS\n")
+                (addstr win "FAIL\n"))
+            (refresh win)
+            (maybe-sleep 3)
+            pass)))
+
+(endwin)
+(curses-test-end test "r042_mouse.out")
