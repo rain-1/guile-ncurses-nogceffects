@@ -279,17 +279,8 @@ inner_main (void *data    __attribute__ ((unused)),
 	  
 	  scm_c_eval_string ("(set! %load-path (append %load-path (list \".\")))");
 	  /* Call the curses libraries */
-	  if (_HAVE_LIBNCURSESW)
-	    {
-	      printf ("Loading (gucu curses)\n");
-	      printf ("Loading (gucu curses-wide)\n");
-	      scm_c_eval_string ("(use-modules (gucu curses) (gucu curses-wide))");
-	    }
-	  else
-	    {
-	      printf ("Loading (gucu curses)\n");
-	      scm_c_eval_string ("(use-modules (gucu curses))");
-	    }
+          printf ("Loading (gucu curses)\n");
+          scm_c_eval_string ("(use-modules (gucu curses))");
 	  scm_c_eval_string ("(define stdscr (stdscr))");
 
 	  scm_shell (argc, argv);

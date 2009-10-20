@@ -8,7 +8,7 @@
 (define test (curses-test-start))
 
 (define win (initscr))
-(set! *sleep* #t)
+(set! *sleep* #f)
 
 (setlocale LC_ALL "")
 

@@ -88,7 +88,7 @@ gucu_baudrate ()
 {
   int ret = baudrate ();
   /* only returns ERR if the screen is not valid  */
-  if (ret != ERR)
+  if (ret == ERR)
     curs_bad_state_error ("baudrate");
 
   return scm_from_int (baudrate ());
@@ -247,7 +247,7 @@ gucu_cbreak ()
 {
   int ret = cbreak ();
   if (ret == ERR)
-    curs_bad_state_error ("cbreak");
+    curs_bad_state_error ("cbreak!");
 
   return SCM_UNSPECIFIED;
 }
@@ -307,7 +307,7 @@ gucu_clrtobot (SCM win)
   if (ret == ERR)
     {
       /* wclrtobot only returns ERR when the window is null */
-      curs_bad_state_error ("cbreak");
+      curs_bad_state_error ("clrtobot");
     }
 
   return SCM_UNSPECIFIED;
@@ -703,11 +703,11 @@ gucu_halfdelay (SCM tenths)
 {
   int c_tenths;
 
-  SCM_ASSERT (scm_is_integer (tenths), tenths, SCM_ARG1, "halfdelay");
+  SCM_ASSERT (scm_is_integer (tenths), tenths, SCM_ARG1, "halfdelay!");
 
   c_tenths = scm_to_int (tenths);
   if (c_tenths < 1 || c_tenths > 255)
-    scm_out_of_range ("halfdelay", tenths);
+    scm_out_of_range ("halfdelay!", tenths);
   
   halfdelay (c_tenths);
   
@@ -996,7 +996,7 @@ gucu_keyname (SCM ch)
 #ifdef HAVE_LIBNCURSESW
   else
     {
-      wchar_t c_ch = _scm_to_wchar (ch);
+      wchar_t c_ch = _scm_schar_to_wchar (ch);
       ret = key_name (c_ch);
     }
 #else
@@ -1092,13 +1092,13 @@ gucu_meta (SCM bf)
   bool c_bf;
   int ret;
 
-  SCM_ASSERT (scm_is_bool (bf), bf, SCM_ARG1, "meta");
+  SCM_ASSERT (scm_is_bool (bf), bf, SCM_ARG1, "meta!");
 
   c_bf = scm_to_bool (bf);
 
   ret = meta ((WINDOW *) 0, c_bf);
   if (ret == ERR)
-    curs_bad_state_error ("meta");
+    curs_bad_state_error ("meta!");
   
   return SCM_UNSPECIFIED;
 }
@@ -1279,7 +1279,7 @@ gucu_nocbreak ()
   int ret = nocbreak ();
 
   if (ret == ERR)
-    curs_bad_state_error ("nocbreak");
+    curs_bad_state_error ("nocbreak!");
 
   return SCM_UNSPECIFIED;
 }
@@ -1437,28 +1437,28 @@ gucu_pechochar (SCM pad, SCM ch)
   WINDOW *c_pad;
   int ret;
 
-  SCM_ASSERT (_scm_is_window (pad), pad, SCM_ARG1, "pechochar");
-  SCM_ASSERT (_scm_is_schar_or_xchar (ch), ch, SCM_ARG2, "pechochar");
+  SCM_ASSERT (_scm_is_window (pad), pad, SCM_ARG1, "%pechochar");
+  SCM_ASSERT (_scm_is_xchar (ch), ch, SCM_ARG2, "%pechochar");
 
   c_pad = _scm_to_window (pad);
   if (!(c_pad->_flags & _ISPAD))
-    scm_misc_error ("pechochar", "not a pad", scm_list_1 (pad));
+    scm_misc_error ("%pechochar", "not a pad", scm_list_1 (pad));
 #ifdef HAVE_LIBNCURSESW
   {
-    cchar_t *c_ch = _scm_schar_or_xchar_to_cchar (ch);
+    cchar_t *c_ch = _scm_xchar_to_cchar (ch);
 
     ret = pecho_wchar (c_pad, c_ch);
     free (c_ch);
   }
 #else
   {
-    chtype c_ch = _scm_to_chtype (ch);
+    chtype c_ch = _scm_xchar_to_chtype (ch);
 
     ret = pechochar (c_pad, c_ch);
   }
 #endif
   if (ret == ERR)
-    curs_bad_state_error ("pechochar");
+    curs_bad_state_error ("%pechochar");
   
   return SCM_UNSPECIFIED;
 }
@@ -1913,7 +1913,7 @@ gucu_ungetch (SCM ch)
       }
     else if (scm_is_integer (ch))
       {
-        ret = unget_wch (scm_to_unsigned_int (ch));
+        ret = unget_wch (scm_to_uint (ch));
       }
     else
       {
@@ -1929,7 +1929,7 @@ gucu_ungetch (SCM ch)
       }
     else if (scm_is_integer (ch))
       {
-        ret = ungetch (scm_to_unsigned_int (ch));
+        ret = ungetch (scm_to_uint (ch));
       }
     else
       {
@@ -2297,18 +2297,18 @@ gucu_winsch (SCM win, SCM ch)
   int ret;
 
   SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "%winsch");
-  SCM_ASSERT (_scm_is_schar_or_xchar (ch), ch, SCM_ARG2, "%winsch");
+  SCM_ASSERT (_scm_is_xchar (ch), ch, SCM_ARG2, "%winsch");
 
   c_win = _scm_to_window (win);
 #ifdef HAVE_LIBNCURSESW
   {
-    cchar_t *c_ch = _scm_schar_or_xchar_to_cchar (ch);
+    cchar_t *c_ch = _scm_xchar_to_cchar (ch);
     ret = wins_wch (c_win, c_ch);
     free (c_ch);
   }
 #else
   {
-    chtype c_ch = _scm_to_chtype (ch);
+    chtype c_ch = _scm_xchar_to_chtype (ch);
     ret = winsch (c_win, c_ch);
   }
 #endif
@@ -2354,13 +2354,13 @@ gucu_winsnstr (SCM win, SCM str, SCM n)
 
 #ifdef HAVE_LIBNCURSESW
   {
-    wchar_t *c_str = _scm_sstring_or_xstring_to_wstring (str);
+    wchar_t *c_str = _scm_sstring_to_wstring (str);
     ret = wins_nwstr (c_win, c_str, c_n);
     free (c_str);
   }
 #else
   {
-    char *c_str = _scm_sstring_or_xstring_to_string (str);
+    char *c_str = _scm_sstring_to_string (str);
     ret = winsnstr (c_win, c_str, c_n);
     free (c_str);
   }
@@ -2522,7 +2522,7 @@ gucu_init_function ()
   scm_c_define_gsubr ("%border", 9, 0, 0, gucu_border);
   scm_c_define_gsubr ("can-change-color?", 0, 0, 0, 
 		      gucu_can_change_color_p);
-  scm_c_define_gsubr ("cbreak", 0, 0, 0, gucu_cbreak);
+  scm_c_define_gsubr ("cbreak!", 0, 0, 0, gucu_cbreak);
   scm_c_define_gsubr ("clear", 1, 0, 0, gucu_clear);
   scm_c_define_gsubr ("clearok!", 2, 0, 0, gucu_clearok);
   scm_c_define_gsubr ("clrtobot", 1, 0, 0, gucu_clrtobot);
@@ -2548,7 +2548,7 @@ gucu_init_function ()
   scm_c_define_gsubr ("flash", 0, 0, 0, gucu_flash);
   scm_c_define_gsubr ("flushinp", 0, 0, 0, gucu_flushinp);
   scm_c_define_gsubr ("getbkgd", 1, 0, 0, gucu_getbkgd);
-  scm_c_define_gsubr ("halfdelay", 1, 0, 0, gucu_halfdelay);
+  scm_c_define_gsubr ("halfdelay!", 1, 0, 0, gucu_halfdelay);
   scm_c_define_gsubr ("has-colors?", 0, 0, 0, gucu_has_colors_p);
   scm_c_define_gsubr ("has-ic?", 0, 0, 0, gucu_has_ic_p);
   scm_c_define_gsubr ("has-il?", 0, 0, 0, gucu_has_il_p);
@@ -2570,7 +2570,7 @@ gucu_init_function ()
   scm_c_define_gsubr ("killchar", 0, 0, 0, gucu_killchar);
   scm_c_define_gsubr ("leaveok!", 2, 0, 0, gucu_leaveok_x);
   scm_c_define_gsubr ("longname", 0, 0, 0, gucu_longname);
-  scm_c_define_gsubr ("meta", 1, 0, 0, gucu_meta);
+  scm_c_define_gsubr ("meta!", 1, 0, 0, gucu_meta);
   scm_c_define_gsubr ("mouseinterval", 1, 0, 0, gucu_mouseinterval);
   scm_c_define_gsubr ("mvcur", 4, 0, 0, gucu_mvcur);
   scm_c_define_gsubr ("mvderwin", 3, 0, 0, gucu_mvderwin);
@@ -2579,7 +2579,7 @@ gucu_init_function ()
   scm_c_define_gsubr ("newpad", 2, 0, 0, gucu_newpad);
   scm_c_define_gsubr ("newwin", 4, 0, 0, gucu_newwin);
   scm_c_define_gsubr ("nl", 0, 0, 0, gucu_nl);
-  scm_c_define_gsubr ("nocbreak", 0, 0, 0, gucu_nocbreak);
+  scm_c_define_gsubr ("nocbreak!", 0, 0, 0, gucu_nocbreak);
   scm_c_define_gsubr ("nodelay!", 2, 0, 0, gucu_nodelay_x);
   scm_c_define_gsubr ("noecho!", 0, 0, 0, gucu_noecho);
   scm_c_define_gsubr ("nonl", 0, 0, 0, gucu_nonl);
@@ -2590,7 +2590,7 @@ gucu_init_function ()
   scm_c_define_gsubr ("overlay", 2, 0, 0, gucu_overlay);
   scm_c_define_gsubr ("overwrite", 2, 0, 0, gucu_overwrite);
   scm_c_define_gsubr ("pair-number", 1, 0, 0, gucu_PAIR_NUMBER);
-  scm_c_define_gsubr ("pechochar", 2, 0, 0, gucu_pechochar);
+  scm_c_define_gsubr ("%pechochar", 2, 0, 0, gucu_pechochar);
   scm_c_define_gsubr ("pnoutrefresh", 7, 0, 0, gucu_pnoutrefresh);
   scm_c_define_gsubr ("prefresh", 7, 0, 0, gucu_prefresh);
   scm_c_define_gsubr ("qiflush", 0, 0, 0, gucu_qiflush);

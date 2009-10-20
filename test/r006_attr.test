@@ -139,7 +139,7 @@
 			      A_REVERSE
 			      A_STANDOUT)
 		      (xchar-attr x2)))))
-
+ 
  ;; set the attribute to be blink alone
  (pass-if "attr-set! A_BLINK"
 	  (begin
@@ -177,7 +177,7 @@
 	    (addstr win "x" #:y 0 #:x 0)
 	    (refresh win)
 	    (let ((x2 (inch win #:y 0 #:x 0)))
-	      (equal? (color-pair 1) (xchar-color x2)))))
+	      (equal? 1 (xchar-color x2)))))
  
  
  (pass-if "standend! #2"
@@ -200,7 +200,7 @@
  
  (pass-if "attr-off! A_BOLD"
 	  (begin
-	    (clear win )
+	    (clear win)
 	    (attr-off! win A_BOLD)
 	    (addstr win "x" #:y 0 #:x 0)
 	    (refresh win)
@@ -251,10 +251,10 @@
 		  (x2 (inch win #:y 0 #:x 1)))
 	      (and
 	       (equal? A_BOLD (xchar-attr x1))
-               (equal? 1 (xchar-color))
+               (equal? 1 (xchar-color x1))
 	       (equal? A_BOLD (xchar-attr x2))
-               (equal? 1 (xchar-color x2))))))
+               (equal? 1 (xchar-color x2)))))))
 
 (endwin)
-
+ 
 (curses-test-end test "r006_attr.out")

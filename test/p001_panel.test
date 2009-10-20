@@ -21,9 +21,13 @@
 		 (win2 (newwin 5 10 7 7))
 		 (panel1 (new-panel win1))
 		 (panel2 (new-panel win2)))
-	    (box win1 (acs-vline) (acs-hline))
+	    (box win1 
+                 (normal (acs-vline)) 
+                 (normal (acs-hline)))
 	    (addstr win1 "box 1"  #:y 1 #:x 1)
-	    (box win2 (acs-vline) (acs-hline))
+	    (box win2 
+                 (normal (acs-vline)) 
+                 (normal (acs-hline)))
 	    (addstr win2 "box 2" #:y 1 #:x 1)
 	    (update-panels)
 	    (doupdate)

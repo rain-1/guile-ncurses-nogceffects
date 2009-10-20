@@ -128,6 +128,9 @@ _scm_xchar_from_cchar (cchar_t *x)
   SCM total_list = SCM_EOL;
 
   len = getcchar(x, 0, 0, 0, 0);
+  /* LEN includes the trailing NULL */
+  len --;
+
   ret = getcchar(x, wch, &attr, &color_pair, NULL);
   
   assert (ret != ERR);
@@ -180,10 +183,12 @@ _scm_xchar_from_chtype (chtype ch)
   c_ch = (char) (ch & A_CHARTEXT);
   c_attrs = (attr_t) (ch & A_ATTRIBUTES);
   c_color_pair = (short) PAIR_NUMBER (ch);
-  printf ("chtype %d\n", ch);
-  printf ("chartext %d\n", ch & A_CHARTEXT);
-  printf ("attrs %d\n", ch & A_ATTRIBUTES);
+#if 0
+  printf ("chtype %u\n", ch);
+  printf ("chartext %lu\n", ch & A_CHARTEXT);
+  printf ("attrs %lu\n", ch & A_ATTRIBUTES);
   printf ("color %d\n", PAIR_NUMBER (ch));
+#endif
 
   if (c_attrs | A_ALTCHARSET)
     {
@@ -413,7 +418,7 @@ _scm_schar_to_wchar (SCM x)
   return c;
 }
 
-wchar_t
+char
 _scm_schar_to_char (SCM x)
 {  
   int ret;
@@ -534,7 +539,7 @@ _scm_xstring_to_cstring (SCM x)
 SCM
 _scm_xstring_from_cstring (cchar_t *x)
 {
-  int i, len, n;
+  int i, n;
   SCM member, xstring;
   wchar_t wch[CCHARW_MAX];
   attr_t attrs;
@@ -544,22 +549,24 @@ _scm_xstring_from_cstring (cchar_t *x)
   i = 0;
   while (1)
     {
-      n = getcchar(&(x[i]), NULL, &attrs, &color_pair, NULL);
-      if (n == 0)
+      if (x[i].chars[0] == 0)
+        break;
+      n = getcchar(&(x[i]), NULL, NULL, NULL, NULL);
+      if (n == 0 || n == 1)
         break;
       getcchar(&(x[i]), wch, &attrs, &color_pair, NULL);
-      if (n == 2)
+      if (n == 3)
         member = scm_list_4 (_scm_from_attr (attrs),
                              scm_from_short (color_pair),
                              _scm_schar_from_wchar (wch[0]),
                              _scm_schar_from_wchar (wch[1]));
-      else if (n == 3)
+      else if (n == 4)
         member = scm_list_5 (_scm_from_attr (attrs),
                              scm_from_short (color_pair),
                              _scm_schar_from_wchar (wch[0]),
                              _scm_schar_from_wchar (wch[1]),
                              _scm_schar_from_wchar (wch[2]));
-      else if (n == 4)
+      else if (n == 5)
         member = scm_list_n (_scm_from_attr (attrs),
                              scm_from_short (color_pair),
                              _scm_schar_from_wchar (wch[0]),
@@ -567,7 +574,7 @@ _scm_xstring_from_cstring (cchar_t *x)
                              _scm_schar_from_wchar (wch[2]),
                              _scm_schar_from_wchar (wch[3]), SCM_UNDEFINED);
       
-      else if (n == 5)
+      else if (n == 6)
         member = scm_list_n (_scm_from_attr (attrs),
                              scm_from_short (color_pair),
                              _scm_schar_from_wchar (wch[0]),
@@ -636,7 +643,7 @@ _scm_sstring_to_wstring (SCM x)
 SCM
 _scm_sstring_from_wstring (wchar_t *x)
 {
-  int i;
+  size_t i;
   SCM member, xstring;
   
   xstring = SCM_EOL;

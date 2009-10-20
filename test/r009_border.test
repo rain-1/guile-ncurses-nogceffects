@@ -17,7 +17,7 @@
 ;; Should be able to draw borders
 (with-test-prefix 
  "border"
-		  
+ 
  (pass-if "border default"
 	  (begin
 	    (clear win)
@@ -78,49 +78,42 @@
 		  )
 	      (and
 	       (equal? x1 (normal #\A))
-	       (equal? x2 (normal #\A)))))
+	       (equal? x2 (normal #\A))))))
 
  (pass-if "vline"
-	  (begin
-	    (clear win)
-	    (move win 1 1)
-	    (vline win (normal #\A) 2)
-	    (refresh win)
-	    (let ((x1  (mvinch 1 1))
-		  (x2  (mvinch 2 1))
-		  )
-	      (and
-	       (equal? x1 (normal #\A))
-	       (equal? x2 (normal #\A))))))
+          (begin
+            (clear win)
+            (move win 1 1)
+            (vline win (normal #\A) 2)
+            (refresh win)
+            (let ((x1  (mvinch 1 1))
+                  (x2  (mvinch 2 1)))
+              (and
+               (equal? x1 (normal #\A))
+               (equal? x2 (normal #\A))))))
  
  (pass-if "hline #:y #:x"
-	  (begin
-	    (clear win)
-	    (hline win (normal #\A) 2 #:y 1 #:x 1) ; A
-	    (refresh win)
-	    (let ((x1  (mvinch 1 1))
-		  (x2  (mvinch 1 2))
-		  )
-	      (and
-	       (equal? x1 (normal #\A))
-	       (equal? x2 (normal #\A))))))
+          (begin
+            (clear win)
+            (hline win (normal #\A) 2 #:y 1 #:x 1) ; A
+            (refresh win)
+            (let ((x1  (mvinch 1 1))
+                  (x2  (mvinch 1 2)))
+              (and
+               (equal? x1 (normal #\A))
+               (equal? x2 (normal #\A))))))
  
  (pass-if "vline #:y #:x"
-	  (begin
-	    (clear win)
-	    (vline win (normal #\A) 2 #:y 1 #:x 1) ; A
-	    (refresh win)
-	    (let ((x1  (mvinch 1 1))
-		  (x2  (mvinch 2 1))
-		  )
-	      (and
-	       (equal? x1 (normal #\A))
-	       (equal? x2 (normal #\A))))))
- )
+          (begin
+            (clear win)
+            (vline win (normal #\A) 2 #:y 1 #:x 1) ; A
+            (refresh win)
+            (let ((x1  (mvinch 1 1))
+                  (x2  (mvinch 2 1)))
+              (and
+               (equal? x1 (normal #\A))
+               (equal? x2 (normal #\A)))))))
 
 (endwin)
 
 (curses-test-end test "r009_border.out")
-
-
-

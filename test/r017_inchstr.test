@@ -11,36 +11,27 @@
 
 (define win (initscr))
 
-(define hello (map char->integer (string->list "hello")))
-(define he (map char->integer (string->list "he")))
-(define hello-bold (map (lambda (x) 
-			  (logior A_BOLD (char->integer x)))
-			(string->list "hello")))
-(define he-bold (map (lambda (x) 
-		       (logior A_BOLD (char->integer x)))
-		     (string->list "he")))
-
 (with-test-prefix "inchstr"
 		  
 		  
 		  (pass-if "inchnstr"
 			   (begin
 			     (clear win)
-			     (addchstr win hello #:y 0 #:x 0)
+			     (addchstr win (normal "hello") #:y 0 #:x 0)
 			     (refresh win)
 			     (move win 0 0)
 			     (let ((w2 (inchstr win #:n 2)))
-			       (lset= equal? he w2))))
+			       (equal? (normal "he") w2))))
 		  
 		  
 		  (pass-if "mvinchnstr"
 			   (begin
 			     (clear win)
-			     (addchstr win hello-bold #:y 1 #:x 0)
+			     (addchstr win (bold "hello") #:y 1 #:x 0)
 			     (refresh win)
 			     (let ((x2 (inchstr win #:y 1 #:x 0 #:n 2)))
-			       (equal? he-bold x2)))))
+			       (equal? (bold "he") x2)))))
 
 (endwin)
 
-(curses-test-end test "r016_inch.out")
+(curses-test-end test "r017_inchstr.out")

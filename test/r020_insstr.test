@@ -23,8 +23,8 @@
 			     (let ((x1 (inch win #:y 0 #:x 2))
 				   (x2 (inch win #:y 0 #:x 3)))
 			       (and
-				(equal? x1 (char->integer #\z))
-				(equal? x2 (char->integer #\x))))))
+				(equal? x1 (normal #\z))
+				(equal? x2 (normal #\x))))))
 
 		  (pass-if "insstr #:y #:x"
 			   (begin
@@ -36,8 +36,8 @@
 			     (let ((x1 (inch win #:y 0 #:x 2))
 				   (x2 (inch win #:y 0 #:x 3)))
 			       (and
-				(equal? x1 (char->integer #\z))
-				(equal? x2 (char->integer #\x))))))
+				(equal? x1 (normal #\z))
+				(equal? x2 (normal #\x))))))
 
 
 		  (pass-if "insstr #:n"
@@ -50,8 +50,8 @@
 			     (let ((x1 (inch win #:y 0 #:x 0))
 				   (x2 (inch win #:y 0 #:x 1)))
 			       (and
-				(equal? x1 (char->integer #\z))
-				(equal? x2 (char->integer #\x))))))
+				(equal? x1 (normal #\z))
+				(equal? x2 (normal #\x))))))
 
 		  (pass-if "insstr #:y #:x #:n"
 			   (begin
@@ -63,8 +63,8 @@
 			     (let ((x1 (inch win #:y 0 #:x 0))
 				   (x2 (inch win #:y 0 #:x 1)))
 			       (and
-				(equal? x1 (char->integer #\z))
-				(equal? x2 (char->integer #\x))))))
+				(equal? x1 (normal #\z))
+				(equal? x2 (normal #\x))))))
 		  )
 
 

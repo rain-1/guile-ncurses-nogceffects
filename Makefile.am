@@ -7,7 +7,6 @@ ACLOCAL_AMFLAGS = -I m4 --install
 # Distcheck flags for Cygwin
 # DISTCHECK_CONFIGURE_FLAGS = --without-ncursesw \
 --with-cygwin-curses-acs-bug-fix
-
 ### FLAGS ###
 
 if WARN
@@ -24,6 +23,9 @@ gucu_libguile_gucu_la_CPPFLAGS = \
 	$(WARN_FLAGS) \
 	$(GUILE_CFLAGS)
 
+tools_testbed_CPPFLAGS = \
+	$(GUILE_CFLAGS)
+
 if WIDE
 gucu_libguile_gucu_la_CPPFLAGS += \
 	-D_XOPEN_SOURCE_EXTENDED
@@ -34,6 +36,9 @@ gucu_libguile_gucu_la_LDFLAGS = \
 	-module \
 	-no-undefined \
 	-version-info @LIBGUILE_GUCU_CURSES_INTERFACE@
+
+tools_testbed_LDFLAGS = \
+	-static 
 
 ### DIRECTORIES ###
 
@@ -46,6 +51,8 @@ lib_LTLIBRARIES = \
 	gucu/libguile-gucu.la
 bin_PROGRAMS = \
 	tools/gucushell
+noinst_PROGRAMS = \
+	tools/testbed
 if GUCUKEY
 bin_SCRIPTS = \
 	tools/gucukey
@@ -56,7 +63,8 @@ dist_pkgguilesite_DATA = \
 	gucu/panel.scm \
 	gucu/form.scm \
 	gucu/eti.scm \
-	gucu/slk.scm
+	gucu/slk.scm \
+	gucu/lib.scm
 
 if WIDE
 dist_pkgguilesite_DATA += \
@@ -83,33 +91,32 @@ gucu_libguile_gucu_la_SOURCES = \
 	gucu/slk_func.c \
 	gucu/slk_func.h \
 	gucu/unicode.c \
-	gucu/unicode.h
-
-# 	gucu/menu_const.c \
-# 	gucu/menu_const.h \
-# 	gucu/menu_func.c \
-# 	gucu/menu_func.h \
-# 	gucu/menu_type.c \
-# 	gucu/menu_type.h \
-# 	gucu/menu_spec.c \
-# 	gucu/menu_spec.h \
-# 	gucu/menu_main.c \
-# 	gucu/panel_func.c \
-# 	gucu/panel_func.h \
-# 	gucu/panel_type.c \
-# 	gucu/panel_type.h \
-# 	gucu/panel_spec.c \
-# 	gucu/panel_spec.h \
-# 	gucu/panel_main.c \
-# 	gucu/form_const.c \
-# 	gucu/form_const.h \
-# 	gucu/form_func.c \
-# 	gucu/form_func.h \
-# 	gucu/form_type.c \
-# 	gucu/form_type.h \
-# 	gucu/form_spec.c \
-# 	gucu/form_spec.h \
-# 	gucu/form_main.c 
+	gucu/unicode.h \
+ 	gucu/panel_func.c \
+ 	gucu/panel_func.h \
+ 	gucu/panel_type.c \
+ 	gucu/panel_type.h \
+ 	gucu/panel_spec.c \
+ 	gucu/panel_spec.h \
+ 	gucu/panel_main.c \
+ 	gucu/form_const.c \
+ 	gucu/form_const.h \
+ 	gucu/form_func.c \
+ 	gucu/form_func.h \
+ 	gucu/form_type.c \
+ 	gucu/form_type.h \
+ 	gucu/form_spec.c \
+ 	gucu/form_spec.h \
+ 	gucu/form_main.c \
+ 	gucu/menu_const.c \
+ 	gucu/menu_const.h \
+ 	gucu/menu_func.c \
+ 	gucu/menu_func.h \
+ 	gucu/menu_type.c \
+ 	gucu/menu_type.h \
+ 	gucu/menu_spec.c \
+ 	gucu/menu_spec.h \
+ 	gucu/menu_main.c 
 
 if WIDE
 # gucu_libguile_gucu_la_SOURCES += \
@@ -135,6 +142,9 @@ gucu_libguile_gucu_la_LIBADD = \
 tools_gucushell_LDADD = \
 	@LIBNCURSES@ -lutil -ltinfo $(GUILE_LIBS)
 
+tools_testbed_LDADD = \
+	$(GUILE_LIBS) @LIBNCURSES@ 
+
 ### OTHER RULES ###
 
 ### CHECK ###
@@ -143,7 +153,8 @@ TESTLIB = \
 	test/lib.scm \
 	test/lib2.scm
 
-TESTS_ENVIRONMENT = ./libtool -dlopen gucu/libguile-gucu.la \
+TESTS_ENVIRONMENT = GUILE_AUTO_COMPILE=0 \
+	./libtool -dlopen gucu/libguile-gucu.la \
 	--mode=execute \
 	guile -L $(abs_top_srcdir) -s 
 

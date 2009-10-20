@@ -23,24 +23,25 @@
 			     (refresh win)
 			     (addstr win "xxx" #:y 0 #:x 0)
 			     (move win 0 0)
-			     (insch win (char->integer #\z))
+			     (insch win (normal #\z))
+                             (refresh win)
 			     (let ((x1 (mvinch 0 0))
 				   (x2 (mvinch 0 1)))
 			       (and
-				(equal? x1 (char->integer #\z))
-				(equal? x2 (char->integer #\x))))))
+				(equal? x1 (normal #\z))
+				(equal? x2 (normal #\x))))))
 
 		  (pass-if "insch #:y #:x"
 			   (begin
 			     (clear win)
 			     (refresh win)
 			     (addstr win "xxx" #:y 0 #:x 0)
-			     (insch win (char->integer #\z) #:y 0 #:x 0)
+			     (insch win (normal #\z) #:y 0 #:x 0)
 			     (let ((x1 (mvinch 0 0))
 				   (x2 (mvinch 0 1)))
 			       (and
-				(equal? x1 (char->integer #\z))
-				(equal? x2 (char->integer #\x)))))))
+				(equal? x1 (normal #\z))
+				(equal? x2 (normal #\x)))))))
 (endwin)
 
 (curses-test-end test "r019_insch.out")		  

@@ -7,7 +7,7 @@
 	     (srfi srfi-1))
 
 (define test (curses-test-start))
-(set! *sleep* #t)
+(set! *sleep* #f)
 (define win (initscr))
 
 (with-test-prefix 

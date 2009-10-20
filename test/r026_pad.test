@@ -38,10 +38,10 @@
 
 		  (pass-if "pechochar"
 			   (begin 
-			     (pechochar win (char->integer #\1))
-			     (pechochar win (char->integer #\2))
-			     (pechochar win (char->integer #\3))
-			     (pechochar win (char->integer #\4))
+			     (pechochar win (normal #\1))
+			     (pechochar win (normal #\2))
+			     (pechochar win (normal #\3))
+			     (pechochar win (normal #\4))
 			     (refresh mainwin)
 			     (let ((x1 (instr win #:y 1 #:x 1 #:n 4)))
 			       (string=? x1 "1234"))))

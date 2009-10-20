@@ -11,27 +11,24 @@
 
 (define win (initscr))
 
-(define x-normal (char->integer #\x))
-(define x-bold (logior x-normal A_BOLD))
-
 (with-test-prefix "inch"
 		  
 		  (pass-if "inch"
 			   (begin
 			     (clear win)
-			     (addch win x-normal #:y 4 #:x 5)
+			     (addch win (normal #\x) #:y 4 #:x 5)
 			     (move win 4 5)
-			     (refresh win )
+			     (refresh win)
 			     (let ((x1 (inch win)))
-			       (equal? x-normal x1))))
+			       (equal? (normal #\x) x1))))
 		  
 		  (pass-if "inch #:y #:x "
 			   (begin
 			     (clear win)
-			     (addch win x-bold #:y 1 #:x 0)
+			     (addch win (bold #\x) #:y 1 #:x 0)
 			     (refresh win)
 			     (let ((x2 (inch win #:y 1 #:x 0)))
-			       (equal? x-bold x2)))))
+			       (equal? (bold #\x) x2)))))
 
 (endwin)
 

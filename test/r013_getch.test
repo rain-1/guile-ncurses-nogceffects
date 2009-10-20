@@ -11,8 +11,8 @@
 
 (define win (initscr))
 
-(cbreak)
-(echo)
+(cbreak!)
+(echo!)
 
 ;; Should be able to get characters from the keyboard
 (with-test-prefix "getch"
@@ -22,7 +22,7 @@
                              (ungetch #\x)
                              (equal? (getch win) #\x)))
 
-
+                  
 		  (pass-if "getch #:y #:x"
 			   (begin
                              (clear win)
@@ -31,7 +31,7 @@
                                    (pos (getyx win)))
                                (and
                                 (equal? x2 #\x)
-                                (lset= eqv? pos '(2 2))))))))
+                                (lset= eqv? pos '(2 2))))))
 					  
 		  (map (lambda (key)
 			 (pass-if (keyname key) (has-key? key)))
@@ -143,7 +143,7 @@
  "define-key"
 
  (pass-if "set"
-	  (let* ((x (string #\ESC #\~ #\~ #\~ ))
+	  (let* ((x (string #\esc #\~ #\~ #\~))
 		 (s1 (key-defined x))
 		 (s2 (define-key x KEY_SDL))
 		 (s3 (key-defined x)))

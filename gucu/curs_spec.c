@@ -193,7 +193,6 @@ gucu_wattr_get (SCM win)
 SCM
 gucu_wgetnstr (SCM win, SCM n)
 {
-  char *c_str;
   SCM s_str;
   int ret;
   int c_n;

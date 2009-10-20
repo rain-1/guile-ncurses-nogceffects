@@ -21,7 +21,7 @@
 	    border
 	    box
 	    can-change-color?
-	    cbreak
+	    cbreak!
 	    chgat
 	    clear
 	    clearok!
@@ -55,7 +55,7 @@
 	    getmaxyx
 	    getnstr
 	    getwin
-	    halfdelay
+	    halfdelay!
 	    has-colors?
 	    has-ic?
 	    has-il?
@@ -85,7 +85,7 @@
 	    killchar
 	    leaveok!
 	    longname
-	    meta
+	    meta!
 	    mouseinterval
 	    move
 	    mvcur
@@ -95,7 +95,7 @@
 	    newpad
 	    newwin
 	    nl
-	    nocbreak
+	    nocbreak!
 	    nodelay!
 	    noecho!
 	    nonl
@@ -616,19 +616,35 @@
   (%bkgdset! win (xchar->list ch)))
 
 (define (border win left right top bottom topleft topright bottomleft bottomright)
-  (let ((l (if (equal? left 0) (normal (acs-vline)) (xchar->list left)))
-        (r (if (equal? right 0) (normal (acs-vline)) (xchar->list right)))
-        (t (if (equal? top 0) (normal (acs-hline)) (xchar->list top)))
-        (b (if (equal? bottom 0) (normal (acs-hline)) (xchar->list bottom)))
-        (tl (if (equal? topleft 0) (normal (acs-ulcorner)) (xchar->list topleft)))
-        (tr (if (equal? topright 0) (normal (acs-urcorner)) (xchar->list topright)))
-        (bl (if (equal? bottomleft 0) (normal (acs-llcorner)) (xchar->list bottomleft)))
-        (br (if (equal? bottomright 0) (normal (acs-lrcorner)) (xchar->list bottomright))))
+  (let ((l (if (equal? left 0) 
+               (xchar->list (normal (acs-vline))) 
+               (xchar->list left)))
+        (r (if (equal? right 0) 
+               (xchar->list (normal (acs-vline))) 
+               (xchar->list right)))
+        (t (if (equal? top 0) 
+               (xchar->list (normal (acs-hline))) 
+               (xchar->list top)))
+        (b (if (equal? bottom 0) 
+               (xchar->list (normal (acs-hline))) 
+               (xchar->list bottom)))
+        (tl (if (equal? topleft 0) 
+                (xchar->list (normal (acs-ulcorner))) 
+                (xchar->list topleft)))
+        (tr (if (equal? topright 0) 
+                (xchar->list (normal (acs-urcorner))) 
+                (xchar->list topright)))
+        (bl (if (equal? bottomleft 0) 
+                (xchar->list (normal (acs-llcorner))) 
+                (xchar->list bottomleft)))
+        (br (if (equal? bottomright 0) 
+                (xchar->list (normal (acs-lrcorner))) 
+                (xchar->list bottomright))))
   (%border win l r t b tl tr bl br)))
 
 (define (box win v h)
-  (let ((v2 (if (equal? v 0) (normal (acs-vline)) (xchar->list v)))
-        (h2 (if (equal? h 0) (normal (acs-hline)) (xchar->list h))))
+  (let ((v2 (if (equal? v 0) (xchar->list (normal (acs-vline))) (xchar->list v)))
+        (h2 (if (equal? h 0) (xchar->list (normal (acs-hline))) (xchar->list h))))
     (%border win v2 v2 h2 h2
              (xchar->list (normal-on (acs-ulcorner))) (xchar->list (normal-on (acs-urcorner))) 
              (xchar->list (normal-on (acs-llcorner))) (xchar->list (normal-on (acs-lrcorner))))))
@@ -697,7 +713,7 @@
   (and (if (and y x)
            (%wmove win y x)
            #t)
-       (%winsch win ch)))
+       (%winsch win (xchar->list ch))))
 
 (define* (instr win #:key y x (n -1))
   (and (if (and y x)
@@ -732,6 +748,13 @@
 ;; I hate it when people are 'clever' with dropping letters
 (define (nooutrefresh win)
   (noutrefresh win))
+
+(define* (pechochar win ch #:key y x)
+  (and
+   (if (and y x)
+       (%wmove win y x)
+       #t)
+   (%pechochar win (xchar->list ch))))
 
 (define (redrawln win beg_line end_line)
   (%wredrawln win beg_line end_line))

@@ -3,7 +3,6 @@
 
 (use-modules (test lib)
 	     (test lib2)
-	     (gucu curses-wide)
 	     (gucu curses)
 	     (ice-9 format)
 	     (srfi srfi-1))
@@ -11,7 +10,7 @@
 (define test (curses-test-start))
 
 (define win (initscr))
-(set! *sleep* #t)
+(set! *sleep* #f)
 
 ;; Should be able to get term attributes
 (with-test-prefix 
@@ -28,13 +27,12 @@
                    (pass (eqv? #\del c)))
               (addstr win (format #f "erasechar for ~s: ~s\n" (termname) c))
               (addstr win (format #f "expecting #\\del\n"))
-              (if pass (addstr win "PASS") (addstr win "FAIL"))
 	      (refresh win)
-	      (maybe-sleep 3)
+	      (maybe-sleep 1)
               pass)))
 		  
  ;; Not sure what the correct answer for killwchar
- ;; should be.  Gnu/Linux xterm give #\del.
+ ;; should be.  Gnu/Linux xterm give #\nak.
  (pass-if "killchar"
 	  (begin
 	    (clear win)
@@ -43,9 +41,8 @@
                    (pass (eqv? #\nak c)))
 	      (addstr win (format #f "killchar for ~s: ~s\n" (termname) c))
               (addstr win "expecting #\\nak\n")
-              (if pass (addstr win "PASS") (addstr win "FAIL"))
 	      (refresh win)
-	      (maybe-sleep 3)
+	      (maybe-sleep 1)
               pass)))
 
  (pass-if "term-attrs"
@@ -86,6 +83,7 @@
 	      (refresh win)
 	      (maybe-sleep 4)
 	      (eqv? ta ta2))
+            (endwin)
 	    *unspecified*))
 
  )

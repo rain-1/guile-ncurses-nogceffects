@@ -1,4 +1,4 @@
-;;;; -*- Mode: scheme; -*-
+;;;; -*- Mode: scheme; coding: utf-8 -*-
 ;;;; r018_inopts.test --- test suite for curse's input options
 
 (use-modules (test lib)
@@ -11,6 +11,8 @@
 
 (define win (initscr))
 
+;; Need a locale, since we are using non-ASCII characters
+(setlocale LC_ALL "")
 ;; Should be able to change input options
 (with-test-prefix "inopts"
 		  
@@ -18,13 +20,13 @@
 			   (begin
 			     (clear win)
 			     (refresh win)
-			     (cbreak)
+			     (cbreak!)
 			     (nodelay! win #t)
 			     (equal? #f (getch win))))
 
 		  (pass-if "halfdelay"
 			   (begin
-			     (halfdelay 1)
+			     (halfdelay! 1)
 			     (equal? #f (getch win))))
 		  
 		  ;; This test shows that 8-bit characters are not
@@ -32,29 +34,29 @@
  		  (pass-if "meta"
  			   (begin
  			     (nodelay! win #t)
- 			     (meta #t)
- 			     (ungetch (+ 128 (char->integer #\A)))
+ 			     (meta! #t)
+ 			     (ungetch #\ā)
  			     (let ((k1 (getch win)))
  			       (addstr win (format #f "~s~%" k1))
  			       (refresh win)
- 			       (equal? k1 (+ 128 (char->integer #\A))))))
+ 			       (equal? k1 #\ā))))
 
 		  ;; This test *SHOULD* show that 8-bit characters are
 		  ;; truncated when meta is false, but, ncurses
 		  ;; doesn't to that yet.
  		  (pass-if "meta"
  			   (begin
- 			     (meta #f)
- 			     (ungetch (+ 128 (char->integer #\A)))
+ 			     (meta! #f)
+ 			     (ungetch (integer->char (+ 128 65)))
  			     (let ((k1 (getch win)))
  			       (addstr win (format #f "~s~%" k1))
  			       (refresh win)
- 			       (equal? k1 (char->integer #\A))
+ 			       (equal? k1 (integer->char 65))
 			       *unspecified*)))
 
 ; 		  (pass-if "keypad!"
 ; 			   (begin
-; 			     (cbreak)
+; 			     (cbreak!)
 ; 			     (keypad! (stdscr) #t)
 ; 			     (ungetch (char->integer #\A))
 ; 			     (ungetch (char->integer #\[))

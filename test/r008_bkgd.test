@@ -42,7 +42,7 @@
 	  (begin
 	    (standend! win)
 	    (addstr win "This is a string" #:y 0 #:x 0)
-            (bkgdset win (color 1 (dim #\+)))
+            (bkgdset! win (color 1 (dim #\+)))
 	    (addstr win "This is another string" #:y 1 #:x 0)
 	    (refresh win)
 	    (let ((x1 (inch win #:y 0 #:x 4))
@@ -53,7 +53,7 @@
 		(refresh win)
 		(and
 		 (equal? (normal #\space) x1)
-		 (equal? (color 1 (dim #\+))) x2)))))))
+		 (equal? (color 1 (dim #\+))) x2))))))
 
 (endwin)
 

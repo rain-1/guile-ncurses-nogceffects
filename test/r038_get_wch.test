@@ -4,7 +4,6 @@
 (use-modules (test lib)
 	     (test lib2)
 	     (srfi srfi-1)
-	     (gucu curses-wide)
 	     (gucu curses))
 
 (setlocale LC_ALL "")
@@ -17,8 +16,8 @@
 
 (define win (initscr))
 
-(cbreak)
-(echo)
+(cbreak!)
+(echo!)
 
 ;; Should be able to get characters from the keyboard
 (with-test-prefix 
