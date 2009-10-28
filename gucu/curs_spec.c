@@ -100,7 +100,9 @@ gucu_getmouse ()
       s_me = _scm_from_mevent (&me);
     }
   else
-    s_me = SCM_BOOL_F;
+    {
+      s_me = SCM_BOOL_F;
+    }
   
   return s_me;
 }
@@ -159,8 +161,13 @@ gucu_tget (SCM id)
 SCM
 gucu_ungetmouse (SCM event)
 {
-  MEVENT *me = _scm_to_mevent (event);
-  int ret = ungetmouse (me);
+  MEVENT *me;
+  int ret;
+
+  SCM_ASSERT (_scm_is_mevent (event), event, SCM_ARG1, "ungetmouse");
+
+  me = _scm_to_mevent (event);
+  ret = ungetmouse (me);
   free (me);
   return (scm_from_int (ret));
 }

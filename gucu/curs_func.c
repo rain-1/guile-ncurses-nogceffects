@@ -516,7 +516,7 @@ gucu_delscreen (SCM scr)
 
   delscreen (c_scr);
   /* delscreen returns void */
-  SCM_SET_SMOB_DATA (scr, NULL);
+  SCM_SET_SMOB_DATA (scr, 0);
 
   return SCM_UNSPECIFIED;
 }

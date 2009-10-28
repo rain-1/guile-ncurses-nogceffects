@@ -17,9 +17,9 @@
 #include "unicode.h"
 
 #ifdef __STDC_ISO_10646__
-const int stdc_iso_10646 = 1;
+static const int stdc_iso_10646 = 1;
 #else
-const int stdc_iso_10646 = 0;
+static const int stdc_iso_10646 = 0;
 #endif
 
 int
@@ -27,6 +27,8 @@ locale_char_to_codepoint (char c, uint32_t *p_codepoint)
 {
   char locale_str[2];
   uint32_t *u32_str;
+
+  assert (p_codepoint != (uint32_t *) NULL);
 
   if (c == '\0')
     {
@@ -40,6 +42,7 @@ locale_char_to_codepoint (char c, uint32_t *p_codepoint)
     return 0;
   if (u32_strlen (u32_str) != 1)
     {
+      *p_codepoint = '\0';
       free (u32_str);
       return 0;
     }
@@ -54,6 +57,8 @@ wchar_to_codepoint (wchar_t c, uint32_t *p_codepoint)
   wchar_t wchar_str[2];
   uint32_t *u32_str;
   size_t u32_len = 0;
+
+  assert (p_codepoint != (uint32_t *) NULL);
 
   if (stdc_iso_10646)
     {
@@ -94,6 +99,7 @@ codepoint_to_locale_char (uint32_t codepoint, char *p_c)
   size_t str_len = 0;
   char *enc;
 
+  assert (p_c != (char *)NULL);
   if (codepoint == 0)
     {
       *p_c = '\0';
@@ -129,6 +135,15 @@ codepoint_to_wchar (uint32_t codepoint, wchar_t *p_c)
   wchar_t *wchar_str;
   size_t wchar_len = 0;
 
+  assert (p_c != (wchar_t *) NULL);
+  assert (codepoint <= 0x10FFFF);
+
+  if (codepoint == 0)
+    {
+      *p_c = 0;
+      return 1;
+    }
+
   if (stdc_iso_10646)
     {
       if ((sizeof (uint32_t) == sizeof (wchar_t))
@@ -145,11 +160,6 @@ codepoint_to_wchar (uint32_t codepoint, wchar_t *p_c)
         }
     }
 
-  if (codepoint == 0)
-    {
-      *p_c = 0;
-      return 1;
-    }
   u32_str[0] = codepoint;
   u32_str[1] = 0;
   wchar_str = (wchar_t *) u32_conv_to_encoding ("WCHAR_T",

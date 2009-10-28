@@ -11,8 +11,8 @@
 #include "type.h"
 #include "unicode.h"
 
-scm_t_bits screen_tag;
-scm_t_bits window_tag;
+static scm_t_bits screen_tag;
+static scm_t_bits window_tag;
 
 SCM equalp_window (SCM x1, SCM x2);
 size_t free_window (SCM x);
@@ -62,33 +62,6 @@ _scm_from_attr (attr_t x)
 // the rest of the list is the code points of the character and its
 // accents
 
-// Returns #t if x is a Guile charater, or a list containing an attribute, 
-// a color pair number, and a 1 to 5 codepoints.
-int
-_scm_is_schar_or_xchar (SCM x)
-{
-  int i, len;
-
-  if (SCM_CHARP (x))
-    return 1;
-
-  if (!scm_is_true (scm_list_p (x)))
-    return 0;
-
-  len = scm_to_int (scm_length (x));
-
-  if (len > 2 + CCHARW_MAX
-      || !_scm_is_attr (scm_list_ref (x, scm_from_int (0)))
-      || !scm_is_integer (scm_list_ref (x, scm_from_int (1))))
-    return 0;
-
-  for (i = 2; i < len; i ++)
-    if (!SCM_CHARP (scm_list_ref (x, scm_from_int (i))))
-      return 0;
-
-  return 1;
-}
-
 int
 _scm_is_xchar (SCM x)
 {
@@ -127,13 +100,16 @@ _scm_xchar_from_cchar (cchar_t *x)
   SCM element_list;
   SCM total_list = SCM_EOL;
 
+  assert (x != NULL);
+
   len = getcchar(x, 0, 0, 0, 0);
   /* LEN includes the trailing NULL */
   len --;
 
   ret = getcchar(x, wch, &attr, &color_pair, NULL);
   
-  assert (ret != ERR);
+  if (ret == ERR)
+    scm_misc_error (NULL, "Error unpacking complex char", SCM_EOL);
   
   // Strip the color info from attr
   attr &= A_ATTRIBUTES ^ A_COLOR;
@@ -168,43 +144,7 @@ _scm_schar_from_char (char c)
 }
 
 // chtype -- in C an unsigned 8-bit locale-encoded char with color and
-// attribute bits.  In Scheme, a complex char.  Returns #f if CH
-// is an 8-bit character in a 7-bit locale or if character conversion fails
-// for some obscure reason.
-SCM
-_scm_xchar_from_chtype (chtype ch)
-{
-  char c_ch;
-  attr_t c_attrs;
-  short c_color_pair;
-  int ret;
-  uint32_t cp;
-
-  c_ch = (char) (ch & A_CHARTEXT);
-  c_attrs = (attr_t) (ch & A_ATTRIBUTES);
-  c_color_pair = (short) PAIR_NUMBER (ch);
-#if 0
-  printf ("chtype %u\n", ch);
-  printf ("chartext %lu\n", ch & A_CHARTEXT);
-  printf ("attrs %lu\n", ch & A_ATTRIBUTES);
-  printf ("color %d\n", PAIR_NUMBER (ch));
-#endif
-
-  if (c_attrs | A_ALTCHARSET)
-    {
-      cp = c_ch;
-    }
-  else
-    {
-      ret = locale_char_to_codepoint (c_ch, &cp);
-      if (!ret)
-        return SCM_BOOL_F;
-    }
-
-  return scm_list_3 (_scm_from_attr (c_attrs),
-                     scm_from_short (c_color_pair),
-                     SCM_MAKE_CHAR (cp));
-}
+// attribute bits.  In Scheme, a complex char.
 
 // wchar -- in C, wchar_t.  In Scheme, a char.
 SCM
@@ -222,56 +162,6 @@ _scm_schar_from_wchar (wchar_t ch)
 
 #ifdef HAVE_LIBNCURSESW
 cchar_t *
-_scm_schar_or_xchar_to_cchar (SCM x)
-{
-  int i;
-  attr_t attr = A_NORMAL;
-  short color_pair = 0;
-  wchar_t wch[CCHARW_MAX+1], wc;
-  cchar_t *cchar;
-
-  cchar = (cchar_t *) scm_malloc (sizeof (cchar_t));
-
-  if (SCM_CHARP (x))
-    {
-      uint32_t codepoint = SCM_CHAR (x);
-      if (!codepoint_to_wchar (codepoint, &wc))
-        wc = GUCU_REPLACEMENT_WCHAR;
-      wch[0] = wc;
-      wch[1] = L'\0';
-    }
-  else if (scm_is_true (scm_list_p (x)))
-    {
-      SCM member;			
-      int len, ret;
-      uint32_t codepoint;
-
-      len = scm_to_int (scm_length (x));
-      member = scm_list_ref (x, scm_from_int (0));
-      attr = _scm_to_attr (member);
-      member = scm_list_ref (x, scm_from_int (1));
-      color_pair = scm_to_short (member);
-
-      for (i=2; i<len; i++)
-        {
-          member = scm_list_ref (x, scm_from_int (i));
-          codepoint = SCM_CHAR (member);
-          ret = codepoint_to_wchar (codepoint, &wc);
-          if (ret)
-            wch[i-2] = wc;
-          else
-            wch[i-2] = GUCU_REPLACEMENT_WCHAR;
-        }
-      wch[len-2] = L'\0';
-    }
-
-  if (OK != setcchar(cchar, wch, attr, color_pair, NULL))
-    return (cchar_t *) NULL;
-
-  return cchar;
-}
-
-cchar_t *
 _scm_xchar_to_cchar (SCM x)
 {
   int i;
@@ -286,80 +176,34 @@ _scm_xchar_to_cchar (SCM x)
   attr_t attr = _scm_to_attr (scm_list_ref (x, scm_from_int (0)));
   short color_pair = scm_to_short (scm_list_ref (x, scm_from_int (1)));
 
+  assert (_scm_is_xchar (x));
+
   for (i=2; i<len; i++)
     {
       member = scm_list_ref (x, scm_from_int (i));
       codepoint = SCM_CHAR (member);
       ret = codepoint_to_wchar (codepoint, &wc);
       if (ret)
-        wch[i-2] = wc;
+        {
+          wch[i-2] = wc;
+        }
       else
-        wch[i-2] = GUCU_REPLACEMENT_WCHAR;
+        {
+          wch[i-2] = GUCU_REPLACEMENT_WCHAR;
+          wch[i-1] = L'\0';
+          break;
+        }
     }
   wch[len-2] = L'\0';
 
   if (OK != setcchar(cchar, wch, attr, color_pair, NULL))
-    return (cchar_t *) NULL;
+    {
+      return (cchar_t *) NULL;
+    }
 
   return cchar;
 }
-
 #endif
-
-char
-_scm_schar_or_xchar_to_char (SCM x)
-{
-  int ret;
-  char c;
-  uint32_t codepoint;
-
-  if (SCM_CHARP (x))
-    codepoint = SCM_CHAR (x);
-  else 
-    codepoint = SCM_CHAR (scm_list_ref (x, scm_from_int (3)));
-
-  ret = codepoint_to_locale_char (codepoint, &c);
-  if (!ret)
-    c = GUCU_REPLACEMENT_CHAR;
-
-  return c;
-}
-      
-chtype
-_scm_schar_or_xchar_to_chtype (SCM x)
-{
-  int ret;
-  chtype ch;
-
-  if (SCM_CHARP (x))
-    {
-      char c;
-      uint32_t codepoint;
-      codepoint = SCM_CHAR (x);
-      ret = codepoint_to_locale_char (SCM_CHAR (x), &c);
-      if (ret)
-        ch = c;
-      else
-        ch = GUCU_REPLACEMENT_CHAR;
-    }
-  else
-    {
-      char c;
-      attr_t attr;
-      short color_pair;
-      uint32_t codepoint;
-      codepoint = SCM_CHAR (scm_list_ref (x, scm_from_int (3)));
-      ret = codepoint_to_locale_char (SCM_CHAR (scm_list_ref (x, scm_from_int (3))), &c);
-      if (ret)
-        ch = c;
-      else
-        ch = GUCU_REPLACEMENT_CHAR;
-      attr = _scm_to_attr (scm_list_ref (x, scm_from_int (0)));
-      color_pair = scm_to_short (scm_list_ref (x, scm_from_int (1)));
-      ch = ch & attr & COLOR_PAIR (color_pair);
-    }
-  return ch;
-}
 
 chtype
 _scm_xchar_to_chtype (SCM x)
@@ -371,6 +215,8 @@ _scm_xchar_to_chtype (SCM x)
   short color_pair;
   uint32_t codepoint;
 
+  assert (_scm_is_xchar (x));
+
   codepoint = SCM_CHAR (scm_list_ref (x, scm_from_int (3)));
   ret = codepoint_to_locale_char (SCM_CHAR (scm_list_ref (x, scm_from_int (3))), &c);
   if (!ret)
@@ -379,28 +225,9 @@ _scm_xchar_to_chtype (SCM x)
     ch = (chtype) (unsigned char) GUCU_REPLACEMENT_CHAR;
   attr = _scm_to_attr (scm_list_ref (x, scm_from_int (0)));
   color_pair = scm_to_short (scm_list_ref (x, scm_from_int (1)));
-  ch = ch & attr & COLOR_PAIR (color_pair);
+  ch = ch | attr | COLOR_PAIR (color_pair);
 
   return ch;
-}
-
-wchar_t
-_scm_schar_or_xchar_to_wchar (SCM x)
-{  
-  int ret;
-  wchar_t c;
-  uint32_t codepoint;
-
-  if (SCM_CHARP (x))
-    codepoint = SCM_CHAR (x);
-  else
-    codepoint = SCM_CHAR (scm_list_ref (x, scm_from_int (3)));
-
-  ret = codepoint_to_wchar (codepoint, &c);
-  if (!ret)
-    return GUCU_REPLACEMENT_WCHAR;
-
-  return c;
 }
 
 wchar_t
@@ -409,6 +236,8 @@ _scm_schar_to_wchar (SCM x)
   int ret;
   wchar_t c;
   uint32_t codepoint;
+
+  assert (SCM_CHARP (x));
 
   codepoint = SCM_CHAR (x);
   ret = codepoint_to_wchar (codepoint, &c);
@@ -425,6 +254,8 @@ _scm_schar_to_char (SCM x)
   char c;
   uint32_t codepoint;
 
+  assert (SCM_CHARP (x));
+
   codepoint = SCM_CHAR (x);
   ret = codepoint_to_locale_char (codepoint, &c);
   if (!ret)
@@ -438,26 +269,6 @@ _scm_schar_to_char (SCM x)
 
 // Guile strings are either standard strings, a list of chars, or a 
 // list of cchars
-
-int
-_scm_is_sstring_or_xstring (SCM x)
-{
-  if (scm_is_string (x))
-    return 1;
-
-  if (scm_is_true (scm_list_p (x)))
-    {
-      int i, len;
-      
-      len = scm_to_int (scm_length (x));
-      for (i = 0; i < len; i ++)
-        {
-          if (!_scm_is_schar_or_xchar (scm_list_ref (x, scm_from_int (i))))
-            return 0;
-        }
-    }
-  return 1;
-}
 
 int
 _scm_is_xstring (SCM x)
@@ -478,44 +289,23 @@ _scm_is_xstring (SCM x)
 
 #ifdef HAVE_LIBNCURSESW
 cchar_t *
-_scm_sstring_or_xstring_to_cstring (SCM x)
-{
-  int i, len;
-  SCM member;			
-  cchar_t *cstring;
-  cchar_t *cchar;
-  cchar_t terminator;
-  wchar_t wch;
-  
-  len = scm_to_int (scm_length (x));
-  cstring = (cchar_t *) scm_malloc (sizeof(cchar_t) * (len + 1));
-
-  for (i=0; i<len; i++)
-    {
-      member = scm_list_ref (x, scm_from_int (i));
-      cchar = _scm_schar_or_xchar_to_cchar (member);
-      memcpy(cstring+i, cchar, sizeof(cchar_t));
-      free(cchar);
-    }
-
-  wch = L'\0';
-
-  setcchar(&terminator, &wch, A_NORMAL, 0, NULL);
-  memcpy(cstring+len, &terminator, sizeof(cchar_t));
-  
-  return cstring;
-}
-
-
-cchar_t *
 _scm_xstring_to_cstring (SCM x)
 {
   int i, len;
   SCM member;			
   cchar_t *cstring;
   cchar_t *cchar;
-  cchar_t terminator;
-  wchar_t wch;
+  static cchar_t terminator;
+  static int first = 1;
+
+  assert (_scm_is_xstring (x));
+
+  if (first)
+    {
+      wchar_t wch = L'\0';
+      setcchar(&terminator, &wch, A_NORMAL, 0, NULL);
+      first = 0;
+    }
   
   len = scm_to_int (scm_length (x));
   cstring = (cchar_t *) scm_malloc (sizeof(cchar_t) * (len + 1));
@@ -528,9 +318,6 @@ _scm_xstring_to_cstring (SCM x)
       free(cchar);
     }
 
-  wch = L'\0';
-
-  setcchar(&terminator, &wch, A_NORMAL, 0, NULL);
   memcpy(cstring+len, &terminator, sizeof(cchar_t));
   
   return cstring;
@@ -545,6 +332,8 @@ _scm_xstring_from_cstring (cchar_t *x)
   attr_t attrs;
   short color_pair;
   
+  assert (x != NULL);
+
   xstring = SCM_EOL;
   i = 0;
   while (1)
@@ -555,7 +344,12 @@ _scm_xstring_from_cstring (cchar_t *x)
       if (n == 0 || n == 1)
         break;
       getcchar(&(x[i]), wch, &attrs, &color_pair, NULL);
-      if (n == 3)
+      if (n == 2)
+        member = scm_list_3 (_scm_from_attr (attrs),
+                             scm_from_short (color_pair),
+                             _scm_schar_from_wchar (wch[0]));
+
+      else if (n == 3)
         member = scm_list_4 (_scm_from_attr (attrs),
                              scm_from_short (color_pair),
                              _scm_schar_from_wchar (wch[0]),
@@ -583,9 +377,7 @@ _scm_xstring_from_cstring (cchar_t *x)
                              _scm_schar_from_wchar (wch[3]), 
                              _scm_schar_from_wchar (wch[4]), SCM_UNDEFINED);
       else
-        member = scm_list_3 (_scm_from_attr (attrs),
-                             scm_from_short (color_pair),
-                             _scm_schar_from_wchar (wch[0]));
+        abort ();
 
       xstring = scm_append (scm_list_2 (xstring, scm_list_1 (member)));
       i ++;
@@ -597,28 +389,6 @@ _scm_xstring_from_cstring (cchar_t *x)
 #endif
 
 wchar_t *
-_scm_sstring_or_xstring_to_wstring (SCM x)
-{
-  int i, len;
-  SCM member;			
-  wchar_t *wstring;
-  wchar_t wchar;
-  
-  len = scm_to_int (scm_length (x));
-  wstring = (wchar_t *) scm_malloc (sizeof(wchar_t) * (len + 1));
-
-  for (i=0; i<len; i++)
-    {
-      member = scm_list_ref (x, scm_from_int (i));
-      wchar = _scm_schar_or_xchar_to_wchar (member);
-      memcpy(wstring+i, &wchar, sizeof(wchar_t));
-    }
-  wstring[len] = L'\0';
-  
-  return wstring;
-}
-
-wchar_t *
 _scm_sstring_to_wstring (SCM x)
 {
   size_t i, len;
@@ -626,6 +396,8 @@ _scm_sstring_to_wstring (SCM x)
   wchar_t *wstring;
   wchar_t wchar;
   
+  assert (scm_is_string (x));
+
   len = scm_c_string_length (x);
   wstring = (wchar_t *) scm_malloc (sizeof(wchar_t) * (len + 1));
 
@@ -646,6 +418,8 @@ _scm_sstring_from_wstring (wchar_t *x)
   size_t i;
   SCM member, xstring;
   
+  assert (x != NULL);
+
   xstring = SCM_EOL;
   for (i = 0; i < wcslen(x); i++)
     {
@@ -662,6 +436,8 @@ _scm_sstring_from_wint_string (wint_t *x)
   int i, len;
   SCM member, xstring;
   
+  assert (x != NULL);
+
   len = 0;
   while (x[len] != 0)
     len ++;
@@ -688,6 +464,8 @@ _scm_xstring_to_chstring (SCM x)
   chtype *chstring;
   chtype ch;
   
+  assert (_scm_is_xstring (x));
+
   len = scm_to_int (scm_length (x));
   chstring = (chtype *) scm_malloc (sizeof(chtype) * (len + 1));
 
@@ -716,6 +494,8 @@ _scm_is_chtype (SCM x)
 chtype
 _scm_to_chtype (SCM x)
 {
+  assert (_scm_is_chtype (x));
+  
   if (SIZEOF_INT == SIZEOF_CHTYPE)
     return (chtype) scm_to_uint (x);
   else if (SIZEOF_LONG == SIZEOF_CHTYPE)
@@ -767,6 +547,8 @@ _scm_to_mevent (SCM x)
 {
   MEVENT *me;
 
+  assert (_scm_is_mevent (x));
+
   me = (MEVENT *) malloc (sizeof (MEVENT));
 
   me->id = scm_to_short (scm_list_ref (x, scm_from_int (0)));
@@ -781,6 +563,8 @@ _scm_to_mevent (SCM x)
 SCM
 _scm_from_mevent (MEVENT *me)
 {
+  assert (me != NULL);
+
   return scm_list_5 
     ( 
      scm_from_short (me->id),
@@ -810,6 +594,8 @@ _scm_is_screen (SCM x)
 SCREEN *
 _scm_to_screen (SCM x)
 {
+  assert (_scm_is_screen (x));
+
   return (SCREEN *) SCM_SMOB_DATA (x);
 }
 
@@ -827,10 +613,14 @@ _scm_from_screen (SCREEN *x)
 int
 print_screen (SCM x, SCM port, scm_print_state *pstate __attribute__ ((unused)))
 {
-  SCREEN *screen = (SCREEN *) SCM_SMOB_DATA (x);
+  SCREEN *screen;
   char *str;
 
+  /* Don't use _scm_is_screen in this assert, because it says freed screens aren't 
+     screens.  */
+  assert (SCM_SMOB_PREDICATE (screen_tag, x));
 
+  screen = (SCREEN *) SCM_SMOB_DATA (x);
   scm_puts ("#<screen ", port);
 
   if (screen == NULL)
@@ -901,6 +691,8 @@ _scm_is_window (SCM x)
 WINDOW *
 _scm_to_window (SCM x)
 {
+  assert (_scm_is_window (x));
+
   return (WINDOW *) SCM_SMOB_DATA (x);
 }
 
@@ -928,12 +720,20 @@ _scm_from_window (WINDOW *x)
 SCM
 equalp_window (SCM x1, SCM x2)
 {
-  WINDOW *win1 = (WINDOW *) SCM_SMOB_DATA (x1);
-  WINDOW *win2 = (WINDOW *) SCM_SMOB_DATA (x2);
+  WINDOW *win1, *win2;
+
+  /* This assert is thrown if x1 or x2 are already freed, as if by
+     delwin.  I'm not sure if one should be able to compare windows if
+     one has been freed.  */
+  assert (_scm_is_window (x1));
+  assert (_scm_is_window (x2));
+
+  win1 = (WINDOW *) SCM_SMOB_DATA (x1);
+  win2 = (WINDOW *) SCM_SMOB_DATA (x2);
 
   if ((win1 == NULL) || (win2 == NULL))
     return SCM_BOOL_F;
-  else if ((win1 != win2))
+  else if (win1 != win2)
     return SCM_BOOL_F;
   else
     return SCM_BOOL_T;
@@ -949,8 +749,11 @@ mark_window (SCM x __attribute__ ((unused)))
 size_t
 free_window (SCM x)
 {
-  WINDOW *win = (WINDOW *) SCM_SMOB_DATA (x);
+  WINDOW *win;
 
+  assert (SCM_SMOB_PREDICATE (window_tag, x));
+
+  win = (WINDOW *) SCM_SMOB_DATA (x);
   /* Windows should already be null if delwin has been called on them */
   if (win != NULL)
     {
@@ -959,13 +762,13 @@ free_window (SCM x)
 	  endwin ();
 	  fprintf (stderr, "Freeing stdscr #<window %p>", (void *) stdscr);
 	  delwin (stdscr);
-	  SCM_SET_SMOB_DATA (x, NULL);
+	  SCM_SET_SMOB_DATA (x, 0);
 	}
       else
 	{
 	  /* This is going to break something */
 	  delwin (win);
-	  SCM_SET_SMOB_DATA (x, NULL);
+	  SCM_SET_SMOB_DATA (x, 0);
 	}
     }
 
@@ -977,6 +780,8 @@ print_window (SCM x, SCM port, scm_print_state *pstate __attribute__ ((unused)))
 {
   WINDOW *win = (WINDOW *) SCM_SMOB_DATA (x);
   char *str;
+
+  assert (SCM_SMOB_PREDICATE (window_tag, x));
 
   scm_puts ("#<window ", port);
 

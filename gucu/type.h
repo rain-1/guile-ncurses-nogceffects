@@ -4,6 +4,7 @@
 #include <curses.h>
 #include <libguile.h>
 #include <stdio.h>
+#include <wchar.h>
 
 #include <config.h>
 
@@ -27,24 +28,18 @@
 
 #define GUCU_PRIVATE_USE_START (0xE000)
 
-int _scm_is_schar_or_xchar (SCM x);
 int _scm_is_xchar (SCM x);
 
 #ifdef HAVE_LIBNCURSESW
 SCM _scm_xchar_from_cchar (cchar_t *x);
 #endif
 SCM _scm_schar_from_char (char c);
-SCM _scm_xchar_from_chtype (chtype ch);
 SCM _scm_schar_from_wchar (wchar_t ch);
 
 #ifdef HAVE_LIBNCURSESW
-cchar_t *_scm_schar_or_xchar_to_cchar (SCM x);
 cchar_t *_scm_xchar_to_cchar (SCM x);
 #endif
-char _scm_schar_or_xchar_to_char (SCM x);
 chtype _scm_xchar_to_chtype (SCM x);
-chtype _scm_schar_or_xchar_to_chtype (SCM x);
-wchar_t _scm_schar_or_xchar_to_wchar (SCM x);
 wchar_t _scm_schar_to_wchar (SCM x);
 char _scm_schar_to_char (SCM x);
 
@@ -52,16 +47,13 @@ char _scm_schar_to_char (SCM x);
 ///////////////////////////////////
 // STRINGS
 
-int _scm_is_sstring_or_xstring (SCM x);
 int _scm_is_xstring (SCM x);
 
 #ifdef HAVE_LIBNCURSESW
-cchar_t *_scm_sstring_or_xstring_to_cstring (SCM x);
 cchar_t *_scm_xstring_to_cstring (SCM x);
 SCM _scm_xstring_from_cstring (cchar_t *x);
 SCM _scm_sstring_from_wstring (wchar_t *x);
 #endif
-wchar_t *_scm_sstring_or_xstring_to_wstring (SCM x);
 wchar_t *_scm_sstring_to_wstring (SCM x);
 chtype *_scm_xstring_to_chstring (SCM x);  
 SCM _scm_sstring_from_wint_string (wint_t *x);

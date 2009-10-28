@@ -10,6 +10,7 @@
 (define test (curses-test-start))
 
 (define mainwin (initscr))
+(set! *sleep* #f)
 
 ;; Should be able to make big windows
 (define win (newpad 10 10))
@@ -23,6 +24,7 @@
 			     (box win 0 0)
 			     (addstr win "xxx" #:y 1 #:x 1)
 			     (prefresh win 0 0 5 5 15 15)
+                             (maybe-sleep 1)
 			     (let ((x1 (instr win #:y 1 #:x 1 #:n 3)))
 			       (string=? x1 "xxx"))))
 
@@ -33,6 +35,7 @@
 			     (touchwin win)
 			     (pnoutrefresh win 0 0 5 5 15 15)
 			     (refresh mainwin)
+                             (maybe-sleep 1)
 			     (let ((x1 (instr win2 #:y 1 #:x 1 #:n 2)))
 				 (string=? x1 "yy"))))
 
@@ -43,6 +46,7 @@
 			     (pechochar win (normal #\3))
 			     (pechochar win (normal #\4))
 			     (refresh mainwin)
+                             (maybe-sleep 1)
 			     (let ((x1 (instr win #:y 1 #:x 1 #:n 4)))
 			       (string=? x1 "1234"))))
 
