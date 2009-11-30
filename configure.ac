@@ -29,6 +29,7 @@ AC_PROG_INSTALL
 # AM_PROG_MKDIR_P is deprecated
 AM_PROG_MKDIR_P
 
+AM_PROG_CC_C_O
 #NCURSESW_PROGS
 
 ##################
@@ -63,23 +64,32 @@ AC_CHECK_LIB([guile],
              [AC_MSG_ERROR([libguile not found])])
 
 
-AC_ARG_ENABLE([ncursesw],
-              [AS_HELP_STRING([--with-ncursesw],
-                              [use the wide version of the curses libraries])],
-              # if option is selected
-              [libncurses="ncursesw"
-	       libform="formw"
-	       libpanel="panelw"
-	       libmenu="menuw"],
-              # if option is not selected
-              [libncurses="ncurses"
-	       libform="form"
-	       libpanel="panel"
-	       libmenu="menu"])
+AC_ARG_WITH([ncursesw],
+            [AS_HELP_STRING([--with-ncursesw],
+                            [use the wide version of the curses libraries])],
+            # if option is selected
+            [libncurses="ncursesw"
+	     libform="formw"
+	     libpanel="panelw"
+	     libmenu="menuw"
+             with_ncursesw="yes"],
+            # if option is not selected
+            [libncurses="ncurses"
+	     libform="form"
+	     libpanel="panel"
+	     libmenu="menu"
+             with_ncursesw="no"])
 	     
 # A conditional to use in the makefiles
 AM_CONDITIONAL([WIDE], [test "$with_ncursesw" = yes])
 
+AS_IF(
+      # if
+      [test "$with_ncursesw" = yes],
+      # then
+      [AC_DEFINE([HAVE_LIBNCURSESW],
+                 [1],
+                 [Define if you are using the wide version of the ncurses library])])
 # The menu, panel, and form libraries should either use the wide or
 # the narrow forms to match the version of the ncurses library being
 # used.
@@ -136,29 +146,7 @@ AC_CHECK_SIZEOF([wint_t], ,[#include <wchar.h>])
 AC_CHECK_FUNCS([cfmakeraw fopencookie])
 
 # Check for ncurses library functions
-AC_CHECK_FUNCS([key_defined])
-
-# Check for Guile library funcs
-AC_CHECK_FUNCS([scm_is_bool scm_from_bool scm_to_bool scm_is_true])
-AC_CHECK_FUNCS([scm_is_integer scm_from_int scm_to_int])
-AC_CHECK_FUNCS([scm_is_number])
-AC_CHECK_FUNCS([scm_from_short scm_to_short])
-AC_CHECK_FUNCS([scm_from_uint scm_to_uint scm_to_uint8])
-AC_CHECK_FUNCS([scm_from_ulong scm_to_ulong])
-AC_CHECK_FUNCS([scm_is_string scm_from_locale_string scm_to_locale_string])
-AC_CHECK_FUNCS([scm_is_symbol])
-AC_CHECK_FUNCS([scm_c_string_length scm_c_string_ref])
-AC_CHECK_FUNCS([scm_from_locale_symbol])
-AC_CHECK_FUNCS([scm_malloc scm_gc_malloc])
-AC_CHECK_FUNCS([scm_assert_smob_type])
-
-# Check to see if scm_make_guardian takes zero (1.8.x) or one (1.6.x)
-# parameters.  Until I write a proper test, I'll just go with 
-# testing for the existence of scm_guardian_greedy_p with correlates
-# with scm_make_guardian taking one parameter
-
-AC_CHECK_FUNCS([scm_guardian_greedy_p])
-
+AC_CHECK_FUNCS([key_defined term_attrs])
 
 # Later something should be done with this
 # AC_FUNC_MALLOC

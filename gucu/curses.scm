@@ -5,6 +5,8 @@
   #:use-module (gucu lib)
   #:export (
 	    %filter
+	    %gucu-wide-ncurses
+	    %gucu-ucs4-chars
 	    addch
 	    addchstr
 	    addstr

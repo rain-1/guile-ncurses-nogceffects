@@ -1,4 +1,4 @@
-;;;; -*- Mode: scheme; coding: utf-8 -*-
+;;;; -*- Mode: scheme; -*-
 ;;;; r018_inopts.test --- test suite for curse's input options
 
 (use-modules (test lib)
@@ -7,12 +7,13 @@
 	     (gucu curses)
 	     (srfi srfi-1))
 
+;; Need a locale, since we are using non-ASCII characters
+(setlocale LC_ALL "en_US.iso-8859-1")
+
 (define test (curses-test-start))
 
 (define win (initscr))
 
-;; Need a locale, since we are using non-ASCII characters
-(setlocale LC_ALL "")
 ;; Should be able to change input options
 (with-test-prefix "inopts"
 		  
@@ -30,16 +31,22 @@
 			     (equal? #f (getch win))))
 		  
 		  ;; This test shows that 8-bit characters are not
-		  ;; truncated when meta is true
+		  ;; truncated when meta is true.
+
+		  ;; Also, prior to 20091010, unget_wch had a sign
+		  ;; bug.  Calling unget_wch with a wchar value above
+		  ;; 128 made garbage, so this test shouldn't be runn
+		  ;; in the wide ncurses case.
  		  (pass-if "meta"
  			   (begin
  			     (nodelay! win #t)
  			     (meta! #t)
- 			     (ungetch #\ā)
+ 			     (ungetch (integer->char (+ 128 65)))
  			     (let ((k1 (getch win)))
  			       (addstr win (format #f "~s~%" k1))
  			       (refresh win)
- 			       (equal? k1 #\ā))))
+ 			       (equal? k1 (integer->char (+ 128 65)))))
+			   *unspecified*)
 
 		  ;; This test *SHOULD* show that 8-bit characters are
 		  ;; truncated when meta is false, but, ncurses

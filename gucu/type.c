@@ -11,10 +11,10 @@
 #include "type.h"
 #include "unicode.h"
 #include "compat.h"
+#include "features.h"
 
 /* The maximum number of characters in a complex character */
-#ifdef HAVE_NCURSESW
-/* This is probably 5 */
+#ifdef HAVE_LIBNCURSESW
 #define GUCU_CCHARW_MAX (CCHARW_MAX) 
 #else
 #define GUCU_CCHARW_MAX (5)
@@ -30,8 +30,8 @@ int print_window (SCM x, SCM port, scm_print_state *pstate);
 
 int print_screen (SCM x, SCM port, scm_print_state *pstate);
 
-// attr -- character attributes, bit flags packed into an unsigned:
-// probably uint32
+/* attr -- character attributes, bit flags packed into an unsigned:
+   probably uint32 */
 
 int
 _scm_is_attr (SCM x)
@@ -62,14 +62,15 @@ _scm_from_attr (attr_t x)
 }
 
 
-///////////////////////////////////
-// CHARACTERS
+/*
+  CHARACTERS
 
-// xchar: a wide character with possible combining characters and its
-// associated renditions.  In C, a cchar_t struct.  In scheme, a list
-// where element 0 is the attributes, element 1 is the color pair, and
-// the rest of the list is the code points of the character and its
-// accents
+  xchar: a wide character with possible combining characters and its
+  associated renditions.  In C, a cchar_t struct.  In scheme, a list
+  where element 0 is the attributes, element 1 is the color pair, and
+  the rest of the list is the code points of the character and its
+  accents.
+*/
 
 int
 _scm_is_xchar (SCM x)
@@ -93,9 +94,9 @@ _scm_is_xchar (SCM x)
   return 1;
 }
 
-
-
 #ifdef HAVE_LIBNCURSESW
+/* Converts a wide NCurses complex character structure to a GuCu
+   complex character */
 SCM
 _scm_xchar_from_cchar (cchar_t *x)
 {
@@ -112,22 +113,48 @@ _scm_xchar_from_cchar (cchar_t *x)
   assert (x != NULL);
 
   len = getcchar(x, 0, 0, 0, 0);
-  /* LEN includes the trailing NULL */
-  len --;
+  /* Starting from the patch on 2009/07/18, the length returned by
+     getcchar includes the trailing NULL.  Prior to that, it did not
+     include the trailing NULL. */
+  if (NCURSES_VERSION_MAJOR > 5
+      || (NCURSES_VERSION_MAJOR == 5 && NCURSES_VERSION_MINOR > 7)
+      || (NCURSES_VERSION_MAJOR == 5 && NCURSES_VERSION_MINOR == 7 
+	  && NCURSES_VERSION_PATCH >= 20090718))
+    {
+      len --;
+    }
 
   ret = getcchar(x, wch, &attr, &color_pair, NULL);
   
   if (ret == ERR)
     scm_misc_error (NULL, "Error unpacking complex char", SCM_EOL);
   
-  // Strip the color info from attr
+  /* Strip the color info from attr */
   attr &= A_ATTRIBUTES ^ A_COLOR;
 
   total_list = scm_list_2 (_scm_from_attr (attr), scm_from_short (color_pair));
 
   for (i=0; i<len; i++)
     {
-      element = SCM_MAKE_CHAR (wch[i]);
+#ifdef GUILE_CHARS_ARE_UCS4
+      { 
+	int ret;
+	uint32_t cp;
+	ret = wchar_to_codepoint (wch[i], &cp);
+	if (!ret)
+	  element = SCM_MAKE_CHAR (GUCU_REPLACEMENT_CODEPOINT);
+	else
+	  element = SCM_MAKE_CHAR (cp);
+      }
+#else
+      {
+	int b = wctob ((wint_t) wch[i]);
+	if (b == EOF)
+	  element = SCM_MAKE_CHAR (GUCU_REPLACEMENT_CHAR);
+	else
+	  element = SCM_MAKE_CHAR (b);
+      }
+#endif
       element_list = scm_list_1 (element);
       total_list = scm_append (scm_list_2 (total_list, element_list));
     }
@@ -136,9 +163,41 @@ _scm_xchar_from_cchar (cchar_t *x)
 }
 #endif
 
-// char -- in C a signed 8-bit locale-encoded char.  In Scheme, a char.
-// Returns #f if CH is an 8-bit character in a 7-bit locale or if
-// character conversion fails for some obscure reason.
+/* Converts a Curses rendered character to a GuCu complex character */
+SCM
+_scm_xchar_from_chtype (chtype x)
+{
+  char c;
+  attr_t attr;
+  short color_pair;
+  SCM total_list = SCM_EOL;
+
+  attr = x & (A_ATTRIBUTES ^ A_COLOR);
+  color_pair = PAIR_NUMBER(x);
+  c = x & A_CHARTEXT;
+
+#ifdef GUILE_CHARS_ARE_UCS4
+  {
+    int ret;
+    uint32_t cp;
+    ret = locale_char_to_codepoint (c, &cp);
+    if (!ret)
+      total_list = scm_list_3 (_scm_from_attr (attr), scm_from_short (color_pair),
+			       SCM_MAKE_CHAR (SCM_REPLACEMENT_CODEPOINT));
+    else
+      total_list = scm_list_3 (_scm_from_attr (attr), scm_from_short (color_pair),
+			       SCM_MAKE_CHAR (cp));
+  }
+#else
+  total_list = scm_list_3 (_scm_from_attr (attr), scm_from_short (color_pair),
+			   SCM_MAKE_CHAR (c));
+#endif
+      
+  return total_list;
+
+}
+
+/* Converts an 8-bit locale-encoded character to a Guile character */
 SCM
 _scm_schar_from_char (char c)
 {
@@ -156,7 +215,7 @@ _scm_schar_from_char (char c)
 #endif
 }
 
-// wchar -- in C, wchar_t.  In Scheme, a char.
+/* Converts a libc wide character to a Guile characters */
 SCM
 _scm_schar_from_wchar (wchar_t ch)
 {
@@ -179,13 +238,12 @@ _scm_schar_from_wchar (wchar_t ch)
 }
 
 #ifdef HAVE_LIBNCURSESW
+/* Converts a GuCu complex character to a wide NCurses complex character */
 cchar_t *
 _scm_xchar_to_cchar (SCM x)
 {
   int i;
   SCM member;
-  uint32_t codepoint;
-  int ret;
   wchar_t wch[GUCU_CCHARW_MAX+1];
   wchar_t wc;
 
@@ -199,18 +257,41 @@ _scm_xchar_to_cchar (SCM x)
   for (i=2; i<len; i++)
     {
       member = scm_list_ref (x, scm_from_int (i));
-      codepoint = SCM_CHAR (member);
-      ret = codepoint_to_wchar (codepoint, &wc);
-      if (ret)
-        {
-          wch[i-2] = wc;
-        }
-      else
-        {
-          wch[i-2] = GUCU_REPLACEMENT_WCHAR;
-          wch[i-1] = L'\0';
-          break;
-        }
+
+#ifdef GUILE_CHARS_ARE_UCS4
+      {
+	int ret;
+	uint32_t codepoint;
+
+	codepoint = SCM_CHAR (member);
+	ret = codepoint_to_wchar (codepoint, &wc);
+	if (ret)
+	  {
+	    wch[i-2] = wc;
+	  }
+	else
+	  {
+	    wch[i-2] = GUCU_REPLACEMENT_WCHAR;
+	    wch[i-1] = L'\0';
+	    break;
+	  }
+      }
+#else
+      {
+	wint_t wc;
+	wc = btowc ((int) SCM_CHAR (member));
+	if (wc == WEOF)
+	  {
+	    wch[i-2] = GUCU_REPLACEMENT_WCHAR;
+	    wch[i-1] = L'\0';
+	    break;
+	  }
+	else
+	  {
+	    wch[i-2] = wc;
+	  }
+      }
+#endif
     }
   wch[len-2] = L'\0';
 
@@ -291,6 +372,7 @@ _scm_schar_to_wchar (SCM x)
 char
 _scm_schar_to_char (SCM x)
 {  
+#ifdef GUILE_CHARS_ARE_UCS4
   int ret;
   char c;
   uint32_t codepoint;
@@ -303,6 +385,10 @@ _scm_schar_to_char (SCM x)
     return GUCU_REPLACEMENT_CHAR;
 
   return c;
+#else
+  assert (SCM_CHARP (x));
+  return SCM_CHAR (x);
+#endif
 }
 
 ///////////////////////////////////
@@ -330,7 +416,7 @@ _scm_is_xstring (SCM x)
 
 #ifdef HAVE_LIBNCURSESW
 SCM
-_scm_sstring_from_wint_string (wint_t *x)
+_scm_sstring_from_wint_string (const wint_t *x)
 {
   int i, len;
   SCM member, xstring;
@@ -356,7 +442,7 @@ _scm_sstring_from_wint_string (wint_t *x)
 
 #ifdef HAVE_LIBNCURSESW
 SCM
-_scm_sstring_from_wstring (wchar_t *x)
+_scm_sstring_from_wstring (const wchar_t *x)
 {
   size_t i;
   SCM member, xstring;
@@ -406,6 +492,29 @@ _scm_sstring_to_wstring (SCM x)
   return wstring;
 }
 
+SCM
+_scm_xstring_from_chstring (const chtype *x)
+{
+  size_t i;
+  SCM member, xstring;
+
+  assert (x != NULL);
+
+  xstring = SCM_EOL;
+  i = 0;
+  while (1)
+    {
+      if (x[i] == 0)
+	break;
+      member = _scm_xchar_from_chtype (x[i]);
+      xstring = scm_append (scm_list_2 (xstring, scm_list_1 (member)));
+      i ++;
+    }
+
+  return xstring;
+}
+
+
 #ifdef HAVE_LIBNCURSESW
 SCM
 _scm_xstring_from_cstring (const cchar_t *x)
@@ -425,26 +534,38 @@ _scm_xstring_from_cstring (const cchar_t *x)
       if (x[i].chars[0] == 0)
         break;
       n = getcchar(&(x[i]), NULL, NULL, NULL, NULL);
-      if (n == 0 || n == 1)
+      /* Starting from the patch on 2009/07/18, the length returned by
+	 getcchar includes the trailing NULL.  Prior to that, it did not
+	 include the trailing NULL. */
+      
+      if (NCURSES_VERSION_MAJOR > 5
+	  || (NCURSES_VERSION_MAJOR == 5 && NCURSES_VERSION_MINOR > 7)
+	  || (NCURSES_VERSION_MAJOR == 5 && NCURSES_VERSION_MINOR == 7 
+	      && NCURSES_VERSION_PATCH >= 20090718))
+	{
+	  n --;
+	}
+
+      if (n == 0)
         break;
       getcchar(&(x[i]), wch, &attrs, &color_pair, NULL);
-      if (n == 2)
+      if (n == 1)
         member = scm_list_3 (_scm_from_attr (attrs),
                              scm_from_short (color_pair),
                              _scm_schar_from_wchar (wch[0]));
 
-      else if (n == 3)
+      else if (n == 2)
         member = scm_list_4 (_scm_from_attr (attrs),
                              scm_from_short (color_pair),
                              _scm_schar_from_wchar (wch[0]),
                              _scm_schar_from_wchar (wch[1]));
-      else if (n == 4)
+      else if (n == 3)
         member = scm_list_5 (_scm_from_attr (attrs),
                              scm_from_short (color_pair),
                              _scm_schar_from_wchar (wch[0]),
                              _scm_schar_from_wchar (wch[1]),
                              _scm_schar_from_wchar (wch[2]));
-      else if (n == 5)
+      else if (n == 4)
         member = scm_list_n (_scm_from_attr (attrs),
                              scm_from_short (color_pair),
                              _scm_schar_from_wchar (wch[0]),
@@ -452,7 +573,7 @@ _scm_xstring_from_cstring (const cchar_t *x)
                              _scm_schar_from_wchar (wch[2]),
                              _scm_schar_from_wchar (wch[3]), SCM_UNDEFINED);
       
-      else if (n == 6)
+      else if (n == 5)
         member = scm_list_n (_scm_from_attr (attrs),
                              scm_from_short (color_pair),
                              _scm_schar_from_wchar (wch[0]),
@@ -698,30 +819,6 @@ SCM
 gucu_is_screen_p (SCM x)
 {
   return scm_from_bool (_scm_is_screen (x));
-}
-
-
-
-// voidstring -- In C, (void *)NULL.  In Scheme, doesn't matter.  This
-// is because all of the (void *) arguments in the directly wrapped
-// list are unused by curses.
-
-int
-_scm_is_voidstring (SCM x)
-{
-  return 1;
-}
-
-void *
-_scm_to_voidstring (SCM x)
-{
-  return NULL;
-}
-
-SCM
-_scm_from_voidstring (void *x)
-{
-  return SCM_EOL;
 }
 
 // window -- in C, a WINDOW *.  In Scheme, a smob that contains the pointer

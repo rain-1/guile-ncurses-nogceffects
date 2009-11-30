@@ -1845,13 +1845,25 @@ gucu_syncok_x (SCM win, SCM bf)
 SCM
 gucu_term_attrs ()
 {
+#ifdef HAVE_TERM_ATTRS
   attr_t ret;
   SCM s_ret;
 
   ret = term_attrs ();
   s_ret = _scm_from_attr (ret);
+  return s_ret;
+#else
+  chtype ret;
+  SCM s_ret ;
+
+  ret = termattrs ();
+  if (SIZEOF_CHTYPE == SIZEOF_LONG)
+    s_ret = scm_from_ulong ((unsigned long) ret);
+  else
+    s_ret = scm_from_uint ((unsigned int) ret);
 
   return s_ret;
+#endif
 }
 
 /* Return the short name of the terminal */
@@ -2156,7 +2168,7 @@ gucu_wechochar (SCM win, SCM ch)
 #else
   {
     chtype c_ch;
-    c_ch = _scm_to_chtype (ch);
+    c_ch = _scm_xchar_to_chtype (ch);
     ret = wechochar (c_win, c_ch);
   }
 #endif
@@ -2206,15 +2218,16 @@ gucu_wgetch (SCM win)
     
     if (ret == OK)
       {
-        if (wchar_to_codepoint (wch, &cp))
-          return SCM_MAKE_CHAR (cp);
-        else
-          return SCM_MAKE_CHAR (GUCU_REPLACEMENT_CODEPOINT);
+	return _scm_schar_from_wchar (wch);
       }
     else if (ret == KEY_CODE_YES)
-      return scm_from_unsigned_integer (wch);
+      {
+	return scm_from_unsigned_integer (wch);
+      }
     else
-      return SCM_BOOL_F;
+      {
+	return SCM_BOOL_F;
+      }
   }
 #else
   ret = wgetch (c_win);
@@ -2286,7 +2299,7 @@ gucu_winch (SCM win)
   {
     chtype c_ch;
     c_ch = winch (c_win);
-    ch = _scm_from_chtype (c_ch);
+    ch = _scm_xchar_from_chtype (c_ch);
   }
 #endif
   return ch;

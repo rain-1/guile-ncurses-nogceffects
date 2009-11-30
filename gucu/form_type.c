@@ -13,6 +13,7 @@
 #include "form_func.h"
 #include "form_type.h"
 #include "compat.h"
+#include "features.h"
 
 scm_t_bits form_tag;
 scm_t_bits field_tag;
@@ -399,26 +400,20 @@ gucu_new_form (SCM fields)
     }
 
   gf->fields = fields;
-#ifdef HAVE_SCM_GUARDIAN_GREEDY_P
-  gf->fields_guard = scm_make_guardian(SCM_BOOL_F);
-#else
-  gf->fields_guard = scm_make_guardian();
-#endif
-  scm_call_1 (gf->fields_guard, fields);
-
   gf->win = SCM_BOOL_F;
-#ifdef HAVE_SCM_GUARDIAN_GREEDY_P
-  gf->win_guard = scm_make_guardian(SCM_BOOL_F);
-#else
+  gf->sub = SCM_BOOL_F;
+
+#ifndef GUILE_1_POINT_6
+  gf->fields_guard = scm_make_guardian();
   gf->win_guard = scm_make_guardian();
+  gf->sub_guard = scm_make_guardian();
+#else
+  gf->fields_guard = scm_make_guardian(SCM_BOOL_F);
+  gf->win_guard = scm_make_guardian(SCM_BOOL_F);
+  gf->sub_guard = scm_make_guardian(SCM_BOOL_F);
 #endif
 
-  gf->sub = SCM_BOOL_F;
-#ifdef HAVE_SCM_GUARDIAN_GREEDY_P
-  gf->sub_guard = scm_make_guardian(SCM_BOOL_F);
-#else
-  gf->sub_guard = scm_make_guardian();
-#endif
+  scm_call_1 (gf->fields_guard, fields);
 
   return smob;
 }

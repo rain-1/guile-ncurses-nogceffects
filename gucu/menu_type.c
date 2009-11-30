@@ -376,14 +376,15 @@ gucu_new_menu (SCM items)
 	abort ();
     }
   scm_remember_upto_here_1 (items);
-#ifdef HAVE_SCM_GUARDIAN_GREEDY_P
-  gm->items_guard = scm_make_guardian (SCM_BOOL_F);
-  gm->win_guard = scm_make_guardian (SCM_BOOL_F);
-  gm->subwin_guard = scm_make_guardian (SCM_BOOL_F);
-#else
+
+#ifndef GUILE_1_POINT_6
   gm->items_guard = scm_make_guardian ();
   gm->win_guard = scm_make_guardian ();
   gm->subwin_guard = scm_make_guardian ();
+#else
+  gm->items_guard = scm_make_guardian (SCM_BOOL_F);
+  gm->win_guard = scm_make_guardian (SCM_BOOL_F);
+  gm->subwin_guard = scm_make_guardian (SCM_BOOL_F);
 #endif
 
   /* Guard the items list */

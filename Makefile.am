@@ -69,51 +69,51 @@ dist_pkgguilesite_DATA = \
 ### SOURCES ###
 
 gucu_libguile_gucu_la_SOURCES = \
+	gucu/compat.c \
+	gucu/compat.h \
 	gucu/curs_const.c \
 	gucu/curs_const.h \
 	gucu/curs_func.c \
 	gucu/curs_func.h \
+	gucu/curs_main.c \
 	gucu/curs_port.c \
 	gucu/curs_port.h \
-	gucu/type.c \
-	gucu/type.h \
 	gucu/curs_spec.c \
 	gucu/curs_spec.h \
-	gucu/curs_main.c \
 	gucu/eti_const.c \
 	gucu/eti_const.h \
 	gucu/eti_main.c \
+	gucu/form_const.c \
+	gucu/form_const.h \
+	gucu/form_func.c \
+	gucu/form_func.h \
+	gucu/form_main.c \
+	gucu/form_spec.c \
+	gucu/form_spec.h \
+	gucu/form_type.c \
+	gucu/form_type.h \
+	gucu/menu_const.c \
+	gucu/menu_const.h \
+	gucu/menu_func.c \
+	gucu/menu_func.h \
+	gucu/menu_main.c \
+	gucu/menu_spec.c \
+	gucu/menu_spec.h \
+	gucu/menu_type.c \
+	gucu/menu_type.h \
+	gucu/panel_func.c \
+	gucu/panel_func.h \
+	gucu/panel_main.c \
+	gucu/panel_spec.c \
+	gucu/panel_spec.h \
+	gucu/panel_type.c \
+	gucu/panel_type.h \
 	gucu/slk_func.c \
 	gucu/slk_func.h \
+	gucu/type.c \
+	gucu/type.h \
 	gucu/unicode.c \
-	gucu/unicode.h \
- 	gucu/panel_func.c \
- 	gucu/panel_func.h \
- 	gucu/panel_type.c \
- 	gucu/panel_type.h \
- 	gucu/panel_spec.c \
- 	gucu/panel_spec.h \
- 	gucu/panel_main.c \
- 	gucu/form_const.c \
- 	gucu/form_const.h \
- 	gucu/form_func.c \
- 	gucu/form_func.h \
- 	gucu/form_type.c \
- 	gucu/form_type.h \
- 	gucu/form_spec.c \
- 	gucu/form_spec.h \
- 	gucu/form_main.c \
- 	gucu/menu_const.c \
- 	gucu/menu_const.h \
- 	gucu/menu_func.c \
- 	gucu/menu_func.h \
- 	gucu/menu_type.c \
- 	gucu/menu_type.h \
- 	gucu/menu_spec.c \
- 	gucu/menu_spec.h \
- 	gucu/menu_main.c \
-        gucu/compat.c \
-        gucu/compat.h
+	gucu/unicode.h
 
 tools_gucushell_SOURCES = \
 	tools/shell.c
@@ -174,10 +174,6 @@ NARROWTESTS = \
 	test/r030_termattrs.test \
 	test/r031_touch.test \
 	test/r032_util.test \
-	test/r037_border_set.test \
-	test/r038_get_wch.test \
-	test/r039_get_wstr.test \
-	test/r040_term_attrs.test \
 	test/r041_ports.test \
 	test/r042_mouse.test \
 	test/p001_panel.test \
@@ -201,19 +197,15 @@ NARROWTESTS = \
 	test/m010_menu_mark.test \
 	test/m011_menu_options.test
 
-# WIDETESTS = \
-# 	test/r033_add_wch.test \
-# 	test/r034_add_wchstr.test \
-# 	test/r035_addwstr.test \
-# 	test/r036_bkgrnd.test \
-# 	test/r037_border_set.test \
-# 	test/r038_get_wch.test \
-# 	test/r039_get_wstr.test \
-# 	test/r040_term_attrs.test
+WIDETESTS = \
+	test/r037_border_set.test \
+	test/r038_get_wch.test \
+	test/r039_get_wstr.test \
+	test/r040_term_attrs.test
 
 TESTS = $(NARROWTESTS)
 if WIDE
-# TESTS += $(WIDETESTS)
+#  TESTS += $(WIDETESTS)
 endif
 
 ### DOCUMENTATION ###

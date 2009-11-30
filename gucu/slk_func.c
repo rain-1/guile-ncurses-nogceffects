@@ -6,206 +6,176 @@
 #include "type.h"
 #include "compat.h"
 
+#define RETURNTF(x) \
+  if(x==ERR) \
+    return SCM_BOOL_F; \
+  else \
+    return SCM_BOOL_T
 
 SCM
-gucu_slk_attr_off (SCM arg1, SCM arg2)
+gucu_slk_attr_off (SCM attrs)
 {
-	SCM_ASSERT (_scm_is_attr (arg1), arg1, SCM_ARG1, "slk-attr-off");
-	SCM_ASSERT (_scm_is_voidstring (arg2), arg2, SCM_ARG2, "slk-attr-off");
+  SCM_ASSERT (_scm_is_attr (attrs), attrs, SCM_ARG1, "slk-attr-off");
+  
+  const attr_t c_attrs = _scm_to_attr (attrs);
 
-	const attr_t c_arg1 = _scm_to_attr (arg1);
-	void *c_arg2 = _scm_to_voidstring (arg2);
-
-	int ret = slk_attr_off (c_arg1, c_arg2);
-	SCM s_ret = scm_from_int (ret);
-
-	return s_ret;
+  int ret = slk_attr_off (c_attrs, NULL);
+  RETURNTF (ret);
 }
 
 SCM
-gucu_slk_attroff (SCM arg1)
+gucu_slk_attroff (SCM attrs)
 {
-	SCM_ASSERT (_scm_is_chtype (arg1), arg1, SCM_ARG1, "slk-attroff");
-
-	const chtype c_arg1 = _scm_to_chtype (arg1);
-
-	int ret = slk_attroff (c_arg1);
-	SCM s_ret = scm_from_int (ret);
-
-	return s_ret;
+  SCM_ASSERT (_scm_is_chtype (attrs), attrs, SCM_ARG1, "slk-attroff");
+  
+  const chtype c_attrs = _scm_to_chtype (attrs);
+  
+  int ret = slk_attroff (c_attrs);
+  RETURNTF(ret);
 }
 
 SCM
-gucu_slk_attr_on (SCM arg1, SCM arg2)
+gucu_slk_attr_on (SCM attrs)
 {
-	SCM_ASSERT (_scm_is_attr (arg1), arg1, SCM_ARG1, "slk-attr-on");
-	SCM_ASSERT (_scm_is_voidstring (arg2), arg2, SCM_ARG2, "slk-attr-on");
+  SCM_ASSERT (_scm_is_attr (attrs), attrs, SCM_ARG1, "slk-attr-on");
 
-	const attr_t c_arg1 = _scm_to_attr (arg1);
-	void *c_arg2 = _scm_to_voidstring (arg2);
+  const attr_t c_attrs = _scm_to_attr (attrs);
 
-	int ret = slk_attr_on (c_arg1, c_arg2);
-	SCM s_ret = scm_from_int (ret);
-
-	return s_ret;
+  int ret = slk_attr_on (c_attrs, NULL);
+  RETURNTF(ret);
 }
 
 SCM
-gucu_slk_attron (SCM arg1)
+gucu_slk_attron (SCM attrs)
 {
-	SCM_ASSERT (_scm_is_chtype (arg1), arg1, SCM_ARG1, "slk-attron");
+  SCM_ASSERT (_scm_is_chtype (attrs), attrs, SCM_ARG1, "slk-attron");
 
-	const chtype c_arg1 = _scm_to_chtype (arg1);
-
-	int ret = slk_attron (c_arg1);
-	SCM s_ret = scm_from_int (ret);
-
-	return s_ret;
+  const chtype c_attrs = _scm_to_chtype (attrs);
+  
+  int ret = slk_attron (c_attrs);
+  RETURNTF(ret);
 }
 
 SCM
-gucu_slk_attr_set (SCM arg1, SCM arg2, SCM arg3)
+gucu_slk_attr_set (SCM attrs, SCM color_pair_number)
 {
-	SCM_ASSERT (_scm_is_attr (arg1), arg1, SCM_ARG1, "slk-attr-set");
-	SCM_ASSERT (scm_is_integer (arg2), arg2, SCM_ARG2, "slk-attr-set");
-	SCM_ASSERT (_scm_is_voidstring (arg3), arg3, SCM_ARG3, "slk-attr-set");
+  SCM_ASSERT (_scm_is_attr (attrs), attrs, SCM_ARG1, "slk-attr-set");
+  SCM_ASSERT (scm_is_integer (color_pair_number), color_pair_number, SCM_ARG2, 
+	      "slk-attr-set");
 
-	const attr_t c_arg1 = _scm_to_attr (arg1);
-	short c_arg2 = scm_to_short (arg2);
-	void *c_arg3 = _scm_to_voidstring (arg3);
+  const attr_t c_attrs = _scm_to_attr (attrs);
+  short c_color_pair_number = scm_to_short (color_pair_number);
 
-	int ret = slk_attr_set (c_arg1, c_arg2, c_arg3);
-	SCM s_ret = scm_from_int (ret);
-
-	return s_ret;
+  int ret = slk_attr_set (c_attrs, c_color_pair_number, NULL);
+  RETURNTF(ret);
 }
 
 SCM
-gucu_slk_attrset (SCM arg1)
+gucu_slk_attrset (SCM attrs)
 {
-	SCM_ASSERT (_scm_is_chtype (arg1), arg1, SCM_ARG1, "slk-attrset");
+  SCM_ASSERT (_scm_is_chtype (attrs), attrs, SCM_ARG1, "slk-attrset");
 
-	const chtype c_arg1 = _scm_to_chtype (arg1);
-
-	int ret = slk_attrset (c_arg1);
-	SCM s_ret = scm_from_int (ret);
-
-	return s_ret;
+  const chtype c_attrs = _scm_to_chtype (attrs);
+  
+  int ret = slk_attrset (c_attrs);
+  RETURNTF(ret);
 }
 
 SCM
 gucu_slk_clear ()
 {
-	int ret = slk_clear ();
-	SCM s_ret = scm_from_int (ret);
-
-	return s_ret;
+  int ret = slk_clear ();
+  RETURNTF(ret);
 }
 
 SCM
-gucu_slk_color (SCM arg1)
+gucu_slk_color (SCM color_pair_number)
 {
-	SCM_ASSERT (scm_is_integer (arg1), arg1, SCM_ARG1, "slk-color");
+  SCM_ASSERT (scm_is_integer (color_pair_number), color_pair_number, SCM_ARG1, 
+	      "slk-color");
 
-	short c_arg1 = scm_to_short (arg1);
+  short c_color_pair_number = scm_to_short (color_pair_number);
 
-	int ret = slk_color (c_arg1);
-	SCM s_ret = scm_from_int (ret);
-
-	return s_ret;
+  int ret = slk_color (c_color_pair_number);
+  RETURNTF(ret);
 }
 
 SCM
-gucu_slk_init (SCM arg1)
+gucu_slk_init (SCM fmt)
 {
-	SCM_ASSERT (scm_is_integer (arg1), arg1, SCM_ARG1, "slk-init");
-
-	int c_arg1 = scm_to_int (arg1);
-
-	int ret = slk_init (c_arg1);
-	if (ret != OK)
-	  return SCM_BOOL_F;
-
-	return SCM_BOOL_T;
+  SCM_ASSERT (scm_is_integer (fmt), fmt, SCM_ARG1, "slk-init");
+  
+  int c_fmt = scm_to_int (fmt);
+  
+  int ret = slk_init (c_fmt);
+  RETURNTF(ret);
 }
 
 SCM
-gucu_slk_label (SCM arg1)
+gucu_slk_label (SCM labnum)
 {
-	SCM_ASSERT (scm_is_integer (arg1), arg1, SCM_ARG1, "slk-label");
-
-	int c_arg1 = scm_to_int (arg1);
-
-	char * ret = slk_label (c_arg1);
-	SCM s_ret = scm_from_locale_string (ret);
-
-	return s_ret;
+  SCM_ASSERT (scm_is_integer (labnum), labnum, SCM_ARG1, "slk-label");
+  
+  int c_labnum = scm_to_int (labnum);
+  
+  char *ret = slk_label (c_labnum);
+  SCM s_ret = scm_from_locale_string (ret);
+  
+  return s_ret;
 }
 
 SCM
 gucu_slk_noutrefresh ()
 {
-	int ret = slk_noutrefresh ();
-	SCM s_ret = scm_from_int (ret);
-
-	return s_ret;
+  int ret = slk_noutrefresh ();
+  RETURNTF(ret);
 }
 
 SCM
 gucu_slk_refresh ()
 {
-	int ret = slk_refresh ();
-	SCM s_ret = scm_from_int (ret);
-
-	return s_ret;
+  int ret = slk_refresh ();
+  RETURNTF(ret);
 }
 
 SCM
 gucu_slk_restore ()
 {
-	int ret = slk_restore ();
-	SCM s_ret = scm_from_int (ret);
-
-	return s_ret;
+  int ret = slk_restore ();
+  RETURNTF(ret);
 }
 
 SCM
-gucu_slk_set (SCM arg1, SCM arg2, SCM arg3)
+gucu_slk_set (SCM labnum, SCM label, SCM fmt)
 {
-	SCM_ASSERT (scm_is_integer (arg1), arg1, SCM_ARG1, "slk-set");
-	SCM_ASSERT (scm_is_string (arg2), arg2, SCM_ARG2, "slk-set");
-	SCM_ASSERT (scm_is_integer (arg3), arg3, SCM_ARG3, "slk-set");
-
-	int c_arg1 = scm_to_int (arg1);
-	 char *c_arg2 = scm_to_locale_string (arg2);
-	int c_arg3 = scm_to_int (arg3);
-
-	int ret = slk_set (c_arg1, c_arg2, c_arg3);
-	if (ret != OK)
-	  return SCM_BOOL_F;
-	
-	return SCM_BOOL_T;
-
+  SCM_ASSERT (scm_is_integer (labnum), labnum, SCM_ARG1, "slk-set");
+  SCM_ASSERT (scm_is_string (label), label, SCM_ARG2, "slk-set");
+  SCM_ASSERT (scm_is_integer (fmt), fmt, SCM_ARG3, "slk-set");
+  
+  int c_labnum = scm_to_int (labnum);
+  char *c_label = scm_to_locale_string (label);
+  int c_fmt = scm_to_int (fmt);
+  
+  int ret = slk_set (c_labnum, c_label, c_fmt);
+  RETURNTF(ret);
 }
 
 SCM
 gucu_slk_touch ()
 {
-	int ret = slk_touch ();
-	SCM s_ret = scm_from_int (ret);
-
-	return s_ret;
+  int ret = slk_touch ();
+  RETURNTF(ret);
 }
 
 
 void 
 gucu_slk_init_function ()
 {
-  scm_c_define_gsubr ("slk-attr-off", 2, 0, 0, gucu_slk_attr_off);
+  scm_c_define_gsubr ("slk-attr-off", 1, 0, 0, gucu_slk_attr_off);
   scm_c_define_gsubr ("slk-attroff", 1, 0, 0, gucu_slk_attroff);
-  scm_c_define_gsubr ("slk-attr-on", 2, 0, 0, gucu_slk_attr_on);
+  scm_c_define_gsubr ("slk-attr-on", 1, 0, 0, gucu_slk_attr_on);
   scm_c_define_gsubr ("slk-attron", 1, 0, 0, gucu_slk_attron);
-  scm_c_define_gsubr ("slk-attr-set", 3, 0, 0, gucu_slk_attr_set);
+  scm_c_define_gsubr ("slk-attr-set", 2, 0, 0, gucu_slk_attr_set);
   scm_c_define_gsubr ("slk-attrset", 1, 0, 0, gucu_slk_attrset);
   scm_c_define_gsubr ("slk-clear", 0, 0, 0, gucu_slk_clear);
   scm_c_define_gsubr ("slk-color", 1, 0, 0, gucu_slk_color);

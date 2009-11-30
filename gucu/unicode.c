@@ -1,23 +1,15 @@
-#define _UNUSED_PARAMETER_ 
+#include <config.h>
+#include "unicode.h"
+#include "features.h"
 
+#ifdef GUILE_CHARS_ARE_UCS4
 #include <assert.h>
 #include <langinfo.h>
-#include <curses.h>
+#include <stddef.h>
+#include <stdint.h>
 #include <stdlib.h>
-#include <string.h>
-
-#ifdef HAVE_LIBUNISTRING
 #include <uniconv.h>
 #include <unistr.h>
-#endif
-
-#ifdef UNICODE_TEST
-#include <langinfo.h>
-#include <locale.h>
-#include <stdio.h>
-#endif
-
-#include "unicode.h"
 
 #ifdef __STDC_ISO_10646__
 static const int stdc_iso_10646 = 1;
@@ -25,7 +17,6 @@ static const int stdc_iso_10646 = 1;
 static const int stdc_iso_10646 = 0;
 #endif
 
-#ifdef HAVE_LIBUNISTRING
 int
 locale_char_to_codepoint (char c, uint32_t *p_codepoint)
 {
@@ -33,7 +24,7 @@ locale_char_to_codepoint (char c, uint32_t *p_codepoint)
   uint32_t *u32_str;
 
   assert (p_codepoint != (uint32_t *) NULL);
-
+  
   if (c == '\0')
     {
       *p_codepoint = 0;
@@ -43,7 +34,9 @@ locale_char_to_codepoint (char c, uint32_t *p_codepoint)
   locale_str[1] = '\0';
   u32_str = u32_strconv_from_locale (locale_str);
   if (u32_str == NULL)
-    return 0;
+    {
+      return 0;
+    }
   if (u32_strlen (u32_str) != 1)
     {
       *p_codepoint = '\0';
@@ -54,7 +47,7 @@ locale_char_to_codepoint (char c, uint32_t *p_codepoint)
   free (u32_str);
   return 1;
 }
-   
+
 int
 wchar_to_codepoint (wchar_t c, uint32_t *p_codepoint)
 {
@@ -131,14 +124,14 @@ codepoint_to_locale_char (uint32_t codepoint, char *p_c)
   free (str);
   return 1;
 }
-  
+
 int
 codepoint_to_wchar (uint32_t codepoint, wchar_t *p_c)
 {
   uint32_t u32_str[2];
   wchar_t *wchar_str;
   size_t wchar_len = 0;
-
+  
   assert (p_c != (wchar_t *) NULL);
   assert (codepoint <= 0x10FFFF);
 
@@ -150,10 +143,10 @@ codepoint_to_wchar (uint32_t codepoint, wchar_t *p_c)
 
   if (stdc_iso_10646)
     {
-      if ((sizeof (uint32_t) == sizeof (wchar_t))
-          || 
-          (sizeof (uint16_t) == sizeof (wchar_t) && codepoint <= 0xFFFF))
-        {
+      if ((SIZEOF_WCHAR_T == 4)
+	  || 
+	  (SIZEOF_WCHAR_T == 2 && codepoint <= 0xFFFF))
+	{
           *p_c = codepoint;
           return 1;
         }
@@ -178,8 +171,9 @@ codepoint_to_wchar (uint32_t codepoint, wchar_t *p_c)
       *p_c = 0;
       return 0;
     }
-  if (wchar_len != sizeof (wchar_t))
+  if (wchar_len != SIZEOF_WCHAR_T)
     {
+      /* Fail, because we didn't receive exactly one char. */
       *p_c = 0;
       free (wchar_str);
       return 0;
@@ -188,58 +182,5 @@ codepoint_to_wchar (uint32_t codepoint, wchar_t *p_c)
   free (wchar_str);
   return 1;
 }
-#endif /* HAVE_LIBUNISTRING */
 
-#ifdef UNICODE_TEST
-int main(int argc, char **argv)
-{
-  int i;
-  char c;
-  wchar_t wc;
-  uint32_t cp;
-  int ret;
-  char *loc;
-
-  loc = setlocale (LC_ALL, "");
-  printf ("Current locale: %s\n\n", loc);
-
-  printf ("locale char -> codepoint\n");
-  for (i = 0; i < 256; i++)
-    {
-      ret = locale_char_to_codepoint ((unsigned char) i, &cp);
-      if (ret)
-        printf ("%d (%c) -> %u\t", i, (unsigned char) i, cp);
-    }
-  printf ("\n\n");
-
-  printf ("codepoint -> locale char\n");
-  for (cp = 0; cp < 256; cp ++)
-    {
-      ret = codepoint_to_locale_char (cp, &c);
-      if (ret)
-        printf ("%u -> %d (%c)\t", cp, c, (unsigned char) c);
-    }
-  printf ("\n\n");
-
-  printf ("wchar -> codepoint\n");
-  for (wc = 0; wc < 256; wc++)
-    {
-      ret = wchar_to_codepoint (wc, &cp);
-      if (ret)
-        printf ("%d (%lc) -> %u\t", wc, wc, cp);
-    }
-  printf ("\n\n");
-
-  printf ("codepoint -> wchar\n");
-  for (cp = 0; cp < 256; cp ++)
-    {
-      ret = codepoint_to_wchar (cp, &wc);
-      if (ret)
-        printf ("%u -> %d (%lc)\t", cp, wc, wc);
-    }
-  printf ("\n");
-  
-        
-  return EXIT_SUCCESS;
-}
 #endif

@@ -3,6 +3,7 @@
 
 #include <curses.h>
 #include <libguile.h>
+#include <stddef.h>
 #include <stdio.h>
 #include <wchar.h>
 
@@ -14,8 +15,8 @@
 #define API
 #endif
 
-///////////////////////////////////
-// CHARACTERS
+/*****************************************************************************/
+/* CHARACTERS                                                                */
 
 #define GUCU_REPLACEMENT_CHAR ('?')
 #define GUCU_REPLACEMENT_CODEPOINT (0xFFFD)
@@ -28,18 +29,12 @@
 
 #define GUCU_PRIVATE_USE_START (0xE000)
 
-#if SCM_MAJOR_VERSION > 1 \
-    || (SCM_MAJOR_VERSION == 1 && SCM_MINOR_VERSION >= 9)
-#define GUILE_CHARS_ARE_UCS4
-#else
-#undef GUILE_CHARS_ARE_UCS4
-#endif
-
 int _scm_is_xchar (SCM x);
 
 #ifdef HAVE_LIBNCURSESW
 SCM _scm_xchar_from_cchar (cchar_t *x);
 #endif
+SCM _scm_xchar_from_chtype (chtype x);
 SCM _scm_schar_from_char (char c);
 SCM _scm_schar_from_wchar (wchar_t ch);
 
@@ -51,34 +46,27 @@ wchar_t _scm_schar_to_wchar (SCM x);
 char _scm_schar_to_char (SCM x);
 
 
-///////////////////////////////////
-// STRINGS
+/*****************************************************************************/
+/* STRINGS                                                                   */
 
 int _scm_is_xstring (SCM x);
 
 #ifdef HAVE_LIBNCURSESW
 SCM _scm_sstring_from_wint_string (const wint_t *x);
-
 SCM _scm_sstring_from_wstring (const wchar_t *x);
 #endif
-
 char *_scm_sstring_to_locale_string (SCM x);
-
 wchar_t *_scm_sstring_to_wstring (SCM x);
-
-
 SCM _scm_xstring_from_chstring (const chtype *x);
-
 #ifdef HAVE_LIBNCURSESW
 SCM _scm_xstring_from_cstring (const cchar_t *x);
 #endif
-
 chtype *_scm_xstring_to_chstring (SCM x);  
-
 #ifdef HAVE_LIBNCURSESW
 cchar_t *_scm_xstring_to_cstring (SCM x);
 #endif
 
+/*****************************************************************************/
 
 int _scm_is_attr (SCM x);
 attr_t _scm_to_attr (SCM x) ;
@@ -105,17 +93,11 @@ SCREEN *_scm_to_screen (SCM x);
 SCM _scm_from_screen (SCREEN *x);
 SCM gucu_is_screen_p (SCM x) API;
 
-int _scm_is_voidstring (SCM x);
-void *_scm_to_voidstring (SCM x);
-SCM _scm_from_voidstring (void *x);
-
 int _scm_is_window (SCM x);
 WINDOW *_scm_to_window (SCM x);
 SCM _scm_from_window (WINDOW *x);
 
 SCM gucu_is_window_p (SCM x) API;
-SCM gucu_fopen(SCM path, SCM mode) API; 
-SCM gucu_fclose(SCM file) API;
 
 void gucu_init_type (void) API;
 

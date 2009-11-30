@@ -200,10 +200,10 @@ gucu_new_panel (SCM win)
     }
   gp->window = win;
 
-#ifdef HAVE_SCM_GUARDIAN_GREEDY_P
-  gp->win_guard = scm_make_guardian (SCM_BOOL_F);
-#else
+#ifndef GUILE_1_POINT_6
   gp->win_guard = scm_make_guardian ();
+#else
+  gp->win_guard = scm_make_guardian (SCM_BOOL_F);
 #endif
  
   scm_call_1 (gp->win_guard, win);
