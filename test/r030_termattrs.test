@@ -3,10 +3,10 @@
 
 (use-modules (test lib)
 	     (test lib2)
-	     ;; (gucu curses-wide)
 	     (gucu curses)
 	     (ice-9 format)
-	     (srfi srfi-1))
+	     (srfi srfi-1)
+             (srfi srfi-13))  ; for Guile 1.6.x's string= 
 
 (define test (curses-test-start))
 

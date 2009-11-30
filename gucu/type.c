@@ -152,7 +152,7 @@ _scm_xchar_from_cchar (cchar_t *x)
 	if (b == EOF)
 	  element = SCM_MAKE_CHAR (GUCU_REPLACEMENT_CHAR);
 	else
-	  element = SCM_MAKE_CHAR (b);
+	  element = SCM_MAKE_CHAR ((unsigned char)b);
       }
 #endif
       element_list = scm_list_1 (element);
@@ -167,7 +167,7 @@ _scm_xchar_from_cchar (cchar_t *x)
 SCM
 _scm_xchar_from_chtype (chtype x)
 {
-  char c;
+  unsigned char c;
   attr_t attr;
   short color_pair;
   SCM total_list = SCM_EOL;
@@ -233,7 +233,7 @@ _scm_schar_from_wchar (wchar_t ch)
   if (b == EOF)
     return SCM_BOOL_F;
 
-  return SCM_MAKE_CHAR (b);
+  return SCM_MAKE_CHAR ((unsigned char)b);
 #endif
 }
 

@@ -436,7 +436,7 @@ SCM
 gucu_ACS_ULCORNER ()
 {
 	chtype ret = ACS_ULCORNER;
-	SCM s_ret = _scm_from_chtype (ret);
+	SCM s_ret = _scm_xchar_from_chtype (ret);
 
 	return s_ret;
 }
@@ -445,7 +445,7 @@ SCM
 gucu_ACS_LLCORNER ()
 {
 	chtype ret = ACS_LLCORNER;
-	SCM s_ret = _scm_from_chtype (ret);
+	SCM s_ret = _scm_xchar_from_chtype (ret);
 
 	return s_ret;
 }
@@ -454,7 +454,7 @@ SCM
 gucu_ACS_URCORNER ()
 {
 	chtype ret = ACS_URCORNER;
-	SCM s_ret = _scm_from_chtype (ret);
+	SCM s_ret = _scm_xchar_from_chtype (ret);
 
 	return s_ret;
 }
@@ -463,7 +463,7 @@ SCM
 gucu_ACS_LRCORNER ()
 {
 	chtype ret = ACS_LRCORNER;
-	SCM s_ret = _scm_from_chtype (ret);
+	SCM s_ret = _scm_xchar_from_chtype (ret);
 
 	return s_ret;
 }
@@ -472,7 +472,7 @@ SCM
 gucu_ACS_LTEE ()
 {
 	chtype ret = ACS_LTEE;
-	SCM s_ret = _scm_from_chtype (ret);
+	SCM s_ret = _scm_xchar_from_chtype (ret);
 
 	return s_ret;
 }
@@ -481,7 +481,7 @@ SCM
 gucu_ACS_RTEE ()
 {
 	chtype ret = ACS_RTEE;
-	SCM s_ret = _scm_from_chtype (ret);
+	SCM s_ret = _scm_xchar_from_chtype (ret);
 
 	return s_ret;
 }
@@ -490,7 +490,7 @@ SCM
 gucu_ACS_BTEE ()
 {
 	chtype ret = ACS_BTEE;
-	SCM s_ret = _scm_from_chtype (ret);
+	SCM s_ret = _scm_xchar_from_chtype (ret);
 
 	return s_ret;
 }
@@ -499,7 +499,7 @@ SCM
 gucu_ACS_TTEE ()
 {
 	chtype ret = ACS_TTEE;
-	SCM s_ret = _scm_from_chtype (ret);
+	SCM s_ret = _scm_xchar_from_chtype (ret);
 
 	return s_ret;
 }
@@ -508,7 +508,7 @@ SCM
 gucu_ACS_HLINE ()
 {
 	chtype ret = ACS_HLINE;
-	SCM s_ret = _scm_from_chtype (ret);
+	SCM s_ret = _scm_xchar_from_chtype (ret);
 
 	return s_ret;
 }
@@ -517,7 +517,7 @@ SCM
 gucu_ACS_VLINE ()
 {
 	chtype ret = ACS_VLINE;
-	SCM s_ret = _scm_from_chtype (ret);
+	SCM s_ret = _scm_xchar_from_chtype (ret);
 
 	return s_ret;
 }
@@ -526,7 +526,7 @@ SCM
 gucu_ACS_PLUS ()
 {
 	chtype ret = ACS_PLUS;
-	SCM s_ret = _scm_from_chtype (ret);
+	SCM s_ret = _scm_xchar_from_chtype (ret);
 
 	return s_ret;
 }
@@ -535,7 +535,7 @@ SCM
 gucu_ACS_S1 ()
 {
 	chtype ret = ACS_S1;
-	SCM s_ret = _scm_from_chtype (ret);
+	SCM s_ret = _scm_xchar_from_chtype (ret);
 
 	return s_ret;
 }
@@ -544,7 +544,7 @@ SCM
 gucu_ACS_S3 ()
 {
 	chtype ret = ACS_S3;
-	SCM s_ret = _scm_from_chtype (ret);
+	SCM s_ret = _scm_xchar_from_chtype (ret);
 
 	return s_ret;
 }
@@ -553,7 +553,7 @@ SCM
 gucu_ACS_S7 ()
 {
 	chtype ret = ACS_S7;
-	SCM s_ret = _scm_from_chtype (ret);
+	SCM s_ret = _scm_xchar_from_chtype (ret);
 
 	return s_ret;
 }
@@ -562,7 +562,7 @@ SCM
 gucu_ACS_S9 ()
 {
 	chtype ret = ACS_S9;
-	SCM s_ret = _scm_from_chtype (ret);
+	SCM s_ret = _scm_xchar_from_chtype (ret);
 
 	return s_ret;
 }
@@ -571,7 +571,7 @@ SCM
 gucu_ACS_DIAMOND ()
 {
 	chtype ret = ACS_DIAMOND;
-	SCM s_ret = _scm_from_chtype (ret);
+	SCM s_ret = _scm_xchar_from_chtype (ret);
 
 	return s_ret;
 }
@@ -580,7 +580,7 @@ SCM
 gucu_ACS_CKBOARD ()
 {
 	chtype ret = ACS_CKBOARD;
-	SCM s_ret = _scm_from_chtype (ret);
+	SCM s_ret = _scm_xchar_from_chtype (ret);
 
 	return s_ret;
 }
@@ -589,7 +589,7 @@ SCM
 gucu_ACS_DEGREE ()
 {
 	chtype ret = ACS_DEGREE;
-	SCM s_ret = _scm_from_chtype (ret);
+	SCM s_ret = _scm_xchar_from_chtype (ret);
 
 	return s_ret;
 }
@@ -598,7 +598,7 @@ SCM
 gucu_ACS_PLMINUS ()
 {
 	chtype ret = ACS_PLMINUS;
-	SCM s_ret = _scm_from_chtype (ret);
+	SCM s_ret = _scm_xchar_from_chtype (ret);
 
 	return s_ret;
 }
@@ -607,7 +607,7 @@ SCM
 gucu_ACS_BULLET ()
 {
 	chtype ret = ACS_BULLET;
-	SCM s_ret = _scm_from_chtype (ret);
+	SCM s_ret = _scm_xchar_from_chtype (ret);
 
 	return s_ret;
 }
@@ -616,7 +616,7 @@ SCM
 gucu_ACS_LARROW ()
 {
 	chtype ret = ACS_LARROW;
-	SCM s_ret = _scm_from_chtype (ret);
+	SCM s_ret = _scm_xchar_from_chtype (ret);
 
 	return s_ret;
 }
@@ -625,7 +625,7 @@ SCM
 gucu_ACS_RARROW ()
 {
 	chtype ret = ACS_RARROW;
-	SCM s_ret = _scm_from_chtype (ret);
+	SCM s_ret = _scm_xchar_from_chtype (ret);
 
 	return s_ret;
 }
@@ -634,7 +634,7 @@ SCM
 gucu_ACS_DARROW ()
 {
 	chtype ret = ACS_DARROW;
-	SCM s_ret = _scm_from_chtype (ret);
+	SCM s_ret = _scm_xchar_from_chtype (ret);
 
 	return s_ret;
 }
@@ -643,7 +643,7 @@ SCM
 gucu_ACS_UARROW ()
 {
 	chtype ret = ACS_UARROW;
-	SCM s_ret = _scm_from_chtype (ret);
+	SCM s_ret = _scm_xchar_from_chtype (ret);
 
 	return s_ret;
 }
@@ -652,7 +652,7 @@ SCM
 gucu_ACS_BOARD ()
 {
 	chtype ret = ACS_BOARD;
-	SCM s_ret = _scm_from_chtype (ret);
+	SCM s_ret = _scm_xchar_from_chtype (ret);
 
 	return s_ret;
 }
@@ -661,7 +661,7 @@ SCM
 gucu_ACS_LANTERN ()
 {
 	chtype ret = ACS_LANTERN;
-	SCM s_ret = _scm_from_chtype (ret);
+	SCM s_ret = _scm_xchar_from_chtype (ret);
 
 	return s_ret;
 }
@@ -670,7 +670,7 @@ SCM
 gucu_ACS_BLOCK ()
 {
 	chtype ret = ACS_BLOCK;
-	SCM s_ret = _scm_from_chtype (ret);
+	SCM s_ret = _scm_xchar_from_chtype (ret);
 
 	return s_ret;
 }
@@ -679,7 +679,7 @@ SCM
 gucu_ACS_GEQUAL ()
 {
 	chtype ret = ACS_GEQUAL;
-	SCM s_ret = _scm_from_chtype (ret);
+	SCM s_ret = _scm_xchar_from_chtype (ret);
 
 	return s_ret;
 }
@@ -688,7 +688,7 @@ SCM
 gucu_ACS_NEQUAL ()
 {
 	chtype ret = ACS_NEQUAL;
-	SCM s_ret = _scm_from_chtype (ret);
+	SCM s_ret = _scm_xchar_from_chtype (ret);
 
 	return s_ret;
 }
@@ -697,7 +697,7 @@ SCM
 gucu_ACS_LEQUAL ()
 {
 	chtype ret = ACS_LEQUAL;
-	SCM s_ret = _scm_from_chtype (ret);
+	SCM s_ret = _scm_xchar_from_chtype (ret);
 
 	return s_ret;
 }
@@ -706,7 +706,7 @@ SCM
 gucu_ACS_PI ()
 {
 	chtype ret = ACS_PI;
-	SCM s_ret = _scm_from_chtype (ret);
+	SCM s_ret = _scm_xchar_from_chtype (ret);
 
 	return s_ret;
 }
@@ -715,7 +715,7 @@ SCM
 gucu_ACS_STERLING ()
 {
 	chtype ret = ACS_STERLING;
-	SCM s_ret = _scm_from_chtype (ret);
+	SCM s_ret = _scm_xchar_from_chtype (ret);
 
 	return s_ret;
 }
@@ -817,38 +817,38 @@ gucu_init_special ()
   scm_c_define_gsubr ("getparyx", 1, 0, 0, gucu_getparyx);
   scm_c_define_gsubr ("getsyx", 0, 0, 0, gucu_getsyx);
   scm_c_define_gsubr ("getyx", 1, 0, 0, gucu_getyx);
-  scm_c_define_gsubr ("acs-block", 0, 0, 0, gucu_ACS_BLOCK);
-  scm_c_define_gsubr ("acs-board", 0, 0, 0, gucu_ACS_BOARD);
-  scm_c_define_gsubr ("acs-btee", 0, 0, 0, gucu_ACS_BTEE);
-  scm_c_define_gsubr ("acs-bullet", 0, 0, 0, gucu_ACS_BULLET);
-  scm_c_define_gsubr ("acs-ckboard", 0, 0, 0, gucu_ACS_CKBOARD);
-  scm_c_define_gsubr ("acs-darrow", 0, 0, 0, gucu_ACS_DARROW);
-  scm_c_define_gsubr ("acs-degree", 0, 0, 0, gucu_ACS_DEGREE);
-  scm_c_define_gsubr ("acs-diamond", 0, 0, 0, gucu_ACS_DIAMOND);
-  scm_c_define_gsubr ("acs-gequal", 0, 0, 0, gucu_ACS_GEQUAL);
-  scm_c_define_gsubr ("acs-hline", 0, 0, 0, gucu_ACS_HLINE);
-  scm_c_define_gsubr ("acs-lantern", 0, 0, 0, gucu_ACS_LANTERN);
-  scm_c_define_gsubr ("acs-larrow", 0, 0, 0, gucu_ACS_LARROW);
-  scm_c_define_gsubr ("acs-lequal", 0, 0, 0, gucu_ACS_LEQUAL);
-  scm_c_define_gsubr ("acs-llcorner", 0, 0, 0, gucu_ACS_LLCORNER);
-  scm_c_define_gsubr ("acs-lrcorner", 0, 0, 0, gucu_ACS_LRCORNER);
-  scm_c_define_gsubr ("acs-ltee", 0, 0, 0, gucu_ACS_LTEE);
-  scm_c_define_gsubr ("acs-nequal", 0, 0, 0, gucu_ACS_NEQUAL);
-  scm_c_define_gsubr ("acs-pi", 0, 0, 0, gucu_ACS_PI);
-  scm_c_define_gsubr ("acs-plminus", 0, 0, 0, gucu_ACS_PLMINUS);
-  scm_c_define_gsubr ("acs-plus", 0, 0, 0, gucu_ACS_PLUS);
-  scm_c_define_gsubr ("acs-rarrow", 0, 0, 0, gucu_ACS_RARROW);
-  scm_c_define_gsubr ("acs-rtee", 0, 0, 0, gucu_ACS_RTEE);
-  scm_c_define_gsubr ("acs-s1", 0, 0, 0, gucu_ACS_S1);
-  scm_c_define_gsubr ("acs-s3", 0, 0, 0, gucu_ACS_S3);
-  scm_c_define_gsubr ("acs-s7", 0, 0, 0, gucu_ACS_S7);
-  scm_c_define_gsubr ("acs-s9", 0, 0, 0, gucu_ACS_S9);
-  scm_c_define_gsubr ("acs-sterling", 0, 0, 0, gucu_ACS_STERLING);
-  scm_c_define_gsubr ("acs-ttee", 0, 0, 0, gucu_ACS_TTEE);
-  scm_c_define_gsubr ("acs-uarrow", 0, 0, 0, gucu_ACS_UARROW);
-  scm_c_define_gsubr ("acs-ulcorner", 0, 0, 0, gucu_ACS_ULCORNER);
-  scm_c_define_gsubr ("acs-urcorner", 0, 0, 0, gucu_ACS_URCORNER);
-  scm_c_define_gsubr ("acs-vline", 0, 0, 0, gucu_ACS_VLINE);
+  scm_c_define_gsubr ("%acs-block", 0, 0, 0, gucu_ACS_BLOCK);
+  scm_c_define_gsubr ("%acs-board", 0, 0, 0, gucu_ACS_BOARD);
+  scm_c_define_gsubr ("%acs-btee", 0, 0, 0, gucu_ACS_BTEE);
+  scm_c_define_gsubr ("%acs-bullet", 0, 0, 0, gucu_ACS_BULLET);
+  scm_c_define_gsubr ("%acs-ckboard", 0, 0, 0, gucu_ACS_CKBOARD);
+  scm_c_define_gsubr ("%acs-darrow", 0, 0, 0, gucu_ACS_DARROW);
+  scm_c_define_gsubr ("%acs-degree", 0, 0, 0, gucu_ACS_DEGREE);
+  scm_c_define_gsubr ("%acs-diamond", 0, 0, 0, gucu_ACS_DIAMOND);
+  scm_c_define_gsubr ("%acs-gequal", 0, 0, 0, gucu_ACS_GEQUAL);
+  scm_c_define_gsubr ("%acs-hline", 0, 0, 0, gucu_ACS_HLINE);
+  scm_c_define_gsubr ("%acs-lantern", 0, 0, 0, gucu_ACS_LANTERN);
+  scm_c_define_gsubr ("%acs-larrow", 0, 0, 0, gucu_ACS_LARROW);
+  scm_c_define_gsubr ("%acs-lequal", 0, 0, 0, gucu_ACS_LEQUAL);
+  scm_c_define_gsubr ("%acs-llcorner", 0, 0, 0, gucu_ACS_LLCORNER);
+  scm_c_define_gsubr ("%acs-lrcorner", 0, 0, 0, gucu_ACS_LRCORNER);
+  scm_c_define_gsubr ("%acs-ltee", 0, 0, 0, gucu_ACS_LTEE);
+  scm_c_define_gsubr ("%acs-nequal", 0, 0, 0, gucu_ACS_NEQUAL);
+  scm_c_define_gsubr ("%acs-pi", 0, 0, 0, gucu_ACS_PI);
+  scm_c_define_gsubr ("%acs-plminus", 0, 0, 0, gucu_ACS_PLMINUS);
+  scm_c_define_gsubr ("%acs-plus", 0, 0, 0, gucu_ACS_PLUS);
+  scm_c_define_gsubr ("%acs-rarrow", 0, 0, 0, gucu_ACS_RARROW);
+  scm_c_define_gsubr ("%acs-rtee", 0, 0, 0, gucu_ACS_RTEE);
+  scm_c_define_gsubr ("%acs-s1", 0, 0, 0, gucu_ACS_S1);
+  scm_c_define_gsubr ("%acs-s3", 0, 0, 0, gucu_ACS_S3);
+  scm_c_define_gsubr ("%acs-s7", 0, 0, 0, gucu_ACS_S7);
+  scm_c_define_gsubr ("%acs-s9", 0, 0, 0, gucu_ACS_S9);
+  scm_c_define_gsubr ("%acs-sterling", 0, 0, 0, gucu_ACS_STERLING);
+  scm_c_define_gsubr ("%acs-ttee", 0, 0, 0, gucu_ACS_TTEE);
+  scm_c_define_gsubr ("%acs-uarrow", 0, 0, 0, gucu_ACS_UARROW);
+  scm_c_define_gsubr ("%acs-ulcorner", 0, 0, 0, gucu_ACS_ULCORNER);
+  scm_c_define_gsubr ("%acs-urcorner", 0, 0, 0, gucu_ACS_URCORNER);
+  scm_c_define_gsubr ("%acs-vline", 0, 0, 0, gucu_ACS_VLINE);
   scm_c_define_gsubr ("lines", 0, 0, 0, gucu_LINES);
   scm_c_define_gsubr ("cols", 0, 0, 0, gucu_COLS);
   scm_c_define_gsubr ("colors", 0, 0, 0, gucu_COLORS);

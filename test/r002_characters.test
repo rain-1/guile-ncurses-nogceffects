@@ -16,13 +16,14 @@
                            (begin
                              (addch win (normal #\a) #:x 0 #:y 0)
                              (refresh win)
-                             (equal? (inch win #:y 0 #:x 0) (normal #\a)))))
+                             (let ((x2 (inch win #:y 0 #:x 0)))
+                               (xchar-equal? x2 (normal #\a))))))
 
 (define (acs-test-pair pair)
   (acs-test (car pair) (cdr pair)))
 
 ;; If the term can print the char, the character should be part of the
-;; ALTCHARSET
+;; ALTCHARSET.  If it can't it'll show up as a normal character
 (define (acs-test xname x)
   (pass-if xname
 	   (begin
@@ -33,9 +34,7 @@
 	     (usleep 10000)
 	     (move win 0 0)
 	     (let ((x2 (inch win)))
-	       (and
-		(equal? (normal x) x2)
-		(equal? (xchar-attr x2) A_ALTCHARSET))))))
+               (xchar-equal? (normal x) x2)))))
 
 (with-test-prefix "ACS"
 		  (map acs-test-pair

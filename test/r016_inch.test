@@ -20,7 +20,7 @@
 			     (move win 4 5)
 			     (refresh win)
 			     (let ((x1 (inch win)))
-			       (equal? (normal #\x) x1))))
+			       (xchar-equal? (normal #\x) x1))))
 		  
 		  (pass-if "inch #:y #:x "
 			   (begin
@@ -28,7 +28,7 @@
 			     (addch win (bold #\x) #:y 1 #:x 0)
 			     (refresh win)
 			     (let ((x2 (inch win #:y 1 #:x 0)))
-			       (equal? (bold #\x) x2)))))
+			       (xchar-equal? (bold #\x) x2)))))
 
 (endwin)
 

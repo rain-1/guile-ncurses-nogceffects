@@ -28,8 +28,8 @@
 			     (let ((x1 (mvinch 0 0))
 				   (x2 (mvinch 0 1)))
 			       (and
-				(equal? x1 (normal #\z))
-				(equal? x2 (normal #\x))))))
+				(xchar-equal? x1 (normal #\z))
+				(xchar-equal? x2 (normal #\x))))))
 
 		  (pass-if "insch #:y #:x"
 			   (begin
@@ -40,8 +40,8 @@
 			     (let ((x1 (mvinch 0 0))
 				   (x2 (mvinch 0 1)))
 			       (and
-				(equal? x1 (normal #\z))
-				(equal? x2 (normal #\x)))))))
+				(xchar-equal? x1 (normal #\z))
+				(xchar-equal? x2 (normal #\x)))))))
 (endwin)
 
 (curses-test-end test "r019_insch.out")		  

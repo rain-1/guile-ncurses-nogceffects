@@ -8,7 +8,7 @@
 	     (srfi srfi-1))
 
 ;; Need a locale, since we are using non-ASCII characters
-(setlocale LC_ALL "en_US.iso-8859-1")
+;; (setlocale LC_ALL "en_US.iso-8859-1")
 
 (define test (curses-test-start))
 
@@ -43,7 +43,6 @@
  			     (meta! #t)
  			     (ungetch (integer->char (+ 128 65)))
  			     (let ((k1 (getch win)))
- 			       (addstr win (format #f "~s~%" k1))
  			       (refresh win)
  			       (equal? k1 (integer->char (+ 128 65)))))
 			   *unspecified*)
@@ -51,12 +50,16 @@
 		  ;; This test *SHOULD* show that 8-bit characters are
 		  ;; truncated when meta is false, but, ncurses
 		  ;; doesn't to that yet.
+
+		  ;; Also, prior to 20091010, unget_wch had a sign
+		  ;; bug.  Calling unget_wch with a wchar value above
+		  ;; 128 made garbage, so this test shouldn't be runn
+		  ;; in the wide ncurses case.
  		  (pass-if "meta"
  			   (begin
  			     (meta! #f)
  			     (ungetch (integer->char (+ 128 65)))
  			     (let ((k1 (getch win)))
- 			       (addstr win (format #f "~s~%" k1))
  			       (refresh win)
  			       (equal? k1 (integer->char 65))
 			       *unspecified*)))

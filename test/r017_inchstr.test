@@ -21,7 +21,7 @@
 			     (refresh win)
 			     (move win 0 0)
 			     (let ((w2 (inchstr win #:n 2)))
-			       (equal? (normal "he") w2))))
+			       (lset= xchar-equal? (normal "he") w2))))
 		  
 		  
 		  (pass-if "mvinchnstr"
@@ -30,7 +30,7 @@
 			     (addchstr win (bold "hello") #:y 1 #:x 0)
 			     (refresh win)
 			     (let ((x2 (inchstr win #:y 1 #:x 0 #:n 2)))
-			       (equal? (bold "he") x2)))))
+			       (lset= xchar-equal? (bold "he") x2)))))
 
 (endwin)
 

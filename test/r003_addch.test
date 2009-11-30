@@ -24,7 +24,7 @@
 			     (refresh win)
 			     (move win 0 0)
 			     (let ((x2 (inch win)))
-			       (equal? x_normal x2))))
+			       (xchar-equal? x_normal x2))))
                   
 		  (pass-if "addch #:y #:x"
 			   (begin
@@ -32,7 +32,7 @@
 			     (addch win x_bold #:y 1 #:x 0)
 			     (refresh win)
 			     (let ((x2 (inch win #:y 1 #:x 0)))
-			       (equal? x_bold x2))))
+			       (xchar-equal? x_bold x2))))
 
 		  (pass-if "echochar"
 			   (begin
@@ -40,7 +40,7 @@
 			     (move win 2 0)
 			     (echochar win x_normal)
 			     (let ((x2 (inch win #:y 2 #:x 0)))
-			       (equal? x_normal x2)))))
+			       (xchar-equal? x_normal x2)))))
 			      
 (endwin)
 

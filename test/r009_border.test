@@ -33,14 +33,14 @@
 		  (br (mvinch (- (lines) 1) (- (cols) 1)))
 		  )
 	      (and
-	       (equal? l (normal (acs-vline)))
-	       (equal? r (normal (acs-vline)))
-	       (equal? t (normal (acs-hline)))
-	       (equal? b (normal (acs-hline)))
-	       (equal? tl (normal (acs-ulcorner)))
-	       (equal? tr (normal (acs-urcorner)))
-	       (equal? bl (normal (acs-llcorner)))
-	       (equal? br (normal (acs-lrcorner)))))))
+	       (xchar-equal? l (normal (acs-vline)))
+	       (xchar-equal? r (normal (acs-vline)))
+	       (xchar-equal? t (normal (acs-hline)))
+	       (xchar-equal? b (normal (acs-hline)))
+	       (xchar-equal? tl (normal (acs-ulcorner)))
+	       (xchar-equal? tr (normal (acs-urcorner)))
+	       (xchar-equal? bl (normal (acs-llcorner)))
+	       (xchar-equal? br (normal (acs-lrcorner)))))))
  
  (pass-if "border"
 	  (begin
@@ -58,14 +58,14 @@
 		  (br (mvinch (- (lines) 1) (- (cols) 1)))
 		  )
 	      (and
-	       (equal? l (normal #\A))
-	       (equal? r (normal #\B))
-	       (equal? t (normal #\C))
-	       (equal? b (normal #\D))
-	       (equal? tl (normal #\E))
-	       (equal? tr (normal #\F))
-	       (equal? bl (normal #\G))
-	       (equal? br (normal #\H))))))
+	       (xchar-equal? l (normal #\A))
+	       (xchar-equal? r (normal #\B))
+	       (xchar-equal? t (normal #\C))
+	       (xchar-equal? b (normal #\D))
+	       (xchar-equal? tl (normal #\E))
+	       (xchar-equal? tr (normal #\F))
+	       (xchar-equal? bl (normal #\G))
+	       (xchar-equal? br (normal #\H))))))
  
  (pass-if "hline"
 	  (begin
@@ -77,8 +77,8 @@
 		  (x2  (mvinch 1 2))
 		  )
 	      (and
-	       (equal? x1 (normal #\A))
-	       (equal? x2 (normal #\A))))))
+	       (xchar-equal? x1 (normal #\A))
+	       (xchar-equal? x2 (normal #\A))))))
 
  (pass-if "vline"
           (begin
@@ -89,8 +89,8 @@
             (let ((x1  (mvinch 1 1))
                   (x2  (mvinch 2 1)))
               (and
-               (equal? x1 (normal #\A))
-               (equal? x2 (normal #\A))))))
+               (xchar-equal? x1 (normal #\A))
+               (xchar-equal? x2 (normal #\A))))))
  
  (pass-if "hline #:y #:x"
           (begin
@@ -100,8 +100,8 @@
             (let ((x1  (mvinch 1 1))
                   (x2  (mvinch 1 2)))
               (and
-               (equal? x1 (normal #\A))
-               (equal? x2 (normal #\A))))))
+               (xchar-equal? x1 (normal #\A))
+               (xchar-equal? x2 (normal #\A))))))
  
  (pass-if "vline #:y #:x"
           (begin
@@ -111,8 +111,8 @@
             (let ((x1  (mvinch 1 1))
                   (x2  (mvinch 2 1)))
               (and
-               (equal? x1 (normal #\A))
-               (equal? x2 (normal #\A)))))))
+               (xchar-equal? x1 (normal #\A))
+               (xchar-equal? x2 (normal #\A)))))))
 
 (endwin)
 

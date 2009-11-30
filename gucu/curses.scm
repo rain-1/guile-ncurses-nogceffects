@@ -80,7 +80,6 @@
 	    is-linetouched?
 	    is-wintouched?
 	    isendwin?
-	    key-defined  ; FIXME: depends on curses version
 	    key-f
 	    keyname
 	    keypad!
@@ -281,7 +280,6 @@
 	    KEY_UNDO
 	    KEY_MOUSE
 	    KEY_RESIZE
-	    ;; KEY_EVENT       ; FIXME: Depends on curses version
 	    BUTTON1_PRESSED
 	    BUTTON1_RELEASED
 	    BUTTON1_CLICKED
@@ -391,9 +389,9 @@
             protect
             protect-off
             protect-on
-            reverse
-            reverse-off
-            reverse-on
+            inverse
+            inverse-off
+            inverse-on
             right
             right-off
             right-on
@@ -405,8 +403,20 @@
             vertical-on
             )
   #:re-export (xchar-attr
-               xchar-color)
+               xchar-color
+               xchar-equal?)
   )
+
+
+;; These functions may not exist depending on the
+;; compile time options
+(if (defined? 'newterm)      (export newterm))
+(if (defined? 'key-defined)  (export key-defined))
+(if (defined? 'KEY_EVENT)    (export KEY_EVENT))
+
+
+
+
 
 ;;; Rendition functions
 
@@ -500,9 +510,9 @@
 (define (protect x) (a-attribute x A_PROTECT))
 (define (protect-off x) (a-attribute-off x A_PROTECT))
 (define (protect-on x) (a-attribute-on x A_PROTECT))
-(define (reverse x) (a-attribute x A_REVERSE))
-(define (reverse-off x) (a-attribute-off x A_REVERSE))
-(define (reverse-on x) (a-attribute-on x A_REVERSE))
+(define (inverse x) (a-attribute x A_REVERSE))
+(define (inverse-off x) (a-attribute-off x A_REVERSE))
+(define (inverse-on x) (a-attribute-on x A_REVERSE))
 (define (right x) (a-attribute x A_RIGHT))
 (define (right-off x) (a-attribute-off x A_RIGHT))
 (define (right-on x) (a-attribute-on x A_RIGHT))
@@ -528,10 +538,39 @@
                 n
                 (xchar-chars x)))))
 
-;; These functions may not exist depending on the
-;; compile time options
-(if (defined? 'newterm)
-    (export newterm))
+(define (acs-block)    (list->xchar (%acs-block)))
+(define (acs-board)    (list->xchar (%acs-board)))
+(define (acs-btee)     (list->xchar (%acs-btee)))
+(define (acs-bullet)   (list->xchar (%acs-bullet)))
+(define (acs-ckboard)  (list->xchar (%acs-ckboard)))
+(define (acs-darrow)   (list->xchar (%acs-darrow)))
+(define (acs-degree)   (list->xchar (%acs-degree)))
+(define (acs-diamond)  (list->xchar (%acs-diamond)))
+(define (acs-gequal)   (list->xchar (%acs-gequal)))
+(define (acs-hline)    (list->xchar (%acs-hline)))
+(define (acs-lantern)  (list->xchar (%acs-lantern)))
+(define (acs-larrow)   (list->xchar (%acs-larrow)))
+(define (acs-lequal)   (list->xchar (%acs-lequal)))
+(define (acs-llcorner) (list->xchar (%acs-llcorner)))
+(define (acs-lrcorner) (list->xchar (%acs-lrcorner)))
+(define (acs-ltee)     (list->xchar (%acs-ltee)))
+(define (acs-nequal)   (list->xchar (%acs-nequal)))
+(define (acs-pi)       (list->xchar (%acs-pi)))
+(define (acs-plminus)  (list->xchar (%acs-plminus)))
+(define (acs-plus)     (list->xchar (%acs-plus)))
+(define (acs-rarrow)   (list->xchar (%acs-rarrow)))
+(define (acs-rtee)     (list->xchar (%acs-rtee)))
+(define (acs-s1)       (list->xchar (%acs-s1)))
+(define (acs-s3)       (list->xchar (%acs-s3)))
+(define (acs-s7)       (list->xchar (%acs-s7)))
+(define (acs-s9)       (list->xchar (%acs-s9)))
+(define (acs-sterling) (list->xchar (%acs-sterling)))
+(define (acs-ttee)     (list->xchar (%acs-ttee)))
+(define (acs-uarrow)   (list->xchar (%acs-uarrow)))
+(define (acs-ulcorner) (list->xchar (%acs-ulcorner)))
+(define (acs-urcorner) (list->xchar (%acs-urcorner)))
+(define (acs-vline)    (list->xchar (%acs-vline)))
+
 
 ;; Scheme calling wrappers for C functions
 
@@ -595,7 +634,7 @@
     (if (logtest attr A_DIM) '(dim) '())
     (if (logtest attr A_INVIS) '(invis) '())
     (if (logtest attr A_PROTECT) '(protect) '())
-    (if (logtest attr A_REVERSE) '(reverse) '())
+    (if (logtest attr A_REVERSE) '(inverse) '())
     (if (logtest attr A_STANDOUT) '(standout) '())
     (if (logtest attr A_UNDERLINE) '(underline) '())
     (if (logtest attr A_HORIZONTAL) '(horizontal) '())

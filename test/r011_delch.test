@@ -26,8 +26,8 @@
 			     (let ((x1 (mvinch 0 0))
 				   (x2 (mvinch 0 1)))
 			       (and
-				(equal? x1 (normal #\a))
-				(equal? x2 (normal #\c))))))
+				(xchar-equal? x1 (normal #\a))
+				(xchar-equal? x2 (normal #\c))))))
 		  
 		  (pass-if "delch #:y #:x"
 			   (begin
@@ -38,8 +38,8 @@
 			     (let ((x1 (mvinch 0 0))
 				   (x2 (mvinch 0 1)))
 			       (and
-				(equal? x1 (normal #\a))
-				(equal? x2 (normal #\c)))))))
+				(xchar-equal? x1 (normal #\a))
+				(xchar-equal? x2 (normal #\c)))))))
 
 (endwin)
 

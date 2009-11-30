@@ -96,28 +96,25 @@
 /* Define to the one symbol short name of this package. */
 #undef PACKAGE_TARNAME
 
-/* Define to the home page for this package. */
-#undef PACKAGE_URL
-
 /* Define to the version of this package. */
 #undef PACKAGE_VERSION
 
-/* The size of `attr_t', as computed by sizeof. */
+/* The size of a `attr_t', as computed by sizeof. */
 #undef SIZEOF_ATTR_T
 
-/* The size of `chtype', as computed by sizeof. */
+/* The size of a `chtype', as computed by sizeof. */
 #undef SIZEOF_CHTYPE
 
-/* The size of `int', as computed by sizeof. */
+/* The size of a `int', as computed by sizeof. */
 #undef SIZEOF_INT
 
-/* The size of `long', as computed by sizeof. */
+/* The size of a `long', as computed by sizeof. */
 #undef SIZEOF_LONG
 
-/* The size of `wchar_t', as computed by sizeof. */
+/* The size of a `wchar_t', as computed by sizeof. */
 #undef SIZEOF_WCHAR_T
 
-/* The size of `wint_t', as computed by sizeof. */
+/* The size of a `wint_t', as computed by sizeof. */
 #undef SIZEOF_WINT_T
 
 /* Define to 1 if you have the ANSI C header files. */

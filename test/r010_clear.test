@@ -29,8 +29,8 @@
 			     (let ((x1 (mvinch 0 1))
 				   (x2 (mvinch 1 1)))
 			       (and
-				(equal? x1 space)
-				(equal? x2 space)))))
+				(xchar-equal? x1 space)
+				(xchar-equal? x2 space)))))
 
 		  (pass-if "erase"
 			   (begin
@@ -42,8 +42,8 @@
 			     (let ((x1 (mvinch 0 1))
 				   (x2 (mvinch 1 1)))
 			       (and
-				(equal? x1 space)
-				(equal? x2 space)))))
+				(xchar-equal? x1 space)
+				(xchar-equal? x2 space)))))
 			      
 
 		  (pass-if "clrtobot"
@@ -57,8 +57,8 @@
 			     (let ((x1 (mvinch 0 1))
 				   (x2 (mvinch 1 1)))
 			       (and
-				(equal? x1 space))
-				(equal? x2 space))))
+				(xchar-equal? x1 space))
+				(xchar-equal? x2 space))))
 
 		  (pass-if "clrtoeol"
 			   (begin
@@ -71,8 +71,8 @@
 			     (let ((x1 (mvinch 0 1))
 				   (x2 (mvinch 1 1)))
 			       (and
-				(equal? x1 space)
-				(equal? x2 (normal #\x)))))))
+				(xchar-equal? x1 space)
+				(xchar-equal? x2 (normal #\x)))))))
 
 (endwin)
 

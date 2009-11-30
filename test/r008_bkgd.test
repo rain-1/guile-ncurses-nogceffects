@@ -35,8 +35,8 @@
 		(clear win)
 		(refresh win)
 		(and
-		 (equal? (bold #\.) x1)
-		 (equal? (bold #\.) x2))))))
+		 (xchar-equal? (bold #\.) x1)
+		 (xchar-equal? (bold #\.) x2))))))
  
  (pass-if "bkgdset"
 	  (begin
@@ -52,8 +52,8 @@
 		(clear win)
 		(refresh win)
 		(and
-		 (equal? (normal #\space) x1)
-		 (equal? (color 1 (dim #\+))) x2))))))
+		 (xchar-equal? (normal #\space) x1)
+		 (xchar-equal? (color 1 (dim #\+)) x2)))))))
 
 (endwin)
 

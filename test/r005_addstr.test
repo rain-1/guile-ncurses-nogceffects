@@ -4,6 +4,8 @@
 (use-modules (test lib)
 	     (test lib2)
 	     (srfi srfi-1)
+             (srfi srfi-13) ; string-take is included by default in guile 1.8.x
+                            ; but only appears in srfi-13 in guile 1.6.x
 	     (gucu curses))
 
 (define test (curses-test-start))

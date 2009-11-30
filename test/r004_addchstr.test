@@ -24,7 +24,7 @@
 			     (addchstr mainwin hello)
 			     (refresh mainwin)
 			     (let ((w2 (inchstr mainwin #:y 0 #:x 0 #:n 10)))
-			       (lset= equal? hello (list-head w2 (length hello))))))
+			       (lset= xchar-equal? hello (list-head w2 (length hello))))))
 
 		  (pass-if "addchstr #:n"
 			   (begin
@@ -33,7 +33,7 @@
 			     (addchstr mainwin hello #:n 2)
 			     (refresh mainwin)
 			     (let ((w2 (inchstr mainwin #:y 0 #:x 0 #:n 10)))
-			       (lset= equal? he (list-head w2 (length he))))))
+			       (lset= xchar-equal? he (list-head w2 (length he))))))
 
 		  (pass-if "addchstr #:y #:x"
 			   (begin
@@ -41,7 +41,7 @@
 			     (addchstr mainwin hello-bold #:y 1 #:x 0)
 			     (refresh mainwin)
 			     (let ((x2 (inchstr mainwin #:y 1 #:x 0 #:n 10)))
-			       (equal? hello-bold (list-head x2 (length hello-bold))))))
+			       (lset= xchar-equal? hello-bold (list-head x2 (length hello-bold))))))
 
 		  (pass-if "addchstr #:y #:x #:n"
 			   (begin
@@ -49,7 +49,7 @@
 			     (addchstr mainwin hello-bold #:y 1 #:x 0 #:n 2)
 			     (refresh mainwin)
 			     (let ((x2 (inchstr mainwin #:y 1 #:x 0 #:n 10)))
-			       (equal? he-bold (list-head x2 (length he-bold)))))))
+			       (lset= xchar-equal? he-bold (list-head x2 (length he-bold)))))))
 
 (endwin)
 

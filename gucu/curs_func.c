@@ -90,7 +90,7 @@ gucu_baudrate ()
   int ret = baudrate ();
   /* only returns ERR if the screen is not valid  */
   if (ret == ERR)
-    curs_bad_state_error ("baudrate");
+    return SCM_BOOL_F;
 
   return scm_from_int (baudrate ());
 }

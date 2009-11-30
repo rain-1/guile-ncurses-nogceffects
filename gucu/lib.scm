@@ -2,6 +2,8 @@
 (define-module (gucu lib)
   #:use-module (srfi srfi-1)
   #:use-module (gucu curses)
+  #:use-module (srfi srfi-13)  ; in Guile 1.8.x string-trim is always available.
+                               ; in Guile 1.6.x it isn't
   #:export (
             make-xchar
             xchar?
@@ -13,6 +15,7 @@
             set-xchar-chars!
             xchar->list
             list->xchar
+            xchar-equal?
             ))
 
 ;; The xchar type -- a Guile version of the NCurses cchar_t
@@ -53,39 +56,39 @@
     (if (logtest attr A_VERTICAL) " vertical" ""))))
 
 (define (acs-char-name c)
-  (let ((n (logior A_ALTCHARSET (char->integer c))))
+  (let ((n (normal c)))
     (cond 
-     ((= n (acs-ulcorner)) "ULCORNER")
-     ((= n (acs-llcorner)) "LLCORNER")
-     ((= n (acs-urcorner)) "URCORNER")
-     ((= n (acs-lrcorner)) "LRCORNER")
-     ((= n (acs-ltee)) "LTEE")
-     ((= n (acs-rtee)) "RTEE")
-     ((= n (acs-btee)) "BTEE")
-     ((= n (acs-ttee)) "TTEE")
-     ((= n (acs-hline)) "HLINE")
-     ((= n (acs-vline)) "VLINE")
-     ((= n (acs-plus)) "PLUS")
-     ((= n (acs-s1)) "S1")
-     ((= n (acs-s9)) "S9")
-     ((= n (acs-diamond)) "DIAMOND")
-     ((= n (acs-ckboard)) "CKBOARD")
-     ((= n (acs-degree)) "DEGREE")
-     ((= n (acs-plminus)) "PLMINUS")
-     ((= n (acs-bullet)) "BULLET")
-     ((= n (acs-larrow)) "LARROW")
-     ((= n (acs-rarrow)) "RARROW")
-     ((= n (acs-darrow)) "DARROW")
-     ((= n (acs-uarrow)) "UARROW")
-     ((= n (acs-board)) "BOARD")
-     ((= n (acs-s3)) "S3")
-     ((= n (acs-s7)) "S7")
-     ((= n (acs-lequal)) "LEQUAL")
-     ((= n (acs-gequal)) "GEQUAL")
-     ((= n (acs-pi)) "PI")
-     ((= n (acs-nequal)) "NEQUAL")
-     ((= n (acs-lantern)) "LANTERN")
-     ((= n (acs-sterling)) "STERLING")
+     ((xchar-equal? n (acs-ulcorner)) "ULCORNER")
+     ((xchar-equal? n (acs-llcorner)) "LLCORNER")
+     ((xchar-equal? n (acs-urcorner)) "URCORNER")
+     ((xchar-equal? n (acs-lrcorner)) "LRCORNER")
+     ((xchar-equal? n (acs-ltee)) "LTEE")
+     ((xchar-equal? n (acs-rtee)) "RTEE")
+     ((xchar-equal? n (acs-btee)) "BTEE")
+     ((xchar-equal? n (acs-ttee)) "TTEE")
+     ((xchar-equal? n (acs-hline)) "HLINE")
+     ((xchar-equal? n (acs-vline)) "VLINE")
+     ((xchar-equal? n (acs-plus)) "PLUS")
+     ((xchar-equal? n (acs-s1)) "S1")
+     ((xchar-equal? n (acs-s9)) "S9")
+     ((xchar-equal? n (acs-diamond)) "DIAMOND")
+     ((xchar-equal? n (acs-ckboard)) "CKBOARD")
+     ((xchar-equal? n (acs-degree)) "DEGREE")
+     ((xchar-equal? n (acs-plminus)) "PLMINUS")
+     ((xchar-equal? n (acs-bullet)) "BULLET")
+     ((xchar-equal? n (acs-larrow)) "LARROW")
+     ((xchar-equal? n (acs-rarrow)) "RARROW")
+     ((xchar-equal? n (acs-darrow)) "DARROW")
+     ((xchar-equal? n (acs-uarrow)) "UARROW")
+     ((xchar-equal? n (acs-board)) "BOARD")
+     ((xchar-equal? n (acs-s3)) "S3")
+     ((xchar-equal? n (acs-s7)) "S7")
+     ((xchar-equal? n (acs-lequal)) "LEQUAL")
+     ((xchar-equal? n (acs-gequal)) "GEQUAL")
+     ((xchar-equal? n (acs-pi)) "PI")
+     ((xchar-equal? n (acs-nequal)) "NEQUAL")
+     ((xchar-equal? n (acs-lantern)) "LANTERN")
+     ((xchar-equal? n (acs-sterling)) "STERLING")
      (else 
       "UNKNOWN SURROGATE"))))
             
@@ -104,9 +107,7 @@
           (format port " color-pair #~a" color)
           (format port " [~a on ~a]" (color-name fore) (color-name back))))
     (if (logtest (xchar-attr x) A_ALTCHARSET)
-        (map (lambda (c)
-               (format port " ~s" (acs-char-name c)))
-             chars)
+        (format port " ~s" (acs-char-name x))
         (map (lambda (c)
                (format port " ~s" c))
              chars))
@@ -132,3 +133,11 @@
               (second x)
               (drop x 2)))
 
+
+;; Guile 1.8.x's equal? is sufficient to compare two xchars, but,
+;; Guile 1.6.x's equal? always returns false when comparing two xchars
+(define (xchar-equal? a b)
+  (and
+    (equal? (xchar-attr a) (xchar-attr b))
+    (equal? (xchar-color a) (xchar-color b))
+    (equal? (xchar-chars a) (xchar-chars b))))

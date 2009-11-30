@@ -143,13 +143,15 @@
  "define-key"
 
  (pass-if "set"
-	  (let* ((x (string #\esc #\~ #\~ #\~))
-		 (s1 (key-defined x))
-		 (s2 (define-key x KEY_SDL))
-		 (s3 (key-defined x)))
-	    (and
-	     (not s1)
-	     (eqv? s3 KEY_SDL)))))
+	  (if (defined? 'key-defined)
+	      (let* ((x (string #\esc #\~ #\~ #\~))
+	   	    (s1 (key-defined x))
+		    (s2 (define-key x KEY_SDL))
+		    (s3 (key-defined x)))
+	        (and
+	          (not s1)
+	          (eqv? s3 KEY_SDL)))
+              *unspecified*)))
 	    
 
 (endwin)

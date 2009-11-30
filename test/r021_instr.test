@@ -3,9 +3,9 @@
 
 (use-modules (test lib)
 	     (test lib2)
-	     ;; (gucu curses-wide)
 	     (gucu curses)
-	     (srfi srfi-1))
+	     (srfi srfi-1)
+             (srfi srfi-13)) ; Necessary only for guile 1.6
 
 (define test (curses-test-start))
 
