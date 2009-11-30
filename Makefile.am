@@ -83,6 +83,7 @@ gucu_libguile_gucu_la_SOURCES = \
 	gucu/eti_const.c \
 	gucu/eti_const.h \
 	gucu/eti_main.c \
+	gucu/features.h \
 	gucu/form_const.c \
 	gucu/form_const.h \
 	gucu/form_func.c \
