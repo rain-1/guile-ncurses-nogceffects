@@ -42,6 +42,7 @@ host_triplet = @host@
 
 bin_PROGRAMS = tools/gucushell$(EXEEXT)
 noinst_PROGRAMS = tools/testbed$(EXEEXT)
+TEXI2DVI = texi2dvi
 subdir = .
 DIST_COMMON = README $(am__configure_deps) $(dist_pkgguilesite_DATA) \
 	$(doc_gucu_TEXINFOS) $(srcdir)/Makefile.am \
@@ -154,7 +155,6 @@ PDFS = doc/gucu.pdf
 PSS = doc/gucu.ps
 HTMLS = doc/gucu.html
 TEXINFOS = doc/gucu.texi
-TEXI2DVI = texi2dvi
 TEXI2PDF = $(TEXI2DVI) --pdf --batch
 MAKEINFOHTML = $(MAKEINFO) --html
 AM_MAKEINFOHTMLFLAGS = $(AM_MAKEINFOFLAGS)
@@ -486,8 +486,8 @@ TESTS = $(NARROWTESTS)
 # The problem lies in Cygwin's etex.fmt file
 # Forcing TEX to tex works around this problem
 # This should not harm other platforms
-# TEX=tex
-# TEXI2DVI = TEX=${TEX} texi2dvi
+@FORCE_TEX_TO_TEX_TRUE@TEX = tex
+@FORCE_TEX_TO_TEX_TRUE@TEXI2DVI = TEX=${TEX} texi2dvi
 info_TEXINFOS = \
 	doc/gucu.texi
 

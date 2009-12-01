@@ -216,8 +216,10 @@ endif
 # The problem lies in Cygwin's etex.fmt file
 # Forcing TEX to tex works around this problem
 # This should not harm other platforms
-# TEX=tex
-# TEXI2DVI = TEX=${TEX} texi2dvi
+if FORCE_TEX_TO_TEX
+TEX=tex
+TEXI2DVI= TEX=${TEX} texi2dvi
+endif
 
 info_TEXINFOS = \
 	doc/gucu.texi

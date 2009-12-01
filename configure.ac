@@ -47,13 +47,17 @@ AC_PROG_LIBTOOL
 # Initial guess of platform specific options
 case $host in
 *-*-cygwin)
+        [force_tex_to_tex=yes]
 	[enable_acs_map_fix=yes] ;;
 *-*-linux*)
+        [force_tex_to_tex=no]
 	[enable_acs_map_fix=no] ;;
 *)
+        [force_tex_to_tex=no]
 	[enable_acs_map_fix=no] ;;
 esac
 
+AM_CONDITIONAL([FORCE_TEX_TO_TEX], [test "$force_tex_to_tex" = yes])
 
 ##################
 # Check for libraries
