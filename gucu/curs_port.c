@@ -15,7 +15,11 @@
 
 ssize_t port_read (void *cookie, char *buf, size_t siz);
 ssize_t port_write (void *cookie, const char *buf, size_t siz);
+#ifdef HAVE_OFF64_T
 int port_seek (void *cookie, off64_t *pos, int whence);
+#else
+int port_seek (void *cookie, off_t *pos, int whence);
+#endif
 int port_close (void *cookie);
 
 #define PORT_ERR (-1)
@@ -88,7 +92,11 @@ port_write (void *cookie, const char *buf, size_t siz)
 }
 
 int 
+#ifdef HAVE_OFF64_T
 port_seek (void *cookie, off64_t *pos, int whence)
+#else
+port_seek (void *cookie, off_t *pos, int whence)
+#endif
 {
   SCM port = PTR2SCM(cookie);
   SCM new_pos;
