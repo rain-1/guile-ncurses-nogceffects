@@ -1,5 +1,4 @@
 \input texinfo @c -*- Mode: texinfo; Fill-column: 70; coding: utf-8 -*-
-@c $Id: gucu.texi,v 1.36 2009/01/18 07:01:11 spike_gran Exp $
 @c %**start of header
 @setfilename gucu.info
 @include version.texi
@@ -22,7 +21,7 @@ screens.
 
 Copyright @copyright{} 1998-2007 Free Software Foundation, Inc. @*             
 Copyright @copyright{} 2001-2005 Pradeep Padala @*
-Copyright @copyright{} 2007,2008 Michael L. Gran
+Copyright @copyright{} 2007,2008,2009 Michael L. Gran
 
 @quotation
                                                                          
@@ -132,11 +131,10 @@ Initialization
 
 Output functions
 
-* The @code{addch} class of functions::  
+* The @code{addch} procedure::  
 * @code{addstr} class of functions::  
 * A simple @code{addstr} example::  
 * A word of caution::           
-* Adding wide strings (tutorial)::  
 
 @code{addstr} class of functions
 
@@ -221,6 +219,7 @@ The basic curses library: @code{(gucu curses)}
 
 * Overview::                    
 * Curses screen initialization and manipulation routines::  
+* Making rendered characters::  
 * Adding characters::           
 * Adding strings of characters and attributes::  
 * Character and window attribute control routines::  
@@ -540,105 +539,112 @@ standard scheme types, while others are represented as opaque types
 @cindex Unicode
 @cindex Characters
 
-Guile characters are based on Unicode and include all or most of the
-glyphs for the most languages.
+The Guile Curses library uses two basic character types, simple
+characters and complex characters.  Simple characters are the native
+Guile characters, and complex characters are those used to interact
+with the NCurses library.  When using this library, a programmer will
+often have to convert simple characters to complex characters and vice
+versa, so it is important to understand their differences and
+applications.
 
-There are challenges when using the non-ASCII characters.  There are
-double-width characters, such as hiragana and katakana, that take up
-two character spaces on a character cell terminal because of their
-complexity.  There are combining characters, such as accents, that
-aren't intended to stand alone and actually modify the previous
+Simple characters are the Guile native character type.  
+
+For older versions of Guile, such as the 1.6.x and the 1.8.x versions,
+characters were limited to being 8-bit.  The lower 128 characters were
+ASCII, and the upper 128 characters had a meaning based on the locale
+of the system.  If the locale were set to ISO-8859-1, for example, the
+upper 128 characters would be common accented letters used in western
+European languages.  In almost all cases, each character took up the
+same space on a character cell terminal.
+
+In newer versions of Guile, such as 2.0.x, the native Guile character
+type is a Unicode codepoint, a 32-bit number.  Characters based on
+Unicode include all or most of the glyphs for the most
+languages. There are challenges when using the non-ASCII characters.
+There are double-width characters, such as hiragana and katakana, that
+take up two character spaces on a character cell terminal because of
+their complexity.  There are combining characters, such as accents,
+that aren't intended to stand alone and actually modify the previous
 character in a string.
 
 In the terminology of Unicode, a 32-bit integer that maps to a wide
-character is a @dfn{code point}, and documents that refer to unicode
+character is a @dfn{code point}, and documents that refer to Unicode
 code points typically write them like this: @code{U+XXXX}, where
 @code{XXXX} is a four-digit hexadecimal number.
 
-Curses also uses the term @dfn{complex character}.  A complex
-character is a set of characters that draw one glyph on the screen.
 
 @table @code
 
-@item unrendered characters
+@item simple characters 
 
-An unrendered characters is a standard Guile character.  It has no
-associated color or attributes.  
+An simple character is a standard Guile character, such as @code{#\x}.
+It is also referred to as an unrendered characters.  It is
+@emph{unrendered} because it has no associated color or attributes.
 
-An example of the scheme representation of unrendered, wide characters
-is as follows:@*
-@example
-;; The letter 'x'
-#\x
-;; or
-(integer->char #x0078)
-;; U+041B Cyrillic Capital Letter El
-Л
-;; or
-(integer->char #x041B)
-;; U+5FE1 Japanese Ideograph Chuu
-佾
-;; or
-(integer->char #x4F7E)
-@end example
+@item simple strings 
 
-@item unrendered strings 
+A simple string, also called an unrendered string, is a standard Guile
+string, such as @code{"hello"}, which is a sequence of unrendered
+characters.
 
-An unrendered string is a standard Guile string, which is a sequence
-of unrendered characters.  
-
-@item rendered, complex characters
+@item complex characters
 
 Rendered, complex characters usually are a standard character, zero to
 three combining characters, attribute information, and color
-information.  It is represented as a list with two integers and then
-one to four characters.  The first element in the list is the
-attribute flags.  The second is the color pair.  The remaining
-elements in the list are the characters that form this glyph.
+information.  The @emph{attribute information} describes if the
+character is bold, dim, reverse video, etc.  The GuCu library defines
+a special record type for complex characters: the xchar.
 
-The first character in the list should be a base character or a control
-character.  A base character is usually a character than can be
-printed standalone: combining accents and other letter codepoints
-intended to modify another letter are not base characters.
+Each complex character may contain more than one simple character.
+The first character in the list should be a base character or a
+control character.  A base character is usually a character than can
+be printed standalone: combining accents and other letter codepoints
+intended to modify another letter are not base characters. The
+remaining characters in the list, if any, are accents or other
+combining characters that modify the appearance of the base character.
+If the first character was a control character, no combining
+characters are allowed.
 
-The remaining characters in the list, if any, are accents or other
-combining characters that modify the appearance of the base
-character.  If the first character was a control character, no
-combining characters are allowed.
-
-Here are examples of Scheme representations rendered, complex
-characters:
+Here are examples of the constructors used to make complex characters.
+These constructors will be described in more detail later on.
 @example
-;; The letter 'x' using the default '0' colors
-(A_NORMAL 0 #\x)
-;; Bold U+041B Cyrillic Capital Letter El using default '0' colors
-(A_BOLD 0 Л)
-(A_BOLD 0 (integer->char #x041B))
-;; 'o' with combining macron above and grave accent below
-(A_NORMAL 0 #\o #\◌̄ #\◌̖)
-(A_NORMAL 0 #\o (integer->char #x0304) (integer->char #x0316))
+;; A constructor for a letter 'x' using the default colors
+> (normal #\x) 
+
+;; The display format of the resulting complex character
+==> #<xchar #\x>
+
+;; A constrctor for a bold letter 'L' using default colors
+> (bold #\L) 
+
+;; The display format of the resulting bold 'L' character
+==> #<xchar bold #\L>
+
+;; A bold letter 'x' printed white on a green background
+> (init-pair! 2 COLOR_WHITE COLOR_GREEN)
+> (bold-on (color 2 #\x))
+==> #<xchar bold color-pair #2 [white on green] #\x>
 @end example
 
 @item rendered, complex strings
 Rendered, complex strings are lists of rendered, complex characters.
 
-An example of a rendered, complex string is as follows:
+An example of the constructor for a rendered complex string, and the
+display format of that string
 @example
-;; The word so@~nar in bold using color '0'
-;; so@~nar --> U+0073 U+006F U+00F1 U+0061 U+0072
-((A_BOLD 0 #\s)
- (A_BOLD 0 #\o)
- (A_BOLD 0 #\@~n)
- (A_BOLD 0 #\a)
- (A_BOLD 0 #\r))
+;; The constructor for a complex string: the word 'hello' in 
+;; reverse video
+> (inverse "hello")
+
+;; The display format of the resulting string could be...
+==> (#<xchar reverse color-pair #0 [white on black] #\h> 
+     #<xchar reverse color-pair #0 [white on black] #\e> 
+     #<xchar reverse color-pair #0 [white on black] #\l> 
+     #<xchar reverse color-pair #0 [white on black] #\l> 
+     #<xchar reverse color-pair #0 [white on black] #\o>)
 @end example
 
 @end table
-
-Constructing complex characters and strings manually is cumbersome.
-Liberal use of the scheme function @code{map} may help here.  There
-are some helper functions, such as @code{(render-bold str)}, that take
-standard strings and create complex strings.
 
 @node Opaque types,  , Character types, Types and encodings
 @section Opaque types
@@ -757,7 +763,7 @@ curses)} module into the program.
 
 @cindex Hello, world
 
-Here is the Hello World program, using the raw library.
+Here is the Hello World program.
 
 @example
 @verbatiminclude ex_hello_world.scm
@@ -794,7 +800,7 @@ library's data structures.
 
 The procedure @code{initscr} returns a @code{#<window>} that contains
 necessary information about the curses screen.  The @code{#<window>}
-that is returns must be stored until the program is finished with the
+that is returned must be stored until the program is finished with the
 curses library.  If that @code{#<window>} is garbage collected, the
 curses library cannot continue.
 
@@ -896,7 +902,7 @@ are normally called immediately after @code{initscr}.
 @node Initialization Functions, An example, Initialization, Initialization
 @subsection Initialization Functions
 
-@subsubsection @code{raw} and @code{cbreak}
+@subsubsection @code{raw!} and @code{cbreak!}
 
 @cindex Line buffering
 @cindex Character buffering
@@ -906,21 +912,21 @@ are normally called immediately after @code{initscr}.
 Normally the terminal driver buffers the characters a user types until
 a newline or carriage return is encountered.  But most programs
 require that the characters be available as soon as the user types
-them. The functions @code{cbreak} and @code{raw} are used to disable
+them. The functions @code{cbreak!} and @code{raw!} are used to disable
 line buffering.  The difference between these two functions is in the
 way control characters like suspend (@kbd{Ctrl-Z}), interrupt and quit
-(@kbd{Ctrl-C}) are passed to the program.  In the @code{raw} mode,
+(@kbd{Ctrl-C}) are passed to the program.  In the @code{raw!} mode,
 these characters are directly passed to the program without generating
-a signal.  In the @code{cbreak} mode, these control characters are
+a signal.  In the @code{cbreak!} mode, these control characters are
 interpreted as any other character by the terminal driver, allowing
 @kbd{Ctrl-C} and @kbd{Ctrl-Z} to quit and suspend the program.
 
-@subsubsection @code{echo} and @code{noecho}
+@subsubsection @code{echo!} and @code{noecho!}
 
 @cindex Echoing
 
 These functions control the echoing of characters typed by the user to
-the terminal.  @code{noecho} switches off echoing. With echoing off,
+the terminal.  @code{noecho!} switches off echoing. With echoing off,
 when a user presses a character, it is not displayed on the screen.
 
 @subsubsection keypad!
@@ -934,7 +940,7 @@ this, as arrow keys are a major part of any user interface.  Do
 screen @code{stdscr} (assuming that @code{stdscr} is the variable
 you used to hold the output of @code{initscr}.)
 
-@subsubsection halfdelay
+@subsubsection halfdelay!
 
 @cindex Half-delay mode
 @cindex Line buffering
@@ -942,9 +948,9 @@ you used to hold the output of @code{initscr}.)
 This function is useful when you want to ask the user for input, and
 if he doesn't respond within a certain time, do something else.  One
 possible example would be a  timeout at a password prompt.
-@code{halfdelay} enables half-delay mode, which is similar to
-@code{cbreak} mode in that characters types are immediately available
-to the program.  However, after a period of time if there is now
+@code{halfdelay!} enables half-delay mode, which is similar to
+@code{cbreak!} mode in that characters types are immediately available
+to the program.  However, after a period of time if there is no
 input, it returns @code{#f}.
 
 @node An example,  , Initialization Functions, Initialization
@@ -958,9 +964,10 @@ Let's write a program that will clarify the usage of these functions.
 
 Hopefully this program is easy to follow even though I used functions
 that aren't explained yet.  The procedure @code{getch} is used to get
-a character from the user.  The @code{(logior A_BOLD ch)} adds the
-bold attribute to the character, and @code{addch} prints the character
-on the screen.
+a character from the user.  If it returns a character, the user
+pressed a character key.  If it returns a number, the use pressed a
+function key. The @code{(bold ch)} adds the bold attribute to the
+character, and @code{addch} prints the character on the screen.
 
 @node A word about windows, Output functions, Initialization, Curses Tutorial
 @section A word about windows
@@ -1013,32 +1020,31 @@ I guess you can't wait any more to see some action.  Back to our
 odyssey of curses functions.  Now that curses is initialized, let's
 interact with the world.
 
-There are three classes of functions which you can use to output
-narrow characters and strings to the screen.
+There are three primary functions which you can use to output
+characters and strings to the screen.
 @enumerate
 @item
-The @code{addch} class: output rendered, narrow characters
+@code{addch}: output rendered characters
 @item
-The @code{addstr} class: output unrendered, narrrow strings
+@code{addstr}: output unrendered strings
 @item
-The @code{addchstr} class: output rendered, narrow strings
+@code{addchstr}: output rendered strings
 @end enumerate
 
 @menu
-* The @code{addch} class of functions::  
+* The @code{addch} procedure::  
 * @code{addstr} class of functions::  
 * A simple @code{addstr} example::  
 * A word of caution::           
-* Adding wide strings (tutorial)::  
 @end menu
 
-@node The @code{addch} class of functions, @code{addstr} class of functions, Output functions, Output functions
-@subsection The @code{addch} class of functions
+@node The @code{addch} procedure, @code{addstr} class of functions, Output functions, Output functions
+@subsection The @code{addch} procedure
 
 @cindex Outputting characters
 
-The @code{addch} function puts a single rendered narrow character into
-the current cursor location and advances the position of the cursor.
+The @code{addch} function puts a single rendered character into the
+current cursor location and advances the position of the cursor.
 Attributes are explained in detail in later sections of the document.
 If a character is associated with an attribute (bold, reverse video,
 etc.), when curses prints the character, it is printed with that
@@ -1050,17 +1056,19 @@ In order to combine a character with some attributes, you have two
 options:
 @enumerate
 @item
-You can explicitly construct a rendered character by @code{logior}'ing
-a single character with the desired attribute.
+You can explicitly construct a rendered character by passing a simple
+character through the rendition functions for the desired attributes:
 @example
-(logior A_BOLD A_UNDERLINE (char->integer ch))
+(bold #\x)
+(blink-on (bold-on #\x))
+(color 2 #\x)
 @end example
 
 @item
-By using functions like @code{attr-set!}, @code{attr-on!}, @code{attr-off!},
-you can manipulate the current attributes of the given window.  Once
-set, the characters printed in the window are associated with the
-attributes until it is turned off.
+By using functions like @code{attr-set!}, @code{attr-on!},
+@code{attr-off!}, you can manipulate the current attributes of the
+given window.  Once set, the characters printed in the window are
+associated with the attributes until it is turned off.
 @end enumerate
 
 Additionally, curses provides some special characters for
@@ -1080,31 +1088,46 @@ can be replaced by
 (addch stdscr ch #:y row #:x col)
 @end example
 
-@subsubsection Complex characters and @code{add-wch}
+@subsubsection Complex characters and @code{addch}
 
 @cindex Outputting wide characters
 
-For every function that operates on narrow characters, there is a
-parallel function that operates on wide characters.  The functions
-that operate on wide characters are in the library @code{(gucu
-curses-wide)}.
+There are really two version of the NCurses library: a standard
+version and a @emph{wide} version.  When @code{gucu} was compiled, it
+was associated with either the standard version @file{libcurses} or
+the wide version @file{libncursesw}.  The wide version has greater
+capability to print non-Latin characters than the standard version.
+
+For every C function that operates on characters, there is a
+parallel function that operates on wide characters.  The gucu library
+hides all of that complexity, and presents the same API regardless of
+whether it used @file{libncurses} or @file{libncursew}.
+
+At this point, a C programmer familiar with @code{ncurses} might be
+wondering how to call @code{add-wch} to print, for example, a Chinese
+character.  The gucu library abstracts both the C ncurses function
+@code{addch} and the C ncurses function @code{add-wch} as the Guile
+function @code{addch}.
+
+So, if you version of Guile is capable of Unicode characters (such as
+Guile version 2.0.x), and if you version of NCurses is the wide
+version @code{libncursesw}, then you can use this library to print
+non-Latin characters.
 
 First off, if you want to use wide characters, you need to call
 @code{(setlocale LC_ALL "")} before the call to @code{initscr}.  The
 locale that is set must be an encoding that has greater than 8-bit
-characters, such as UTF-8.
+characters, such as UTF-8.  Also, you terminal must be capable of
+printing non-Latin characters.
 
-To add a rendered, complex character to the screen, use @code{add-wch}
-and friends.
+Then, to add a rendered, complex character to the screen, use @code{addch}
+and friends as before
 @example
 ;; Bold U+041B Cyrillic Capital Letter El
-(add-wch stdscr (list A_BOLD 0 #x041B))
+(addch stdscr (bold #\Л))
 @end example
 
-This procedure can optionally be called with a position as key
-arguments.
-
-@node @code{addstr} class of functions, A simple @code{addstr} example, The @code{addch} class of functions, Output functions
+@node @code{addstr} class of functions, A simple @code{addstr} example, The @code{addch} procedure, Output functions
 @subsection @code{addstr} class of functions
 
 @cindex Outputting strings
@@ -1139,7 +1162,7 @@ number of columns and the number of rows in a given window.
 @code{getmaxyx} does this by returning a list of two elements,
 @code{y} and @code{x}.
 
-@node A word of caution, Adding wide strings (tutorial), A simple @code{addstr} example, Output functions
+@node A word of caution,  , A simple @code{addstr} example, Output functions
 @subsection A word about coordinates
 
 The @code{move} function takes the @code{y} coordinate first and then
@@ -1156,21 +1179,6 @@ you.
 ;; or
 (addstr win "Hi" #:y 10 #:x 0)
 @end example
-
-
-@node Adding wide strings (tutorial),  , A word of caution, Output functions
-@subsection Adding wide strings
-
-@cindex Wide strings
-
-The @code{addstr} functions print unrendered, narrow strings, which
-are the same as standard Guile strings.  For unrendered, wide strings
-use the @code{add-wstr} procedure.  Unrendered, wide strings are lists
-of integers, where each integer is a codepoint.
-
-Again, the wide string functions are in the @code{(gucu curses-wide)}
-module.  They require that @code{setlocale} be called prior to the
-@code{initscr} procedure call.
 
 @node Input functions, Attributes, Output functions, Curses Tutorial
 @section Input functions
@@ -1198,15 +1206,15 @@ which allow us to get input from the user.
 
 The procedure @code{getch} reads a single character from the terminal.
 But there are several subtle facts to consider.  For example, if you
-don't use the function @code{cbreak}, curses will not read your input
+don't use the function @code{cbreak!}, curses will not read your input
 characters contiguously, but, will begin to read them only after
 @key{RET} has been pressed or after and @key{EOF} has been
-encountered.  In order to avoid this, the @code{cbreak} function must
+encountered.  In order to avoid this, the @code{cbreak!} function must
 be used so that characters are immediately available to your program.
-Another widely used function is @code{noecho}.  As the name suggests,
+Another widely used function is @code{noecho!}.  As the name suggests,
 when this function is set (used), the characters that are keyed in by
 the user will not show up on the screen.  The two functions
-@code{cbreak} and @code{noecho} are typical examples of key
+@code{cbreak!} and @code{noecho!} are typical examples of key
 management.
 
 
@@ -1244,6 +1252,19 @@ newline is detected.  Have a look.
 @example
 @verbatiminclude ex_attrib.scm
 @end example
+
+One important thing to note is that in this program, @code{addch} is
+always passed a normal, un-bolded, character.  Note the line
+@example
+	  (addch stdscr (normal ch))
+@end example
+But yet, the character printed by @code{addch} may still appear as
+bold on the screen.  This is because the character attributes passed
+to @code{addch} combine with the character attributes set by
+@code{attr-on!}.  If @code{attr-on!} has set the window's default
+attributes to bold, that will merge with the attributes passed to
+@code{addch}.
+
 
 The function also introduces the useful function @code{getyx}.  It
 returns the coordinates of the present cursor as a list of two
@@ -1471,7 +1492,9 @@ exercise for the reader.  Let's dissect it line by line.
 The @code{create-newwin} function creates a window with @code{newwin}
 and draws a box around it with @code{box}.  For the horizonal lines in
 the box, I chose the special drawing character @code{acs-hline}.  The
-vertical lines are the special drawing character @code{acs-vline}.  
+vertical lines are the special drawing character @code{acs-vline}.
+For the corners of the box, the @code{box} procedure will use a guess
+of the best available corners for the terminal.
 
 Most terminals will have special box drawing characters available.
 The procedure @code{acs-hline} and @code{acs-vline} will return these
@@ -1481,7 +1504,7 @@ have box drawing characters available, @code{acs-hline} and
 ``|''.
 
 The procedure @code{destroy-win} first erases the window from the
-screen by painting a border of blanks and then calline @code{delwin}
+screen by painting a border of blanks and then calling @code{delwin}
 to deallocate memory related to it.  Depending on the key the user
 presses, @code{startx} and @code{starty} are changed, and a new window
 is created.
@@ -1494,14 +1517,14 @@ as below:
 
 @example
 (border win 
-        (char->integer #\|)
-        (char->integer #\|)
-        (char->integer #\-)
-        (char->integer #\-)
-        (char->integer #\+)
-        (char->integer #\+)
-        (char->integer #\+)
-        (char->integer #\+))
+        (normal #\|)
+        (normal #\|)
+        (normal #\-)
+        (normal #\-)
+        (normal #\+)
+        (normal #\+)
+        (normal #\+)
+        (normal #\+))
 @end example
 it produces something like this
 @verbatim
@@ -1511,6 +1534,10 @@ it produces something like this
    |     | 
    +-----+
 @end verbatim 
+
+It wouldn't have been sufficient to use @code{(box win (normal #\sp)
+(normal #\sp))} to erase the box, because the @code{box} procedure
+still would have drawn the four corners of the box.
 
 @node Other functions, Other border functions, Let there be a window, Windows Tutorial
 @subsection Other functions
@@ -1531,12 +1558,13 @@ draw borders around the outside of windows.  If you want to draw lines
 on the screen is other locations than the border of windows, you can
 use the @code{hline} and @code{vline} procedures.
 
-The following little program shows how to draw a box at any location
-using @code{hline} and @code{vline}.  These two functions are simple.
-They create a horizontal or vertical line of the specified length at
-the specified position.  The program uses more of the special drawing
-characters like @code{(acs-urcorer)}, which is the upper-right corner
-of a box.
+The following little program shows how to draw a box at any location.
+To draw a box, it needs to draw four corners, two horizontal lines,
+and two vertical lines.  It uses @code{hline} and @code{vline}.  These
+two functions are simple.  They create a horizontal or vertical line
+of the specified length at the specified position.  The program uses
+more of the special drawing characters like @code{(acs-urcorer)},
+which is the upper-right corner of a box.
 
 @example
 @verbatiminclude ex_hline.scm
@@ -1562,7 +1590,7 @@ colors.  Let's get into the thick of things with a small program.
 @end example
 
 As you can see, to start using color, you should first call
-@code{start-color}.  After that you can use color capabilities of your
+@code{start-color!}.  After that you can use color capabilities of your
 terminal.  To find out whether a terminal has color capabilities or
 not, you can use @code{has-colors?}, which returns @code{#f} if the
 terminal does not support color.
@@ -1571,11 +1599,11 @@ terminal does not support color.
 @cindex Color pairs
 
 Curses initializes all the color support for the terminal when
-@code{start-color} is called.  Usually, a color terminal will have at
+@code{start-color!} is called.  Usually, a color terminal will have at
 least eight colors available that can be accessed by constants like
 @code{COLOR_BLACK}, etc.  Now to actually start using colors, you
 have to define pairs.  Colors are always used in pairs.  That means
-you have to use the function @code{init-pair} to define the foreground
+you have to use the function @code{init-pair!} to define the foreground
 and background for the pair number you give.  After that, that pair
 number can be used as a normal attribute with the @code{color-pair}
 procedure.  This may seem to be cumbersome at first.
@@ -1608,13 +1636,13 @@ COLOR_WHITE
 
 Most terminals don't support defining new colors or changing the
 colors that already exist.  For those terminals that do, the function
-@code{init-color} can be used to change the definition of colors by
+@code{init-color!} can be used to change the definition of colors by
 adjusting the amount of red, green, and blue in each.  To set the red
 to a darker red, you could use this function
 @example
 ;; Param 1: color name
 ;; Param 2, 3, 4; RGB content, min=0 max=1000
-(init-color COLOR_RED 300 0 0)
+(init-color! COLOR_RED 300 0 0)
 @end example
 
 If your terminal cannot change the color definitions, the procedure
@@ -1645,18 +1673,18 @@ mouse actions done by the user.  Let's deal with keys first.
 
 As you have seen in almost all of the above examples, it's very easy
 to get key input from the user.  A simple way of getting key presses
-is the @code{getch} procedure.  The @code{cbreak} mode should be
+is the @code{getch} procedure.  The @code{cbreak!} mode should be
 enabled to read keys when you are interested in reading individual key
 hits rather than complete lines of text (which usually end with a
 @key{CR}).  @code{keypad!} should be enabled to get the function
 keys, arrow keys and so on.
 
-@code{getch} returns an integer corresponding to the key pressed.  If
-it is a normal character, the integer value will be equivalent to the
-character.  Otherwise it returns a number which can be matched with
-the @code{KEY_} constants.  For example, if the user presses
-@key{F1}, the integer returned is 265.  The procedure @code{(key-f 1)}
-returns 265.  
+@code{getch} returns a character if the key pressed maps to a standard
+character or it returns an integer code for those keys that don't map
+to characters, such as @key{PAGE UP} or @key{DELETE}.  This integer
+code which can be matched with the @code{KEY_} constants.  For
+example, if the user presses @key{F1}, the integer returned is 265.
+The procedure @code{(key-f 1)} returns 265.
 
 For example, if you call @code{getch} like this
 @example
@@ -1665,9 +1693,9 @@ For example, if you call @code{getch} like this
 @end example
 @code{getch} will wait for the user to press a key, (unless you
 specified a timeout), and when the user presses a key, the
-corresponding integer is returned.  Then you can check the value
-returned with the @code{KEY_} constants of the result of the
-function key procedure @code{key-f}.
+corresponding character or integer is returned.  If it is an integer,
+then you can check the value returned with the @code{KEY_} constants
+or the result of the function key procedure @code{key-f}.
 
 The following code piece will do that job
 @example
@@ -2132,7 +2160,6 @@ size required for the display of items. Then items are displayed in
 the calculated sub window. So let's play with these windows and
 display a menu with a border and a title.
 
-
 @example
 @include ex_menu3.scm
 @end example
@@ -2143,7 +2170,6 @@ window to a menu the function @code{set-menu-win!} has to be used. Then
 we attach the sub window also. This displays the items in the sub
 window. You can also set the mark string which gets displayed to the
 left of the selected item with @code{set-menu-mark!}.
------------------------------------------------------------------------------
 
 @node Scrolling Menus,  , Menu Windows, Menu Library
 @subsection Scrolling Menus
@@ -2514,8 +2540,8 @@ password-like field where the characters are hidden from view.
 
 ;; Initialize curses
 (define stdscr (initscr))
-(cbreak)
-(noecho)
+(cbreak!)
+(noecho!)
 (keypad! stdscr #t)
 
 ;; Initialize the fields
@@ -2596,7 +2622,7 @@ The two procedures that work with field status are
 @node  Variable-Sized Fields, Form Windows, Field Status, Forms Library
 @subsection Variable-Sized Fields
 
-If you want a dynamically changin field with variable width, this is
+If you want a dynamically changing field with variable width, this is
 the feature tyou want to put to full use.  This will allow the user to
 enter more data than the original size of the field and let the field
 grow.  According to the field orientation it will scroll horizontally
@@ -2670,13 +2696,13 @@ similar example.
 
 ;; Initialize curses
 (define stdscr (initscr))
-(start-color)
-(cbreak)
-(noecho)
+(start-color!)
+(cbreak!)
+(noecho!)
 (keypad! stdscr #t)
 
 ;;Initialize a few color pairs
-(init-pair 1 COLOR_RED COLOR_BLACK)
+(init-pair! 1 COLOR_RED COLOR_BLACK)
 
 (define field (list
 	       (new-field 1 10 6 1 0 0)
@@ -2923,10 +2949,7 @@ will return you to the top.
 The gucu package provides the following modules:
 @enumerate
 @item
-@code{(gucu curses)}: Basic functionality and input/output with narrow strings.
-
-@item
-@code{(gucu curses-wide)}: Input/output with wide strings.
+@code{(gucu curses)}: Basic functionality and input/output.
 
 @item
 @code{(gucu panel)}: A library for managing overlapping windows.
@@ -2997,6 +3020,7 @@ arguments as the functions in the C-language API.
 @menu
 * Overview::                    
 * Curses screen initialization and manipulation routines::  
+* Making rendered characters::  
 * Adding characters::           
 * Adding strings of characters and attributes::  
 * Character and window attribute control routines::  
@@ -3060,23 +3084,23 @@ echoing (most interactive, screen oriented programs want this), the
 following sequence should be used:
 
 @findex initscr
-@findex cbreak
-@findex noecho
+@findex cbreak!
+@findex noecho!
 
 @example
-(cbreak)
-(noecho)
+(cbreak!)
+(noecho!)
 @end example
 
 Most programs would additionally use the sequence:
 
-@findex nonl
-@findex intrflush
+@findex nonl!
+@findex intrflush!
 @findex keypad!
 
 @example
-(nonl)
-(intrflush #f)
+(nonl!)
+(intrflush! #f)
 (keypad! stdscr #t))
 @end example
 
@@ -3181,7 +3205,7 @@ column.  The upper left-hand corner is always (0,0), not (1,1).
 @menu
 @end menu
 
-@node Curses screen initialization and manipulation routines, Adding characters, Overview, The basic curses library
+@node Curses screen initialization and manipulation routines, Making rendered characters, Overview, The basic curses library
 @subsection Curses screen initialization and manipulation routines
 
 @cindex Initialization
@@ -3216,6 +3240,10 @@ The @code{initscr} code determines the terminal type and initializes
 all curses data structures.  @code{initscr} also causes the first call
 to @code{refresh} to clear the screen.  
 
+The @code{#<window>} returned by @code{initscr} should be held in a
+variable that exists for the lifetime of a curses program.  If it is
+garbage collected, the window will become unusable.
+
 If errors occur, @code{initscr} throws and error and exits; otherwise,
 a @code{#<window>} referencing @code{stdscr} is returned.
 @end deffn
@@ -3227,6 +3255,12 @@ a @code{#<window>} referencing @code{stdscr} is returned.
 
 @deffn Procedure newterm type outport inport
 @findex newterm
+The procedure @code{newterm} initializes curses for a given terminal
+type @var{type} on specific curses port @var{inport} and
+@var{outport}.  The @code{newterm} function relies on some relatively
+obscure GNU C library functions and thus may not be available on
+non-GNU systems.
+
 The routine @code{newterm} should be called once for each terminal.
 It returns a variable of type @code{#<screen>} which should be saved
 as a reference to that terminal.  @var{type} is the type of the
@@ -3330,24 +3364,123 @@ The return value is unspecified.
 
 @end deffn
 
-@node Adding characters, Adding strings of characters and attributes, Curses screen initialization and manipulation routines, The basic curses library
+@node Making rendered characters, Adding characters, Curses screen initialization and manipulation routines, The basic curses library
+@subsection Making rendered characters
+
+Many curses functions take rendered, complex characters: characters
+with associated color and attribute information.  There is a family of
+functions to convert unrendered, simple characters or strings to
+rendered complex characters and strings.
+
+@deffn Procedure blink x
+@deffnx Procedure bold x
+@deffnx Procedure dim x
+@deffnx Procedure horizontal x
+@deffnx Procedure invis x
+@deffnx Procedure left x
+@deffnx Procedure low x
+@deffnx Procedure normal x
+@deffnx Procedure protect x
+@deffnx Procedure inverse x
+@deffnx Procedure right x
+@deffnx Procedure top x
+@deffnx Procedure vertical x
+
+These procedures take @var{x}, which can be either a simple character,
+a complex character, a simple string, or a complex string, and returns
+a rendered character or string with the attribute blink, bold, dim,
+horizontal, invis, left, low, normal, protect, inverse, right, top, or
+vertical, respectively.  If the input @var{x} was a rendered character
+or a rendered string, the old attributes are replaced.  If @var{x} was
+a rendered character or string with an associated color pair, the
+returned character or string will have the same associated color pair.
+
+Note that whether these attributes can actually be visualized depends
+on the capabilities of the terminal itself.  Most terminals can handle
+bold, dim, inverse, and sometimes blink and invis.  The rest should
+probably not be used.
+
+@end deffn
+
+@deffn Procedure blink-on x
+@deffnx Procedure bold-on x
+@deffnx Procedure dim-on x
+@deffnx Procedure horizontal-on x
+@deffnx Procedure invis-on x
+@deffnx Procedure left-on x
+@deffnx Procedure low-on x
+@deffnx Procedure normal-on x
+@deffnx Procedure protect-on x
+@deffnx Procedure inverse-on x
+@deffnx Procedure right-on x
+@deffnx Procedure top-on x
+@deffnx Procedure vertical-on x
+
+These procedures take @var{x}, which can be either a simple character,
+a complex character, a simple string, or a complex string.  If @var{x}
+is a simple character or simple string, it sets its rendering to
+blink, bold, dim, horizontal, invis, left, low, normal, protect,
+inverse, right, top, or vertical, respectively.  If the input @var{x}
+was a rendered character or a rendered string, these attributes are
+added to the rendered character.
+
+Most terminals can't actually visualize multiple attributes on a
+single character: some terminals can handle the combination of blink
+and bold or inverse and bold.
+
+@end deffn
+
+@deffn Procedure blink-off x
+@deffnx Procedure bold-off x
+@deffnx Procedure dim-off x
+@deffnx Procedure horizontal-off x
+@deffnx Procedure invis-off x
+@deffnx Procedure left-off x
+@deffnx Procedure low-off x
+@deffnx Procedure normal-off x
+@deffnx Procedure protect-off x
+@deffnx Procedure inverse-off x
+@deffnx Procedure right-off x
+@deffnx Procedure top-off x
+@deffnx Procedure vertical-off x
+
+These procedures take @var{x}, which can be either a simple character,
+a complex character, a simple string, or a complex string.  If @var{x}
+is a simple character or simple string, it sets its rendering to
+normal.  If the input @var{x} was a rendered character or a rendered
+string and had the given attribute, these attributes is removed from
+the resulting rendered character.
+
+@end deffn
+
+@deffn Procedure color n x
+
+These procedure takes @var{x}, which can be either a simple character,
+a complex character, a simple string, or a complex string.  It returns
+a rendered character or string with an assocated color pair @var{n}.
+
+This procedure should only be used if @code{start-color} has been
+called.
+
+@end deffn
+
+@node Adding characters, Adding strings of characters and attributes, Making rendered characters, The basic curses library
 @subsection Outputting characters 
 @cindex Characters, output
 @cindex Outputting characters
 
-There is a family of functions that add a rendered, narrow character
+There are two primary functions that add a rendered character
 to a curses window, and then advance the cursor.
 
 @deffn Procedure addch win ch #:key y x
-@deffnx Alternate add-rendered-char win ch #:key y x
 @findex scrollok! 
 
-The @code{addch} routine puts the rendered, narrow character @var{ch}
-into the given window at its current window position, which is then
-advanced.  If the advance is at the right margin, the cursor
-automatically wraps to the beginning of the next line.  At the bottom
-of the current scrolling region, if @code{scrollok!} is enabled, the
-scrolling region is scrolled up one line.
+The @code{addch} routine puts the rendered character @var{ch} into the
+given window at its current window position, which is then advanced.
+If the advance is at the right margin, the cursor automatically wraps
+to the beginning of the next line.  At the bottom of the current
+scrolling region, if @code{scrollok!} is enabled, the scrolling region
+is scrolled up one line.
 
 @findex set-tabsize
 @findex clrtoeol
@@ -3379,7 +3512,6 @@ window that doesn't wrap or scroll.
 @end deffn
 
 @deffn Procedure echochar win ch #:key y x
-@deffnx Alternate echo-rendered-char win ch #:key y x
 
 @findex addch
 @findex refresh
@@ -3414,11 +3546,12 @@ Not all terminals have line-graphics characters.  There is a default
 character listed below is used if the @code{acsc} capability doesn't
 define a terminal-specific replacement for it.  The names are taken
 from VT100 nomenclature. Each of these procecures takes no arguments
-and returns a character.  The following prints a less-than-or-equal-to
+and returns a rendered character with the 'normal' attribute and with
+the default color pair.  The following prints a less-than-or-equal-to
 sign to the screen, for example.
 
 @example
-(addch (acs-lequal))
+(addch stdscr (acs-lequal))
 @end example
 
 The set of line-graphics characters is given in @ref{tab:ACS}.
@@ -3531,17 +3664,12 @@ The set of line-graphics characters is given in @ref{tab:ACS}.
 @subsection Outputing strings
 
 @deffn Procecure addstr win #:key y x n
-@deffnx Alternate add-string win #:key y x n
 
-@findex addch
-
-This routine writes the characters of the unrendered, narrow string
-@var{str} on the given window. It is similar to calling @code{addch}
-once for each character in the string.  When called with @var{n}
-it writes at most n characters.  If @var{n} is -1,
-then the entire string will be added, up to the maximum number of
-characters that will fit on the line, or until a terminating null is
-reached.
+This routine writes the characters of the unrendered simple string
+@var{str} on the given window.  When called with @var{n} it writes at
+most n characters.  If @var{n} is -1, then the entire string will be
+added, up to the maximum number of characters that will fit on the
+line, or until a terminating null is reached.
 
 It returns @code{#f} upon failure and @code{#t} on success.  Failure
 usually indicates at attempt to write beyond the borders of the window
@@ -3551,9 +3679,8 @@ that doesn't support it.
 @end deffn
 
 @deffn Procedure addchstr win chstr #:key y x n
-@deffnx Alternate add-rendered-string win chstr #:key y x n
 
-These routines copy the rendered, narrow string @var{chstr} into the
+These routines copy the rendered, complex string @var{chstr} into the
 window image structure at and after the current cursor position.  If
 @var{n} is defined, copy at most @var{n} elements, but no more than
 will fit on the line.  If @var{n} equals -1 or if it is undefined,
@@ -3633,8 +3760,8 @@ The routine @code{color-set!} sets the current color of the given window to
 the foreground/background combination described by the
 @var{color-pair-number}.  
 
-The return value is @code{#t} on success or @code{#f} on failure.
-Failure usually indicates that the color pair number was too large.
+The return value is unspecified, but, it can throw an error if the
+color pair number was too large.
 @end deffn
 
 @deffn Procedure attr-get
@@ -3648,7 +3775,7 @@ attributes.  The second element is the color pair alone.
 
 @deffn Procedure chgat win n attr color #:key y x
 
-@findex init-pair
+@findex init-pair!
 
 The routine @code{chgat} changes the attributes of a given number of
 characters starting at the current cursor location of @code{stdscr} or
@@ -3658,7 +3785,7 @@ remaining window width means to change attributes all the way to the
 end of the current line.  If @var{y} and @var{x} are given, the
 function does a cursor move before acting.  In these functions, the
 @var{color} argument is a color-pair index as in the first argument of
-@code{init-pair}. @xref{Color manipulation routines}.
+@code{init-pair!}. @xref{Color manipulation routines}.
 
 The return value is unspecified.
 
@@ -3755,18 +3882,17 @@ flashing, @code{#f} otherwise.
 @cindex Background
 
 @deffn Procedure bkgdset! win ch 
-@deffnx Alternate background-rendered-char-set! win ch
 @findex addch
 
 The @code{bkgdset!} routine manipulates the background of the named
-window.  The window background consists of any combination of
-attributes (i.e., rendition) and a character @var{ch}.  The attribute
-part of the background is combined (@code{logior}'d) with all
-non-blank characters that are written into the window with
-@code{addch}.  Both the character and attribute parts of the
-background are combined with the blank characters.  The background
-becomes a property of the character and moves with the character
-through any scrolling and insert/delete line/character operations.
+window.  The window background is set to the rendered complex
+character @var{ch}. The attribute part of the @var{ch} is combined
+(@code{logior}'d) with all non-blank characters that are written into
+the window with @code{addch}.  Both the character and attribute parts
+of the @var{ch} are combined with the blank characters.  The
+background becomes a property of the character and moves with the
+character through any scrolling and insert/delete line/character
+operations.
 
 To the extent possible on a particular terminal, the attribute part of
 the background is displayed as the graphic rendition of the character
@@ -3777,7 +3903,6 @@ The return value is undefined.
 @end deffn
 
 @deffn Procedure bkgd win ch
-@deffnx Alternate background-rendered-char-apply
 The @code{bkgd} function sets the background property
 of the current or specified window and then applies this setting to
 every character position in that window: The rendition of every
@@ -3789,7 +3914,6 @@ The return value is undefined.
 @end deffn
 
 @deffn Procedure getbkgd win
-@deffnx Alternate get-background-rendered-char win
 @cindex Windows, background
 @cindex Background rendition
 
@@ -3805,12 +3929,12 @@ rendered character.
 @deffn Procedure border win ls rs ts bs tl tr bl br
 
 The @code{border} routine draws a box around the edges of a
-window. Other than @var{win}, each argument is a rendered narrow
-character, representing a side or a corner of the border.  The
-arguments are @var{ls} - left side, @var{rs} - right side, @var{ts} -
-top side, @var{bs} - bottom side, @var{tl} - top left-hand corner,
-@var{tr} - top right-hand corner, @var{bl} - bottom left-hand corner,
-and @var{br} - bottom right-hand corner.
+window. Other than @var{win}, each argument is a rendered character,
+representing a side or a corner of the border.  The arguments are
+@var{ls} - left side, @var{rs} - right side, @var{ts} - top side,
+@var{bs} - bottom side, @var{tl} - top left-hand corner, @var{tr} -
+top right-hand corner, @var{bl} - bottom left-hand corner, and
+@var{br} - bottom right-hand corner.
 
 If  any of these arguments is zero, then the corresponding default
 values are used instead.  The default values are the line drawing
@@ -3819,6 +3943,9 @@ characters that create a box, and they would be @var{ls} =
 @code{acs-hline}, @var{bs} = @code{acs-hline}, @var{tl} =
 @code{acs-ulcorner}, @var{tr} = @code{acs-urcorner}, @var{bl} =
 @code{acs-llcorner}, @var{br} = @code{acs-lrcorner}.
+
+The characters used should have the standard character width.
+Double-width characters should not be used in borders.
 
 It returns @code{#f} on failure and @code{#t} on success.
 @end deffn
@@ -3841,7 +3968,7 @@ The current cursor position is not changed.  The line is at most
 The optional parameters @var{y} and @var{x} cause the cursor to be
 moved to that position before drawing the line.
 
-It returns @code{#f} on failure and @code{#t} on success.
+The return value is unspecified.
 @end deffn
 
 
@@ -3855,7 +3982,7 @@ characters long, or as many as fit into the window.
 If the key parameters @var{y} and @var{x} are set, it moves the cursor
 before drawing the line.
 
-It returns @code{#f} on failure and @code{#t} on success.
+The return value is unspecified.
 @end deffn
 
 @node Clearing windows and parts of window, Color manipulation routines, Borders and lines, The basic curses library
@@ -3890,7 +4017,7 @@ The @code{clear} routine is like @code{erase}, but they also call
 @code{clearok!}, so that the screen is cleared completely on the next
 call to @code{refresh} for that window and repainted from scratch.
 
-It returns @code{#f} on failure and @code{#t} on success.
+Its return value is unspecified.
 @end deffn
 
 @deffn Procedure clrtobot win
@@ -3900,7 +4027,7 @@ screen. That is, they erase all lines below the cursor in the window.
 Also, the current line to the right of the cursor, inclusive, is
 erased.
 
-It returns @code{#f} on failure and @code{#t} on success.
+Its return value is unspecified.
 @end deffn
 
 @deffn Procedure clrtoeol win
@@ -3915,20 +4042,20 @@ It returns @code{#f} on failure and @code{#t} on success.
 @subsection Color manipulation routines
 @cindex Colors, manipulation
 @findex initscr
-@findex init-pair
+@findex init-pair!
 @findex color-pair
 
 Curses supports color attributes on terminals with that capability.  To
-use these routines @code{start-color} must be called, usually right
+use these routines @code{start-color!} must be called, usually right
 after @code{initscr}.  Colors are always used in pairs (referred to as
 color-pairs).  A color-pair consists of a foreground color (for
 characters) and a background color (for the blank field on which the
 characters are displayed).  A programmer initializes a color-pair with
-the routine @code{init-pair}.  After it has been initialized,
+the routine @code{init-pair!}.  After it has been initialized,
 @code{color-pair} can be used as a new video attribute.
 
 If a terminal is capable of redefining colors, the programmer can use
-the routine @code{init-color} to change the definition of a color.
+the routine @code{init-color!} to change the definition of a color.
 The routines @code{has-colors?} and @code{can-change-color?} return
 @code{#t} or @code{#f}, depending on whether the terminal has color
 capabilities and whether the programmer can change the colors.  The
@@ -3937,16 +4064,16 @@ amounts of red, green, and blue components in an initialized color.
 The routine @code{pair-content} allows a programmer to find out how a
 given color-pair is currently defined.
 
-@deffn Procedure start-color
+@deffn Procedure start-color!
 @cindex Colors, initialization
 @findex initscr
 @findex colors
 @findex color-pairs
 
-The @code{start-color} routine requires no arguments.  It must be
+The @code{start-color!} routine requires no arguments.  It must be
 called if the programmer wants to use colors, and before any other
 color manipulation routine is called.  It is good practice to call
-this routine right after @code{initscr}. @code{start-color}
+this routine right after @code{initscr}. @code{start-color!}
 initializes eight basic colors (black, red, green, yellow, blue,
 magenta, cyan, and white), and prepares the procedures @code{colors} and
 @code{color-pairs} (respectively defining the maximum number of colors
@@ -3975,30 +4102,30 @@ Returns the maximum number of color-pairs the terminal can support.
 @defvrx Constant COLOR_CYAN
 @defvrx Constant COLOR_WHITE
 
-@findex init-color
+@findex init-color!
 These variables contain the color number of the eight default colors.
 @end defvr
 
 
-@deffn Procedure init-color color red green blue
+@deffn Procedure init-color! color red green blue
 @cindex Colors, defining
 
-The @code{init-color} routine changes the definition of a color.  It
+The @code{init-color!} routine changes the definition of a color.  It
 takes four arguments: the number of the color to be changed followed
 by three RGB values (for the amounts of @var{red}, @var{green}, and
 @var{blue} components).  The value of the first argument must be
 between 0 and the value returned by the @code{colors} procedure. Each
 of the last three arguments must be a value between 0 and 1000.  When
-@code{init-color} is used, all occurrences of that color on the screen
+@code{init-color!} is used, all occurrences of that color on the screen
 immediately change to the new definition.
 
-The return value is unspecified.
+It returns @code{#f} on failure and @code{#t} on success.  Failure may 
+indicate that, for the current terminal, the colors cannot be modified.
 @end deffn
 
+@deffn Procedure init-pair! color-pair fore-color back-color
 
-@deffn Procedure init-pair color-pair fore-color back-color
-
-The @code{init-pair} routine changes the definition of a color-pair.
+The @code{init-pair!} routine changes the definition of a color-pair.
 It takes three arguments: the number of the color-pair to be changed,
 the fore-ground color number, and the background color number.
 
@@ -4027,7 +4154,9 @@ number @code{-1} can be used as @var{fore-color} or
 foreground or background color for this screen, which is usually white
 on black.
 
-The return value is unspecified.
+It returns @code{#f} on failure and @code{#t} on success.  Failure may 
+indicate an attempt to change a color pair beyond the allow range of
+color pairs.
 @end deffn
 
 
@@ -4077,10 +4206,10 @@ number. The values are between 0 and the value returned by
 
 @deffn Procedre use-default-colors
 
-@findex init-pair
+@findex init-pair!
 
 This procedure allow routines that use color numbers, like
-@code{init-pair} to use the special color number -1 to indicate the
+@code{init-pair!} to use the special color number -1 to indicate the
 default color.  When -1 is used in lieu of the foreground color, it
 indicated the default foreground color.  When -1 is used as the
 background color, it indicated the default background color.  Thus, it
@@ -4095,10 +4224,10 @@ the capability to set color pair 0.
 
 @cindex Default colors
 @cindex Colors, default
-@findex init-pair
+@findex init-pair!
 
 This procedure allow the modification of special color pair 0, which
-cannot be modified by @code{init-pair}.  
+cannot be modified by @code{init-pair!}.  
 
 It returns @code{#t} if successful or @code{#f} is the terminal lacks
 the capability to set color pair 0.
@@ -4160,7 +4289,7 @@ It returns @code{#f} on failure and @code{#t} on success.
 
 @deffn Procedure getch win #:key y x
 @cindex Input
-@findex cbreak
+@findex cbreak!
 @findex nocbreak
 @cindex Inputing characters
 
@@ -4170,14 +4299,14 @@ waiting, the value @code{#f} is returned.  In delay mode, the program
 waits until the system passes text through to the program.  Depending
 on the setting of cbreak, this is after one character (@code{cbreak}
 mode), or after the first newline (@code{nocbreak} mode).  In
-@code{halfdelay} mode, the program waits until a character is typed
+@code{halfdelay!} mode, the program waits until a character is typed
 or the specified timeout has been reached.
 
-@findex noecho
+@findex noecho!
 @findex delch
 @findex beep
 
-Unless @code{noecho} has been set, then the character will also be
+Unless @code{noecho!} has been set, then the character will also be
 echoed into the designated window according to the following rules: If
 the character is the current erase character, left arrow, or
 backspace, the cursor is moved one space to the left and that screen
@@ -4406,7 +4535,7 @@ says that KEY_ENTER is @kbd{C-M}, @code{getch} will return
 
 When using @code{getch}, @code{wgetch}, @code{mvgetch}, or
 @code{mvwgetch}, nocbreak mode (@code{nocbreak}) and echo mode
-(@code{echo}) should not be used at the same time.  Depending on the
+(@code{echo!}) should not be used at the same time.  Depending on the
 state of the tty driver when each character is typed, the program may
 produce undesirable results.
 
@@ -4440,7 +4569,7 @@ The user's erase and kill characters are interpreted. If keypad mode
 is on for the window, @code{KEY_LEFT} and @code{KEY_BACKSPACE} are
 both considered equivalent to the user's kill character.
 
-Characters input are echoed only if @code{echo} is currently on.  In
+Characters input are echoed only if @code{echo!} is currently on.  In
 that case, backspace is echoed as deletion of the previous character
 (typically a left motion).
 
@@ -4508,13 +4637,13 @@ margin of the window or until @var{n} characters have been found.
 @node Input options, Inserting a character before the cursor, Getting a string of characters and attributes from a window, The basic curses library
 @subsection Input options
 
-@deffn Procedure cbreak
+@deffn Procedure cbreak!
 @deffnx Procedure nocbreak
 @cindex Line buffering
 @cindex Control character processing
 
 Normally, the tty driver buffers typed characters until a @key{NL} or
-@key{RET} is typed.  The @code{cbreak} routine disables line buffering
+@key{RET} is typed.  The @code{cbreak!} routine disables line buffering
 and erase/kill character-processing (interrupt and flow control
 characters are unaffected), making characters typed by the user
 immediately available to the program.
@@ -4524,49 +4653,49 @@ mode.
 
 The return value is unspecified.  The routines will throw a ``bad
 state'' error if the underlying screen data is invalid.  The routine
-will also throw a ``bad state'' error if @code{cbreak} was called on
+will also throw a ``bad state'' error if @code{cbreak!} was called on
 an ordinary file (such as might be used with @code{newterm}) instead
 of a TTY.
 
-@findex raw
+@findex raw!
 @findex getch
 
 Initially the terminal may or may not be in @code{cbreak} mode, as the
-mode is inherited; therefore, a program should call @code{cbreak} or
+mode is inherited; therefore, a program should call @code{cbreak!} or
 @code{nocbreak} explicitly.  Most interactive programs using curses
-set the @code{cbreak} mode.  Note that @code{cbreak} overrides
-@code{raw}.  
+set the @code{cbreak} mode.  Note that @code{cbreak!} overrides
+@code{raw!}.  
 
 @end deffn
 
-@deffn Procedure echo
-@deffnx Procedure noecho
+@deffn Procedure echo!
+@deffnx Procedure noecho!
 @cindex Echoing
 
-The @code{echo} and @code{noecho} routines control whether characters
-typed by the user are echoed by getch as they are typed.  Echoing by
-the tty driver is always disabled, but initially @code{getch} is in
-echo mode, so characters typed are echoed.  Authors of most
-interactive programs prefer to do their own echoing in a controlled
-area of the screen, or not to echo at all, so they disable echoing by
-calling noecho.  See @ref{Getting characters from the keyboard} for a
-discussion of how these routines interact with @code{echo} and
-@code{noecho}.
+The @code{echo!} and @code{noecho!} routines control whether
+characters typed by the user are echoed by getch as they are typed.
+Echoing by the tty driver is always disabled, but initially
+@code{getch} is in echo mode, so characters typed are echoed.  Authors
+of most interactive programs prefer to do their own echoing in a
+controlled area of the screen, or not to echo at all, so they disable
+echoing by calling @code{noecho!}.  See @ref{Getting characters from
+the keyboard} for a discussion of how these routines interact with
+@code{echo!} and @code{noecho!}.
 
 The return values are unspecified.
 
 @end deffn
 
 
-@deffn Procedure halfdelay tenths
+@deffn Procedure halfdelay! tenths
 @cindex Half-delay mode
 @cindex Line buffering
 
-@findex cbreak
+@findex cbreak!
 @findex nocbreak
 
-The @code{halfdelay} routine is used for half-delay mode, which is similar to
-@code{cbreak} mode in that characters typed by the user are immediately
+The @code{halfdelay!} routine is used for half-delay mode, which is similar to
+@code{cbreak!} mode in that characters typed by the user are immediately
 available to the program.  However, after blocking for @var{tenths} tenths
 of seconds, @code{#f} is returned if nothing has been typed.  The value of
 tenths must be a number between 1 and 255.  Use @code{nocbreak} to leave
@@ -4576,7 +4705,7 @@ The return value is unspecified.
 
 @end deffn
 
-@deffn Procedure intrflush bf
+@deffn Procedure intrflush! bf
 
 If the intrflush option is enabled, (@var{bf} is @code{#t}), when an
 interrupt key is pressed on the keyboard (interrupt, break, quit) all
@@ -4612,21 +4741,21 @@ state'' error.
 @end deffn
 
 
-@deffn Procedure meta win bf
+@deffn Procedure meta! win bf
 @cindex 7-bit characters
 @cindex 8-bit characters
 
 Initially, whether the terminal returns 7 or 8 significant bits on
 input depends on the control mode of the tty driver.  To force 8 bits
-to be returned, invoke @code{(meta win #t)}.  This is equivalent,
+to be returned, invoke @code{(meta! win #t)}.  This is equivalent,
 under POSIX, to setting the CS8 flag on the terminal.  To force 7 bits
-to be returned, invoke @code{(meta win #f)}.  This is equivalent,
+to be returned, invoke @code{(meta! win #f)}.  This is equivalent,
 under POSIX, to setting the CS7 flag on the terminal.  The window
 argument, @var{win}, is always ignored. If the terminfo capabilities
 @code{smm} (@code{meta-on}) and @code{rmm} (@code{meta-off}) are
 defined for the terminal.  The code for @code{smm} is sent to the
-terminal when @code{(meta win #t)} is called and @code{rmm} is sent
-when @code{(meta win #f)} is called.
+terminal when @code{(meta! win #t)} is called and @code{rmm} is sent
+when @code{(meta! win #f)} is called.
 @end deffn
 
 @deffn Procedure nodelay! win bf
@@ -4651,13 +4780,13 @@ key and those typed by a user.
 
 @end deffn
 
-@deffn Procedure raw
-@deffnx Procedure noraw
+@deffn Procedure raw!
+@deffnx Procedure noraw!
 @cindex Control character processing
 @cindex Line buffering
 
-The @code{raw} and @code{noraw} routines place the terminal into or
-out of raw mode.  Raw mode is similar to @code{cbreak} mode, in that
+The @code{raw!} and @code{noraw!} routines place the terminal into or
+out of raw mode.  Raw mode is similar to @code{cbreak!} mode, in that
 characters typed are immediately passed through to the user program.
 The differences are that in raw mode, the interrupt, quit, suspend,
 and flow control characters are all passed through uninterpreted,
@@ -4668,17 +4797,17 @@ The return value is unspecified.
 
 @end deffn
 
-@deffn Procedure noqiflush
-@deffnx Procedure qiflush
+@deffn Procedure noqiflush!
+@deffnx Procedure qiflush!
 @cindex Flushing
 @cindex Input, flushing
 @cindex Output, flushing
 
-When the @code{noqiflush} routine is used, normal flush of input and
+When the @code{noqiflush!} routine is used, normal flush of input and
 output queues associated with the INTR, QUIT and SUSP characters will
-not be done.  When @code{qiflush} is called, the queues will be
+not be done.  When @code{qiflush!} is called, the queues will be
 flushed when these control characters are read. You may want to call
-@code{noqiflush} in a signal handler if you want output to continue as
+@code{noqiflush!} in a signal handler if you want output to continue as
 though the interrupt had not occurred, after the handler exits.
 
 @end deffn
@@ -4701,7 +4830,7 @@ milliseconds (where @var{delay} is positive).
 @end deffn
 
 
-@deffn Procedure typeahead fd
+@deffn Procedure typeahead! fd
 
 The curses library does ``line-breakout optimization'' by looking for
 typeahead periodically while updating the screen.  If input is found,
@@ -4709,10 +4838,10 @@ and it is coming from a tty, the current update is postponed until
 refresh or doupdate is called again.  This allows faster response to
 commands typed in advance.  Normally, the input file port passed to
 newterm, or @code{stdin} in the case that initscr was used, will be
-used to do this typeahead checking.  The typeahead routine specifies
-that the (integer) file descriptor @var{fd} is to be used to check for
-typeahead instead.  If @var{fd} is -1, then no typeahead checking is
-done.
+used to do this typeahead checking.  The @code{typeahead!} routine
+specifies that the (integer) file descriptor @var{fd} is to be used to
+check for typeahead instead.  If @var{fd} is -1, then no typeahead
+checking is done.
 
 @end deffn 
 
@@ -5126,18 +5255,18 @@ on the terminal, it is also necessary to call @code{idlok!}).
 The return value is unspecified.
 @end deffn
 
-@deffn Procedure nl
-@deffnx Procedure nonl
+@deffn Procedure nl!
+@deffnx Procedure nonl!
 @cindex Carriage return
 @cindex Line feed
 
-The @code{nl} and @code{nonl} routines control whether the underlying
+The @code{nl!} and @code{nonl!} routines control whether the underlying
 display device translates @key{RET} (return) into @key{NL} (newline)
 on input, and whether it translates @key{NL} into @key{RET} and
 @key{LF} (linefeed) output (in either case, the call @code{(addch
-(char->integer #\nl))} does the equivalent of return and line feed on
+(normal #\nl))} does the equivalent of return and line feed on
 the virtual screen).  Initially, these translations do occur.  If you
-disable them using @code{nonl}, curses will be able to make better use
+disable them using @code{nonl!}, curses will be able to make better use
 of the line-feed capability, resulting in faster cursor motion.  Also,
 curses will then be able to detect the return key.
 
@@ -5984,7 +6113,7 @@ The @code{echo-wchar} function is functionally equivalent to a call to
 @code{add-wch} followed by a call to @code{refresh}.  The knowledge
 that only a single character is being output is taken into
 consideration and, for non-control characters, a considerable
-performance gain might be seen by using the @code{echo} functions
+performance gain might be seen by using the @code{echo!} functions
 instead of their equivalents.
 
 This returns the @code{#f} upon failure and @code{#t} on success.
@@ -6136,13 +6265,13 @@ codepoint of the character pressed.  In no-delay mode, if
 no input is waiting, a list of two elements is returned where the first
 element is @code{ERR} and the second element is zero.  In
 @code{delay} mode, the program waits until the system passes text
-through to the program.  Depending on the setting of @code{cbreak},
+through to the program.  Depending on the setting of @code{cbreak!},
 this is after one character (cbreak mode), or after the first newline
 (nocbreak mode).  In half-delay mode, the program waits until
 the user types a character or the specified timeout interval has
 elapsed.
 
-Unless @code{noecho} has been set, these routines echo the character
+Unless @code{noecho!} has been set, these routines echo the character
 into the designated window.
 
 If the window is not a pad and has been moved or modified since the

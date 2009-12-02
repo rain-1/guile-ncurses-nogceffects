@@ -5,8 +5,8 @@
 (define stdscr (initscr))
 (if (has-colors?)
     (begin
-      (start-color)
-      (init-pair 1 COLOR_GREEN COLOR_YELLOW)
+      (start-color!)
+      (init-pair! 1 COLOR_GREEN COLOR_YELLOW)
       (attr-on! stdscr (logior A_BOLD (color-pair 1)))
       (addstr stdscr "Voila!! In color...")
       (refresh stdscr)

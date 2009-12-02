@@ -214,7 +214,7 @@ gucu_field_pad (SCM field)
   const FIELD *c_field = _scm_to_field (field);
 
   int ret = field_pad (c_field);
-  SCM s_ret = scm_from_int (ret);
+  SCM s_ret = _scm_schar_from_char ((unsigned char) ret);
 
   return s_ret;
 }
@@ -238,10 +238,15 @@ SCM
 gucu_form_driver (SCM form, SCM c)
 {
   SCM_ASSERT (_scm_is_form (form), form, SCM_ARG1, "form-driver");
-  SCM_ASSERT (scm_is_integer (c), c, SCM_ARG2, "form-driver");
+  SCM_ASSERT (SCM_CHARP (c) || scm_is_integer (c), c, SCM_ARG2, 
+	      "form-driver");
 
+  int c_c;
   FORM *c_form = _scm_to_form (form);
-  int c_c = scm_to_int (c);
+  if (SCM_CHARP (c))
+    c_c = (unsigned char) _scm_schar_to_char (c);
+  else
+    c_c = scm_to_int (c);
 
   int ret = form_driver (c_form, c_c);
 
@@ -683,12 +688,12 @@ SCM
 gucu_set_field_pad_x (SCM field, SCM pad)
 {
   SCM_ASSERT (_scm_is_field (field), field, SCM_ARG1, "set-field-pad!");
-  SCM_ASSERT (scm_is_integer (pad), pad, SCM_ARG2, "set-field-pad!");
+  SCM_ASSERT (SCM_CHARP (pad), pad, SCM_ARG2, "set-field-pad!");
 
   FIELD *c_field = _scm_to_field (field);
-  int c_pad = scm_to_int (pad);
+  char c_pad = _scm_schar_to_char (pad);
 
-  int ret = set_field_pad (c_field, c_pad);
+  int ret = set_field_pad (c_field, (unsigned char) c_pad);
   if (ret == E_BAD_ARGUMENT)
     scm_out_of_range ("set-field-pad!", pad);
   else if (ret == E_SYSTEM_ERROR)

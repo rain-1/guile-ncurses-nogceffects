@@ -7,14 +7,14 @@
 
 ;; Initialize curses
 (define stdscr (initscr))
-(start-color)
-(cbreak)
-(noecho)
+(start-color!)
+(cbreak!)
+(noecho!)
 (keypad! stdscr #t)
 
 ;; Initialize the color pairs
-(init-pair 1 COLOR_WHITE COLOR_BLUE)
-(init-pair 2 COLOR_WHITE COLOR_BLUE)
+(init-pair! 1 COLOR_WHITE COLOR_BLUE)
+(init-pair! 2 COLOR_WHITE COLOR_BLUE)
 
 ;; Initialize the fields
 (define field (list

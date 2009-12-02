@@ -11,7 +11,7 @@
 (define test (curses-test-start))
 
 (define win (initscr))
-(start-color)
+(start-color!)
 
 (with-test-prefix 
  "attr"

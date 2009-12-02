@@ -68,15 +68,15 @@
 	    immedok!
 	    inch
 	    inchstr
-	    init-color
-	    init-pair
+	    init-color!
+	    init-pair!
 	    initscr
 	    insch
 	    insdelln
 	    insertln
 	    insstr
 	    instr
-	    intrflush
+	    intrflush!
 	    is-linetouched?
 	    is-wintouched?
 	    isendwin?
@@ -95,14 +95,14 @@
 	    napms
 	    newpad
 	    newwin
-	    nl
+	    nl!
 	    nocbreak!
 	    nodelay!
 	    noecho!
-	    nonl
+	    nonl!
 	    nooutrefresh
-	    noqiflush
-	    noraw
+	    noqiflush!
+	    noraw!
 	    notimeout!
 	    noutrefresh
 	    overlay
@@ -112,8 +112,8 @@
 	    pnoutrefresh
 	    prefresh
 	    putwin
-	    qiflush
-	    raw
+	    qiflush!
+	    raw!
 	    redrawln
 	    redrawwin
 	    refresh
@@ -133,7 +133,7 @@
 	    setsyx
 	    standend!
 	    standout!
-	    start-color
+	    start-color!
 	    subpad
 	    subwin
 	    syncok!
@@ -142,7 +142,7 @@
 	    timeout!
 	    touchline
 	    touchwin
-	    typeahead
+	    typeahead!
 	    ungetch
 	    untouchline
 	    untouchwin
@@ -821,7 +821,7 @@
 (define* (untouchline win start #:optional (count 1))
   (%wtouchln win start count #f))
 
-(define (typeahead port-or-fd)
+(define (typeahead! port-or-fd)
   (cond
    ((port? port-or-fd) (%typeahead (fileno port-or-fd)))
    (else (%typeahead port-or-fd))))

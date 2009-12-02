@@ -14,9 +14,9 @@
 
 ;; Should be able to start color
 (with-test-prefix
- "start-color"
+ "start-color!"
  (expect-fail-exception "(default)" exception:miscellaneous-error
-			(equal? OK (start-color))))
+			(equal? OK (start-color!))))
 
 ;; xterm has colors
 (with-test-prefix
@@ -85,10 +85,10 @@
 
 ;; ability to  set colors on xterm depends on how xterm was compiled
 (with-test-prefix
- "init-color"
+ "init-color!"
  (expect-fail "set color #1"
 	      (begin
-		(false-if-exception (init-color 1 200 200 200))
+		(false-if-exception (init-color! 1 200 200 200))
 		(lset= equal?
 		       '(200 200 200)
 		       (color-content 1))
@@ -96,10 +96,10 @@
 
 ;; can set color pairs on xterm
 (with-test-prefix
- "init-pair"
+ "init-pair!"
  (pass-if "set pair #1"
 	  (begin
-	    (init-pair 1 COLOR_BLACK COLOR_RED)
+	    (init-pair! 1 COLOR_BLACK COLOR_RED)
 	    (lset= equal?
 		   (list COLOR_BLACK COLOR_RED)
 		   (pair-content 1)))))

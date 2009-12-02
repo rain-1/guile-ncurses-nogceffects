@@ -7,11 +7,11 @@
 	     (gucu menu))
 
 (define stdscr (initscr))
-(start-color)
-(cbreak)
-(noecho)
+(start-color!)
+(cbreak!)
+(noecho!)
 (keypad! stdscr #t)
-(init-pair 1 COLOR_RED COLOR_BLACK)
+(init-pair! 1 COLOR_RED COLOR_BLACK)
 
 (let* (;; Labels for the menu items
        (names '("Choice 1" "Choice 2" "Choice 3" "Choice 4" "Exit"))
@@ -83,8 +83,8 @@
 
      ;; When enter is pressed, return the selection and quit.
      ((or (eqv? c KEY_ENTER)
-	  (eqv? c (char->integer #\cr))
-	  (eqv? c (char->integer #\nl)))
+	  (eqv? c #\cr)
+	  (eqv? c #\nl))
       (begin
 	(unpost-menu my-menu)
 	(move stdscr (- (lines) 4) 0)

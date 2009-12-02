@@ -5,7 +5,7 @@
 
 (define stdscr (initscr))
 
-;; Draw a box 
+;; Draw a box the hard way
 (define (box2 win y x height width)
   ;; top
   (move win y x)

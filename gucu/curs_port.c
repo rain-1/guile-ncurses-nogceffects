@@ -138,7 +138,6 @@ gucu_newterm (SCM type, SCM outp, SCM inp)
   if (c_inp == NULL)
     scm_syserror ("newterm");
 
-
   /* Convert the output port to a special stream */
   c_outp = fopencookie (SCM2PTR(outp), "w", port_func);
   if (c_outp == NULL)

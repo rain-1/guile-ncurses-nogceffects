@@ -6,10 +6,10 @@
 (define stdscr (initscr))
 
 ;; Prep the color functions
-(start-color)
+(start-color!)
 
 ;; Label cyan on black as color-pair #1
-(init-pair 1 COLOR_CYAN COLOR_BLACK)
+(init-pair! 1 COLOR_CYAN COLOR_BLACK)
 
 (addstr stdscr "Blink Don't Blink")
 

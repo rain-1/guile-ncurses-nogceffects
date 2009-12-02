@@ -16,7 +16,7 @@
 
 ;; This procedure erases the box around a window and then deletes it
 (define (destroy-win win)
-  (let ((s (char->integer #\sp)))
+  (let ((s (normal #\sp)))
     (border win s s s s s s s s)	; Draw a box of spaces
     (refresh win)
     (delwin win)))
@@ -30,7 +30,7 @@
 
 ;; Program Begins
 (define stdscr (initscr))		; Start curses
-(cbreak)				; Line buffering disabled
+(cbreak!)				; Line buffering disabled
 (keypad! stdscr #t)			; Check for function keys
 
 

@@ -49,13 +49,13 @@
         (keyflag #t)
         (c #f))
     (keypad! stdscr keyflag)
-    (cbreak)
-    (noecho)
-    (nonl)
+    (cbreak!)
+    (noecho!)
+    (nonl!)
     (scrollok! stdscr #t)
     (mousemask ALL_MOUSE_EVENTS)
     
-    (move stdscr 0 0);
+    (move stdscr 0 0)
     (addstr stdscr "Press any key to see its name\n")
     (addstr stdscr "Press TAB to toggle the interpretation of function keys\n")
     (addstr stdscr "Press Ctrl-C to quit\n")

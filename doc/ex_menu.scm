@@ -63,17 +63,17 @@
        
        ;; If enter or return is pressed, return the current selected
        ;; menu item
-       ((or (eqv? ch (char->integer #\NL)) (eqv? ch KEY_ENTER))
+       ((or (eqv? ch #\nl) (eqv? ch KEY_ENTER))
         highlight)
        
        (else
-        (loop highlight (wgetch menu-win)))))))
+        (loop highlight (getch menu-win)))))))
 
 
 (define (main)
   (let ((stdscr(initscr)))
-    (cbreak)
-    (noecho)
+    (cbreak!)
+    (noecho!)
 
     (let* ((menu-width 30)
 	   (menu-height 10)

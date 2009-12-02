@@ -141,59 +141,66 @@ gucu_menu_grey (SCM menu)
 }
 
 SCM
-gucu_set_menu_pad (SCM arg1, SCM arg2)
+gucu_set_menu_pad (SCM mnu, SCM pad)
 {
-	SCM_ASSERT (_scm_is_menu (arg1), arg1, SCM_ARG1, "set-menu-pad!");
-	SCM_ASSERT (scm_is_integer (arg2), arg2, SCM_ARG2, "set-menu-pad!");
+  SCM_ASSERT (_scm_is_menu (mnu), mnu, SCM_ARG1, "set-menu-pad!");
+  SCM_ASSERT (scm_is_char (pad), pad, SCM_ARG2, "set-menu-pad!");
+  
+  MENU *c_mnu = _scm_to_menu (mnu);
+  unsigned char c_pad;
 
-	MENU *c_arg1 = _scm_to_menu (arg1);
-	int c_arg2 = scm_to_int (arg2);
-
-	int ret = set_menu_pad (c_arg1, c_arg2);
-	SCM s_ret = scm_from_int (ret);
-
-	return s_ret;
+  c_pad = (unsigned char) _scm_schar_to_char (pad);
+  
+  int ret = set_menu_pad (c_mnu, (int) c_pad);
+  SCM s_ret = scm_from_int (ret);
+  
+  return s_ret;
 }
 
 SCM
-gucu_menu_pad (SCM arg1)
+gucu_menu_pad (SCM mnu)
 {
-	SCM_ASSERT (_scm_is_menu (arg1), arg1, SCM_ARG1, "menu-pad");
+  SCM_ASSERT (_scm_is_menu (mnu), mnu, SCM_ARG1, "menu-pad");
 
-	 MENU *c_arg1 = _scm_to_menu (arg1);
+  MENU *c_mnu = _scm_to_menu (mnu);
+  
+  int ret = menu_pad (c_mnu);
 
-	int ret = menu_pad (c_arg1);
-	SCM s_ret = scm_from_int (ret);
-
-	return s_ret;
+  return _scm_schar_from_char ((unsigned char) ret);
 }
 
 SCM
-gucu_pos_menu_cursor (SCM arg1)
+gucu_pos_menu_cursor (SCM mnu)
 {
-	SCM_ASSERT (_scm_is_menu (arg1), arg1, SCM_ARG1, "pos-menu-cursor");
-
-	 MENU *c_arg1 = _scm_to_menu (arg1);
-
-	int ret = pos_menu_cursor (c_arg1);
-	SCM s_ret = scm_from_int (ret);
-
-	return s_ret;
+  SCM_ASSERT (_scm_is_menu (mnu), mnu, SCM_ARG1, "pos-menu-cursor");
+  
+  MENU *c_mnu = _scm_to_menu (mnu);
+  
+  int ret = pos_menu_cursor (c_mnu);
+  SCM s_ret = scm_from_int (ret);
+  
+  return s_ret;
 }
 
 SCM
-gucu_menu_driver (SCM arg1, SCM arg2)
+gucu_menu_driver (SCM mnu, SCM c)
 {
-	SCM_ASSERT (_scm_is_menu (arg1), arg1, SCM_ARG1, "menu-driver");
-	SCM_ASSERT (scm_is_integer (arg2), arg2, SCM_ARG2, "menu-driver");
+  SCM_ASSERT (_scm_is_menu (mnu), mnu, SCM_ARG1, "menu-driver");
+  SCM_ASSERT (scm_is_integer (c) || SCM_CHARP (c), c, SCM_ARG2, 
+	      "menu-driver");
 
-	MENU *c_arg1 = _scm_to_menu (arg1);
-	int c_arg2 = scm_to_int (arg2);
+  int ret;
+  SCM s_ret;
+  MENU *c_mnu = _scm_to_menu (mnu);
 
-	int ret = menu_driver (c_arg1, c_arg2);
-	SCM s_ret = scm_from_int (ret);
+  if (scm_is_integer (c))
+    ret = menu_driver (c_mnu, scm_to_int (c));
+  else
+    ret = menu_driver (c_mnu, (unsigned char) scm_to_char (c));
 
-	return s_ret;
+  s_ret = scm_from_int (ret);
+  
+  return s_ret;
 }
 
 /* Set the maximum display size of the menu in rows and columns */

@@ -35,13 +35,17 @@
 	  ;; and the end of a line
 	  (cond
 	   ((eqv? ch #\;)
-	    (attr-on stdscr A_BOLD))
+	    (attr-on! stdscr A_BOLD))
 	   ((eqv? ch #\nl)
-	    (attr-off stdscr A_BOLD)))
-	  (addch stdscr (char->integer ch))
+	    (attr-off! stdscr A_BOLD)))
+	  (addch stdscr (normal ch))
 	  (refresh stdscr)
 	  (loop (read-char fport)))
-	;; Clean up on exit
+
+	;; Clean up and exit
 	(begin
+	  (addstr stdscr "<-Press any key->")
+	  (refresh stdscr)
+	  (getch stdscr)
 	  (endwin)
 	  (close-input-port fport)))))

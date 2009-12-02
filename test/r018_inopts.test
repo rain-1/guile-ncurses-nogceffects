@@ -17,7 +17,7 @@
 ;; Should be able to change input options
 (with-test-prefix "inopts"
 		  
-		  (pass-if "cbreak"
+		  (pass-if "cbreak!"
 			   (begin
 			     (clear win)
 			     (refresh win)
@@ -25,7 +25,7 @@
 			     (nodelay! win #t)
 			     (equal? #f (getch win))))
 
-		  (pass-if "halfdelay"
+		  (pass-if "halfdelay!"
 			   (begin
 			     (halfdelay! 1)
 			     (equal? #f (getch win))))
@@ -37,7 +37,7 @@
 		  ;; bug.  Calling unget_wch with a wchar value above
 		  ;; 128 made garbage, so this test shouldn't be runn
 		  ;; in the wide ncurses case.
- 		  (pass-if "meta"
+ 		  (pass-if "meta!"
  			   (begin
  			     (nodelay! win #t)
  			     (meta! #t)
@@ -55,7 +55,7 @@
 		  ;; bug.  Calling unget_wch with a wchar value above
 		  ;; 128 made garbage, so this test shouldn't be runn
 		  ;; in the wide ncurses case.
- 		  (pass-if "meta"
+ 		  (pass-if "meta!"
  			   (begin
  			     (meta! #f)
  			     (ungetch (integer->char (+ 128 65)))

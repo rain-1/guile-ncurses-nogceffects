@@ -7,8 +7,8 @@
 
 ;; Initialize curses
 (define stdscr (initscr))
-(cbreak)
-(noecho)
+(cbreak!)
+(noecho!)
 (keypad! stdscr #t)
 
 ;; Initialize the fields
