@@ -112,13 +112,13 @@
 				  (field2 (new-field 1 10 1 0 0 0))
 				  (field3 (new-field 1 10 2 0 0 0)))
 	
-			     (set-field-pad! field1 (char->integer #\sp))	
+			     (set-field-pad! field1 #\sp)	
 			     (set-field-buffer! field1 0 "Space")
 
-			     (set-field-pad! field2 (char->integer #\.))
+			     (set-field-pad! field2 #\.)
 			     (set-field-buffer! field2 0 "Period")
 			     
-			     (set-field-pad! field3 (char->integer #\+))
+			     (set-field-pad! field3 #\+)
 			     (set-field-buffer! field3 0 "Plus")
 			     
 			     (let* (
@@ -128,9 +128,9 @@
 			       ;; Paint it
 			       (refresh stdscr)
 			       ;;(sleep 1)
-			       (and (eqv? (field-pad field1) (char->integer #\sp))
-				    (eqv? (field-pad field2) (char->integer #\.))
-				    (eqv? (field-pad field3) (char->integer #\+)))))))
+			       (and (eqv? (field-pad field1) #\sp)
+				    (eqv? (field-pad field2) #\.)
+				    (eqv? (field-pad field3) #\+))))))
 
 
 (endwin)

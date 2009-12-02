@@ -1,7 +1,7 @@
 This is doc/gucu.info, produced by makeinfo version 4.13 from
 ./doc/gucu.texi.
 
-This manual is for Gucu, a Guile Curses library, (version 0.3, 1
+This manual is for Gucu, a Guile Curses library, (version 0.4, 2
 December 2009).  Gucu provides bindings for the Curses library, which
 provides functionality for updating character screens.
 
@@ -39,7 +39,7 @@ Copyright (C) 2007,2008,2009 Michael L. Gran
 
 Indirect:
 gucu.info-1: 1799
-gucu.info-2: 293250
+gucu.info-2: 293480
 
 Tag Table:
 (Indirect)
@@ -129,77 +129,77 @@ Node: Window background manipulation routines155404
 Node: Borders and lines157024
 Node: Clearing windows and parts of window159286
 Node: Color manipulation routines160675
-Node: Deleting the character under the cursor167152
-Node: Deleting and inserting lines167888
-Node: Getting characters from the keyboard169080
-Ref: tab:key172797
-Ref: tab:key2174605
-Node: Receiving strings from the keyboard178202
-Node: Cursor location and window coordinates179536
-Node: Getting a rendered character from the window180469
-Node: Getting a string of characters and attributes from a window181289
-Node: Input options181870
-Node: Inserting a character before the cursor189264
-Node: Inserting a string before the cursor189950
-Node: Getting a string of characters from the screen190937
-Node: Low-level routines191518
-Node: Mouse handling193676
-Ref: tab:mouse194590
-Node: Moving the cursor199279
-Node: Output options199848
-Node: Overlay and manipulate overlapped windows204547
-Node: Create and display pads205901
-Node: Refresh windows and lines209228
-Node: Reading and writing a curses screen to a file212164
-Node: Scroll a window214056
-Node: Terminal attributes215029
-Node: Refresh routines216719
-Node: Miscellaneous utilities218166
-Node: Window creation220701
-Node: Function key labels library224444
-Node: The wide curses library228167
-Node: Overview (wide)229150
-Node: Adding wide characters229551
-Node: Adding wide strings231419
-Node: Clearing windows or parts of windows (wide)233452
-Node: Borders and lines (wide)235121
-Node: Getting characters from the keyboard (wide)236821
-Node: Getting wide strings from the keyboard239315
-Node: Getting a rendered complex character240658
-Node: Getting a rendered complex string241108
-Node: Inserting a complex character before the cursor241778
-Node: Inserting a unrendered wide string into a window242518
-Node: Getting a string of unrendered wide characters from a window244180
-Node: Terminal attributes for wide characters244911
-Node: The curses panel library245871
-Node: The curses menu library248936
-Node: Menus Overview249326
-Node: Menu Item Procedures249980
-Node: Menu Procedures253335
-Node: Menu Colors and Attributes253632
-Node: Positioning a menu cursor255031
-Node: The menu driver255504
-Node: Menu sizes260042
-Node: Menu mark strings261041
-Node: Menu creation261889
-Node: Menu options262264
-Node: Menu pattern buffer263758
-Node: Writing or erasing menus from window264803
-Node: Control spacing between menu items265865
-Node: Associate menus with window267360
-Node: The curses form library268403
-Node: Forms Overview269073
-Node: Form procedures270175
-Node: Making or breaking connections between forms and fields277400
-Node: Color and attribute control for form fields278609
-Node: Data type validation for fields285001
-Node: Creating forms288750
-Node: Form pagination functions289080
-Node: Setting and getting form options289578
-Node: Setting the page number and field290714
-Node: Writing or erasing forms from associated subwindows291368
-Node: Printable form request names291960
-Node: Form windows292412
-Node: Index293250
+Node: Deleting the character under the cursor167382
+Node: Deleting and inserting lines168118
+Node: Getting characters from the keyboard169310
+Ref: tab:key173027
+Ref: tab:key2174835
+Node: Receiving strings from the keyboard178432
+Node: Cursor location and window coordinates179766
+Node: Getting a rendered character from the window180699
+Node: Getting a string of characters and attributes from a window181519
+Node: Input options182100
+Node: Inserting a character before the cursor189494
+Node: Inserting a string before the cursor190180
+Node: Getting a string of characters from the screen191167
+Node: Low-level routines191748
+Node: Mouse handling193906
+Ref: tab:mouse194820
+Node: Moving the cursor199509
+Node: Output options200078
+Node: Overlay and manipulate overlapped windows204777
+Node: Create and display pads206131
+Node: Refresh windows and lines209458
+Node: Reading and writing a curses screen to a file212394
+Node: Scroll a window214286
+Node: Terminal attributes215259
+Node: Refresh routines216949
+Node: Miscellaneous utilities218396
+Node: Window creation220931
+Node: Function key labels library224674
+Node: The wide curses library228397
+Node: Overview (wide)229380
+Node: Adding wide characters229781
+Node: Adding wide strings231649
+Node: Clearing windows or parts of windows (wide)233682
+Node: Borders and lines (wide)235351
+Node: Getting characters from the keyboard (wide)237051
+Node: Getting wide strings from the keyboard239545
+Node: Getting a rendered complex character240888
+Node: Getting a rendered complex string241338
+Node: Inserting a complex character before the cursor242008
+Node: Inserting a unrendered wide string into a window242748
+Node: Getting a string of unrendered wide characters from a window244410
+Node: Terminal attributes for wide characters245141
+Node: The curses panel library246101
+Node: The curses menu library249166
+Node: Menus Overview249556
+Node: Menu Item Procedures250210
+Node: Menu Procedures253565
+Node: Menu Colors and Attributes253862
+Node: Positioning a menu cursor255261
+Node: The menu driver255734
+Node: Menu sizes260272
+Node: Menu mark strings261271
+Node: Menu creation262119
+Node: Menu options262494
+Node: Menu pattern buffer263988
+Node: Writing or erasing menus from window265033
+Node: Control spacing between menu items266095
+Node: Associate menus with window267590
+Node: The curses form library268633
+Node: Forms Overview269303
+Node: Form procedures270405
+Node: Making or breaking connections between forms and fields277630
+Node: Color and attribute control for form fields278839
+Node: Data type validation for fields285231
+Node: Creating forms288980
+Node: Form pagination functions289310
+Node: Setting and getting form options289808
+Node: Setting the page number and field290944
+Node: Writing or erasing forms from associated subwindows291598
+Node: Printable form request names292190
+Node: Form windows292642
+Node: Index293480
 
 End Tag Table

@@ -1000,7 +1000,7 @@ gucu_keyname (SCM ch)
   else
     {
       int c_ch;
-      c_ch = SCM_CHAR (ch);
+      c_ch = _scm_schar_to_char (ch);
       ret = keyname (c_ch);
     }
 #endif

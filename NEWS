@@ -1,5 +1,17 @@
 The NEWS file for Guile Curses
-$Id: NEWS,v 1.6 2009/01/18 07:01:11 spike_gran Exp $
+
+Release 0.4 
+
+- Abstracted away the difference between wide and narrow functions
+- Created a new xchar (rendered complex character) scheme type
+  to replace the old complex char and chtype
+- Created new xchar creation functions, like (bold #\x) and (blink
+  #\x)
+- Jiggled the naming conventions, adding exclamation points and 
+  question marks.
+- Tried to add some Guile 1.6.x and Guile 2.0.x compatibility
+- Changed the build system to no use recursive Makefiles
+- Some attempt at building correctly on BSD-like systems
 
 Release 0.3
 - Modified API to be more scheme-like

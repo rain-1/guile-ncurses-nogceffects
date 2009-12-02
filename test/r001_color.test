@@ -111,7 +111,7 @@
  "default-colors"
  (pass-if "use-default-colors"
 	  (and (use-default-colors)
-	       (init-pair 1 -1 -1)))
+	       (init-pair! 1 -1 -1)))
 
  (pass-if "assume-default-colors"
 	  (assume-default-colors COLOR_BLACK COLOR_YELLOW)))

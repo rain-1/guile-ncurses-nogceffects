@@ -24,10 +24,10 @@
 			   (string? (curses-version)))
 
 		  (pass-if "keyname #\\bel"
-			   (string=? "^G" (keyname (char->integer #\bel))))
+			   (string=? "^G" (keyname #\bel)))
 		  
 		  (pass-if "keyname x"
-			   (string=? "x" (keyname (char->integer #\x))))
+			   (string=? "x" (keyname #\x)))
 		  
 		  (pass-if "keyname home"
 			   (string=? "KEY_HOME" (keyname KEY_HOME))))

@@ -68,9 +68,9 @@
 ; 			   (begin
 ; 			     (cbreak!)
 ; 			     (keypad! (stdscr) #t)
-; 			     (ungetch (char->integer #\A))
-; 			     (ungetch (char->integer #\[))
-; 			     (ungetch (char->integer #\esc))
+; 			     (ungetch #\A)
+; 			     (ungetch #\[)
+; 			     (ungetch #\esc)
 ; 			     (let ((k1 (getch))
 ; 				   (k2 (getch))
 ; 				   (k3 (getch)))

@@ -1,7 +1,7 @@
 This is doc/gucu.info, produced by makeinfo version 4.13 from
 ./doc/gucu.texi.
 
-This manual is for Gucu, a Guile Curses library, (version 0.3, 1
+This manual is for Gucu, a Guile Curses library, (version 0.4, 2
 December 2009).  Gucu provides bindings for the Curses library, which
 provides functionality for updating character screens.
 
@@ -42,7 +42,7 @@ File: gucu.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 GuCu: a Guile Curses Library
 ****************************
 
-This manual is for Gucu, a Guile Curses library, (version 0.3, 1
+This manual is for Gucu, a Guile Curses library, (version 0.4, 2
 December 2009).  Gucu provides bindings for the Curses library, which
 provides functionality for updating character screens.
 
@@ -4495,7 +4495,9 @@ a programmer to find out how a given color-pair is currently defined.
      `init-color!' is used, all occurrences of that color on the screen
      immediately change to the new definition.
 
-     The return value is unspecified.
+     It returns `#f' on failure and `#t' on success.  Failure may
+     indicate that, for the current terminal, the colors cannot be
+     modified.
 
  -- Procedure: init-pair! color-pair fore-color back-color
      The `init-pair!' routine changes the definition of a color-pair.
@@ -4521,7 +4523,9 @@ a programmer to find out how a given color-pair is currently defined.
      `-1' is set to contain the default foreground or background color
      for this screen, which is usually white on black.
 
-     The return value is unspecified.
+     It returns `#f' on failure and `#t' on success.  Failure may
+     indicate an attempt to change a color pair beyond the allow range
+     of color pairs.
 
  -- Procedure: has-colors?
      The `has-colors?' routine returns `#t' if the terminal can

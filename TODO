@@ -1,10 +1,17 @@
 TODO
-$Id: TODO,v 1.3 2009/01/18 07:01:11 spike_gran Exp $
 
-* Documentation is rough.
+* Documentation is has not kept up with changes.
+
+* "make check" does not work on Guile 1.6.x because
+  of the lack of the -L flag.
+
+* The newterm function is flaky.
+
+* Conditionally compiled functions such as newterm don't 
+  appear even if the system is capable of supporting them
+
+* Menu, form, and slk remain poorly tested.
 
 * Documentation lacks subject index entries.
 
-* SLK library needs cleanup
-
-* Many functions lack unit tests, garbage collection tests
+* Many functions lack unit tests, garbage collection tests.
