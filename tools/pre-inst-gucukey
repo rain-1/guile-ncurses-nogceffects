@@ -1,7 +1,0 @@
-#!/bin/sh
-
-# Script for running the gucukey script before before it has been installed
-
-GUILE_LOAD_PATH=.. \
-libtool -dlopen ../gucu/libguile-gucu.la  --mode=execute \
-./gucukey
