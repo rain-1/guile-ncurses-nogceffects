@@ -41,18 +41,17 @@ host_triplet = @host@
 @WIDE_TRUE@	-D_XOPEN_SOURCE_EXTENDED
 
 bin_PROGRAMS = tools/gucushell$(EXEEXT)
-noinst_PROGRAMS = tools/testbed$(EXEEXT)
 TEXI2DVI = texi2dvi
 subdir = .
 DIST_COMMON = README $(am__configure_deps) $(dist_pkgguilesite_DATA) \
 	$(doc_gucu_TEXINFOS) $(srcdir)/Makefile.am \
 	$(srcdir)/Makefile.in $(srcdir)/config.h.in \
 	$(srcdir)/doc/stamp-vti $(srcdir)/doc/version.texi \
-	$(top_srcdir)/configure AUTHORS COPYING ChangeLog INSTALL NEWS \
-	TODO build_aux/compile build_aux/config.guess \
-	build_aux/config.sub build_aux/depcomp build_aux/install-sh \
-	build_aux/ltmain.sh build_aux/mdate-sh build_aux/missing \
-	build_aux/texinfo.tex
+	$(top_srcdir)/configure $(top_srcdir)/tools/uninstalled-env.in \
+	AUTHORS COPYING ChangeLog INSTALL NEWS TODO build_aux/compile \
+	build_aux/config.guess build_aux/config.sub build_aux/depcomp \
+	build_aux/install-sh build_aux/ltmain.sh build_aux/mdate-sh \
+	build_aux/missing build_aux/texinfo.tex
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/libtool.m4 \
 	$(top_srcdir)/configure.ac
@@ -62,7 +61,7 @@ am__CONFIG_DISTCLEAN_FILES = config.status config.cache config.log \
  configure.lineno config.status.lineno
 mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = config.h
-CONFIG_CLEAN_FILES =
+CONFIG_CLEAN_FILES = tools/uninstalled-env
 CONFIG_CLEAN_VPATH_FILES =
 am__vpath_adj_setup = srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`;
 am__vpath_adj = case $$p in \
@@ -119,17 +118,11 @@ gucu_libguile_gucu_la_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 	$(gucu_libguile_gucu_la_LDFLAGS) $(LDFLAGS) -o $@
 am__dirstamp = $(am__leading_dot)dirstamp
-PROGRAMS = $(bin_PROGRAMS) $(noinst_PROGRAMS)
+PROGRAMS = $(bin_PROGRAMS)
 am_tools_gucushell_OBJECTS = shell.$(OBJEXT)
 tools_gucushell_OBJECTS = $(am_tools_gucushell_OBJECTS)
 tools_gucushell_DEPENDENCIES =
-tools_testbed_SOURCES = tools/testbed.c
-tools_testbed_OBJECTS = tools_testbed-testbed.$(OBJEXT)
-tools_testbed_DEPENDENCIES =
-tools_testbed_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
-	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
-	$(tools_testbed_LDFLAGS) $(LDFLAGS) -o $@
-SCRIPTS = $(bin_SCRIPTS)
+SCRIPTS = $(bin_SCRIPTS) $(noinst_SCRIPTS)
 DEFAULT_INCLUDES = -I.@am__isrc@
 depcomp = $(SHELL) $(top_srcdir)/build_aux/depcomp
 am__depfiles_maybe = depfiles
@@ -143,10 +136,9 @@ CCLD = $(CC)
 LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 	--mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) \
 	$(LDFLAGS) -o $@
-SOURCES = $(gucu_libguile_gucu_la_SOURCES) $(tools_gucushell_SOURCES) \
-	tools/testbed.c
+SOURCES = $(gucu_libguile_gucu_la_SOURCES) $(tools_gucushell_SOURCES)
 DIST_SOURCES = $(gucu_libguile_gucu_la_SOURCES) \
-	$(tools_gucushell_SOURCES) tools/testbed.c
+	$(tools_gucushell_SOURCES)
 INFO_DEPS = $(srcdir)/doc/gucu.info
 TEXINFO_TEX = $(top_srcdir)/build_aux/texinfo.tex
 am__TEXINFO_TEX_DIR = $(top_srcdir)/build_aux
@@ -289,7 +281,9 @@ sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
+top_builddir_absolute = @top_builddir_absolute@
 top_srcdir = @top_srcdir@
+top_srcdir_absolute = @top_srcdir_absolute@
 ACLOCAL_AMFLAGS = -I m4
 @WARN_FALSE@WARN_FLAGS = 
 
@@ -309,16 +303,12 @@ ACLOCAL_AMFLAGS = -I m4
 @WARN_TRUE@-Wformat=2
 
 gucu_libguile_gucu_la_CPPFLAGS = $(WARN_FLAGS) $(am__append_1)
-tools_testbed_CPPFLAGS = 
 
 # Set version flags and indicate that this is meant to be dlopened
 gucu_libguile_gucu_la_LDFLAGS = \
 	-module \
 	-no-undefined \
 	-version-info @LIBGUILE_GUCU_CURSES_INTERFACE@
-
-tools_testbed_LDFLAGS = \
-	-static 
 
 
 ### DIRECTORIES ###
@@ -329,9 +319,11 @@ pkgguilesitedir = $(guilesitedir)/$(PACKAGE)
 lib_LTLIBRARIES = \
 	gucu/libguile-gucu.la
 
-@GUCUKEY_TRUE@bin_SCRIPTS = \
-@GUCUKEY_TRUE@	tools/gucukey
+@DEMO_INSTALL_TRUE@bin_SCRIPTS = \
+@DEMO_INSTALL_TRUE@	tools/gucu-keyboard-test \
+@DEMO_INSTALL_TRUE@	tools/gucu-vi
 
+@DEMO_INSTALL_FALSE@noinst_SCRIPTS = 
 dist_pkgguilesite_DATA = \
 	gucu/curses.scm \
 	gucu/menu.scm \
@@ -398,7 +390,6 @@ tools_gucushell_SOURCES = \
 ### LINKER ###
 gucu_libguile_gucu_la_LIBADD = 
 tools_gucushell_LDADD = -lutil
-tools_testbed_LDADD = 
 
 ### OTHER RULES ###
 
@@ -520,9 +511,9 @@ EXTRA_DIST = \
 	README \
 	COPYING \
 	ChangeLog \
-	tools/gucukey \
-	tools/pre-inst-gucushell \
-	tools/pre-inst-gucukey \
+	tools/uninstalled-env.in \
+	tools/gucu-keyboard-test \
+	tools/gucu-vi \
 	$(TESTLIB) \
 	$(TESTS)
 
@@ -587,6 +578,8 @@ $(srcdir)/config.h.in:  $(am__configure_deps)
 
 distclean-hdr:
 	-rm -f config.h stamp-h1
+tools/uninstalled-env: $(top_builddir)/config.status $(top_srcdir)/tools/uninstalled-env.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
 install-libLTLIBRARIES: $(lib_LTLIBRARIES)
 	@$(NORMAL_INSTALL)
 	test -z "$(libdir)" || $(MKDIR_P) "$(DESTDIR)$(libdir)"
@@ -682,24 +675,12 @@ installcheck-binPROGRAMS: $(bin_PROGRAMS)
 	    else echo "$$f does not support $$opt" 1>&2; bad=1; fi; \
 	  done; \
 	done; rm -f c$${pid}_.???; exit $$bad
-
-clean-noinstPROGRAMS:
-	@list='$(noinst_PROGRAMS)'; test -n "$$list" || exit 0; \
-	echo " rm -f" $$list; \
-	rm -f $$list || exit $$?; \
-	test -n "$(EXEEXT)" || exit 0; \
-	list=`for p in $$list; do echo "$$p"; done | sed 's/$(EXEEXT)$$//'`; \
-	echo " rm -f" $$list; \
-	rm -f $$list
 tools/$(am__dirstamp):
 	@$(MKDIR_P) tools
 	@: > tools/$(am__dirstamp)
 tools/gucushell$(EXEEXT): $(tools_gucushell_OBJECTS) $(tools_gucushell_DEPENDENCIES) tools/$(am__dirstamp)
 	@rm -f tools/gucushell$(EXEEXT)
 	$(LINK) $(tools_gucushell_OBJECTS) $(tools_gucushell_LDADD) $(LIBS)
-tools/testbed$(EXEEXT): $(tools_testbed_OBJECTS) $(tools_testbed_DEPENDENCIES) tools/$(am__dirstamp)
-	@rm -f tools/testbed$(EXEEXT)
-	$(tools_testbed_LINK) $(tools_testbed_OBJECTS) $(tools_testbed_LDADD) $(LIBS)
 install-binSCRIPTS: $(bin_SCRIPTS)
 	@$(NORMAL_INSTALL)
 	test -z "$(bindir)" || $(MKDIR_P) "$(DESTDIR)$(bindir)"
@@ -782,7 +763,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gucu_libguile_gucu_la-type.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gucu_libguile_gucu_la-unicode.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/shell.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tools_testbed-testbed.Po@am__quote@
 
 .c.o:
 @am__fastdepCC_TRUE@	$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
@@ -993,20 +973,6 @@ shell.obj: tools/shell.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='tools/shell.c' object='shell.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o shell.obj `if test -f 'tools/shell.c'; then $(CYGPATH_W) 'tools/shell.c'; else $(CYGPATH_W) '$(srcdir)/tools/shell.c'; fi`
-
-tools_testbed-testbed.o: tools/testbed.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tools_testbed_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT tools_testbed-testbed.o -MD -MP -MF $(DEPDIR)/tools_testbed-testbed.Tpo -c -o tools_testbed-testbed.o `test -f 'tools/testbed.c' || echo '$(srcdir)/'`tools/testbed.c
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/tools_testbed-testbed.Tpo $(DEPDIR)/tools_testbed-testbed.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='tools/testbed.c' object='tools_testbed-testbed.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tools_testbed_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o tools_testbed-testbed.o `test -f 'tools/testbed.c' || echo '$(srcdir)/'`tools/testbed.c
-
-tools_testbed-testbed.obj: tools/testbed.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tools_testbed_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT tools_testbed-testbed.obj -MD -MP -MF $(DEPDIR)/tools_testbed-testbed.Tpo -c -o tools_testbed-testbed.obj `if test -f 'tools/testbed.c'; then $(CYGPATH_W) 'tools/testbed.c'; else $(CYGPATH_W) '$(srcdir)/tools/testbed.c'; fi`
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/tools_testbed-testbed.Tpo $(DEPDIR)/tools_testbed-testbed.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='tools/testbed.c' object='tools_testbed-testbed.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tools_testbed_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o tools_testbed-testbed.obj `if test -f 'tools/testbed.c'; then $(CYGPATH_W) 'tools/testbed.c'; else $(CYGPATH_W) '$(srcdir)/tools/testbed.c'; fi`
 
 mostlyclean-libtool:
 	-rm -f *.lo
@@ -1539,8 +1505,7 @@ maintainer-clean-generic:
 clean: clean-am
 
 clean-am: clean-aminfo clean-binPROGRAMS clean-generic \
-	clean-libLTLIBRARIES clean-libtool clean-noinstPROGRAMS \
-	mostlyclean-am
+	clean-libLTLIBRARIES clean-libtool mostlyclean-am
 
 distclean: distclean-am
 	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
@@ -1696,16 +1661,16 @@ uninstall-am: uninstall-binPROGRAMS uninstall-binSCRIPTS \
 
 .PHONY: CTAGS GTAGS all all-am am--refresh check check-TESTS check-am \
 	clean clean-aminfo clean-binPROGRAMS clean-generic \
-	clean-libLTLIBRARIES clean-libtool clean-noinstPROGRAMS ctags \
-	dist dist-all dist-bzip2 dist-gzip dist-info dist-lzma \
-	dist-shar dist-tarZ dist-xz dist-zip distcheck distclean \
-	distclean-compile distclean-generic distclean-hdr \
-	distclean-libtool distclean-tags distcleancheck distdir \
-	distuninstallcheck dvi dvi-am html html-am info info-am \
-	install install-am install-binPROGRAMS install-binSCRIPTS \
-	install-data install-data-am install-dist_pkgguilesiteDATA \
-	install-dvi install-dvi-am install-exec install-exec-am \
-	install-html install-html-am install-info install-info-am \
+	clean-libLTLIBRARIES clean-libtool ctags dist dist-all \
+	dist-bzip2 dist-gzip dist-info dist-lzma dist-shar dist-tarZ \
+	dist-xz dist-zip distcheck distclean distclean-compile \
+	distclean-generic distclean-hdr distclean-libtool \
+	distclean-tags distcleancheck distdir distuninstallcheck dvi \
+	dvi-am html html-am info info-am install install-am \
+	install-binPROGRAMS install-binSCRIPTS install-data \
+	install-data-am install-dist_pkgguilesiteDATA install-dvi \
+	install-dvi-am install-exec install-exec-am install-html \
+	install-html-am install-info install-info-am \
 	install-libLTLIBRARIES install-man install-pdf install-pdf-am \
 	install-ps install-ps-am install-strip installcheck \
 	installcheck-am installcheck-binPROGRAMS \
@@ -1719,6 +1684,8 @@ uninstall-am: uninstall-binPROGRAMS uninstall-binSCRIPTS \
 	uninstall-html-am uninstall-info-am uninstall-libLTLIBRARIES \
 	uninstall-pdf-am uninstall-ps-am
 
+@DEMO_INSTALL_FALSE@	tools/gucu-keyboard-test \
+@DEMO_INSTALL_FALSE@	tools/gucu-vi
 
 ### INSTALLATION ###
 

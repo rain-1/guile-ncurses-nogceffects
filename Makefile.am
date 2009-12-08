@@ -24,8 +24,6 @@ endif
 gucu_libguile_gucu_la_CPPFLAGS = \
 	$(WARN_FLAGS) 
 
-tools_testbed_CPPFLAGS = 
-
 if WIDE
 gucu_libguile_gucu_la_CPPFLAGS += \
 	-D_XOPEN_SOURCE_EXTENDED
@@ -36,9 +34,6 @@ gucu_libguile_gucu_la_LDFLAGS = \
 	-module \
 	-no-undefined \
 	-version-info @LIBGUILE_GUCU_CURSES_INTERFACE@
-
-tools_testbed_LDFLAGS = \
-	-static 
 
 ### DIRECTORIES ###
 
@@ -51,11 +46,14 @@ lib_LTLIBRARIES = \
 	gucu/libguile-gucu.la
 bin_PROGRAMS = \
 	tools/gucushell
-noinst_PROGRAMS = \
-	tools/testbed
-if GUCUKEY
+if DEMO_INSTALL
 bin_SCRIPTS = \
-	tools/gucukey
+	tools/gucu-keyboard-test \
+	tools/gucu-vi
+else
+noinst_SCRIPTS =
+	tools/gucu-keyboard-test \
+	tools/gucu-vi
 endif
 dist_pkgguilesite_DATA = \
 	gucu/curses.scm \
@@ -124,8 +122,6 @@ tools_gucushell_SOURCES = \
 gucu_libguile_gucu_la_LIBADD = 
 
 tools_gucushell_LDADD = -lutil
-
-tools_testbed_LDADD =
 
 ### OTHER RULES ###
 
@@ -251,9 +247,9 @@ EXTRA_DIST = \
 	README \
 	COPYING \
 	ChangeLog \
-	tools/gucukey \
-	tools/pre-inst-gucushell \
-	tools/pre-inst-gucukey \
+	tools/uninstalled-env.in \
+	tools/gucu-keyboard-test \
+	tools/gucu-vi \
 	$(TESTLIB) \
 	$(TESTS)
 

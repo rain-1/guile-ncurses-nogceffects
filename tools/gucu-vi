@@ -1,0 +1,118 @@
+#!/usr/bin/guile \
+-e vi-main
+!#
+
+(use-modules (ice-9 getopt-long)
+	     (srfi srfi-1)
+	     (gucu curses))
+
+
+(define (set-readonly-file! x) (set! x (logior x 0x01)))
+(define (set-readonly-mode! x) (set! x (logior x 0x02)))
+(define (unset-readonly-file! x) (set! x (logand x 0xfe)))
+
+(define %columns 0)
+(define %editing 0)
+(define %my-pid 0)
+(define %readonly-mode 0)
+(define %rows 0)
+(define MAX_SCR_COLS 128)
+(define MAX_SCR_ROWS 128)
+(define %stdscr #f)
+
+(define (vi-main args)
+  (let* ((option-spec '((help    (single-char #\H) (value #f))
+			(readonly (single-char #\R) (value #f))))
+         (options (getopt-long args option-spec))
+         (help-wanted (option-ref options 'help #f))
+	 (read-only-mode-wanted (option-ref options 'readonly #f))
+	 (file-names (option-ref options '() '()))
+	 (program-name (last (string-split (first (command-line)) #\/))))
+
+    (set! %my-pid (getpid))
+
+    (if (string-contains program-name "view")
+	;; If our program name has "view" in it, we are in readonly mode
+	(set-readonly-mode! %readonly-mode))
+
+    (cond 
+     (read-only-mode-wanted
+      (set-readonly-mode! %readonly-mode))
+     (help-wanted
+      (show-help)
+      (show-usage)
+      (primitive-exit 0)))
+
+    (if (null? file-names)
+	(edit-file #f)
+	(edit-file (first file-names)))
+
+    0))
+
+(define (show-usage)
+  (display "usage") (newline))
+
+;; Given FN, a string filename, edit the file
+(define (edit-file fn)
+  (let ((size 0))
+    (set! %editing 1)
+
+    (if (not %stdscr)
+	(set! %stdscr (initscr)))
+    (raw!)
+    (receive (r c)
+	     (getmaxyx %stdscr)
+	     (set! %rows (min MAX_SCR_ROWS r))
+	     (set! %columns (min MAX_SCR_COLUMNS c)))
+    ;; get memory for virtual screen
+    
+
+))
+
+(define (new-screen ro co)
+  (set! %screensize (+ 8 (* ro co)))
+  ;; non-existent text lines start with a tilde
+  (map 
+   (lambda (k)
+     (string-set! %screen (* (+ k 1) co) #\~))
+   (iota (- ro 2)))
+  %screen)
+
+(define (screen-erase)
+  (set! %screen (make-string %screensize #\sp)))
+
+;; Return file size in bytes, or -1 if file doesn't exist
+(define (file-size fn)
+  (if (and fn (false-if-exception (stat fn)))
+      (stat:size (stat fn))
+      -1))
+
+;; At POSITION make a SIZE byte hold
+(define (text-hole-make position size)
+  (cond 
+   ((< size 0)
+    0)
+   (else
+    (set! (%end (+ %end size)))
+    (
+
+(define (stupid-insert position char)
+  
+
+(define (char-insert position char)
+  (cond 
+   ((eqv? char #\syn)
+    (
+
+;; Read text from file or create an empty buf
+(define (init-text-buffer fn)
+  (let ((size (file-size gn)))
+    (set! %text-size (+ size 10240))
+    (set! %text (make-string %text-size %\sp))
+    (set! %end %text)
+    (set! %dot %text)
+    (set! %screenbegin %text)
+    (if (not (string=? (fn %current-filename)))
+	(set! %current-filename (string-copy fn)))
+    (if (< size 0)
+	;; file doesn't exist.  Start emptu buf with dummy line

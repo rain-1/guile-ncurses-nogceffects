@@ -123,10 +123,10 @@ AC_ARG_ENABLE([warnings],
                               [Build with most GCC warnings enabled])])
 AM_CONDITIONAL([WARN], [test "$enable_warnings" = yes])
 
-AC_ARG_ENABLE([gucukey],
-              [AS_HELP_STRING([--enable-gucukey],
-                              [Install the gucukey script])])
-AM_CONDITIONAL([GUCUKEY], [test "$enable_gucukey" = yes])
+AC_ARG_ENABLE([demo-install],
+              [AS_HELP_STRING([--enable-demo-install],
+                              [Install the demonstration programs])])
+AM_CONDITIONAL([DEMO_INSTALL], [test "$enable_demo_install" = yes])
 
 
 ##################
@@ -167,5 +167,5 @@ AC_CHECK_FUNCS([key_defined term_attrs])
 ##################
 #  Output
 AC_CONFIG_FILES([Makefile])
-
+AC_CONFIG_FILES([tools/uninstalled-env], [chmod +x tools/uninstalled-env])
 AC_OUTPUT

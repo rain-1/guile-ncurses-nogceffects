@@ -752,8 +752,8 @@ ac_subst_vars='am__EXEEXT_FALSE
 am__EXEEXT_TRUE
 LTLIBOBJS
 LIBOBJS
-GUCUKEY_FALSE
-GUCUKEY_TRUE
+DEMO_INSTALL_FALSE
+DEMO_INSTALL_TRUE
 WARN_FALSE
 WARN_TRUE
 WIDE_FALSE
@@ -885,7 +885,7 @@ with_tags
 with_ncursesw
 enable_acs_map_fix
 enable_warnings
-enable_gucukey
+enable_demo_install
 '
       ac_precious_vars='build_alias
 host_alias
@@ -1531,7 +1531,7 @@ Optional Features:
   --enable-acs-map-fix    Work around acs_map bug in Cygwin NCurses v
                           5.5.20061104
   --enable-warnings       Build with most GCC warnings enabled
-  --enable-gucukey        Install the gucukey script
+  --enable-demo-install   Install the demonstration programs
 
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
@@ -3287,7 +3287,7 @@ ac_config_headers="$ac_config_headers config.h"
 ##################
 # Set some version constants
 LIBGUILE_GUCU_CURSES_MAJOR=0
-LIBGUILE_GUCU_CURSES_INTERFACE="1:0:0"
+LIBGUILE_GUCU_CURSES_INTERFACE="2:0:0"
 
 
 
@@ -20116,17 +20116,17 @@ else
 fi
 
 
-# Check whether --enable-gucukey was given.
-if test "${enable_gucukey+set}" = set; then :
-  enableval=$enable_gucukey;
+# Check whether --enable-demo-install was given.
+if test "${enable_demo_install+set}" = set; then :
+  enableval=$enable_demo_install;
 fi
 
- if test "$enable_gucukey" = yes; then
-  GUCUKEY_TRUE=
-  GUCUKEY_FALSE='#'
+ if test "$enable_demo_install" = yes; then
+  DEMO_INSTALL_TRUE=
+  DEMO_INSTALL_FALSE='#'
 else
-  GUCUKEY_TRUE='#'
-  GUCUKEY_FALSE=
+  DEMO_INSTALL_TRUE='#'
+  DEMO_INSTALL_FALSE=
 fi
 
 
@@ -20422,6 +20422,7 @@ done
 #  Output
 ac_config_files="$ac_config_files Makefile"
 
+ac_config_files="$ac_config_files tools/uninstalled-env"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -20552,8 +20553,8 @@ if test -z "${WARN_TRUE}" && test -z "${WARN_FALSE}"; then
   as_fn_error "conditional \"WARN\" was never defined.
 Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
-if test -z "${GUCUKEY_TRUE}" && test -z "${GUCUKEY_FALSE}"; then
-  as_fn_error "conditional \"GUCUKEY\" was never defined.
+if test -z "${DEMO_INSTALL_TRUE}" && test -z "${DEMO_INSTALL_FALSE}"; then
+  as_fn_error "conditional \"DEMO_INSTALL\" was never defined.
 Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 
@@ -21156,6 +21157,7 @@ do
     "config.h") CONFIG_HEADERS="$CONFIG_HEADERS config.h" ;;
     "depfiles") CONFIG_COMMANDS="$CONFIG_COMMANDS depfiles" ;;
     "Makefile") CONFIG_FILES="$CONFIG_FILES Makefile" ;;
+    "tools/uninstalled-env") CONFIG_FILES="$CONFIG_FILES tools/uninstalled-env" ;;
 
   *) as_fn_error "invalid argument: \`$ac_config_target'" "$LINENO" 5;;
   esac
@@ -21835,6 +21837,7 @@ $as_echo X"$file" |
   done
 }
  ;;
+    "tools/uninstalled-env":F) chmod +x tools/uninstalled-env ;;
 
   esac
 done # for ac_tag
