@@ -1,7 +1,8 @@
 #!/usr/bin/guile \
 -e main -s
 !#
-;;; gucukey -- examine the raw keycodes returned when keys are pressed
+;;; gucu-keyboard-test -- examine the raw keycodes returned when keys
+;;; are pressed
 
 (use-modules (ice-9 format)
              (ice-9 getopt-long)
@@ -20,7 +21,7 @@
         (if version-wanted
             (display 
              (string-append
-              "gucukey (gucu) 0.3\n"
+              "gucu-keyboard-test (gucu) 0.5\n"
               "Copyright (C) 2009 Michael Gran\n"
               "License X11:\n"
               "This is free software: you are free to change and redistribute it.\n"
@@ -28,7 +29,7 @@
         (if help-wanted
             (display
              (string-append 
-              "gucukey \n"
+              "gucu-keyboard-test \n"
               "\n"
               "This interactive program help a developer find the terminal keycodes\n"
               "for the terminal on which it is run. For each key pressed, it will report\n"
