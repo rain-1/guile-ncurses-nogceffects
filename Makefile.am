@@ -171,6 +171,7 @@ NARROWTESTS = \
 	test/r030_termattrs.test \
 	test/r031_touch.test \
 	test/r032_util.test \
+	test/r033_attributes.test \
 	test/r041_ports.test \
 	test/r042_mouse.test \
 	test/p001_panel.test \
