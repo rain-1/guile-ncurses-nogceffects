@@ -463,6 +463,16 @@
      (make-xchar (logior ,A_ATTRIBUTE (xchar-attr x))
                  (xchar-color ,x)
                  (xchar-chars ,x)))
+    ((string? ,x)
+     (map (lambda (c)
+            (make-xchar ,A_ATTRIBUTE 0 (list c)))
+          (string->list ,x)))
+    ((and (list? ,x) (every xchar? ,x))
+     (map (lambda (c)
+            (make-xchar (logior ,A_ATTRIBUTE (xchar-attr c))
+                        (xchar-color c)
+                        (xchar-chars c)))
+          ,x))
     (else
      (error "Invalid input ~s" ,x))))
 
@@ -478,10 +488,18 @@
      (make-xchar (logand (lognot ,A_ATTRIBUTE) (xchar-attr x))
                  (xchar-color ,x)
                  (xchar-chars ,x)))
+    ((string? ,x)
+     (map (lambda (c)
+            (make-xchar A_NORMAL 0 (list c)))
+          (string->list ,x)))
+    ((and (list? ,x) (every xchar? ,x))
+     (map (lambda (c)
+            (make-xchar (logand (lognot ,A_ATTRIBUTE) (xchar-attr c))
+                        (xchar-color c)
+                        (xchar-chars c)))
+          ,x))
     (else
      (error "Invalid input ~s" ,x))))
-
-
 
 (define (blink x) (a-attribute x A_BLINK))
 (define (blink-off x) (a-attribute-off x A_BLINK))
@@ -533,10 +551,23 @@
      (make-xchar A_ALTCHARSET
                  n
                  (list (integer->char (logand x #xff)))))
-   ((xchar? x)
-    (make-xchar (xchar-attr x)
-                n
-                (xchar-chars x)))))
+    ((xchar? x)
+     (make-xchar (xchar-attr x)
+		 n
+		 (xchar-chars x)))
+    ((string? ,x)
+     (map (lambda (c)
+            (make-xchar A_NORMAL n (list c)))
+          (string->list ,x)))
+    ((and (list? ,x) (every xchar? ,x))
+     (map (lambda (c)
+            (make-xchar (xchar-attr c)
+			n
+			(xchar-chars c)))
+          ,x))
+    (else
+     (error "Invalid input ~s" ,x))))
+
 
 (define (acs-block)    (list->xchar (%acs-block)))
 (define (acs-board)    (list->xchar (%acs-board)))
