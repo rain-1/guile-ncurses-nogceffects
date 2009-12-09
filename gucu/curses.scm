@@ -555,18 +555,18 @@
      (make-xchar (xchar-attr x)
 		 n
 		 (xchar-chars x)))
-    ((string? ,x)
+    ((string? x)
      (map (lambda (c)
             (make-xchar A_NORMAL n (list c)))
-          (string->list ,x)))
-    ((and (list? ,x) (every xchar? ,x))
+          (string->list x)))
+    ((and (list? x) (every xchar? x))
      (map (lambda (c)
             (make-xchar (xchar-attr c)
 			n
 			(xchar-chars c)))
-          ,x))
+          x))
     (else
-     (error "Invalid input ~s" ,x))))
+     (error "Invalid input ~s" x))))
 
 
 (define (acs-block)    (list->xchar (%acs-block)))
