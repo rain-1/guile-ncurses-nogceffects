@@ -9,6 +9,10 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <uniconv.h>
+
+/* Work around bug in libunistring 0.9.1.1 by
+   defining _UNUSED_PARAMETER_ */
+#define _UNUSED_PARAMETER_
 #include <unistr.h>
 
 #ifdef __STDC_ISO_10646__
