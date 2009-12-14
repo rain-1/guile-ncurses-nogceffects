@@ -183,7 +183,7 @@ _scm_xchar_from_chtype (chtype x)
     ret = locale_char_to_codepoint (c, &cp);
     if (!ret)
       total_list = scm_list_3 (_scm_from_attr (attr), scm_from_short (color_pair),
-			       SCM_MAKE_CHAR (SCM_REPLACEMENT_CODEPOINT));
+			       SCM_MAKE_CHAR (GUCU_REPLACEMENT_CODEPOINT));
     else
       total_list = scm_list_3 (_scm_from_attr (attr), scm_from_short (color_pair),
 			       SCM_MAKE_CHAR (cp));
