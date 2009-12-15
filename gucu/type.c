@@ -321,7 +321,7 @@ _scm_xchar_to_chtype (SCM x)
 
   codepoint = SCM_CHAR (scm_list_ref (x, scm_from_int (2)));
   ret = codepoint_to_locale_char (codepoint, &c);
-  if (!ret)
+  if (ret)
     ch = (chtype) (unsigned char) c;
   else
     ch = (chtype) (unsigned char) GUCU_REPLACEMENT_CHAR;
