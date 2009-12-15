@@ -11,6 +11,7 @@
 	    %scheme-char-from-c-char
 	    %scheme-char-to-c-wchar
 	    %scheme-char-from-c-wchar
+	    %xchar-from-chtype
 	    addch
 	    addchstr
 	    addstr
