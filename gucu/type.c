@@ -3,6 +3,7 @@
 #include <curses.h>
 #include <errno.h>
 #include <libguile.h>
+#include <limits.h>
 #include <stdio.h>
 #include <string.h>
 
@@ -204,7 +205,7 @@ _scm_schar_from_char (char c)
 #ifdef GUILE_CHARS_ARE_UCS4
   int ret;
   uint32_t cp;
-
+  
   ret = locale_char_to_codepoint (c, &cp);
   if (!ret)
     return SCM_BOOL_F;
@@ -390,6 +391,43 @@ _scm_schar_to_char (SCM x)
   return SCM_CHAR (x);
 #endif
 }
+
+SCM 
+gucu_schar_from_char (SCM c)
+{
+  int c_c;
+  SCM_ASSERT (scm_is_integer (c), c, SCM_ARG1, "%scheme-char-from-c-char");
+  c_c = scm_to_int (c);
+  return _scm_schar_from_char ((char) (unsigned char) c_c);
+}
+
+SCM 
+gucu_schar_to_char (SCM c)
+{
+  char c_c;
+  SCM_ASSERT (SCM_CHARP (c), c, SCM_ARG1, "%scheme-char-to-c-char");
+  c_c = _scm_schar_to_char (c);
+  return scm_from_uint ((unsigned char) c_c);
+}
+
+SCM 
+gucu_schar_from_wchar (SCM wc)
+{
+  wchar_t c_wc;
+  SCM_ASSERT (scm_is_integer (wc), wc, SCM_ARG1, "%scheme-char-from-c-wchar");
+  c_wc = scm_to_uint (wc);
+  return _scm_schar_from_wchar (c_wc);
+}
+
+SCM 
+gucu_schar_to_wchar (SCM c)
+{
+  wchar_t c_c;
+  SCM_ASSERT (SCM_CHARP (c), c, SCM_ARG1, "%scheme-char-to-c-wchar");
+  c_c = _scm_schar_to_wchar (c);
+  return scm_from_uint (c_c);
+}
+  
 
 ///////////////////////////////////
 // STRINGS
@@ -974,6 +1012,11 @@ gucu_init_type ()
       scm_set_smob_print (window_tag, print_window);
       scm_set_smob_equalp (window_tag, equalp_window);
       scm_c_define_gsubr ("window?", 1, 0, 0, gucu_is_window_p);
+
+      scm_c_define_gsubr ("%scheme-char-to-c-char", 1, 0, 0, gucu_schar_to_char);
+      scm_c_define_gsubr ("%scheme-char-to-c-wchar", 1, 0, 0, gucu_schar_to_wchar);
+      scm_c_define_gsubr ("%scheme-char-from-c-char", 1, 0, 0, gucu_schar_from_char);
+      scm_c_define_gsubr ("%scheme-char-from-c-wchar", 1, 0, 0, gucu_schar_from_wchar);
       
       first = 0;
     }

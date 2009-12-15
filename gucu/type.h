@@ -37,6 +37,10 @@ SCM _scm_xchar_from_cchar (cchar_t *x);
 SCM _scm_xchar_from_chtype (chtype x);
 SCM _scm_schar_from_char (char c);
 SCM _scm_schar_from_wchar (wchar_t ch);
+SCM gucu_schar_from_char (SCM c) API;
+SCM gucu_schar_from_wchar (SCM c) API;
+SCM gucu_schar_to_char (SCM c) API;
+SCM gucu_scm_to_wchar (SCM c) API;
 
 #ifdef HAVE_LIBNCURSESW
 cchar_t *_scm_xchar_to_cchar (SCM x);

@@ -138,8 +138,9 @@ TESTS_ENVIRONMENT = GUILE_AUTO_COMPILE=0 \
 
 NARROWTESTS = \
 	test/r000_test.test \
-	test/r000_initscr.test \
-	test/r001_color.test \
+	test/c001_char_conversion.test \
+	test/r001_initscr.test \
+	test/r002_color.test \
 	test/r002_characters.test \
 	test/r003_addch.test \
 	test/r004_addchstr.test \

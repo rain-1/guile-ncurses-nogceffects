@@ -7,6 +7,10 @@
 	    %filter
 	    %gucu-wide-ncurses
 	    %gucu-ucs4-chars
+	    %scheme-char-to-c-char
+	    %scheme-char-from-c-char
+	    %scheme-char-to-c-wchar
+	    %scheme-char-from-c-wchar
 	    addch
 	    addchstr
 	    addstr
