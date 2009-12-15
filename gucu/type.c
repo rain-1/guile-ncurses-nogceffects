@@ -436,6 +436,13 @@ gucu_xchar_from_chtype (SCM c)
   return _scm_xchar_from_chtype (_scm_to_chtype (c));
 }
 
+SCM
+gucu_xchar_to_chtype (SCM c)
+{
+  SCM_ASSERT (_scm_is_xchar (c), c, SCM_ARG1, "%xchar-to-chtype");
+  return _scm_from_chtype (_scm_xchar_to_chtype (c));
+}
+
 ///////////////////////////////////
 // STRINGS
 
@@ -1025,6 +1032,7 @@ gucu_init_type ()
       scm_c_define_gsubr ("%scheme-char-from-c-char", 1, 0, 0, gucu_schar_from_char);
       scm_c_define_gsubr ("%scheme-char-from-c-wchar", 1, 0, 0, gucu_schar_from_wchar);
       scm_c_define_gsubr ("%xchar-from-chtype", 1, 0, 0, gucu_xchar_from_chtype);
+      scm_c_define_gsubr ("%xchar-to-chtype", 1, 0, 0, gucu_xchar_to_chtype);
       
       first = 0;
     }
