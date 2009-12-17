@@ -139,7 +139,6 @@ _scm_xchar_from_cchar (cchar_t *x)
     {
 #ifdef GUILE_CHARS_ARE_UCS4
       { 
-	int ret;
 	uint32_t cp;
 	ret = wchar_to_codepoint (wch[i], &cp);
 	if (!ret)
