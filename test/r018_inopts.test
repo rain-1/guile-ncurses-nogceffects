@@ -23,11 +23,13 @@
 			     (refresh win)
 			     (cbreak!)
 			     (nodelay! win #t)
+			     (flushinp)
 			     (equal? #f (getch win))))
 
 		  (pass-if "halfdelay!"
 			   (begin
 			     (halfdelay! 1)
+			     (flushinp)
 			     (equal? #f (getch win))))
 		  
 		  ;; This test shows that 8-bit characters are not
