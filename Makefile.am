@@ -255,11 +255,5 @@ EXTRA_DIST = \
 	$(TESTLIB) \
 	$(TESTS)
 
-# We don't distcheck this script, because it won't run in the build
-# environment without being prepended by
-# "libtool -dlopen ../gucu/libguile-gucu.la --mode=execute"
-
-DISTCHECK_CONFIGURE_FLAGS = --disable-gucukey
-
 ### INSTALLATION ###
 
