@@ -41,6 +41,7 @@
 
 		  (pass-if "pechochar"
 			   (begin 
+			     (move win 1 1)
 			     (pechochar win (normal #\1))
 			     (pechochar win (normal #\2))
 			     (pechochar win (normal #\3))
