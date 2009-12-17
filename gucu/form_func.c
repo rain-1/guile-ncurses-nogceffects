@@ -261,7 +261,7 @@ gucu_form_driver (SCM form, SCM c)
   else if (ret == E_SYSTEM_ERROR)
     scm_syserror ("form-driver");
   else if (ret == E_CURRENT)
-    form_current_field_error ("field-opts-off!");
+    form_current_field_error ("form-driver");
 
   /* Return E_OK, E_REQUEST_DENIED (mouse error), or
      E_UNKNOWN_COMMAND */
