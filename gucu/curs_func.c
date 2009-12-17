@@ -246,11 +246,7 @@ gucu_can_change_color_p ()
 SCM
 gucu_cbreak ()
 {
-  int ret = cbreak ();
-  if (ret == ERR)
-    curs_bad_state_error ("cbreak!");
-
-  return SCM_UNSPECIFIED;
+  RETURNTF (cbreak ());
 }
 
 /* Copy blanks to entire window */
