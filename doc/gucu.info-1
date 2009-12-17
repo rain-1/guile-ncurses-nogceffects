@@ -1,7 +1,7 @@
 This is doc/gucu.info, produced by makeinfo version 4.13 from
 ./doc/gucu.texi.
 
-This manual is for Gucu, a Guile Curses library, (version 0.4, 2
+This manual is for Gucu, a Guile Curses library, (version 0.5, 2
 December 2009).  Gucu provides bindings for the Curses library, which
 provides functionality for updating character screens.
 
@@ -42,7 +42,7 @@ File: gucu.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 GuCu: a Guile Curses Library
 ****************************
 
-This manual is for Gucu, a Guile Curses library, (version 0.4, 2
+This manual is for Gucu, a Guile Curses library, (version 0.5, 2
 December 2009).  Gucu provides bindings for the Curses library, which
 provides functionality for updating character screens.
 
