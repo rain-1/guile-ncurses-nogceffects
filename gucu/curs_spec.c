@@ -315,7 +315,7 @@ gucu_winnstr (SCM win, SCM n)
   {
     wchar_t *c_wstr;
     c_wstr = (wchar_t *) scm_malloc (sizeof (wchar_t) * (c_n + 1));
-    ret = winnwstr(_scm_to_window (win), c_wstr, c_n+1);
+    ret = winnwstr(_scm_to_window (win), c_wstr, c_n);
     if (ret != ERR)
       {
         c_wstr[c_n] = 0;
