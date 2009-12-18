@@ -1730,7 +1730,7 @@ gucu_setsyx (SCM y, SCM x)
   return SCM_UNSPECIFIED;
 }
 
-/* Switch to a new terminal.  Return the old terminal */
+/* Switch to a new terminal. */
 SCM
 gucu_set_term (SCM newterminal)
 {
