@@ -10,7 +10,9 @@
 #define API
 #endif
 
+#ifdef HAVE_FOPENCOOKIE
 SCM gucu_newterm (SCM a, SCM b, SCM c) API;
+#endif
 SCM gucu_getwin (SCM port) API;
 SCM gucu_putwin (SCM win, SCM port) API;
 
