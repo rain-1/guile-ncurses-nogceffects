@@ -245,7 +245,6 @@ _scm_xchar_to_cchar (SCM x)
   int i;
   SCM member;
   wchar_t wch[GUCU_CCHARW_MAX+1];
-  wchar_t wc;
 
   cchar_t *cchar = (cchar_t *) scm_malloc (sizeof (cchar_t));
   int len = scm_to_int (scm_length (x));
@@ -262,6 +261,7 @@ _scm_xchar_to_cchar (SCM x)
       {
 	int ret;
 	uint32_t codepoint;
+	wchar_t wc;
 
 	codepoint = SCM_CHAR (member);
 	ret = codepoint_to_wchar (codepoint, &wc);
@@ -278,9 +278,9 @@ _scm_xchar_to_cchar (SCM x)
       }
 #else
       {
-	wint_t wc;
-	wc = btowc ((int) SCM_CHAR (member));
-	if (wc == WEOF)
+	wint_t wint;
+	wint = btowc ((int) SCM_CHAR (member));
+	if (wint == WEOF)
 	  {
 	    wch[i-2] = GUCU_REPLACEMENT_WCHAR;
 	    wch[i-1] = L'\0';
@@ -288,7 +288,7 @@ _scm_xchar_to_cchar (SCM x)
 	  }
 	else
 	  {
-	    wch[i-2] = wc;
+	    wch[i-2] = (wchar_t) wint;
 	  }
       }
 #endif
