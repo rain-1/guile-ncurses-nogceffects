@@ -430,7 +430,6 @@ gucu_schar_to_wchar (SCM c)
 SCM
 gucu_xchar_from_chtype (SCM c)
 {
-  chtype c_c;
   SCM_ASSERT (_scm_is_chtype (c), c, SCM_ARG1, "%xchar-from-chtype");
   return _scm_xchar_from_chtype (_scm_to_chtype (c));
 }

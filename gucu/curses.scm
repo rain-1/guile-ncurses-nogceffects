@@ -414,16 +414,6 @@
   )
 
 
-;; These functions may not exist depending on the
-;; compile time options
-(if (defined? 'newterm)      (export newterm))
-(if (defined? 'key-defined)  (export key-defined))
-(if (defined? 'KEY_EVENT)    (export KEY_EVENT))
-
-
-
-
-
 ;;; Rendition functions
 
 (defmacro a-attribute (x A_ATTRIBUTE)
@@ -870,3 +860,11 @@
        (%wvline win (xchar->list ch) n)))
 
 (load-extension "libguile-gucu" "gucu_init")
+
+;; These functions may not exist depending on the
+;; compile time options
+(if (defined? 'newterm)      (export newterm))
+(if (defined? 'key-defined)  (export key-defined))
+(if (defined? 'KEY_EVENT)    (export KEY_EVENT))
+
+

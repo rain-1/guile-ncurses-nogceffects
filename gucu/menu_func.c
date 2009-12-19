@@ -144,7 +144,7 @@ SCM
 gucu_set_menu_pad (SCM mnu, SCM pad)
 {
   SCM_ASSERT (_scm_is_menu (mnu), mnu, SCM_ARG1, "set-menu-pad!");
-  SCM_ASSERT (scm_is_char (pad), pad, SCM_ARG2, "set-menu-pad!");
+  SCM_ASSERT (SCM_CHARP (pad), pad, SCM_ARG2, "set-menu-pad!");
   
   MENU *c_mnu = _scm_to_menu (mnu);
   unsigned char c_pad;

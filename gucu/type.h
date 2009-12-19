@@ -32,23 +32,24 @@
 int _scm_is_xchar (SCM x);
 
 #ifdef HAVE_LIBNCURSESW
+cchar_t *_scm_xchar_to_cchar (SCM x);
+#endif
+char _scm_schar_to_char (SCM x);
+chtype _scm_xchar_to_chtype (SCM x);
+wchar_t _scm_schar_to_wchar (SCM x);
+
+SCM _scm_schar_from_char (char c);
+SCM _scm_schar_from_wchar (wchar_t ch);
+#ifdef HAVE_LIBNCURSESW
 SCM _scm_xchar_from_cchar (cchar_t *x);
 #endif
 SCM _scm_xchar_from_chtype (chtype x);
-SCM _scm_schar_from_char (char c);
-SCM _scm_schar_from_wchar (wchar_t ch);
 SCM gucu_schar_from_char (SCM c) API;
 SCM gucu_schar_from_wchar (SCM c) API;
 SCM gucu_schar_to_char (SCM c) API;
 SCM gucu_schar_to_wchar (SCM c) API;
 SCM gucu_xchar_from_chtype (SCM c) API;
-
-#ifdef HAVE_LIBNCURSESW
-cchar_t *_scm_xchar_to_cchar (SCM x);
-#endif
-chtype _scm_xchar_to_chtype (SCM x);
-wchar_t _scm_schar_to_wchar (SCM x);
-char _scm_schar_to_char (SCM x);
+SCM gucu_xchar_to_chtype (SCM c) API;
 
 
 /*****************************************************************************/

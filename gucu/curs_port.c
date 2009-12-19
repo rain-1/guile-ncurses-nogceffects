@@ -3,35 +3,32 @@
 
 #include <config.h>
 
-#include <libguile.h>
 #include <curses.h>
+#include <libguile.h>
 #include <stdio.h>
 #include <unistd.h>
+
 #include "type.h"
 #include "curs_port.h"
 #include "compat.h"
 
 #ifdef HAVE_FOPENCOOKIE
 
-ssize_t port_read (void *cookie, char *buf, size_t siz);
-ssize_t port_write (void *cookie, const char *buf, size_t siz);
-#ifdef HAVE_OFF64_T
-int port_seek (void *cookie, off64_t *pos, int whence);
-#else
-int port_seek (void *cookie, off_t *pos, int whence);
-#endif
-int port_close (void *cookie);
-
 #define PORT_ERR (-1)
 #define PORT_OK (0)
 
-cookie_io_functions_t port_func 
-= {.read = port_read, 
-   .write = port_write, 
-   .seek = port_seek, 
-   .close = port_close};
+static ssize_t port_read (void *cookie, char *buf, size_t siz);
+static ssize_t port_write (void *cookie, const char *buf, size_t siz);
+#ifdef HAVE_OFF64_T
+static int port_seek (void *cookie, off64_t *pos, int whence);
+#else
+static int port_seek (void *cookie, off_t *pos, int whence);
+#endif
+static int port_close (void *cookie);
 
-ssize_t 
+static cookie_io_functions_t port_funcs;
+
+static ssize_t 
 port_read (void *cookie, char *buf, size_t siz)
 {
   SCM port = PTR2SCM(cookie);
@@ -63,7 +60,7 @@ port_read (void *cookie, char *buf, size_t siz)
 #endif
 }
 
-ssize_t 
+static ssize_t 
 port_write (void *cookie, const char *buf, size_t siz)
 {
   size_t i;
@@ -91,10 +88,11 @@ port_write (void *cookie, const char *buf, size_t siz)
 #endif
 }
 
-int 
 #ifdef HAVE_OFF64_T
+static int 
 port_seek (void *cookie, off64_t *pos, int whence)
 #else
+static int 
 port_seek (void *cookie, off_t *pos, int whence)
 #endif
 {
@@ -107,7 +105,7 @@ port_seek (void *cookie, off_t *pos, int whence)
   return PORT_OK;
 }
 
-int
+static int
 port_close (void *cookie)
 {
   SCM port = PTR2SCM(cookie);
@@ -139,7 +137,7 @@ gucu_newterm (SCM type, SCM outp, SCM inp)
     scm_syserror ("newterm");
 
   /* Convert the output port to a special stream */
-  c_outp = fopencookie (SCM2PTR(outp), "w", port_func);
+  c_outp = fopencookie (SCM2PTR(outp), "w", port_funcs);
   if (c_outp == NULL)
     scm_out_of_range ("newterm", outp);
 
@@ -175,7 +173,7 @@ gucu_getwin (SCM port)
 
   //ifdef HAVE_FOPENCOOKIE  
 #if 0
-  fp = fopencookie (&port, "rb", port_func);
+  fp = fopencookie (&port, "rb", port_funcs);
 
   if (fp == NULL)
     return SCM_BOOL_F;
@@ -234,7 +232,7 @@ gucu_putwin (SCM win, SCM port)
     char *debug_str;
     size_t debug_len;
     
-    fp = fopencookie (&port, "wb", port_func);
+    fp = fopencookie (&port, "wb", port_funcs);
     
     if (fp == NULL)
       return SCM_BOOL_F;
@@ -274,9 +272,20 @@ gucu_putwin (SCM win, SCM port)
 void
 gucu_init_port ()
 {
+  static int first=1;
+
+  if (first)
+    {
 #ifdef HAVE_FOPENCOOKIE
-  scm_c_define_gsubr ("newterm", 3, 0, 0, gucu_newterm);
+      port_funcs.read = port_read;
+      port_funcs.write = port_write;
+      port_funcs.seek = port_seek;
+      port_funcs.close = port_close;
+
+      scm_c_define_gsubr ("newterm", 3, 0, 0, gucu_newterm);
 #endif
-  scm_c_define_gsubr ("getwin", 1, 0, 0, gucu_getwin);
-  scm_c_define_gsubr ("putwin", 2, 0, 0, gucu_putwin);
+      scm_c_define_gsubr ("getwin", 1, 0, 0, gucu_getwin);
+      scm_c_define_gsubr ("putwin", 2, 0, 0, gucu_putwin);
+      first = 0;
+    }
 }
