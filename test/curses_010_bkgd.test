@@ -1,5 +1,6 @@
 ;;;; -*- Mode: scheme; -*-
-;;;; r008_bkgd.test --- test suite for curses's background functions
+;;;; curses_010_bkgd.test --- test suite for curses's background
+;;;; functions
 
 (use-modules (test lib)
 	     (test lib2)
@@ -9,12 +10,14 @@
 
 (define test (curses-test-start))
 
+;; Requires a terminal that can do color
+(setenv "TERM" "xterm")
+
+(set! *sleep* #f)
+
 (define win (initscr))
-
-(define period (normal #\.))
-(define plus (normal #\+))
-(define space (normal #\sp))
-
+(start-color!)
+(init-pair! 1 COLOR_BLACK COLOR_RED)
 
 (clear win)
 (standend! win)
@@ -24,11 +27,15 @@
  
  (pass-if "bkgd"
 	  (begin
-	    (addstr win "This is a string" #:y 0 #:x 0)
+	    (addstr win "This is bold and has periods as background" 
+		    #:y 0 #:x 0)
 	    (bkgd win (bold #\.))
-	    (addstr win "This is a new string" #:y 1 #:x 0)
+	    (addstr win "This is bold has periods as background" 
+		    #:y 1 #:x 0)
 	    (refresh win)
-	    (let ((x1 (inch win #:y 0 #:x 4)) ;Loc of space between "This" and "is"
+	    (maybe-sleep 2)
+	    (let ((x1 (inch win #:y 0 #:x 4)) ; Loc of space between
+					      ; "This" and "is"
 		  (x2 (inch win #:y 1 #:x 4)))
 	      (begin
 		(bkgd win (normal #\space)) ; clear bkgd
@@ -41,10 +48,13 @@
  (pass-if "bkgdset"
 	  (begin
 	    (standend! win)
-	    (addstr win "This is a string" #:y 0 #:x 0)
+	    (addstr win "This has default colors and spaces as background" 
+		    #:y 0 #:x 0)
             (bkgdset! win (color 1 (dim #\+)))
-	    (addstr win "This is another string" #:y 1 #:x 0)
+	    (addstr win "This is black on red and has plus signs as background" 
+		    #:y 1 #:x 0)
 	    (refresh win)
+	    (maybe-sleep 2)
 	    (let ((x1 (inch win #:y 0 #:x 4))
 		  (x2 (inch win #:y 1 #:x 4)))
 	      (begin
@@ -57,5 +67,5 @@
 
 (endwin)
 
-(curses-test-end test "r008_bkgd.out")
+(curses-test-end test "curses_010_bkgd.out")
 		  

@@ -137,18 +137,18 @@ TESTS_ENVIRONMENT = GUILE_AUTO_COMPILE=0 \
 	guile -L $(abs_top_srcdir) -s 
 
 NARROWTESTS = \
-	test/r000_test.test \
-	test/c001_char_conversion.test \
-	test/r001_initscr.test \
-	test/r002_color.test \
-	test/r002_characters.test \
-	test/r003_addch.test \
-	test/r004_addchstr.test \
-	test/r005_addstr.test \
-	test/r006_attr.test \
-	test/r007_beep.test \
-	test/r008_bkgd.test \
-	test/r009_border.test \
+	test/curses_000_test_setup.test \
+	test/curses_001_char_conversion.test \
+	test/curses_002_initscr.test \
+	test/curses_003_color.test \
+	test/curses_004_characters.test \
+	test/curses_005_addch.test \
+	test/curses_006_addchstr.test \
+	test/curses_007_addstr.test \
+	test/curses_008_attr.test \
+	test/curses_009_beep.test \
+	test/curses_010_bkgd.test \
+	test/curses_011_border.test \
 	test/r010_clear.test \
 	test/r011_delch.test \
 	test/r012_deleteln.test \

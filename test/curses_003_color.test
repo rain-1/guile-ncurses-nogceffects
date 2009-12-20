@@ -1,5 +1,5 @@
 ;;;; -*- Mode: scheme; -*-
-;;;; r001_color.test --- test suite for curses's color functions
+;;;; curses_003_color.test --- test suite for curses's color functions
 
 (use-modules (test lib)
 	     (test lib2)
@@ -8,9 +8,10 @@
 
 (define test (curses-test-start))
 
-(define scr (initscr))
-
 ;;; These values are the xterm values
+(setenv "TERM" "xterm")
+
+(define scr (initscr))
 
 ;; Should be able to start color
 (with-test-prefix

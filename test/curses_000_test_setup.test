@@ -1,0 +1,35 @@
+;;; curses_000_test_setup.test -- print some diagnostic info 
+;;;   for this test
+
+(use-modules (gucu curses))
+
+(newline)
+(display "Load path: ") (newline)
+(write %load-path) (newline)
+(display "Current test directory:  ") (write (getcwd)) (newline)
+(display "Current locale:          ") (display (setlocale LC_ALL "")) (newline)
+(display "TERM:                    ") (display (getenv "TERM")) (newline)
+(display "Guile version:           ") (display (version)) (newline)
+(if %gucu-ucs4-chars
+    (display "Guile character storage: UCS-4") 
+    (display "Guile character storage: 8-bit locale chars"))
+(newline)
+
+(display "Ncurses version:         ") (display (curses-version))
+(if %gucu-wide-ncurses
+    (display " wide") 
+    (display " standard"))
+(newline)
+(newline)
+
+(if (not (string=? (getenv "TERM") "xterm"))
+    (format #t
+"WARNING: this terminal is a(n) ~s
+	This test suite should be run in an xterm.
+	The environment will be set to 'xterm' for now.
+	This may cause odd things to happen to the display
+	while the test is being run.
+
+" (getenv "TERM")))
+
+(sleep 2)

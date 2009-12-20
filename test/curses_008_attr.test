@@ -1,5 +1,5 @@
 ;;;; -*- Mode: scheme; -*-
-;;;; r006_attr.test --- test suite for curses's attr
+;;;; curses_008_attr.test --- test suite for curses's attr
 
 (use-modules (test lib)
 	     (test lib2)
@@ -9,6 +9,9 @@
 
 
 (define test (curses-test-start))
+
+;; Requires a color terminal, so setting this to xterm
+(setenv "TERM" "xterm")
 
 (define win (initscr))
 (start-color!)
@@ -25,6 +28,7 @@
 	    (refresh win)
 	    (let ((x2 (inch win #:y 0 #:x 0)))
 	      (equal? 0 (xchar-attr x2)))))
+ 
  ;; add them one by one
  (pass-if "attr-on! A_BLINK"
 	  (begin
@@ -59,7 +63,7 @@
 	  (begin
 	    (attr-on! win A_INVIS)
 	    (addstr win "x" #:y 0 #:x 0)
-	    (refresh win )
+	    (refresh win)
 	    (let ((x2 (inch win #:y 0 #:x 0)))
 	      (equal? (logior A_BLINK
 			      A_BOLD
@@ -71,7 +75,7 @@
 	  (begin
 	    (attr-on! win A_PROTECT)
 	    (addstr win "x" #:y 0 #:x 0)
-	    (refresh win )
+	    (refresh win)
 	    (let ((x2 (inch win #:y 0 #:x 0)))
 	      (equal? (logior A_BLINK
 			      A_BOLD
@@ -84,7 +88,7 @@
 	  (begin
 	    (attr-on! win A_REVERSE)
 	    (addstr win "x" #:y 0 #:x 0)
-	    (refresh win )
+	    (refresh win)
 	    (let ((x2 (inch win #:y 0 #:x 0)))
 	      (equal? (logior A_BLINK
 			      A_BOLD
@@ -124,6 +128,7 @@
 			      A_STANDOUT
 			      A_UNDERLINE)
 		      (xchar-attr x2)))))
+
  ;; take one away
  (pass-if "attr-off! A_UNDERLINE"
 	  (begin
@@ -178,7 +183,6 @@
 	    (refresh win)
 	    (let ((x2 (inch win #:y 0 #:x 0)))
 	      (equal? 1 (xchar-color x2)))))
- 
  
  (pass-if "standend! #2"
 	  (begin
@@ -257,4 +261,4 @@
 
 (endwin)
  
-(curses-test-end test "r006_attr.out")
+(curses-test-end test "curses_008_attr.out")

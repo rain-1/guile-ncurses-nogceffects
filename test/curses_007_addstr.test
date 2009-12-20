@@ -1,11 +1,12 @@
 ;;;; -*- Mode: scheme; -*-
-;;;; r005_addstr.test --- test suite for curses's addstr
+;;;; curses_007_addstr.test --- test suite for curses's addstr
 
 (use-modules (test lib)
 	     (test lib2)
 	     (srfi srfi-1)
-             (srfi srfi-13) ; string-take is included by default in guile 1.8.x
-                            ; but only appears in srfi-13 in guile 1.6.x
+             (srfi srfi-13) ; string-take is included by default in
+			    ; guile 1.8.x but only appears in srfi-13
+			    ; in guile 1.6.x
 	     (gucu curses))
 
 (define test (curses-test-start))
@@ -36,7 +37,9 @@
  (pass-if "addstr #:y #:x"
 	  (begin
 	    (clear mainwin)
+	    (attr-on! mainwin A_BOLD)
 	    (addstr mainwin "bold" #:y 1 #:x 0)
+	    (attr-off! mainwin A_BOLD)
 	    (refresh mainwin)
 	    (let ((x2 (instr mainwin #:y 1 #:x 0)))
 	      (string=? "bold" (string-take x2 (string-length "bold"))))))
@@ -44,11 +47,13 @@
  (pass-if "addstr #:y #:x #:n"
 	  (begin
 	    (clear mainwin)
+	    (attr-on! mainwin A_BOLD)
 	    (addstr mainwin "bold" #:y 1 #:x 0 #:n 2)
+	    (attr-off! mainwin A_BOLD)
 	    (refresh mainwin)
 	    (let ((x2 (instr mainwin #:y 1 #:x 0)))
 	      (string=? "bo" (string-take x2 (string-length "bo")))))))
 
 (endwin)
 
-(curses-test-end test "r005_addstr.out")
+(curses-test-end test "curses_007_addstr.out")

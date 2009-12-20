@@ -604,7 +604,7 @@ SCM
 gucu_endwin ()
 {
   int ret = endwin ();
-  /* returns true if screen exists and reset_shell_mode succeedes */
+  /* returns true if screen exists and reset_shell_mode succeeds */
   RETURNTF (ret);
 }
 
