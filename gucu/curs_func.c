@@ -434,11 +434,9 @@ gucu_curses_version ()
 SCM
 gucu_def_prog_mode ()
 {
-  def_prog_mode ();
-
   /* def_prog_mode can return ERR, but, I don't think it can return an
      error the way it is used in this library  */
-  return SCM_UNSPECIFIED;
+  RETURNTF (def_prog_mode ());
 }
 
 /* Save the current terminal mode, so that it can be returned later by
@@ -446,9 +444,7 @@ gucu_def_prog_mode ()
 SCM
 gucu_def_shell_mode ()
 {
-  def_shell_mode ();
-
-  return SCM_UNSPECIFIED;
+  RETURNTF (def_shell_mode ());
 }
 
 /* Define a keycode and its corresponding control string */
