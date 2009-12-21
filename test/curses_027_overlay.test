@@ -1,10 +1,10 @@
 ;;;; -*- Mode: scheme; -*-
-;;;; r025_overlay.test --- test suite for curses's overlay
+;;;; curses_027_overlay.test --- test suite for curses's overlay
 
 (use-modules (test lib)
-	     (test lib2)
-	     (gucu curses)
-	     (srfi srfi-1))
+             (test lib2)
+             (gucu curses)
+             (srfi srfi-1))
 
 (define test (curses-test-start))
 
@@ -13,65 +13,64 @@
 ;; Should be able to overlay one window onto another
 
 (define win (newwin 5 5 5 5))
-(with-test-prefix "overlay"
-		  
-		  (pass-if "overlay"
-			   (begin
-			     (clear win)
-			     (refresh win)
-			     (clear mainwin)
-			     (refresh mainwin)
+(with-test-prefix
+ "overlay"
 
-			     (addstr win "xxx" #:y 0 #:x 0)
-			     (refresh win)
+ (pass-if "overlay"
+          (begin
+            (clear win)
+            (refresh win)
+            (clear mainwin)
+            (refresh mainwin)
 
-			     (overlay win mainwin)
-			     (delwin win)
-			     (refresh mainwin)
+            (addstr win "xxx" #:y 0 #:x 0)
+            (refresh win)
 
-			     (let ((x1 (instr mainwin #:y 5 #:x 5 #:n 3)))
-			       (string=? x1 "xxx"))))
+            (overlay win mainwin)
+            (delwin win)
+            (refresh mainwin)
 
-		  (pass-if "overwrite"
-			   (begin
-			     (set! win (newwin 5 5 5 5))
-			     (clear win)
-			     (refresh win)
-			     (clear mainwin)
-			     (refresh mainwin)
+            (let ((x1 (instr mainwin #:y 5 #:x 5 #:n 3)))
+              (string=? x1 "xxx"))))
 
-			     (addstr win "xxx" #:y 0 #:x 0)
-			     (refresh win)
+ (pass-if "overwrite"
+          (begin
+            (set! win (newwin 5 5 5 5))
+            (clear win)
+            (refresh win)
+            (clear mainwin)
+            (refresh mainwin)
 
-			     (overwrite win mainwin)
-			     (delwin win)
-			     (refresh mainwin)
+            (addstr win "xxx" #:y 0 #:x 0)
+            (refresh win)
 
-			     (let ((x1 (instr mainwin #:y 5 #:x 5 #:n 3)))
-			       (string=? x1 "xxx"))))
+            (overwrite win mainwin)
+            (delwin win)
+            (refresh mainwin)
 
-		  (pass-if "copywin"
-			   (begin
-			     (set! win (newwin 5 5 5 5))
-			     (clear win)
-			     (refresh win)
-			     (clear mainwin)
-			     (refresh mainwin)
+            (let ((x1 (instr mainwin #:y 5 #:x 5 #:n 3)))
+              (string=? x1 "xxx"))))
 
-			     (addstr win "xxx" #:y 0 #:x 0)
-			     (refresh win)
+ (pass-if "copywin"
+          (begin
+            (set! win (newwin 5 5 5 5))
+            (clear win)
+            (refresh win)
+            (clear mainwin)
+            (refresh mainwin)
 
-			     (copywin win mainwin 0 0 0 0 4 4 1)
-			     (refresh mainwin)
-			     (delwin win)
-			     (refresh mainwin)
+            (addstr win "xxx" #:y 0 #:x 0)
+            (refresh win)
 
-			     (let ((x1 (instr mainwin #:y 0 #:x 0 #:n 3)))
-			       (string=? x1 "xxx"))))
+            (copywin win mainwin 0 0 0 0 4 4 1)
+            (refresh mainwin)
+            (delwin win)
+            (refresh mainwin)
 
-		  )
+            (let ((x1 (instr mainwin #:y 0 #:x 0 #:n 3)))
+              (string=? x1 "xxx")))))
 
 
 (endwin)
 
-(curses-test-end test "r025_overlay.out")		  
+(curses-test-end test "curses_027_overlay.out")

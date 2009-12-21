@@ -1,94 +1,122 @@
 ;;;; -*- Mode: scheme; -*-
-;;;; r018_inopts.test --- test suite for curse's input options
+;;;; curses_020_inopts.test --- test suite for curse's input options
 
 (use-modules (test lib)
-	     (test lib2)
-	     ;; (gucu curses-wide)
-	     (gucu curses)
-	     (srfi srfi-1))
+             (test lib2)
+             (gucu curses)
+             (srfi srfi-1))
 
-;; Need a locale, since we are using non-ASCII characters
-;; (setlocale LC_ALL "en_US.iso-8859-1")
+(define *fail* #f)
 
 (define test (curses-test-start))
 
 (define win (initscr))
 
 ;; Should be able to change input options
-(with-test-prefix "inopts"
-		  
-		  (pass-if "cbreak!"
-			   (begin
-			     (clear win)
-			     (refresh win)
-			     (cbreak!)
-			     (nodelay! win #t)
-			     (flushinp)
-			     (equal? #f (getch win))))
+(with-test-prefix
+ "inopts"
 
-		  (pass-if "halfdelay!"
-			   (begin
-			     (halfdelay! 1)
-			     (flushinp)
-			     (equal? #f (getch win))))
-		  
-		  ;; This test shows that 8-bit characters are not
-		  ;; truncated when meta is true.
-
-		  ;; Also, prior to 20091010, unget_wch had a sign
-		  ;; bug.  Calling unget_wch with a wchar value above
-		  ;; 128 made garbage, so this test shouldn't be runn
-		  ;; in the wide ncurses case.
- 		  (pass-if "meta!"
- 			   (begin
- 			     (nodelay! win #t)
- 			     (meta! #t)
- 			     (ungetch (integer->char (+ 128 65)))
- 			     (let ((k1 (getch win)))
- 			       (refresh win)
- 			       (equal? k1 (integer->char (+ 128 65)))))
-			   *unspecified*)
-
-		  ;; This test *SHOULD* show that 8-bit characters are
-		  ;; truncated when meta is false, but, ncurses
-		  ;; doesn't to that yet.
-
-		  ;; Also, prior to 20091010, unget_wch had a sign
-		  ;; bug.  Calling unget_wch with a wchar value above
-		  ;; 128 made garbage, so this test shouldn't be runn
-		  ;; in the wide ncurses case.
- 		  (pass-if "meta!"
- 			   (begin
- 			     (meta! #f)
- 			     (ungetch (integer->char (+ 128 65)))
- 			     (let ((k1 (getch win)))
- 			       (refresh win)
- 			       (equal? k1 (integer->char 65))
-			       *unspecified*)))
-
-; 		  (pass-if "keypad!"
-; 			   (begin
-; 			     (cbreak!)
-; 			     (keypad! (stdscr) #t)
-; 			     (ungetch #\A)
-; 			     (ungetch #\[)
-; 			     (ungetch #\esc)
-; 			     (let ((k1 (getch))
-; 				   (k2 (getch))
-; 				   (k3 (getch)))
-; 			       (addstr (format #f "~s~%" k1))
-; 			       (addstr (format #f "~s~%" k2))
-; 			       (addstr (format #f "~s~%" k3))
-; 			       (addstr (format #f "~s~%" KEY_UP))
-; 			       (refresh)
-; 			       (sleep 5)
-; 			       (equal? k1 KEY_UP))))
+ (pass-if "cbreak!"
+          (begin
+            (clear win)
+            (refresh win)
+            (cbreak!)
+            (nodelay! win #t)
+            (flushinp)
+            (let* ((c (getch win))
+                   (pass (equal? #f c)))
+              (addstr win (format #f "getch: ~S" c) #:y 1 #:x 1)
+              (refresh win)
+              (maybe-sleep 2)
+              (if pass
+                  #t
+                  (begin
+                    (set! *fail* #t)
+                    #f)))))
 
 
-)
+ (pass-if "halfdelay!"
+          (begin
+            (clear win)
+            (refresh win)
+            (halfdelay! 1)
+            (flushinp)
+            (let* ((c (getch win))
+                   (pass (equal? #f c)))
+              (addstr win (format #f "getch: ~S" c) #:y 1 #:x 1)
+              (refresh win)
+              (maybe-sleep 2)
+              (if pass
+                  #t
+                  (begin
+                    (set! *fail* #t)
+                    #f)))))
+
+
+ ;; This test shows that 8-bit characters are not
+ ;; truncated when meta is true.
+
+ ;; Also, prior to 20091010, unget_wch had a sign
+ ;; bug.  Calling unget_wch with a wchar value above
+ ;; 128 made garbage, so this test shouldn't be runn
+ ;; in the wide ncurses case.
+ (pass-if "meta!"
+          (begin
+            (nodelay! win #t)
+            (meta! #t)
+            (ungetch (integer->char (+ 128 65)))
+            (let ((k1 (getch win)))
+              (refresh win)
+              (equal? k1 (integer->char (+ 128 65)))))
+          *unspecified*)
+
+ ;; This test *SHOULD* show that 8-bit characters are
+ ;; truncated when meta is false, but, ncurses
+ ;; doesn't to that yet.
+
+ ;; Also, prior to 20091010, unget_wch had a sign
+ ;; bug.  Calling unget_wch with a wchar value above
+ ;; 128 made garbage, so this test shouldn't be runn
+ ;; in the wide ncurses case.
+ (pass-if "meta!"
+          (begin
+            (meta! #f)
+            (ungetch (integer->char (+ 128 65)))
+            (let ((k1 (getch win)))
+              (refresh win)
+              (equal? k1 (integer->char 65))
+              *unspecified*)))
+
+;                 (pass-if "keypad!"
+;                          (begin
+;                            (cbreak!)
+;                            (keypad! (stdscr) #t)
+;                            (ungetch #\A)
+;                            (ungetch #\[)
+;                            (ungetch #\esc)
+;                            (let ((k1 (getch))
+;                                  (k2 (getch))
+;                                  (k3 (getch)))
+;                              (addstr (format #f "~s~%" k1))
+;                              (addstr (format #f "~s~%" k2))
+;                              (addstr (format #f "~s~%" k3))
+;                              (addstr (format #f "~s~%" KEY_UP))
+;                              (refresh)
+;                              (sleep 5)
+;                              (equal? k1 KEY_UP))))
+
+
+ )
 
 
 
 (endwin)
 
-(curses-test-end test "r018_inopts.out")		  
+(if *fail*
+    (display
+"WARNING: The curses_020_inopts.test has failed, but, this may not
+indicate a true problem.  It may report a false failure if you were
+generating keypresses or mouse clicks when the test was running.
+"))
+
+(curses-test-end test "curses_020_inopts.out")

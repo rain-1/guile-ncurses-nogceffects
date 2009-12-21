@@ -9,7 +9,7 @@
 	     (ice-9 format))
 
 (define test (curses-test-start))
-
+(set! *sleep* #f)
 (define stdscr (initscr))
 
 (with-test-prefix 
@@ -44,7 +44,7 @@
 	      (addstr stdscr (format #f "PASSOK ~16,'0b~%" O_PASSOK))
 	      (addstr stdscr (format #f "DEFALT ~16,'0b~%" fo))
 	      (refresh stdscr)
-	      (sleep 1)
+	      (maybe-sleep 1)
 	      (eqv? fo fo2))))
 
  (pass-if "set"

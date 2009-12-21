@@ -1,37 +1,36 @@
 ;;;; -*- Mode: scheme; -*-
-;;;; r017_inchstr.test --- test suite for curses's inchstr
+;;;; curses_019_inchstr.test --- test suite for curses's inchstr
 
 (use-modules (test lib)
-	     (test lib2)
-	     (srfi srfi-1)
-	     (gucu curses))
+             (test lib2)
+             (srfi srfi-1)
+             (gucu curses))
 
 
 (define test (curses-test-start))
 
 (define win (initscr))
 
-(with-test-prefix "inchstr"
-		  
-		  
-		  (pass-if "inchnstr"
-			   (begin
-			     (clear win)
-			     (addchstr win (normal "hello") #:y 0 #:x 0)
-			     (refresh win)
-			     (move win 0 0)
-			     (let ((w2 (inchstr win #:n 2)))
-			       (lset= xchar-equal? (normal "he") w2))))
-		  
-		  
-		  (pass-if "mvinchnstr"
-			   (begin
-			     (clear win)
-			     (addchstr win (bold "hello") #:y 1 #:x 0)
-			     (refresh win)
-			     (let ((x2 (inchstr win #:y 1 #:x 0 #:n 2)))
-			       (lset= xchar-equal? (bold "he") x2)))))
+(with-test-prefix
+ "inchstr"
+
+ (pass-if "inchstr #:n"
+          (begin
+            (clear win)
+            (addchstr win (normal "hello") #:y 0 #:x 0)
+            (refresh win)
+            (move win 0 0)
+            (let ((w2 (inchstr win #:n 2)))
+              (lset= xchar-equal? (normal "he") w2))))
+
+ (pass-if "inchnstr #:y #:x #:n"
+          (begin
+            (clear win)
+            (addchstr win (bold "hello") #:y 1 #:x 0)
+            (refresh win)
+            (let ((x2 (inchstr win #:y 1 #:x 0 #:n 2)))
+              (lset= xchar-equal? (bold "he") x2)))))
 
 (endwin)
 
-(curses-test-end test "r017_inchstr.out")
+(curses-test-end test "curses_019_inchstr.out")

@@ -1,11 +1,11 @@
 ;;;; -*- Mode: scheme; -*-
-;;;; r015_getyx.test --- test suite for curses's position reporting functions
+;;;; curses_017_getyx.test --- test suite for curses's position
+;;;; reporting functions
 
 (use-modules (test lib)
-	     (test lib2)
-	     (srfi srfi-1)
-	     (gucu curses))
-
+             (test lib2)
+             (srfi srfi-1)
+             (gucu curses))
 
 (define test (curses-test-start))
 
@@ -16,34 +16,35 @@
 
 
 ;; Should be able to determine where the cursor is
-(with-test-prefix "getyx"
-		  
-		  (pass-if "setup"
-			   (begin
-			     (clear mainwin)
-			     (refresh mainwin)
-			     (box win 0 0)
-			     (box win2 0 0)
-			     (touchwin win)
-			     (refresh win2)
-			     (refresh win)
-			     #t))
+(with-test-prefix
+ "getyx"
 
-		  (pass-if "getyx"
-			   (begin
-			     (move win 2 1)
-			     (refresh win)
-			     (lset= eqv? '(2 1) (getyx win))))
+ (pass-if "setup"
+          (begin
+            (clear mainwin)
+            (refresh mainwin)
+            (box win 0 0)
+            (box win2 0 0)
+            (touchwin win)
+            (refresh win2)
+            (refresh win)
+            #t))
 
-		  (pass-if "getparyx"
-			   (lset= eqv? (list (- 8 7) (- 9 8)) (getparyx win2)))
+ (pass-if "getyx"
+          (begin
+            (move win 2 1)
+            (refresh win)
+            (lset= eqv? '(2 1) (getyx win))))
 
-		  (pass-if "getbegyx"
-			   (lset= eqv? '(7 8) (getbegyx win)))
+ (pass-if "getparyx"
+          (lset= eqv? (list (- 8 7) (- 9 8)) (getparyx win2)))
 
-		  (pass-if "getmaxyx"
-			   (lset= eqv? '(5 6) (getmaxyx win))))
+ (pass-if "getbegyx"
+          (lset= eqv? '(7 8) (getbegyx win)))
+
+ (pass-if "getmaxyx"
+          (lset= eqv? '(5 6) (getmaxyx win))))
 
 (endwin)
 
-(curses-test-end test "r015_getyx.out")
+(curses-test-end test "curses_017_getyx.out")

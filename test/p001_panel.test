@@ -10,6 +10,7 @@
 
 (define test (curses-test-start))
 
+(set! *sleep* #f)
 (define mainwin (initscr))
 
 ;; Should be able to make a panel
@@ -31,56 +32,56 @@
 	    (addstr win2 "box 2" #:y 1 #:x 1)
 	    (update-panels)
 	    (doupdate)
-	    (sleep 1)
+	    (maybe-sleep 1)
 
 	    (addstr win1 "bottom" #:y 1 #:x 1)
 	    (addstr win2 "box 2 " #:y 1 #:x 1)
 	    (bottom-panel panel1)
 	    (update-panels)
 	    (doupdate)
-	    (sleep 1)
+	    (maybe-sleep 1)
 
 	    (addstr win1 "top   " #:y 1 #:x 1)
 	    (addstr win2 "box 2 " #:y 1 #:x 1)
 	    (top-panel panel1)
 	    (update-panels)
 	    (doupdate)
-	    (sleep 1)
+	    (maybe-sleep 1)
 
 	    (addstr win1 "hide   " #:y 1 #:x 1)
 	    (addstr win2 "box 2  " #:y 1 #:x 1)
 	    (hide-panel panel1)
 	    (update-panels)
 	    (doupdate)
-	    (sleep 1)
+	    (maybe-sleep 1)
 
 	    (addstr win1 "show   " #:y 1 #:x 1)
 	    (addstr win2 "box 2  " #:y 1 #:x 1)
 	    (show-panel panel1)
 	    (update-panels)
 	    (doupdate)
-	    (sleep 1)
+	    (maybe-sleep 1)
 
 	    (addstr win1 "move   " #:y 1 #:x 1)
 	    (addstr win2 "box 2  " #:y 1 #:x 1)
 	    (move-panel panel1 2 2)
 	    (update-panels)
 	    (doupdate)
-	    (sleep 1)
+	    (maybe-sleep 1)
 
 	    (addstr (panel-window panel1) "pwin1  " #:y 1 #:x 1)
 	    (addstr (panel-window panel2) "pwin2  " #:y 1 #:x 1)
 	    (move-panel panel1 2 2)
 	    (update-panels)
 	    (doupdate)
-	    (sleep 1)
+	    (maybe-sleep 1)
 
 	    (addstr win1 "delete " #:y 1 #:x 1)
 	    (addstr win2 "box 2  " #:y 1 #:x 1)
 	    (del-panel panel1)
 	    (update-panels)
 	    (doupdate)
-	    (sleep 1)
+	    (maybe-sleep 1)
 
 	    *unspecified*)))
 

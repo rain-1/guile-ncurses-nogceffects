@@ -1,46 +1,35 @@
 ;;;; -*- Mode: scheme; -*-
-;;;; r027_refresh.test --- test suite for curses's refresh
+;;;; curses_029_refresh.test --- test suite for curses's refresh
 
 (use-modules (test lib)
-	     (test lib2)
-	     (gucu curses)
-	     (srfi srfi-1))
+             (test lib2)
+             (gucu curses)
+             (srfi srfi-1))
 
 (define test (curses-test-start))
 
 (define win (initscr))
 
-;; Should be able to refresh the windows
-(with-test-prefix "refresh"
+;; Should be able to refresh the windows.  Like this hasn't already
+;; been tested hundreds of times already...
+(with-test-prefix
+ "refresh"
 
-		  (pass-if "refresh"
-			   (begin
-			     (and
-			      (clear win)
-			      (refresh win)
-			      
-			      ;; Normal refresh
-			      (addstr win "a")
-			      (refresh win)
+ (pass-if "refresh"
+          (begin
+            (and
+             (clear win)
+             (refresh win)
 
-			      ;; Two-part refresh
-			      (addstr win "b")
-			      (noutrefresh win)
-			      (doupdate)
+             ;; Normal refresh
+             (addstr win "a")
+             (refresh win)
 
-			      ;; Force non-curses output to be overwritten
-			      (begin
-				(display "c")
-				(redrawln win 0 3))
-			      (refresh win)
-
-			      ;; Force non-curses output to be overwritten
-			      (begin
-				(display "d")
-				(redrawwin win))
-			      (refresh win)))))
-
+             ;; Two-part refresh
+             (addstr win "b")
+             (noutrefresh win)
+             (doupdate)))))
 (endwin)
 
-(curses-test-end test "r027_refresh.out")		  
+(curses-test-end test "curses_029_refresh.out")
 

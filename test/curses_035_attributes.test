@@ -1,6 +1,6 @@
 ;;;; -*- Mode: scheme; -*-
-;;;; r033-attributes.test --- test suite for gucu's attribute conversion
-;;;;                          functions
+;;;; curses_035_attributes.test --- test suite for gucu's attribute
+;;;; conversion functions
 
 (use-modules (test lib)
 	     (test lib2)
@@ -393,4 +393,4 @@
 	  (list= xchar-equal? (inverse-off (bold-off "hi")) (normal "hi"))))
 
 
-(curses-test-end test "r033_attributes.out")
+(curses-test-end test "curses_035_attributes.out")

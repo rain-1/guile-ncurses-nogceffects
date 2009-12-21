@@ -1,5 +1,5 @@
 ;;;; -*- Mode: scheme; -*-
-;;;; r042_mouse.test --- test suite for mouse functions
+;;;; curses_037_mouse.test --- test suite for mouse functions
 
 (use-modules (test lib)
 	     (test lib2)
@@ -8,10 +8,12 @@
 
 (define test (curses-test-start))
 (set! *sleep* #f)
+(setenv "TERM" "xterm")
 (define win (initscr))
 
 (with-test-prefix 
  "mouse"
+
  (pass-if "mouseinterval 1"
           (clear win)
           (refresh win)
@@ -43,4 +45,4 @@
             pass)))
 
 (endwin)
-(curses-test-end test "r042_mouse.out")
+(curses-test-end test "curses_037_mouse.out")

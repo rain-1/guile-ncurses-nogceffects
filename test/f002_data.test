@@ -8,7 +8,7 @@
 	     (gucu form))
 
 (define test (curses-test-start))
-
+(set! *sleep* #f)
 (define stdscr (initscr))
 
 ;; Create a two-page form.  Set the form to the first page.  Thus data-ahead
@@ -39,7 +39,7 @@
 ; 			       (mvaddstr 3 0 (format #f "~a ~a ~a ~a ~a ~a ~a ~a" 
 ; 						     ret1 ret2 ret3 ret4 ret5 ret6 ret7 ret8))
 ; 			       (refresh)
-; 			       (sleep 1)
+; 			       (maybe-sleep 1)
 ; 			       (eqv? ret8 #t)))))
 
 (with-test-prefix 
@@ -71,7 +71,7 @@
 				     ret1 ret2 ret3 ret4 ret5 ret6 ret7 ret8)
 		      #:y 3 #:x 0)
 	      (refresh stdscr)
-	      ;;(sleep 1)
+	      ;;(maybe-sleep 1)
 	      ;; pass if data-behind returned true and data-ahead is false
 	      (and ret7 (not ret8)))))
  
@@ -97,7 +97,7 @@
 				     ret1 ret2 ret3 ret4 ret5 ret6)
 		      #:y 3 #:x 0)
 	      (refresh stdscr)
-	      ;;(sleep 1)
+	      ;;(maybe-sleep 1)
 	      ;; pass if data-ahead returned true
 	      (and (not ret5) ret6)))))
 

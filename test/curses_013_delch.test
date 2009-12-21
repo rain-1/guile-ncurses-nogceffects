@@ -1,5 +1,5 @@
 ;;;; -*- Mode: scheme; -*-
-;;;; r011_delch.test --- test suite for curses's character deletion
+;;;; curses_013_delch.test --- test suite for curses's character deletion
 
 (use-modules (test lib)
 	     (test lib2)
@@ -14,33 +14,34 @@
   (inch win #:y y #:x x))
 
 ;; Should be able to delete characters
-(with-test-prefix "delch"
+(with-test-prefix 
+ "delch"
 		  
-		  (pass-if "delch"
-			   (begin
-			     (clear win)
-			     (addstr win "abc" #:y 0 #:x 0)
-			     (move win 0 1)
-			     (delch win)
-			     (refresh win)
-			     (let ((x1 (mvinch 0 0))
-				   (x2 (mvinch 0 1)))
-			       (and
-				(xchar-equal? x1 (normal #\a))
-				(xchar-equal? x2 (normal #\c))))))
-		  
-		  (pass-if "delch #:y #:x"
-			   (begin
-			     (clear win)
-			     (addstr win "abc" #:y 0 #:x 0)
-			     (delch win #:y 0 #:x 1)
-			     (refresh win)
-			     (let ((x1 (mvinch 0 0))
-				   (x2 (mvinch 0 1)))
-			       (and
-				(xchar-equal? x1 (normal #\a))
-				(xchar-equal? x2 (normal #\c)))))))
+ (pass-if "delch"
+	  (begin
+	    (clear win)
+	    (addstr win "abc" #:y 0 #:x 0)
+	    (move win 0 1)
+	    (delch win)
+	    (refresh win)
+	    (let ((x1 (mvinch 0 0))
+		  (x2 (mvinch 0 1)))
+	      (and
+	       (xchar-equal? x1 (normal #\a))
+	       (xchar-equal? x2 (normal #\c))))))
+ 
+ (pass-if "delch #:y #:x"
+	  (begin
+	    (clear win)
+	    (addstr win "abc" #:y 0 #:x 0)
+	    (delch win #:y 0 #:x 1)
+	    (refresh win)
+	    (let ((x1 (mvinch 0 0))
+		  (x2 (mvinch 0 1)))
+	      (and
+	       (xchar-equal? x1 (normal #\a))
+	       (xchar-equal? x2 (normal #\c)))))))
 
 (endwin)
 
-(curses-test-end test "r011_delch.out")
+(curses-test-end test "curses_013_delch.out")

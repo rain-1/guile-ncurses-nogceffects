@@ -1,10 +1,10 @@
 ;;;; -*- Mode: scheme; -*-
-;;;; r013_getch.test --- test suite for curses's getch
+;;;; curses_015_getch.test --- test suite for curses's getch
 
 (use-modules (test lib)
-	     (test lib2)
-	     (srfi srfi-1)
-	     (gucu curses))
+             (test lib2)
+             (srfi srfi-1)
+             (gucu curses))
 
 
 (define test (curses-test-start))
@@ -15,145 +15,148 @@
 (echo!)
 
 ;; Should be able to get characters from the keyboard
-(with-test-prefix "getch"
-		  
-		  (pass-if "ungetch / getch"
-			   (begin
-                             (ungetch #\x)
-                             (equal? (getch win) #\x)))
+(with-test-prefix
+ "getch"
 
-                  
-		  (pass-if "getch #:y #:x"
-			   (begin
-                             (clear win)
-                             (ungetch #\x)
-                             (let ((x2 (getch win #:y 2 #:x 2))
-                                   (pos (getyx win)))
-                               (and
-                                (equal? x2 #\x)
-                                (lset= eqv? pos '(2 2))))))
-					  
-		  (map (lambda (key)
-			 (pass-if (keyname key) (has-key? key)))
-		       (list
-			KEY_BREAK
-			KEY_DOWN
-			KEY_UP
-			KEY_LEFT
-			KEY_RIGHT
-			KEY_HOME
-			KEY_BACKSPACE
-			KEY_F0
-			(key-f 1)
-			(key-f 2)
-			(key-f 3)
-			(key-f 4)
-			(key-f 5)
-			(key-f 6)
-			(key-f 7)
-			(key-f 8)
-			(key-f 9)
-			(key-f 10)
-			(key-f 11)
-			(key-f 12)
-			KEY_DL
-			KEY_IL
-			KEY_DC
-			KEY_IC
-			KEY_EIC
-			KEY_CLEAR
-			KEY_EOS
-			KEY_EOL
-			KEY_SF
-			KEY_SR
-			KEY_NPAGE
-			KEY_PPAGE
-			KEY_STAB
-			KEY_CTAB
-			KEY_CATAB
-			KEY_ENTER
-			KEY_SRESET
-			KEY_RESET
-			KEY_PRINT
-			KEY_LL
-			KEY_A1
-			KEY_A3
-			KEY_B2
-			KEY_C1
-			KEY_C3
-			KEY_BTAB
-			KEY_BEG
-			KEY_CANCEL
-			KEY_CLOSE
-			KEY_COMMAND
-			KEY_COPY
-			KEY_CREATE
-			KEY_END
-			KEY_EXIT
-			KEY_FIND
-			KEY_HELP
-			KEY_MARK
-			KEY_MESSAGE
-			KEY_MOUSE
-			KEY_MOVE
-			KEY_NEXT
-			KEY_OPEN
-			KEY_OPTIONS
-			KEY_PREVIOUS
-			KEY_REDO
-			KEY_REFERENCE
-			KEY_REFRESH
-			KEY_REPLACE
-			KEY_RESIZE
-			KEY_RESTART
-			KEY_RESUME
-			KEY_SAVE
-			KEY_SBEG
-			KEY_SCANCEL
-			KEY_SCOMMAND
-			KEY_SCOPY
-			KEY_SCREATE
-			KEY_SDC
-			KEY_SDL
-			KEY_SELECT
-			KEY_SEND
-			KEY_SEOL
-			KEY_SEXIT
-			KEY_SFIND
-			KEY_SHELP
-			KEY_SHOME
-			KEY_SIC
-			KEY_SLEFT
-			KEY_SMESSAGE
-			KEY_SMOVE
-			KEY_SNEXT
-			KEY_SOPTIONS
-			KEY_SPREVIOUS
-			KEY_SPRINT
-			KEY_SREDO
-			KEY_SREPLACE
-			KEY_SRIGHT
-			KEY_SRSUME
-			KEY_SSAVE
-			KEY_SSUSPEND
-			KEY_SUNDO
-			KEY_SUSPEND
-			KEY_UNDO)))
-(with-test-prefix 
+ (pass-if "ungetch / getch"
+          (begin
+            (ungetch #\x)
+            (equal? (getch win) #\x)))
+
+ (pass-if "getch #:y #:x"
+          (begin
+            (clear win)
+            (ungetch #\x)
+            (let ((x2 (getch win #:y 2 #:x 2))
+                  (pos (getyx win)))
+              (and
+               (equal? x2 #\x)
+               (lset= eqv? pos '(2 2))))))
+
+ (map (lambda (key)
+        (pass-if (keyname key) (has-key? key)))
+      (list
+       KEY_BREAK
+       KEY_DOWN
+       KEY_UP
+       KEY_LEFT
+       KEY_RIGHT
+       KEY_HOME
+       KEY_BACKSPACE
+       KEY_F0
+       (key-f 1)
+       (key-f 2)
+       (key-f 3)
+       (key-f 4)
+       (key-f 5)
+       (key-f 6)
+       (key-f 7)
+       (key-f 8)
+       (key-f 9)
+       (key-f 10)
+       (key-f 11)
+       (key-f 12)
+       KEY_DL
+       KEY_IL
+       KEY_DC
+       KEY_IC
+       KEY_EIC
+       KEY_CLEAR
+       KEY_EOS
+       KEY_EOL
+       KEY_SF
+       KEY_SR
+       KEY_NPAGE
+       KEY_PPAGE
+       KEY_STAB
+       KEY_CTAB
+       KEY_CATAB
+       KEY_ENTER
+       KEY_SRESET
+       KEY_RESET
+       KEY_PRINT
+       KEY_LL
+       KEY_A1
+       KEY_A3
+       KEY_B2
+       KEY_C1
+       KEY_C3
+       KEY_BTAB
+       KEY_BEG
+       KEY_CANCEL
+       KEY_CLOSE
+       KEY_COMMAND
+       KEY_COPY
+       KEY_CREATE
+       KEY_END
+       KEY_EXIT
+       KEY_FIND
+       KEY_HELP
+       KEY_MARK
+       KEY_MESSAGE
+       KEY_MOUSE
+       KEY_MOVE
+       KEY_NEXT
+       KEY_OPEN
+       KEY_OPTIONS
+       KEY_PREVIOUS
+       KEY_REDO
+       KEY_REFERENCE
+       KEY_REFRESH
+       KEY_REPLACE
+       KEY_RESIZE
+       KEY_RESTART
+       KEY_RESUME
+       KEY_SAVE
+       KEY_SBEG
+       KEY_SCANCEL
+       KEY_SCOMMAND
+       KEY_SCOPY
+       KEY_SCREATE
+       KEY_SDC
+       KEY_SDL
+       KEY_SELECT
+       KEY_SEND
+       KEY_SEOL
+       KEY_SEXIT
+       KEY_SFIND
+       KEY_SHELP
+       KEY_SHOME
+       KEY_SIC
+       KEY_SLEFT
+       KEY_SMESSAGE
+       KEY_SMOVE
+       KEY_SNEXT
+       KEY_SOPTIONS
+       KEY_SPREVIOUS
+       KEY_SPRINT
+       KEY_SREDO
+       KEY_SREPLACE
+       KEY_SRIGHT
+       KEY_SRSUME
+       KEY_SSAVE
+       KEY_SSUSPEND
+       KEY_SUNDO
+       KEY_SUSPEND
+       KEY_UNDO))
+
+ (if (defined? 'KEY_EVENT)
+     (pass-if (keyname KEY_EVENT)
+              (has-key? KEY_EVENT))))
+
+(with-test-prefix
  "define-key"
 
  (pass-if "set"
-	  (if (defined? 'key-defined)
-	      (let* ((x (string #\esc #\~ #\~ #\~))
-	   	    (s1 (key-defined x))
-		    (s2 (define-key x KEY_SDL))
-		    (s3 (key-defined x)))
-	        (and
-	          (not s1)
-	          (eqv? s3 KEY_SDL)))
-              *unspecified*)))
-	    
+          (if (defined? 'key-defined)
+              (let* ((x (string #\esc #\~ #\~ #\~))
+                     (s1 (key-defined x))
+                     (s2 (define-key x KEY_SDL))
+                     (s3 (key-defined x)))
+                (and
+                 (not s1)
+                 (eqv? s3 KEY_SDL))))))
 
 (endwin)
 
-(curses-test-end test "r013_getch.out")
+(curses-test-end test "curses_015_getch.out")

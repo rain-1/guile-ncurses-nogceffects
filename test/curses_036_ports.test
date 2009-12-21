@@ -1,11 +1,11 @@
 ;;;; -*- Mode: scheme; -*-
-;;;; r041-ports.test --- test suite for newterm
+;;;; curses_036_ports.test --- test suite for newterm
 
 (use-modules (test lib)
-	     (test lib2)
-	     (gucu curses)
-	     (ice-9 format)
-	     (srfi srfi-1))
+             (test lib2)
+             (gucu curses)
+             (ice-9 format)
+             (srfi srfi-1))
 
 (define test (curses-test-start))
 
@@ -24,61 +24,61 @@
       (set! input-port (mkstemp! tmpl))
       (set! output-port (open-output-string))
 
-      (with-test-prefix 
+      (with-test-prefix
        "newterm"
        (pass-if "create"
-		(begin
-		  (set! scr (newterm "xterm" output-port input-port))
-		  (screen? scr)))
-       
+                (begin
+                  (set! scr (newterm "xterm" output-port input-port))
+                  (screen? scr)))
+
        (pass-if "stdscr"
-		(begin
-		  (set! win (stdscr))
-		  (window? win)))
-       
+                (begin
+                  (set! win (stdscr))
+                  (window? win)))
+
        (pass-if "addstr"
-		(begin
-		  (addstr win "Blammo!")
-		  #t))
-       
+                (begin
+                  (addstr win "Blammo!")
+                  #t))
+
        (pass-if "refresh"
-		(begin
-		  (refresh win)
-		  #t))
-       
+                (begin
+                  (refresh win)
+                  #t))
+
        (pass-if "nodelay!"
-		(begin
-		  (nodelay! win #t)
-		  #t))
-       
+                (begin
+                  (nodelay! win #t)
+                  #t))
+
        ;;(pass-if "getch"
-       ;;	  (not (not (getch win))))
+       ;;         (not (not (getch win))))
        )
-      
-      (with-test-prefix 
+
+      (with-test-prefix
        "set-term"
        (pass-if "switch"
-		(set! scr2 (newterm "xterm" output-port input-port))
-		(set-term scr2)
-		(set! win2 (stdscr))
-		(and
-		 (screen? scr2)
-		 (window? win2)
-		 (not (eq? win win2))))
-       
+                (set! scr2 (newterm "xterm" output-port input-port))
+                (set-term scr2)
+                (set! win2 (stdscr))
+                (and
+                 (screen? scr2)
+                 (window? win2)
+                 (not (eq? win win2))))
+
        ;; Should be false because it should not be possible to restore
        ;; the "shell mode" of a port
        (pass-if "endwin"
-		(let* ((x1 (endwin))
-		       (x2 (window? win2)))
-		  (and (not x1) x2)))
-       
+                (let* ((x1 (endwin))
+                       (x2 (window? win2)))
+                  (and (not x1) x2)))
+
        (pass-if "delscreen"
-		(not (not (false-if-exception (delscreen scr2))))))
+                (not (not (false-if-exception (delscreen scr2))))))
 
       (endwin)
       (close input-port)
       (delete-file tmpl)))
 
 
-(curses-test-end test "r041_ports.out")
+(curses-test-end test "curses_036_ports.out")

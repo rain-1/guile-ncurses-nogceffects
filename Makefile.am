@@ -149,32 +149,32 @@ NARROWTESTS = \
 	test/curses_009_beep.test \
 	test/curses_010_bkgd.test \
 	test/curses_011_border.test \
-	test/r010_clear.test \
-	test/r011_delch.test \
-	test/r012_deleteln.test \
-	test/r013_getch.test \
-	test/r014_getstr.test \
-	test/r015_getyx.test \
-	test/r016_inch.test \
-	test/r017_inchstr.test \
-	test/r018_inopts.test \
-	test/r019_insch.test \
-	test/r020_insstr.test \
-	test/r021_instr.test \
-	test/r022_kernel.test \
-	test/r023_move.test \
-	test/r024_outputs.test \
-	test/r025_overlay.test \
-	test/r026_pad.test \
-	test/r027_refresh.test \
-	test/r028_scr_dump.test \
-	test/r029_scroll.test \
-	test/r030_termattrs.test \
-	test/r031_touch.test \
-	test/r032_util.test \
-	test/r033_attributes.test \
-	test/r041_ports.test \
-	test/r042_mouse.test \
+	test/curses_012_clear.test \
+	test/curses_013_delch.test \
+	test/curses_014_deleteln.test \
+	test/curses_015_getch.test \
+	test/curses_016_getstr.test \
+	test/curses_017_getyx.test \
+	test/curses_018_inch.test \
+	test/curses_019_inchstr.test \
+	test/curses_020_inopts.test \
+	test/curses_021_insch.test \
+	test/curses_022_insstr.test \
+	test/curses_023_instr.test \
+	test/curses_024_kernel.test \
+	test/curses_025_move.test \
+	test/curses_026_outputs.test \
+	test/curses_027_overlay.test \
+	test/curses_028_pad.test \
+	test/curses_029_refresh.test \
+	test/curses_030_scr_dump.test \
+	test/curses_031_scroll.test \
+	test/curses_032_termattrs.test \
+	test/curses_033_touch.test \
+	test/curses_034_util.test \
+	test/curses_035_attributes.test \
+	test/curses_036_ports.test \
+	test/curses_037_mouse.test \
 	test/p001_panel.test \
 	test/f001_new_form.test \
 	test/f002_data.test \

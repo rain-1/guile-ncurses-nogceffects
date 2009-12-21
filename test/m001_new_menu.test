@@ -8,7 +8,7 @@
 	     (gucu menu))
 
 (define test (curses-test-start))
-
+(set! *sleep* #f)
 (define win (initscr))
 
 ;; Should be able to make a menu
@@ -24,7 +24,7 @@
 		 (m (new-menu (list item))))
 	    (post-menu m)
 	    (refresh win)
-	    (sleep 1)
+	    (maybe-sleep 1)
 	    (unpost-menu m)
 	    (refresh win)
 	    (menu? m))))

@@ -404,6 +404,9 @@
             top
             top-off
             top-on
+	    underline
+	    underline-on
+	    underlline-off
             vertical
             vertical-off
             vertical-on
@@ -533,6 +536,9 @@
 (define (top x) (a-attribute x A_TOP))
 (define (top-off x) (a-attribute-off x A_TOP))
 (define (top-on x) (a-attribute-on x A_TOP))
+(define (underline x) (a-attribute x A_UNDERLINE))
+(define (underline-off x) (a-attribute-off x A_UNDERLINE))
+(define (underline-on x) (a-attribute-on x A_UNDERLINE))
 (define (vertical x) (a-attribute x A_VERTICAL))
 (define (vertical-off x) (a-attribute-off x A_VERTICAL))
 (define (vertical-on x) (a-attribute-on x A_VERTICAL))

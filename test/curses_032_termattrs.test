@@ -1,48 +1,47 @@
 ;;;; -*- Mode: scheme; -*-
-;;;; r030-termattrs.test --- test suite for curses's term attrs
+;;;; curses_032_termattrs.test --- test suite for curses's term attrs
 
 (use-modules (test lib)
-	     (test lib2)
-	     (gucu curses)
-	     (ice-9 format)
-	     (srfi srfi-1)
-             (srfi srfi-13))  ; for Guile 1.6.x's string= 
+             (test lib2)
+             (gucu curses)
+             (ice-9 format)
+             (srfi srfi-1)
+             (srfi srfi-13))  ; for Guile 1.6.x's string=
 
 (define test (curses-test-start))
 
+(setenv "TERM" "xterm")
 (define win (initscr))
+(start-color!)
 (set! *sleep* #f)
 
 ;; Should be able to get term attributes
-(with-test-prefix 
+(with-test-prefix
  "termattrs"
 
  (pass-if "baudrate"
-	  (begin
-	    (clear win)
-	    (let ((b (baudrate)))
-	      (addstr win (format #f "Baudrate: ~a" b))
-	      (refresh win)
-	      (maybe-sleep 1)
-	      (eqv? b 38400)
+          (begin
+            (clear win)
+            (let ((b (baudrate)))
+              (addstr win (format #f "Baudrate: ~a" b))
+              (refresh win)
+              (maybe-sleep 1)
               (endwin)
-	      *unspecified*)))
+              (eqv? b 38400))))
 
  ;; Not sure what the correct answer for
  ;; erasechar should be.  Gnu/Linux xterm gives
  ;; #\del.  Cygwin gives ERR.
  (pass-if "erasechar"
-	  (begin
-	    (clear win)
-	    (move win 0 0)
-	    (let ((c (erasechar)))
-	      (addstr win (format #f "Erasechar: ~s" c))
-	      (refresh win)
-	      (maybe-sleep 1)
-	      (eqv? c #\del)
-              (endwin)
-              *unspecified*)))
- 
+          (begin
+            (clear win)
+            (move win 0 0)
+            (let ((c (erasechar)))
+              (addstr win (format #f "Erasechar: ~s" c))
+              (refresh win)
+              (maybe-sleep 1)
+              (eqv? c #\del))))
+
  ;; Not sure what the correct answer for killchar
  ;; should be.  Gnu/Linux xterm give #\nak. Cygwin
  ;; gives ERR
@@ -54,9 +53,7 @@
               (addstr win (format #f "Killchar: ~s" c))
               (refresh win)
               (maybe-sleep 1)
-              (eqv? c #\nak))
-              (endwin)
-              *unspecified*))
+              (eqv? c #\nak))))
 
  (pass-if "has-ic?"
           (begin
@@ -86,10 +83,7 @@
               (addstr win (format #f "Long Terminal Name: ~a" c))
               (refresh win)
               (maybe-sleep 1)
-              (not (not (string= c "xterm" 0 4 0 4))))
-            (endwin)
-            *unspecified*))
-
+              (not (not (string= c "xterm" 0 4 0 4))))))
 
  (pass-if "termname"
           (begin
@@ -99,48 +93,41 @@
               (addstr win (format #f "Terminal Name: ~a" c))
               (refresh win)
               (maybe-sleep 1)
-              (not (not (string= c "xterm" 0 4 0 4))))
-            (endwin)
-            *unspecified*))
-
+              (not (not (string= c "xterm" 0 4 0 4))))))
 
  (pass-if "term-attrs"
           (begin
             (clear win)
             (let ((ta (term-attrs))
-                  (ta2 (logior 
+                  (ta2 (logior
                         A_ALTCHARSET
                         A_BLINK
                         A_BOLD
-					; A_DIM
+			;; A_DIM
                         A_COLOR
                         A_INVIS
-					; A_PROTECT
+                        ;; A_PROTECT
                         A_REVERSE
                         A_STANDOUT
-                        A_UNDERLINE))) 
+                        A_UNDERLINE)))
               (move win 0 0)
-              (addstr win (format #f "      ~32,'0b~%" ta))
-              (addstr win (format #f "PRTCT ~32,'0b~%" A_PROTECT))
-              (addstr win (format #f "INVIS ~32,'0b~%" A_INVIS))
-              (addstr win (format #f "  ALT ~32,'0b~%" A_ALTCHARSET))
-              (addstr win (format #f " BOLD ~32,'0b~%" A_BOLD))
-              (addstr win (format #f "  DIM ~32,'0b~%" A_DIM))
-              (addstr win (format #f "BLINK ~32,'0b~%" A_BLINK))
-              (addstr win (format #f "RVRSE ~32,'0b~%" A_REVERSE))
-              (addstr win (format #f "UNDRL ~32,'0b~%" A_UNDERLINE))
-              (addstr win (format #f "STNDT ~32,'0b~%" A_STANDOUT))
-              (addstr win (format #f "COLOR ~32,'0b~%" A_COLOR))
-              (addstr win (format #f "      ~32,'0b~%" ta2))
+	      (addchstr win (underline-on (bold-on "Terminal Capabilities")))
+	      (move win 1 0)
+              (addstr win (format #f "this term ~32,'0b~%" ta))
+              (addstr win (format #f "  PROTECT ~32,'0b~%" A_PROTECT))
+              (addstr win (format #f "INVISIBLE ~32,'0b~%" A_INVIS))
+              (addstr win (format #f "      ALT ~32,'0b~%" A_ALTCHARSET))
+              (addstr win (format #f "     BOLD ~32,'0b~%" A_BOLD))
+              (addstr win (format #f "      DIM ~32,'0b~%" A_DIM))
+              (addstr win (format #f "    BLINK ~32,'0b~%" A_BLINK))
+              (addstr win (format #f "  REVERSE ~32,'0b~%" A_REVERSE))
+              (addstr win (format #f "UNDERLINE ~32,'0b~%" A_UNDERLINE))
+              (addstr win (format #f " STANDOUT ~32,'0b~%" A_STANDOUT))
+              (addstr win (format #f "    COLOR ~32,'0b~%" A_COLOR))
+              (addstr win (format #f "std xterm ~32,'0b~%" ta2))
               (refresh win)
-              (maybe-sleep 1)
-              (eqv? ta ta2))
-            (endwin)
-            *unspecified*))
-
- )
-
-
+              (maybe-sleep 10)
+              (eqv? ta ta2)))))
 (endwin)
 
-(curses-test-end test "r030_termattrs.out")		  
+(curses-test-end test "curses_032_termattrs.out")

@@ -1,35 +1,36 @@
 ;;;; -*- Mode: scheme; -*-
-;;;; r016_inch.test --- test suite for curses's inch
+;;;; curses_018_inch.test
 
 (use-modules (test lib)
-	     (test lib2)
-	     (srfi srfi-1)
-	     (gucu curses))
+             (test lib2)
+             (srfi srfi-1)
+             (gucu curses))
 
 
 (define test (curses-test-start))
 
 (define win (initscr))
 
-(with-test-prefix "inch"
-		  
-		  (pass-if "inch"
-			   (begin
-			     (clear win)
-			     (addch win (normal #\x) #:y 4 #:x 5)
-			     (move win 4 5)
-			     (refresh win)
-			     (let ((x1 (inch win)))
-			       (xchar-equal? (normal #\x) x1))))
-		  
-		  (pass-if "inch #:y #:x "
-			   (begin
-			     (clear win)
-			     (addch win (bold #\x) #:y 1 #:x 0)
-			     (refresh win)
-			     (let ((x2 (inch win #:y 1 #:x 0)))
-			       (xchar-equal? (bold #\x) x2)))))
+(with-test-prefix
+ "inch"
+
+ (pass-if "inch"
+          (begin
+            (clear win)
+            (addch win (normal #\x) #:y 4 #:x 5)
+            (move win 4 5)
+            (refresh win)
+            (let ((x1 (inch win)))
+              (xchar-equal? (normal #\x) x1))))
+
+ (pass-if "inch #:y #:x "
+          (begin
+            (clear win)
+            (addch win (bold #\x) #:y 1 #:x 0)
+            (refresh win)
+            (let ((x2 (inch win #:y 1 #:x 0)))
+              (xchar-equal? (bold #\x) x2)))))
 
 (endwin)
 
-(curses-test-end test "r016_inch.out")
+(curses-test-end test "curses_018_inch.out")

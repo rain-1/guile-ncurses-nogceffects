@@ -1,5 +1,7 @@
 ;;;; -*- Mode: scheme; -*-
-;;;; r012_deleteln.test --- test suite for curses's line deletion functions
+
+;;;; curses_014_deleteln.test --- test suite for curses's line
+;;;; deletion functions
 
 (use-modules (test lib)
 	     (test lib2)
@@ -13,67 +15,68 @@
 (define (mvinch y x)
   (inch win #:y y #:x x))
 
-(with-test-prefix "deleteln"
-		  
-		  (pass-if "deleteln"
-			   (begin
-			     (clear win)
-			     (addstr win "aaa" #:y 0 #:x 0)
-			     (addstr win "bbb" #:y 1 #:x 0)
-			     (addstr win "ccc" #:y 2 #:x 0)
-			     (move win 1 0)
-			     (deleteln win)
-			     (refresh win)
-			     (let ((x1 (mvinch 0 0))
-				   (x2 (mvinch 2 0)))
-			       (and
-				(xchar-equal? x1 (normal #\a))
-				(xchar-equal? x2 (normal #\sp))))))
+(with-test-prefix
+ "deleteln"
 
-		  (pass-if "insdelln -1"
-			   (begin
-			     (clear win)
-			     (addstr win "aaa" #:y 0 #:x 0)
-			     (addstr win "bbb" #:y 1 #:x 0)
-			     (addstr win "ccc" #:y 2 #:x 0)
-			     (move win 1 0)
-			     (insdelln win -1)
-			     (refresh win)
-			     (let ((x1 (mvinch 0 0))
-				   (x2 (mvinch 2 0)))
-			       (and
-				(xchar-equal? x1 (normal #\a))
-				(xchar-equal? x2 (normal #\sp))))))
+ (pass-if "deleteln"
+	  (begin
+	    (clear win)
+	    (addstr win "aaa" #:y 0 #:x 0)
+	    (addstr win "bbb" #:y 1 #:x 0)
+	    (addstr win "ccc" #:y 2 #:x 0)
+	    (move win 1 0)
+	    (deleteln win)
+	    (refresh win)
+	    (let ((x1 (mvinch 0 0))
+		  (x2 (mvinch 2 0)))
+	      (and
+	       (xchar-equal? x1 (normal #\a))
+	       (xchar-equal? x2 (normal #\sp))))))
 
-		  (pass-if "insertln"
-			   (begin
-			     (clear win)
-			     (addstr win "aaa" #:y 0 #:x 0)
-			     (addstr win "bbb" #:y 1 #:x 0)
-			     (addstr win "ccc" #:y 2 #:x 0)
-			     (move win 1 0)
-			     (insertln win)
-			     (refresh win)
-			     (let ((x1 (mvinch 0 0))
-				   (x2 (mvinch 2 0)))
-			       (and
-				(xchar-equal? x1 (normal #\a))
-				(xchar-equal? x2 (normal #\b))))))
+ (pass-if "insdelln -1"
+	  (begin
+	    (clear win)
+	    (addstr win "aaa" #:y 0 #:x 0)
+	    (addstr win "bbb" #:y 1 #:x 0)
+	    (addstr win "ccc" #:y 2 #:x 0)
+	    (move win 1 0)
+	    (insdelln win -1)
+	    (refresh win)
+	    (let ((x1 (mvinch 0 0))
+		  (x2 (mvinch 2 0)))
+	      (and
+	       (xchar-equal? x1 (normal #\a))
+	       (xchar-equal? x2 (normal #\sp))))))
 
-		  (pass-if "insdelln +1"
-			   (begin
-			     (clear win)
-			     (addstr win "aaa" #:y 0 #:x 0)
-			     (addstr win "bbb" #:y 1 #:x 0)
-			     (addstr win "ccc" #:y 2 #:x 0)
-			     (move win 1 0)
-			     (insdelln win 1)
-			     (refresh win)
-			     (let ((x1 (mvinch 0 0))
-				   (x2 (mvinch 2 0)))
-			       (and
-				(xchar-equal? x1 (normal #\a))
-				(xchar-equal? x2 (normal #\b)))))))
+ (pass-if "insertln"
+	  (begin
+	    (clear win)
+	    (addstr win "aaa" #:y 0 #:x 0)
+	    (addstr win "bbb" #:y 1 #:x 0)
+	    (addstr win "ccc" #:y 2 #:x 0)
+	    (move win 1 0)
+	    (insertln win)
+	    (refresh win)
+	    (let ((x1 (mvinch 0 0))
+		  (x2 (mvinch 2 0)))
+	      (and
+	       (xchar-equal? x1 (normal #\a))
+	       (xchar-equal? x2 (normal #\b))))))
+
+ (pass-if "insdelln +1"
+	  (begin
+	    (clear win)
+	    (addstr win "aaa" #:y 0 #:x 0)
+	    (addstr win "bbb" #:y 1 #:x 0)
+	    (addstr win "ccc" #:y 2 #:x 0)
+	    (move win 1 0)
+	    (insdelln win 1)
+	    (refresh win)
+	    (let ((x1 (mvinch 0 0))
+		  (x2 (mvinch 2 0)))
+	      (and
+	       (xchar-equal? x1 (normal #\a))
+	       (xchar-equal? x2 (normal #\b)))))))
 (endwin)
 
-(curses-test-end test "r012_deleteln.out")
+(curses-test-end test "curses_014_deleteln.out")

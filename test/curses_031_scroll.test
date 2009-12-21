@@ -1,55 +1,54 @@
 ;;;; -*- Mode: scheme; -*-
-;;;; r029_scroll.test --- test suite for curses's scroll
+;;;; curses_031_scroll.test --- test suite for curses's scroll
 
 (use-modules (test lib)
-	     (test lib2)
-	     ;; (gucu curses-wide)
-	     (gucu curses)
-	     (srfi srfi-1))
+             (test lib2)
+             (gucu curses)
+             (srfi srfi-1))
 
 (define test (curses-test-start))
 
 (define win (initscr))
 
 ;; Scroll the screens
-(with-test-prefix "scroll"
+(with-test-prefix
+ "scroll"
 
-		  (pass-if "scroll"
-			   (begin
-			     (clear win)
-			     (move win 1 0)
-			     (addstr win "xxx")
-			     (scrollok! win #t)
-			     (scroll win)
-			     (refresh win)
-			     (let ((x1 (instr win #:y 0 #:x 0 #:n 3)))
-			       (string=? "xxx" x1))))
+ (pass-if "scroll"
+          (begin
+            (clear win)
+            (move win 1 0)
+            (addstr win "xxx")
+            (scrollok! win #t)
+            (scroll win)
+            (refresh win)
+            (let ((x1 (instr win #:y 0 #:x 0 #:n 3)))
+              (string=? "xxx" x1))))
 
 
-		  (pass-if "scrl"
-			   (begin
-			     (clear win)
-			     (move win 0 0)
-			     (addstr win "xxx")
-			     (scrollok! win #t)
-			     (scrl win -1)
-			     (refresh win)
-			     (let ((x1 (instr win #:y 1 #:x 0 #:n 3)))
-			       (string=? "xxx" x1))))
+ (pass-if "scrl"
+          (begin
+            (clear win)
+            (move win 0 0)
+            (addstr win "xxx")
+            (scrollok! win #t)
+            (scrl win -1)
+            (refresh win)
+            (let ((x1 (instr win #:y 1 #:x 0 #:n 3)))
+              (string=? "xxx" x1))))
 
-		  (pass-if "scrl"
-			   (begin
-			     (clear win)
-			     (move win 1 0)
-			     (addstr win "xxx")
-			     (scrollok! win #t)
-			     (scrl win 1)
-			     (refresh win)
-			     (let ((x1 (instr win #:y 0 #:x 0 #:n 3)))
-			       (string=? "xxx" x1))))
-		  )
+ (pass-if "scrl"
+          (begin
+            (clear win)
+            (move win 1 0)
+            (addstr win "xxx")
+            (scrollok! win #t)
+            (scrl win 1)
+            (refresh win)
+            (let ((x1 (instr win #:y 0 #:x 0 #:n 3)))
+              (string=? "xxx" x1)))))
 
 
 (endwin)
 
-(curses-test-end test "r029_scroll.out")		  
+(curses-test-end test "curses_031_scroll.out")

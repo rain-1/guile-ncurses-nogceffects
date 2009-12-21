@@ -1,61 +1,53 @@
 ;;;; -*- Mode: scheme; -*-
-;;;; r022_kernel.test --- test suite for curses's low level functions
+;;;; curses_024_kernel.test --- test suite for curses's low level functions
 
 (use-modules (test lib)
-	     (test lib2)
-	     (gucu curses)
-	     (srfi srfi-1))
+             (test lib2)
+             (gucu curses)
+             (srfi srfi-1))
 
 (define test (curses-test-start))
-
-;; WTF?: def-shell-mode and def-shell-mode crash hard on Cygwin
-(with-test-prefix "def-prog-mode"
-		  (pass-if "def-prog-mode"
-			   (begin
-			     ;; (def-prog-mode)
-			     #t))
-
-		  (pass-if "def-shell-mode"
-			   (begin
-			     ;; (def-shell-mode)
-			     #t))
-		  )
-
+(setenv "TERM" "xterm")
 
 (define win (initscr))
 
+;; WTF?: def-shell-mode and def-shell-mode crash hard on Cygwin
+(with-test-prefix
+ "def-prog-mode"
+
+ (pass-if "def-prog-mode"
+          (def-prog-mode)))
+
 ;; Should be able to save and reset tty
-(with-test-prefix "kernel"
-		  
- 		  (pass-if "getsyx / setsyx"
- 			   (begin
- 			     (clear win)
- 			     (refresh win)
- 			     (setsyx 6 6)
- 			     (lset= equal? '(6 6) (getsyx))))
+(with-test-prefix
+ "kernel"
 
-		  ;; WTF?: True on Linux, False on Cygwin
-		  (pass-if "savetty / resettty"
-			   (begin
-			     (clear win)
-			     (refresh win)
-			     (and (savetty)
-				  (resetty))
-			     *unspecified*))
-		  
-		  ;; Curs-set should not return #f if this terminal
-		  ;; has the capability to set the visiblity of the
-		  ;; cursor.  Not all terminals have this capability.
-		  (pass-if "curs-set"
-			   (begin
-			     (let ((x1 (curs-set 0))
-				   (x2 (curs-set 1))
-				   (x3 (curs-set 2)))
-			       (if x1 (curs-set x1))
-			       (and x1 x2 x3)
-                               *unspecified*))))
+ (pass-if "getsyx / setsyx"
+          (begin
+            (clear win)
+            (refresh win)
+            (setsyx 6 6)
+            (lset= equal? '(6 6) (getsyx))))
 
+ ;; WTF?: True on Linux, False on Cygwin
+ (pass-if "savetty / resettty"
+          (begin
+            (clear win)
+            (refresh win)
+            (and (savetty)
+                 (resetty))))
+
+ ;; Curs-set should not return #f if this terminal
+ ;; has the capability to set the visiblity of the
+ ;; cursor.  Not all terminals have this capability.
+ (pass-if "curs-set"
+          (begin
+            (let ((x1 (curs-set 0))
+                  (x2 (curs-set 1))
+                  (x3 (curs-set 2)))
+              (if x1 (curs-set x1))
+              (and x1 x2 x3)))))
 
 (endwin)
 
-(curses-test-end test "r022_kernel.out")		  
+(curses-test-end test "curses_024_kernel.out")

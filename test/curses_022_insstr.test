@@ -1,5 +1,6 @@
 ;;;; -*- Mode: scheme; -*-
-;;;; r020_insstr.test --- test suite for curses's insert string functions
+;;;; curses_022_insstr.test --- test suite for curses's insert string
+;;;; functions
 
 (use-modules (test lib)
 	     (test lib2)
@@ -11,63 +12,62 @@
 (define win (initscr))
 
 ;; Should be able to change input options
-(with-test-prefix "insstr"
+(with-test-prefix 
+ "insstr"
 		  
-		  (pass-if "insstr"
-			   (begin
-			     (clear win)
-			     (refresh win)
-			     (addstr win "xxx" #:y 0 #:x 0)
-			     (move win 0 0)
-			     (insstr win "zzz")
-			     (let ((x1 (inch win #:y 0 #:x 2))
-				   (x2 (inch win #:y 0 #:x 3)))
-			       (and
-				(xchar-equal? x1 (normal #\z))
-				(xchar-equal? x2 (normal #\x))))))
+ (pass-if "insstr"
+	  (begin
+	    (clear win)
+	    (refresh win)
+	    (addstr win "xxx" #:y 0 #:x 0)
+	    (move win 0 0)
+	    (insstr win "zzz")
+	    (let ((x1 (inch win #:y 0 #:x 2))
+		  (x2 (inch win #:y 0 #:x 3)))
+	      (and
+	       (xchar-equal? x1 (normal #\z))
+	       (xchar-equal? x2 (normal #\x))))))
 
-		  (pass-if "insstr #:y #:x"
-			   (begin
-			     (clear win)
-			     (refresh win)
-			     (move win 0 0)
-			     (addstr win "xxx")
-			     (insstr win "zzz" #:y 0 #:x 0)
-			     (let ((x1 (inch win #:y 0 #:x 2))
-				   (x2 (inch win #:y 0 #:x 3)))
-			       (and
-				(xchar-equal? x1 (normal #\z))
-				(xchar-equal? x2 (normal #\x))))))
+ (pass-if "insstr #:y #:x"
+	  (begin
+	    (clear win)
+	    (refresh win)
+	    (move win 0 0)
+	    (addstr win "xxx")
+	    (insstr win "zzz" #:y 0 #:x 0)
+	    (let ((x1 (inch win #:y 0 #:x 2))
+		  (x2 (inch win #:y 0 #:x 3)))
+	      (and
+	       (xchar-equal? x1 (normal #\z))
+	       (xchar-equal? x2 (normal #\x))))))
 
+ (pass-if "insstr #:n"
+	  (begin
+	    (clear win)
+	    (refresh win)
+	    (addstr win "xxx" #:y 0 #:x 0)
+	    (move win 0 0)
+	    (insstr win "zzz" #:n 1)
+	    (let ((x1 (inch win #:y 0 #:x 0))
+		  (x2 (inch win #:y 0 #:x 1)))
+	      (and
+	       (xchar-equal? x1 (normal #\z))
+	       (xchar-equal? x2 (normal #\x))))))
 
-		  (pass-if "insstr #:n"
-			   (begin
-			     (clear win)
-			     (refresh win)
-			     (addstr win "xxx" #:y 0 #:x 0)
-			     (move win 0 0)
-			     (insstr win "zzz" #:n 1)
-			     (let ((x1 (inch win #:y 0 #:x 0))
-				   (x2 (inch win #:y 0 #:x 1)))
-			       (and
-				(xchar-equal? x1 (normal #\z))
-				(xchar-equal? x2 (normal #\x))))))
-
-		  (pass-if "insstr #:y #:x #:n"
-			   (begin
-			     (clear win)
-			     (refresh win)
-			     (move win 0 0)
-			     (addstr win "xxx")
-			     (insstr win "zzz" #:y 0 #:x 0 #:n 1)
-			     (let ((x1 (inch win #:y 0 #:x 0))
-				   (x2 (inch win #:y 0 #:x 1)))
-			       (and
-				(xchar-equal? x1 (normal #\z))
-				(xchar-equal? x2 (normal #\x))))))
-		  )
+ (pass-if "insstr #:y #:x #:n"
+	  (begin
+	    (clear win)
+	    (refresh win)
+	    (move win 0 0)
+	    (addstr win "xxx")
+	    (insstr win "zzz" #:y 0 #:x 0 #:n 1)
+	    (let ((x1 (inch win #:y 0 #:x 0))
+		  (x2 (inch win #:y 0 #:x 1)))
+	      (and
+	       (xchar-equal? x1 (normal #\z))
+	       (xchar-equal? x2 (normal #\x)))))))
 
 
 (endwin)
 
-(curses-test-end test "r020_insstr.out")		  
+(curses-test-end test "curses_022_insstr.out")		  
