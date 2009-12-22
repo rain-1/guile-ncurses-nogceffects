@@ -1,6 +1,7 @@
 \input texinfo @c -*- Mode: texinfo; Fill-column: 70; coding: utf-8 -*-
 @c %**start of header
 @setfilename gucu.info
+@documentencoding UTF-8
 @include version.texi
 @settitle GuCu @value{VERSION}
 
@@ -3194,13 +3195,15 @@ time @code{initscr} was called.
 @c can be used in only a few routines.
 
 
-@subsubsection Coordinates
+@subsubsection The Coordinate System
 @cindex Coordinates
 
-The @code{move} routine and routines prefixed with @emph{mv} require a
-@code{y} and @code{x} coordinate.  The coordinate @code{y} always
-refers to the row (of the window), and @code{x} always refers to the
-column.  The upper left-hand corner is always (0,0), not (1,1).
+The @code{move} routine and routines that take @code{#:y} and
+@code{#:x} arguments use a screen based coordinate system.  The
+coordinate @code{y} always refers to the row (of the window), and
+@code{x} always refers to the column.  The upper left-hand corner is
+always (0,0).  @code{y} increases as one moves down the window, and
+@code{x} increases as one moves left.
 
 @menu
 @end menu
@@ -3384,21 +3387,23 @@ rendered complex characters and strings.
 @deffnx Procedure inverse x
 @deffnx Procedure right x
 @deffnx Procedure top x
+@deffnx Procedure underline x
 @deffnx Procedure vertical x
 
 These procedures take @var{x}, which can be either a simple character,
 a complex character, a simple string, or a complex string, and returns
 a rendered character or string with the attribute blink, bold, dim,
-horizontal, invis, left, low, normal, protect, inverse, right, top, or
-vertical, respectively.  If the input @var{x} was a rendered character
-or a rendered string, the old attributes are replaced.  If @var{x} was
-a rendered character or string with an associated color pair, the
-returned character or string will have the same associated color pair.
+horizontal, invisible, left, low, normal, protect, inverse, right,
+top, underline, or vertical, respectively.  If the input @var{x} was a
+rendered character or a rendered string, the old attributes are
+replaced.  If @var{x} was a rendered character or string with an
+associated color pair, the returned character or string will have the
+same associated color pair.
 
 Note that whether these attributes can actually be visualized depends
 on the capabilities of the terminal itself.  Most terminals can handle
-bold, dim, inverse, and sometimes blink and invis.  The rest should
-probably not be used.
+bold, dim, inverse, and sometimes blink, underline and invisible.  The
+rest should probably not be used.
 
 @end deffn
 
@@ -3414,19 +3419,20 @@ probably not be used.
 @deffnx Procedure inverse-on x
 @deffnx Procedure right-on x
 @deffnx Procedure top-on x
+@deffnx Procecure underline-on x
 @deffnx Procedure vertical-on x
 
 These procedures take @var{x}, which can be either a simple character,
 a complex character, a simple string, or a complex string.  If @var{x}
 is a simple character or simple string, it sets its rendering to
-blink, bold, dim, horizontal, invis, left, low, normal, protect,
-inverse, right, top, or vertical, respectively.  If the input @var{x}
-was a rendered character or a rendered string, these attributes are
-added to the rendered character.
+blink, bold, dim, horizontal, invisible, left, low, normal, protect,
+inverse, right, top, underline, or vertical, respectively.  If the
+input @var{x} was a rendered character or a rendered string, these
+attributes are added to the rendered character.
 
 Most terminals can't actually visualize multiple attributes on a
 single character: some terminals can handle the combination of blink
-and bold or inverse and bold.
+and bold, bold and underline, or inverse and bold.
 
 @end deffn
 
@@ -3442,6 +3448,7 @@ and bold or inverse and bold.
 @deffnx Procedure inverse-off x
 @deffnx Procedure right-off x
 @deffnx Procedure top-off x
+@deffnx Procedure underline-off
 @deffnx Procedure vertical-off x
 
 These procedures take @var{x}, which can be either a simple character,
@@ -3482,7 +3489,7 @@ to the beginning of the next line.  At the bottom of the current
 scrolling region, if @code{scrollok!} is enabled, the scrolling region
 is scrolled up one line.
 
-@findex set-tabsize
+@findex set-tabsize!
 @findex clrtoeol
 
 If @var{ch} is a tab, newline, or backspace, the cursor is moved
@@ -3491,7 +3498,7 @@ character left; at the left edge of a window it does nothing. Newline
 does a @code{clrtoeol}, then moves the cursor to the window left
 margin on the next line, scrolling the window if on the last
 line. Tabs are considered to be at every eighth column.  The tab
-interval may be altered with the @code{set-tabsize} procedure.
+interval may be altered with the @code{set-tabsize!} procedure.
 
 @findex inch
 
@@ -3530,7 +3537,7 @@ that doesn't wrap or scroll.
 Returns the current tabsize for this screen.  The default is eight.
 @end deffn
 
-@deffn Procedure set-tabsize tab
+@deffn Procedure set-tabsize! tab
 Sets the tabsize for this screen to @var{tab} characters.
 
 Its return value is unspecified.
@@ -3548,10 +3555,10 @@ define a terminal-specific replacement for it.  The names are taken
 from VT100 nomenclature. Each of these procecures takes no arguments
 and returns a rendered character with the 'normal' attribute and with
 the default color pair.  The following prints a less-than-or-equal-to
-sign to the screen, for example.
+sign to the window @code{win}, for example.
 
 @example
-(addch stdscr (acs-lequal))
+(addch win (normal (acs-lequal)))
 @end example
 
 The set of line-graphics characters is given in @ref{tab:ACS}.
@@ -3727,6 +3734,16 @@ The routine @code{attr-set!} sets the current rendition (attributes
 and color pair) of the given window to @var{attrs}.  Optionally, you
 may split the color-pair information as a third parameter.
 
+@var{attrs} is one of the attribute constants: there is an attribute
+constant for each of the attributes mentioned in @xref{Making rendered
+characters}: A_BLINK, A_BOLD, A_DIM, A_INVIS, A_NORMAL, A_PROTECT,
+A_REVERSE, A_STANDOUT, A_UNDERLINE, A_HORIZONTAL, A_LEFT, A_LOW,
+A_RIGHT, A_TOP, A_VERTICAL.
+
+@comment A_ALTCHARSET,  A_ATTRIBUTES
+@comment 	    A_CHARTEXT
+@comment	    A_COLOR
+
 The following two calls are equivalent:
 @example
 (attr-set! win (logior A_BOLD (color-pair 1)))
@@ -3756,9 +3773,9 @@ manipulation routines}.
 
 @deffn Procedure color-set! win color-pair-number
 
-The routine @code{color-set!} sets the current color of the given window to
-the foreground/background combination described by the
-@var{color-pair-number}.  
+The routine @code{color-set!} sets the current color of the given
+window to the foreground/background combination described by the
+@var{color-pair-number}.
 
 The return value is unspecified, but, it can throw an error if the
 color pair number was too large.
@@ -3791,9 +3808,9 @@ The return value is unspecified.
 
 @end deffn
 
-The attributes can be passed to the routines
-@code{attr-on!}, @code{attr-off!}, and @code{attr-set!}, or @code{logior}'d
-with the characters passed to @code{addch}.  For the color part of the
+The attributes can be passed to the routines @code{attr-on!},
+@code{attr-off!}, and @code{attr-set!}, or @code{logior}'d with the
+characters passed to @code{addch}.  For the color part of the
 rendition, use @code{color-pair}.  @xref{tab:a}.
 
 @deffn Procedure color-pair n
@@ -3805,11 +3822,26 @@ if the pair number is less than 256.  The alternate functions such as
 @code{color-set!} can pass a color pair value directly.
 @end deffn
 
+For example, the following two calls are equivalent ways of
+setting the default attribute of the screen to be bold and
+have color-pair #1.
+@example
+(attr-set! win (logior A_BOLD (color-pair 1)))
+@end example
+or
+@example
+(attr-set! win A_BOLD 1)
+@end example
+
 @deffn Procedure pair-number attrs
 @cindex Color pairs
 
-Returns the color pair number number associated with attribute
-@var{attrs}.
+This function is the inverse operation of @code{color-pair}.  It is
+rarely useful.
+@example
+(color-pair 1) ==> 256
+(pair-number 256) ==> 1
+@end example
 
 @end deffn
 
@@ -4035,7 +4067,8 @@ Its return value is unspecified.
 The @code{clrtoeol} routine erase the current line to the right
 of the cursor, inclusive, to the end of the current line.
 
-It returns @code{#f} on failure and @code{#t} on success.
+It returns @code{#f} on failure and @code{#t} on success.  Failure
+could occur if the cursor position is offscreen.
 @end deffn
 
 @node Color manipulation routines, Deleting the character under the cursor, Clearing windows and parts of window, The basic curses library
@@ -4573,8 +4606,8 @@ Characters input are echoed only if @code{echo!} is currently on.  In
 that case, backspace is echoed as deletion of the previous character
 (typically a left motion).
 
-FIXME (MAKE THE CODE DO THIS) If a SIGWINCH interrupts the function,
-it will do something clever with the KEY_RESIZE.
+If a SIGWINCH interrupts the function, it will return the integer
+value of KEY_RESIZE instead of a string.
 @end deffn
 
 @node Cursor location and window coordinates, Getting a rendered character from the window, Receiving strings from the keyboard, The basic curses library
@@ -4611,23 +4644,15 @@ with its rendition.
 
 @deffn Procedure inch
 
-@findex A_CHARTEXT
-@findex A_ATTRIBUTES
-@findex A_COLOR
-
-These routines return the rendered 8-bit character at the current
-position in the named window.  If any attributes are set for that
-position, their values are @code{logior}'ed into the value returned.
-The constants @code{A_CHARTEXT}, @code{A_ATTRIBUTES}, and
-@code{A_COLOR} can be used with @code{logand} to extract the
-character, attributes, or color of the rendered character.
+These routines return the rendered complex character at the current
+position in the named window. 
 @end deffn
 
 
 @node Getting a string of characters and attributes from a window, Input options, Getting a rendered character from the window, The basic curses library
 @subsection Getting a string of characters and attributes from a window
 
-@deffn Procedure inchnstr win n #:key y x
+@deffn Procedure inchnstr win #:key y x n
 
 These routines return a list of rendered characters, starting at the
 current cursor position in the named window and ending at the right
