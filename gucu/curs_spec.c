@@ -224,6 +224,10 @@ gucu_wgetnstr (SCM win, SCM n)
         s_str = _scm_sstring_from_wint_string (c_wstr);
         free (c_wstr);
       }
+    else if (ret == KEY_RESIZE)
+      {
+	s_str = scm_from_int (KEY_RESIZE);
+      }
     else
       abort ();
   }
@@ -237,6 +241,10 @@ gucu_wgetnstr (SCM win, SCM n)
       {
         s_str = scm_from_locale_string (c_str);
         free (c_str);
+      }
+    else if (ret == KEY_RESIZE)
+      {
+	s_str = scm_from_int (KEY_RESIZE);
       }
     else
       abort ();
@@ -769,7 +777,7 @@ gucu_TABSIZE ()
 SCM
 gucu_set_TABSIZE (SCM t)
 {
-  SCM_ASSERT (scm_is_integer (t), t, SCM_ARG1, "set-tabsize");
+  SCM_ASSERT (scm_is_integer (t), t, SCM_ARG1, "set-tabsize!");
 
   TABSIZE = scm_to_int (t);
   return SCM_UNSPECIFIED;
@@ -854,7 +862,7 @@ gucu_init_special ()
   scm_c_define_gsubr ("colors", 0, 0, 0, gucu_COLORS);
   scm_c_define_gsubr ("color-pairs", 0, 0, 0, gucu_COLOR_PAIRS);
   scm_c_define_gsubr ("tabsize", 0, 0, 0, gucu_TABSIZE);
-  scm_c_define_gsubr ("set-tabsize", 1, 0, 0, gucu_set_TABSIZE);
+  scm_c_define_gsubr ("set-tabsize!", 1, 0, 0, gucu_set_TABSIZE);
   scm_c_define_gsubr ("stdscr", 0, 0, 0, gucu_stdscr);
   scm_c_define_gsubr ("curscr", 0, 0, 0, gucu_curscr);
 }
