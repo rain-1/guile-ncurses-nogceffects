@@ -359,7 +359,7 @@
 	    colors
 	    color-pairs
 	    tabsize
-	    set-tabsize
+	    set-tabsize!
 	    stdscr
 	    curscr
 	    window?
