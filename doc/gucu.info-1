@@ -1,7 +1,7 @@
 This is doc/gucu.info, produced by makeinfo version 4.13 from
 ./doc/gucu.texi.
 
-This manual is for Gucu, a Guile Curses library, (version 0.6, 2
+This manual is for Gucu, a Guile Curses library, (version 0.6, 23
 December 2009).  Gucu provides bindings for the Curses library, which
 provides functionality for updating character screens.
 
@@ -42,7 +42,7 @@ File: gucu.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 GuCu: a Guile Curses Library
 ****************************
 
-This manual is for Gucu, a Guile Curses library, (version 0.6, 2
+This manual is for Gucu, a Guile Curses library, (version 0.6, 23
 December 2009).  Gucu provides bindings for the Curses library, which
 provides functionality for updating character screens.
 
@@ -142,7 +142,6 @@ Output functions
 
 * A simple `addstr' example::
 * A word of caution::
-* Adding wide strings::
 
 Input functions
 
@@ -212,7 +211,6 @@ Curses Reference
 * The naming of routines::
 * The basic curses library::
 * Function key labels library::
-* The wide curses library::
 * The curses panel library::
 * The curses menu library::
 * The curses form library::
@@ -255,24 +253,8 @@ The basic curses library: `(gucu curses)'
 * Miscellaneous utilities::
 * Window creation::
 
-Coordinates
+The Coordinate System
 
-
-The wide curses library: `(gucu curses-wide)'
-
-* Overview (wide)::
-* Adding wide characters::
-* Adding wide strings::
-* Clearing windows or parts of windows (wide)::
-* Borders and lines (wide)::
-* Getting characters from the keyboard (wide)::
-* Getting wide strings from the keyboard::
-* Getting a rendered complex character::
-* Getting a rendered complex string::
-* Inserting a complex character before the cursor::
-* Inserting a unrendered wide string into a window::
-* Getting a string of unrendered wide characters from a window::
-* Terminal attributes for wide characters::
 
 The curses menu library: `(gucu menu)'
 
@@ -1108,7 +1090,6 @@ procedure from `(ice-9 format)'.
 
 * A simple `addstr' example::
 * A word of caution::
-* Adding wide strings::
 
 
 File: gucu.info,  Node: A simple `addstr' example,  Next: A word of caution,  Prev: `addstr' class of functions,  Up: Output functions
@@ -3634,7 +3615,6 @@ The gucu package provides the following modules:
 * The naming of routines::
 * The basic curses library::
 * Function key labels library::
-* The wide curses library::
 * The curses panel library::
 * The curses menu library::
 * The curses form library::
@@ -3821,13 +3801,14 @@ permission in `/usr/share/terminfo' is not available.
 curses)' and will be return the size of the screen at the time
 `initscr' was called.
 
-5.2.1.1 Coordinates
-...................
+5.2.1.1 The Coordinate System
+.............................
 
-The `move' routine and routines prefixed with _mv_ require a `y' and
-`x' coordinate.  The coordinate `y' always refers to the row (of the
-window), and `x' always refers to the column.  The upper left-hand
-corner is always (0,0), not (1,1).
+The `move' routine and routines that take `#:y' and `#:x' arguments use
+a screen based coordinate system.  The coordinate `y' always refers to
+the row (of the window), and `x' always refers to the column.  The
+upper left-hand corner is always (0,0).  `y' increases as one moves
+down the window, and `x' increases as one moves left.
 
 * Menu:
 
@@ -3938,9 +3919,19 @@ File: gucu.info,  Node: Making rendered characters,  Next: Adding characters,  P
 --------------------------------
 
 Many curses functions take rendered, complex characters: characters
-with associated color and attribute information.  There is a family of
-functions to convert unrendered, simple characters or strings to
-rendered complex characters and strings.
+with associated color and attribute information.
+
+   For those who are familiar with the C API for ncurses, they know that
+a rendered character is either a `chtype', which is a 32-bit integer
+containing an 8-bit `char' and 24-bits of color and rendering
+information, or is a `cchar_t', which is one or more `wchar_t'
+characters plus associated color and rendering information.  GuCu
+abstracts away the difference between these two types and presents a
+consistent API for both.  The GuCu complex rendered character will get
+converted automatically to `chtype' or `cchar_t' when necessary.
+
+   There is a family of functions to convert unrendered, simple
+characters or strings to rendered complex characters and strings.
 
  -- Procedure: blink x
  -- Procedure: bold x
@@ -3954,21 +3945,22 @@ rendered complex characters and strings.
  -- Procedure: inverse x
  -- Procedure: right x
  -- Procedure: top x
+ -- Procedure: underline x
  -- Procedure: vertical x
      These procedures take X, which can be either a simple character, a
      complex character, a simple string, or a complex string, and
      returns a rendered character or string with the attribute blink,
-     bold, dim, horizontal, invis, left, low, normal, protect, inverse,
-     right, top, or vertical, respectively.  If the input X was a
-     rendered character or a rendered string, the old attributes are
-     replaced.  If X was a rendered character or string with an
-     associated color pair, the returned character or string will have
-     the same associated color pair.
+     bold, dim, horizontal, invisible, left, low, normal, protect,
+     inverse, right, top, underline, or vertical, respectively.  If the
+     input X was a rendered character or a rendered string, the old
+     attributes are replaced.  If X was a rendered character or string
+     with an associated color pair, the returned character or string
+     will have the same associated color pair.
 
      Note that whether these attributes can actually be visualized
      depends on the capabilities of the terminal itself.  Most
-     terminals can handle bold, dim, inverse, and sometimes blink and
-     invis.  The rest should probably not be used.
+     terminals can handle bold, dim, inverse, and sometimes blink,
+     underline and invisible.  The rest should probably not be used.
 
 
  -- Procedure: blink-on x
@@ -3983,18 +3975,20 @@ rendered complex characters and strings.
  -- Procedure: inverse-on x
  -- Procedure: right-on x
  -- Procedure: top-on x
+ -- Procecure: underline-on x
  -- Procedure: vertical-on x
      These procedures take X, which can be either a simple character, a
      complex character, a simple string, or a complex string.  If X is
      a simple character or simple string, it sets its rendering to
-     blink, bold, dim, horizontal, invis, left, low, normal, protect,
-     inverse, right, top, or vertical, respectively.  If the input X
-     was a rendered character or a rendered string, these attributes are
-     added to the rendered character.
+     blink, bold, dim, horizontal, invisible, left, low, normal,
+     protect, inverse, right, top, underline, or vertical,
+     respectively.  If the input X was a rendered character or a
+     rendered string, these attributes are added to the rendered
+     character.
 
      Most terminals can't actually visualize multiple attributes on a
      single character: some terminals can handle the combination of
-     blink and bold or inverse and bold.
+     blink and bold, bold and underline, or inverse and bold.
 
 
  -- Procedure: blink-off x
@@ -4009,6 +4003,7 @@ rendered complex characters and strings.
  -- Procedure: inverse-off x
  -- Procedure: right-off x
  -- Procedure: top-off x
+ -- Procedure: underline-off
  -- Procedure: vertical-off x
      These procedures take X, which can be either a simple character, a
      complex character, a simple string, or a complex string.  If X is
@@ -4026,6 +4021,33 @@ rendered complex characters and strings.
 
      This procedure should only be used if `start-color' has been
      called.
+
+
+   There are also a couple of low-level functions to do conversion
+between C characters and Guile characters.
+
+ -- Procedure: %scheme-char-from-c-char c
+     Given an 8-bit integer C that represents a C character in the
+     current locale, this returns the associated scheme character.
+
+
+ -- Procedure: %scheme-char-to-c-char c
+     This returns an 8-bit integer that is the C representation of
+     character `c' in the current locale.  If the character cannot be
+     represented in the current locale, it will return the integer 63,
+     which is the ASCII code for the question mark.
+
+
+ -- Procedure: %scheme-char-from-c-wchar c
+     Given an integer C that represents a wchar_t representation of a C
+     wide character, this returns the associated scheme character.
+
+
+ -- Procedure: %scheme-char-to-c-wchar c
+     This returns an integer that is the C `wchar_t' representation of
+     character `c'.  If the character cannot be represented in the
+     current locale, it will return the integer #xFFFD, which is the
+     Unicode codepoint for the replacement character.
 
 
 
@@ -4051,7 +4073,7 @@ curses window, and then advance the cursor.
      Newline does a `clrtoeol', then moves the cursor to the window left
      margin on the next line, scrolling the window if on the last line.
      Tabs are considered to be at every eighth column.  The tab
-     interval may be altered with the `set-tabsize' procedure.
+     interval may be altered with the `set-tabsize!' procedure.
 
      If CH is any control character other than <TAB>, <CR>, or <BS>, it
      is drawn in `^X' notation.  Calling `inch' after adding a control
@@ -4080,7 +4102,7 @@ curses window, and then advance the cursor.
  -- Procecure: tabsize
      Returns the current tabsize for this screen.  The default is eight.
 
- -- Procedure: set-tabsize tab
+ -- Procedure: set-tabsize! tab
      Sets the tabsize for this screen to TAB characters.
 
      Its return value is unspecified.
@@ -4096,9 +4118,9 @@ terminal-specific replacement for it.  The names are taken from VT100
 nomenclature. Each of these procecures takes no arguments and returns a
 rendered character with the 'normal' attribute and with the default
 color pair.  The following prints a less-than-or-equal-to sign to the
-screen, for example.
+window `win', for example.
 
-     (addch stdscr (acs-lequal))
+     (addch win (normal (acs-lequal)))
 
    The set of line-graphics characters is given in *note tab:ACS::.
 
@@ -4200,6 +4222,12 @@ graphic rendition of characters put on the screen.
      color pair) of the given window to ATTRS.  Optionally, you may
      split the color-pair information as a third parameter.
 
+     ATTRS is one of the attribute constants: there is an attribute
+     constant for each of the attributes mentioned in *note Making
+     rendered characters::: A_BLINK, A_BOLD, A_DIM, A_INVIS, A_NORMAL,
+     A_PROTECT, A_REVERSE, A_STANDOUT, A_UNDERLINE, A_HORIZONTAL,
+     A_LEFT, A_LOW, A_RIGHT, A_TOP, A_VERTICAL.
+
      The following two calls are equivalent:
           (attr-set! win (logior A_BOLD (color-pair 1)))
      or
@@ -4261,9 +4289,17 @@ to `addch'.  For the color part of the rendition, use `color-pair'.
      pair number is less than 256.  The alternate functions such as
      `color-set!' can pass a color pair value directly.
 
+   For example, the following two calls are equivalent ways of setting
+the default attribute of the screen to be bold and have color-pair #1.
+     (attr-set! win (logior A_BOLD (color-pair 1)))
+   or
+     (attr-set! win A_BOLD 1)
+
  -- Procedure: pair-number attrs
-     Returns the color pair number number associated with attribute
-     ATTRS.
+     This function is the inverse operation of `color-pair'.  It is
+     rarely useful.
+          (color-pair 1) ==> 256
+          (pair-number 256) ==> 1
 
 
 Name           Description
@@ -4428,7 +4464,8 @@ background rendition (as set by `bkgdset!') merged into them.
      The `clrtoeol' routine erase the current line to the right of the
      cursor, inclusive, to the end of the current line.
 
-     It returns `#f' on failure and `#t' on success.
+     It returns `#f' on failure and `#t' on success.  Failure could
+     occur if the cursor position is offscreen.
 
 
 File: gucu.info,  Node: Color manipulation routines,  Next: Deleting the character under the cursor,  Prev: Clearing windows and parts of window,  Up: The basic curses library
@@ -4636,7 +4673,7 @@ File: gucu.info,  Node: Getting characters from the keyboard,  Next: Receiving s
      the value `#f' is returned.  In delay mode, the program waits
      until the system passes text through to the program.  Depending on
      the setting of cbreak, this is after one character (`cbreak'
-     mode), or after the first newline (`nocbreak' mode).  In
+     mode), or after the first newline (`nocbreak!' mode).  In
      `halfdelay!' mode, the program waits until a character is typed or
      the specified timeout has been reached.
 
@@ -4830,7 +4867,7 @@ KEY_ENTER is `C-M', `getch' will return `KEY_ENTER' when you press
 `C-M'.
 
    When using `getch', `wgetch', `mvgetch', or `mvwgetch', nocbreak
-mode (`nocbreak') and echo mode (`echo!') should not be used at the
+mode (`nocbreak!') and echo mode (`echo!') should not be used at the
 same time.  Depending on the state of the tty driver when each
 character is typed, the program may produce undesirable results.
 
@@ -4867,8 +4904,8 @@ File: gucu.info,  Node: Receiving strings from the keyboard,  Next: Cursor locat
      that case, backspace is echoed as deletion of the previous
      character (typically a left motion).
 
-     FIXME (MAKE THE CODE DO THIS) If a SIGWINCH interrupts the
-     function, it will do something clever with the KEY_RESIZE.
+     If a SIGWINCH interrupts the function, it will return the integer
+     value of KEY_RESIZE instead of a string.
 
 
 File: gucu.info,  Node: Cursor location and window coordinates,  Next: Getting a rendered character from the window,  Prev: Receiving strings from the keyboard,  Up: The basic curses library
@@ -4904,12 +4941,8 @@ These functions examine a character on the screen and return it, along
 with its rendition.
 
  -- Procedure: inch
-     These routines return the rendered 8-bit character at the current
-     position in the named window.  If any attributes are set for that
-     position, their values are `logior''ed into the value returned.
-     The constants `A_CHARTEXT', `A_ATTRIBUTES', and `A_COLOR' can be
-     used with `logand' to extract the character, attributes, or color
-     of the rendered character.
+     These routines return the rendered complex character at the current
+     position in the named window.
 
 
 File: gucu.info,  Node: Getting a string of characters and attributes from a window,  Next: Input options,  Prev: Getting a rendered character from the window,  Up: The basic curses library
@@ -4917,7 +4950,7 @@ File: gucu.info,  Node: Getting a string of characters and attributes from a win
 5.2.18 Getting a string of characters and attributes from a window
 ------------------------------------------------------------------
 
- -- Procedure: inchnstr win n #:key y x
+ -- Procedure: inchnstr win #:key y x n
      These routines return a list of rendered characters, starting at
      the current cursor position in the named window and ending at the
      right margin of the window or until N characters have been found.
@@ -4929,26 +4962,25 @@ File: gucu.info,  Node: Input options,  Next: Inserting a character before the c
 --------------------
 
  -- Procedure: cbreak!
- -- Procedure: nocbreak
+ -- Procedure: nocbreak!
      Normally, the tty driver buffers typed characters until a <NL> or
      <RET> is typed.  The `cbreak!' routine disables line buffering and
      erase/kill character-processing (interrupt and flow control
      characters are unaffected), making characters typed by the user
      immediately available to the program.
 
-     The `nocbreak' routine returns the terminal to normal (cooked)
+     The `nocbreak!' routine returns the terminal to normal (cooked)
      mode.
 
-     The return value is unspecified.  The routines will throw a "bad
-     state" error if the underlying screen data is invalid.  The routine
-     will also throw a "bad state" error if `cbreak!' was called on an
-     ordinary file (such as might be used with `newterm') instead of a
-     TTY.
+     These routines will return `#t' on success and `#f' on failure.
+     Failure may indicate that the underlying screen data is invalid.
+     The routine may also fail if `cbreak!' was called on an ordinary
+     file (such as might be used with `newterm') instead of a TTY.
 
      Initially the terminal may or may not be in `cbreak' mode, as the
      mode is inherited; therefore, a program should call `cbreak!' or
-     `nocbreak' explicitly.  Most interactive programs using curses set
-     the `cbreak' mode.  Note that `cbreak!' overrides `raw!'.
+     `nocbreak!' explicitly.  Most interactive programs using curses
+     set the `cbreak!' mode.  Note that `cbreak!' overrides `raw!'.
 
 
  -- Procedure: echo!
@@ -4972,7 +5004,7 @@ File: gucu.info,  Node: Input options,  Next: Inserting a character before the c
      immediately available to the program.  However, after blocking for
      TENTHS tenths of seconds, `#f' is returned if nothing has been
      typed.  The value of tenths must be a number between 1 and 255.
-     Use `nocbreak' to leave half-delay mode.
+     Use `nocbreak!' to leave half-delay mode.
 
      The return value is unspecified.
 
@@ -5006,6 +5038,9 @@ File: gucu.info,  Node: Input options,  Next: Inserting a character before the c
 
 
  -- Procedure: meta! win bf
+     If GuCu was compiled with the standard version of the ncurses
+     library, and not the wide version, it operates on 8-bit characters.
+
      Initially, whether the terminal returns 7 or 8 significant bits on
      input depends on the control mode of the tty driver.  To force 8
      bits to be returned, invoke `(meta! win #t)'.  This is equivalent,
@@ -5018,11 +5053,14 @@ File: gucu.info,  Node: Input options,  Next: Inserting a character before the c
      win #t)' is called and `rmm' is sent when `(meta! win #f)' is
      called.
 
+     The return value is unspecified.
+
  -- Procedure: nodelay! win bf
      The `nodelay!' option causes `getch' to be a non-blocking call.
      If no input is ready, getch returns `#f'.  If disabled (BF is
      `#f'), `getch' waits until a key is pressed.
 
+     The return value is unspecified.
 
  -- Procedure: notimeout! win bf
      While interpreting an input escape sequence, `getch' sets a timer
@@ -5031,6 +5069,7 @@ File: gucu.info,  Node: Input options,  Next: Inserting a character before the c
      timeout is to differentiate between sequences received from a
      function key and those typed by a user.
 
+     The return value is unspecified.
 
  -- Procedure: raw!
  -- Procedure: noraw!
@@ -5056,6 +5095,7 @@ File: gucu.info,  Node: Input options,  Next: Inserting a character before the c
      continue as though the interrupt had not occurred, after the
      handler exits.
 
+     The return value is unspecified.
 
  -- Procedure: timeout! win delay
      The `timeout!' routine sets blocking or non-blocking read for a
@@ -5081,6 +5121,8 @@ File: gucu.info,  Node: Input options,  Next: Inserting a character before the c
      FD is to be used to check for typeahead instead.  If FD is -1,
      then no typeahead checking is done.
 
+     The routine returns `#t' if the mode could be set and `#f' on
+     failure.
 
 
 File: gucu.info,  Node: Inserting a character before the cursor,  Next: Inserting a string before the cursor,  Prev: Input options,  Up: The basic curses library
@@ -5105,8 +5147,8 @@ File: gucu.info,  Node: Inserting a string before the cursor,  Next: Getting a s
 -------------------------------------------
 
  -- Procedure: insstr win str #:key y x n
-     These routines insert a character string (as many characters as
-     will fit on the line) before the character under the cursor. All
+     This routine inserts a character string (as many characters as will
+     fit on the line) before the character under the cursor. All
      characters to the right of the cursor are shifted right with the
      possibility of the rightmost characters on the line being lost.
      The cursor position does not change (after moving to Y, X, if
@@ -5116,8 +5158,7 @@ File: gucu.info,  Node: Inserting a string before the cursor,  Next: Getting a s
 
      Special characters are handled as in `addch'.
 
-     All routines that return an integer return `#f' upon failure and
-     `#t' upon successful completion.
+     It returns `#f' upon failure and `#t' upon successful completion.
 
 
 
@@ -5127,7 +5168,7 @@ File: gucu.info,  Node: Getting a string of characters from the screen,  Next: L
 -----------------------------------------------------
 
  -- Procedure: instr win #:key y x n
-     This routine returnd a unrendered string, extracted starting at the
+     This routine returns a unrendered string, extracted starting at the
      current cursor position in the named window. Attributes are
      stripped from the characters.  If N is specified, it returns a
      leading substring at most N characters long.
@@ -5152,7 +5193,7 @@ routines.
      `initscr'.  There is one such save area for each screen context
      allocated by `newterm'.
 
-     The return value is unspecified.
+     They return `#t' on success and `#f' on failure.
 
 
  -- Procedure: reset-prog-mode
@@ -5188,6 +5229,7 @@ routines.
  -- Procedure: napms ms
      The procedure is used to sleep for MS milliseconds.
 
+     The return value is unspecified.
 
 
 File: gucu.info,  Node: Mouse handling,  Next: Moving the cursor,  Prev: Low-level routines,  Up: The basic curses library
@@ -5280,9 +5322,8 @@ data and pop the event off the queue, call `getmouse'.
      MOUSE-EVENT is a list of five elements as described above.
 
 
- -- Procedure: mouse-trafo y x to-screen
- -- Procedure: wmouse-trafo win y xto-screen
-     The `wmouse-trafo' function transforms a given pair of coordinates
+ -- Procedure: mouse-trafo win y x to-screen
+     The `mouse-trafo' function transforms a given pair of coordinates
      Y, X from `stdscr'-relative coordinates to coordinates relative to
      the given window WIN or vice versa.  Please remember, that
      `stdscr'-relative coordinates are not always identical to
@@ -5914,7 +5955,7 @@ File: gucu.info,  Node: Window creation,  Prev: Miscellaneous utilities,  Up: Th
      The return value is unspecified.
 
 
-File: gucu.info,  Node: Function key labels library,  Next: The wide curses library,  Prev: The basic curses library,  Up: Curses Reference
+File: gucu.info,  Node: Function key labels library,  Next: The curses panel library,  Prev: The basic curses library,  Up: Curses Reference
 
 5.3 The Function Key Label Library: `(gucu slk)'
 ================================================
@@ -5999,404 +6040,9 @@ hardware support for this mode.
      screen.
 
 
-File: gucu.info,  Node: The wide curses library,  Next: The curses panel library,  Prev: Function key labels library,  Up: Curses Reference
+File: gucu.info,  Node: The curses panel library,  Next: The curses menu library,  Prev: Function key labels library,  Up: Curses Reference
 
-5.4 The wide curses library: `(gucu curses-wide)'
-=================================================
-
-These are the functions in the `(gucu curses-wide)' module.
-
-   Again, the procedures in the curses library closely follow the
-functions in the C-language API (application programming interface).
-
-* Menu:
-
-* Overview (wide)::
-* Adding wide characters::
-* Adding wide strings::
-* Clearing windows or parts of windows (wide)::
-* Borders and lines (wide)::
-* Getting characters from the keyboard (wide)::
-* Getting wide strings from the keyboard::
-* Getting a rendered complex character::
-* Getting a rendered complex string::
-* Inserting a complex character before the cursor::
-* Inserting a unrendered wide string into a window::
-* Getting a string of unrendered wide characters from a window::
-* Terminal attributes for wide characters::
-
-
-File: gucu.info,  Node: Overview (wide),  Next: Adding wide characters,  Prev: The wide curses library,  Up: The wide curses library
-
-5.4.1 Overview
---------------
-
-The module `(gucu curses-wide)' includes the functions that read and
-write wide characters, complex characters, wide strings, and complex
-strings.
-
-   This optional module may or may not exist depending on the how GuCu
-was compiled.
-
-
-File: gucu.info,  Node: Adding wide characters,  Next: Adding wide strings,  Prev: Overview (wide),  Up: The wide curses library
-
-5.4.2 Adding wide characters
-----------------------------
-
- -- Procedure: add-wch win wch #:key y x
-     The `add-wch' function puts the complex character WCH into the
-     given window at its current position, which is then advanced.  If
-     Y and X are supplied, the cursor is moved to this position first.
-     These functions perform wrapping and special-character processing
-     as follows:
-
-     If WCH refers to a spacing character, then any previous character
-     at that location is removed.  A new character specified by WCH is
-     placed at that location with rendition specified by WCH.  The
-     cursor then advances to the next spacing character on the screen.
-
-     If WCH refers to a non-spacing character, all previous characters
-     at that location are preserved.  The non-spacing characters of WCH
-     are added to the spacing complex character, and the rendition
-     specified by WCH is ignored.
-
-     If the character part of WCH is a tab, newline, backspace or other
-     control character, the window is updated and the cursor moves as
-     if `addch' were called.
-
-     This returns `#t' on success and `#f' on failure.  Failure could
-     indicate an illegal character combination or a problem with the
-     window structure.
-
-
- -- Procedure: echo-wchar win wch #:key y x
-     The `echo-wchar' function is functionally equivalent to a call to
-     `add-wch' followed by a call to `refresh'.  The knowledge that
-     only a single character is being output is taken into
-     consideration and, for non-control characters, a considerable
-     performance gain might be seen by using the `echo!' functions
-     instead of their equivalents.
-
-     This returns the `#f' upon failure and `#t' on success.
-
-
-
-File: gucu.info,  Node: Adding wide strings,  Next: Clearing windows or parts of windows (wide),  Prev: Adding wide characters,  Up: The wide curses library
-
-5.4.3 Adding wide strings
--------------------------
-
- -- Procecure: addwstr win str #:key x y n
-     This routine writes the characters of the unrendered, wide string
-     STR on the given window. It is similar to constructing a rendered,
-     complex character for each unrendered wide character in the
-     string, and then calling `add-wch' once for each resulting
-     rendered, complex character.  The optional argument N will cause
-     the procedure to write at most n characters.  If N is -1, then the
-     entire string will be added, up to the maximum number of
-     characters that will fit on the line, or until a terminating null
-     is reached.
-
-     All routines return the integer `#f' upon failure and `#t' on
-     success.
-
-
- -- Procedure: add-wchstr win wchstr #:key win y x n
-     This routine copies the array of complex characters WCHSTR into
-     the window image structure at and after the current cursor
-     position.  If the optional key parameter N is given, it will copy
-     at most N elements, but no more than will fit on the line.  If N
-     is -1 or is not given then the whole array is copied, to the
-     maximum number of characters that will fit on the line.
-
-     The window cursor is not advanced.  These routines work faster than
-     WADD-WNSTR.  On the other hand, they do not perform checking (such
-     as for the newline, backspace, or carriage return characters),
-     they do not advance the current cursor position, they do not expand
-     other control characters to `^'-escapes, and they truncate the
-     string if it crosses the right margin, rather than wrapping it
-     around to the newline.
-
-     If a complex character cannot completely fit at the end of the
-     current line, the remaining columns are filled with the background
-     character and rendition.
-
-     Returns `#t' on success and `#f' on failure.
-
-
-
-File: gucu.info,  Node: Clearing windows or parts of windows (wide),  Next: Borders and lines (wide),  Prev: Adding wide strings,  Up: The wide curses library
-
-5.4.4 Clearing windows or parts of windows (wide)
--------------------------------------------------
-
- -- Procedure: bkgrndset win wch
-     The `bkgrndset' routine manipulates the background of the named
-     window.  The window background is a rendered, complex character.
-     The attribute part of the background is combined (`logior''ed) with
-     all non-blank characters that are written into the window with
-     `addch'.  Both the character and attribute parts of the background
-     are combined with the blank characters.  The background becomes a
-     property of the character and moves with the character through any
-     scrolling and insert/delete line/character operations.
-
-     To the extent possible on a particular terminal, the attribute
-     part of the background is displayed as the graphic rendition of
-     the character put on the screen.
-
-     The return value of `bkgrndset' is undefined.
-
- -- Procedure: bkgrnd win wch
-     The `bkgrnd' procedure sets the background property of the current
-     or specified window and then applies this setting to every
-     character position in that window:
-
-     The rendition of every character on the screen is changed to the
-     new background rendition.
-
-     Wherever the former background character appears, it is changed to
-     the new background character.
-
-     These return `#t' on success or `#f' on failure.
-
- -- Procedure: getbkgrnd win
-     These return the rendered, complex character that is the current
-     background.
-
-
-File: gucu.info,  Node: Borders and lines (wide),  Next: Getting characters from the keyboard (wide),  Prev: Clearing windows or parts of windows (wide),  Up: The wide curses library
-
-5.4.5 Borders and lines (wide)
-------------------------------
-
- -- Procedure: border-set win ls rs ts bs tl tr bl br
-     The `border-set' routine draws a border around the edges of a
-     window. Other than the window, each argument is a rendered, complex
-     character representing a side or a corner of the border.  The
-     arguments are LS - left side, RS - right side, TS - top side, BS -
-     bottom side, TL - top left-hand corner, TR - top right-hand
-     corner, BL - bottom left-hand corner, and BR - bottom right-hand
-     corner.
-
-     These return `#t' on success or `#f' on failure.
-
- -- Procedure: box-set win vert horiz
-     The function `box-set' is shorthand for the following function
-     call.
-          (wborder-set win
-                       vert vert
-                       horiz horiz
-                       WACS_ULCORNER WACS_URCORNER
-                       WACS_LLCORNER WACS_LRCORNER)
-
- -- Procedure: hline-set win wch n #:key y x
- -- Procedure: vline-set win wch n #:key y x
-     This procedure draws a line beginning at the current cursor
-     position and proceeding toward the right or to the bottom of the
-     window.  The `hline-set' procedure is for horizontal lines and the
-     `vline-set' procedure is for vertical lines.  The line is at most
-     N characters long, or as many as will fit into the window.  The
-     current cursor position is not changed.
-
-     Note that only single-width characters are supported.
-
-     These return `#t' on success or `#f' on failure.
-
-
-File: gucu.info,  Node: Getting characters from the keyboard (wide),  Next: Getting wide strings from the keyboard,  Prev: Borders and lines (wide),  Up: The wide curses library
-
-5.4.6 Getting characters from the keyboard (wide)
--------------------------------------------------
-
- -- Procedure: get-wch win #:key y x
-     The `get-wch', `wget-wch', `mvget-wch', and `mvwget-wch' functions
-     read a character from the terminal associated with the current or
-     specified window.  It returns a list of two elements.  The first
-     element is `OK' and the second is the codepoint of the character
-     pressed.  In no-delay mode, if no input is waiting, a list of two
-     elements is returned where the first element is `ERR' and the
-     second element is zero.  In `delay' mode, the program waits until
-     the system passes text through to the program.  Depending on the
-     setting of `cbreak!', this is after one character (cbreak mode),
-     or after the first newline (nocbreak mode).  In half-delay mode,
-     the program waits until the user types a character or the
-     specified timeout interval has elapsed.
-
-     Unless `noecho!' has been set, these routines echo the character
-     into the designated window.
-
-     If the window is not a pad and has been moved or modified since the
-     last call to `refresh', `refresh' will be called before another
-     character is read.
-
-     If `keypad!' is enabled, these functions respond to the pressing
-     of a function key by returning a list of two elements where the
-     first element it `KEY_CODE_YES' and the second is the corresponding
-     `KEY_' constant. See *note Getting characters from the keyboard::
-     for the list of key codes.  If a character (such as <ESC>) that
-     could be the beginning of a function key is received, curses sets
-     a timer.  If the remainder of the sequence does arrive within the
-     designated time, curses passes through the character; otherwise,
-     curses returns the function key value.  For this reason, many
-     terminals experience a delay between the time a user presses the
-     escape key and the time the escape is returned to the program.
-
-
- -- Procedure: unget-wch wch
-     The procedure pushed WCH back onto the input queue, so the wide
-     character is returned on the next call to `get-wch'.  If a program
-     calls `unget-wch' too many times without a call to `get-wch', the
-     procedure may fail.
-
-     This returns `#t' on success or `#f' on failure.
-
-
-File: gucu.info,  Node: Getting wide strings from the keyboard,  Next: Getting a rendered complex character,  Prev: Getting characters from the keyboard (wide),  Up: The wide curses library
-
-5.4.7 Getting wide strings from the keyboard
---------------------------------------------
-
- -- Procedure: getn-wstr win n #:key y x
-     The procedure `getn-wstr' returns a list of unrendered, wide
-     characters from the keyboard of the specified terminal is as
-     though a series of calls to `get-wch' were made, until a <NL>,
-     other end-of-line, or end-of-file condition is processed.  An
-     end-of-file condition will be represented in the returned string
-     by the constant `WEOF'.  The <NL> and end-of-line conditions are
-     represented by the `NL' value.  The returned list will be
-     constrained to have no more than N wide characters.
-
-     The user's erase and kill characters are interpreted.  If keypad
-     mode is on for the window, <LEFT> and <BS> are both considered
-     equivalent to the user's kill character.
-
-     Characters input are echoed only if echo is currently on.  In that
-     case, <BS> is echoed as deletion of the previous character
-     (typically a left motion).
-
-     These functions will throw an error if the window is invalid or if
-     the underlying `get-wch' functions fail for some reason.
-
-
-
-File: gucu.info,  Node: Getting a rendered complex character,  Next: Getting a rendered complex string,  Prev: Getting wide strings from the keyboard,  Up: The wide curses library
-
-5.4.8 Getting a rendered complex character from the window
-----------------------------------------------------------
-
- -- Procedure: in-wch win #:key y x
-     This procedure extracts the rendered complex character from the
-     given position in the named window.
-
-
-
-File: gucu.info,  Node: Getting a rendered complex string,  Next: Inserting a complex character before the cursor,  Prev: Getting a rendered complex character,  Up: The wide curses library
-
-5.4.9 Getting a rendered complex string from the window
--------------------------------------------------------
-
- -- Procedure: in-wchnstr win n #:key y x
-     This procedure returns an array of complex characters, starting at
-     the current cursor position in the named window.  Attributes
-     (rendition) are stored with the characters.  The array has at most
-     N complex characters.
-
-     Upon successful completion, it returns `#t'.  Otherwise, it
-     returns `#f'.
-
-
-File: gucu.info,  Node: Inserting a complex character before the cursor,  Next: Inserting a unrendered wide string into a window,  Prev: Getting a rendered complex string,  Up: The wide curses library
-
-5.4.10 Inserting a complex character before the cursor
-------------------------------------------------------
-
- -- Procedure: ins-wch win ch #:key y x
-     This routine inserts the rendered complex character CH before the
-     character under the cursor.  All characters to the right of the
-     cursor are moved one space to the right, with the possibility of
-     the rightmost character on the line being lost.  The insertion
-     operation does not change the cursor position.
-
-     It returns `#f' on failure or `#t' on success.
-
-
-
-File: gucu.info,  Node: Inserting a unrendered wide string into a window,  Next: Getting a string of unrendered wide characters from a window,  Prev: Inserting a complex character before the cursor,  Up: The wide curses library
-
-5.4.11 Inserting a unrendered wide string into a window
--------------------------------------------------------
-
- -- Procedure: ins-wstr win str #:key y x n
-     These routines insert an unrendered wide character string (as many
-     characters as will fit on the line) before the character under the
-     cursor. All characters to the right of the cursor are shifted right
-     with the possibility of the rightmost characters on the line being
-     lost.  The cursor position does not change (after moving to Y, X,
-     if specified). If N is specified, it inserts a leading substring
-     of at most n characters.  If N<=0, then the entire string is
-     inserted.
-
-     If a character in STR is a tab, newline, carriage return or
-     backspace, the cursor is moved appropriately within the window.  A
-     newline also does a clrtoeol before moving.  Tabs are considered
-     to be at every eighth column.  If a character in `wstr' is another
-     control character, it is drawn in the ^X notation.  Calling
-     `win-wch' after adding a control character (and moving to it, if
-     necessary) does not return the control character, but instead
-     returns a character in the ^-representation of the control
-     character.
-
-     All routines that return an integer return `#f' upon failure and
-     `#t' upon successful completion.  These routines will fail if the
-     first character in WSTR is not a spacing character.
-
-
-
-File: gucu.info,  Node: Getting a string of unrendered wide characters from a window,  Next: Terminal attributes for wide characters,  Prev: Inserting a unrendered wide string into a window,  Up: The wide curses library
-
-5.4.12 Getting a string of unrendered wide characters from a window
--------------------------------------------------------------------
-
- -- Procedure: innwstr win n
-     These routines return a string of unrendered wide characters,
-     extracted starting at the current cursor position in the named
-     window.  The rendition is stripped from the characters.  Up to N
-     characters will be returned.
-
-     If the size N is not large enough to store a complete character,
-     an error will be thrown.
-
-
-
-File: gucu.info,  Node: Terminal attributes for wide characters,  Prev: Getting a string of unrendered wide characters from a window,  Up: The wide curses library
-
-5.4.13 Terminal attributes for wide characters
-----------------------------------------------
-
- -- Procedure: term-attrs
-     The `term-attrs' function return a `logior' of all video
-     attributes supported by the terminal using `A_XXX' constants.  The
-     `termattrs' function is almost identical except that it doesn't
-     return the attributes for the rarely usable modes `A_HORIZONTAL',
-     `A_LEFT', `A_LOW', `A_RIGHT', `A_TOP' and `A_VERTICAL'.
-
-
- -- Procedure: erasewchar
-     This returns the character currently used as the erase character
-     when using wide characters.  If wide strings are not or usable,
-     this returns `#f'.
-
-
- -- Procedure: killwchar
-     This returns the character used to erase lines of wide characters,
-     or `#f' if no such character is defined.
-
-
-
-File: gucu.info,  Node: The curses panel library,  Next: The curses menu library,  Prev: The wide curses library,  Up: Curses Reference
-
-5.5 The curses panel library: `(gucu panel)'
+5.4 The curses panel library: `(gucu panel)'
 ============================================
 
 These are the functions in the `(gucu panel)' module.
@@ -6474,7 +6120,7 @@ high-level curses calls, and work anywhere terminfo curses does.
 
 File: gucu.info,  Node: The curses menu library,  Next: The curses form library,  Prev: The curses panel library,  Up: Curses Reference
 
-5.6 The curses menu library: `(gucu menu)'
+5.5 The curses menu library: `(gucu menu)'
 ==========================================
 
 These are the functions in the `(gucu menu)' module.
@@ -6490,7 +6136,7 @@ These are the functions in the `(gucu menu)' module.
 
 File: gucu.info,  Node: Menus Overview,  Next: Menu Item Procedures,  Prev: The curses menu library,  Up: The curses menu library
 
-5.6.1 Menus Overview
+5.5.1 Menus Overview
 --------------------
 
 Menu items are individual menu entries.  Each menu item has a name -
@@ -6506,7 +6152,7 @@ operates and is presented.
 
 File: gucu.info,  Node: Menu Item Procedures,  Next: Menu Procedures,  Prev: Menus Overview,  Up: The curses menu library
 
-5.6.2 Menu Item Procedures
+5.5.2 Menu Item Procedures
 --------------------------
 
  -- Procedure: new-item name description
@@ -6589,7 +6235,7 @@ File: gucu.info,  Node: Menu Item Procedures,  Next: Menu Procedures,  Prev: Men
 
 File: gucu.info,  Node: Menu Procedures,  Next: Menu creation,  Prev: Menu Item Procedures,  Up: The curses menu library
 
-5.6.3 Menu Procedures
+5.5.3 Menu Procedures
 ---------------------
 
 * Menu:
@@ -6603,7 +6249,7 @@ File: gucu.info,  Node: Menu Procedures,  Next: Menu creation,  Prev: Menu Item 
 
 File: gucu.info,  Node: Menu Colors and Attributes,  Next: Positioning a menu cursor,  Prev: Menu Procedures,  Up: Menu Procedures
 
-5.6.3.1 Menu Colors and Attributes
+5.5.3.1 Menu Colors and Attributes
 ..................................
 
  -- Procedure: set-menu-fore! menu attr
@@ -6640,7 +6286,7 @@ File: gucu.info,  Node: Menu Colors and Attributes,  Next: Positioning a menu cu
 
 File: gucu.info,  Node: Positioning a menu cursor,  Next: The menu driver,  Prev: Menu Colors and Attributes,  Up: Menu Procedures
 
-5.6.3.2 Positioning a menu's cursor
+5.5.3.2 Positioning a menu's cursor
 ...................................
 
  -- Procedure: pos-menu-cursor menu
@@ -6652,7 +6298,7 @@ File: gucu.info,  Node: Positioning a menu cursor,  Next: The menu driver,  Prev
 
 File: gucu.info,  Node: The menu driver,  Next: Menu sizes,  Prev: Positioning a menu cursor,  Up: Menu Procedures
 
-5.6.3.3 The menu driver
+5.5.3.3 The menu driver
 .......................
 
  -- Procedure: menu-driver menu c
@@ -6805,7 +6451,7 @@ File: gucu.info,  Node: The menu driver,  Next: Menu sizes,  Prev: Positioning a
 
 File: gucu.info,  Node: Menu sizes,  Next: Menu mark strings,  Prev: The menu driver,  Up: Menu Procedures
 
-5.6.3.4 Menu sizes
+5.5.3.4 Menu sizes
 ..................
 
  -- Procedure: set-menu-format! menu rows cols
@@ -6830,7 +6476,7 @@ File: gucu.info,  Node: Menu sizes,  Next: Menu mark strings,  Prev: The menu dr
 
 File: gucu.info,  Node: Menu mark strings,  Prev: Menu sizes,  Up: Menu Procedures
 
-5.6.3.5 Menu mark strings
+5.5.3.5 Menu mark strings
 .........................
 
  -- Procedure: set-menu-mark! menu str
@@ -6853,7 +6499,7 @@ File: gucu.info,  Node: Menu mark strings,  Prev: Menu sizes,  Up: Menu Procedur
 
 File: gucu.info,  Node: Menu creation,  Next: Menu options,  Prev: Menu Procedures,  Up: The curses menu library
 
-5.6.4 Menu creation
+5.5.4 Menu creation
 -------------------
 
  -- Procdure: new-menu items
@@ -6865,7 +6511,7 @@ File: gucu.info,  Node: Menu creation,  Next: Menu options,  Prev: Menu Procedur
 
 File: gucu.info,  Node: Menu options,  Prev: Menu creation,  Up: The curses menu library
 
-5.6.5 Menu options
+5.5.5 Menu options
 ------------------
 
  -- Procedure: set-menu-opts! menu options
@@ -6917,7 +6563,7 @@ File: gucu.info,  Node: Menu options,  Prev: Menu creation,  Up: The curses menu
 
 File: gucu.info,  Node: Menu pattern buffer,  Next: Writing or erasing menus from window,  Prev: Menu options,  Up: Menu options
 
-5.6.5.1 Menu pattern buffer
+5.5.5.1 Menu pattern buffer
 ...........................
 
  -- Procedure: set-menu-pattern! menu pattern
@@ -6943,7 +6589,7 @@ File: gucu.info,  Node: Menu pattern buffer,  Next: Writing or erasing menus fro
 
 File: gucu.info,  Node: Writing or erasing menus from window,  Next: Control spacing between menu items,  Prev: Menu pattern buffer,  Up: Menu options
 
-5.6.5.2 Writing or erasing menus from window
+5.5.5.2 Writing or erasing menus from window
 ............................................
 
  -- Procedure: post-menu menu
@@ -6967,7 +6613,7 @@ File: gucu.info,  Node: Writing or erasing menus from window,  Next: Control spa
 
 File: gucu.info,  Node: Control spacing between menu items,  Next: Associate menus with window,  Prev: Writing or erasing menus from window,  Up: Menu options
 
-5.6.5.3 Control spacing between menu items
+5.5.5.3 Control spacing between menu items
 ..........................................
 
  -- Procedure: set-menu-spacing! menu description rows cols
@@ -6996,7 +6642,7 @@ File: gucu.info,  Node: Control spacing between menu items,  Next: Associate men
 
 File: gucu.info,  Node: Associate menus with window,  Prev: Control spacing between menu items,  Up: Menu options
 
-5.6.5.4 Associate menus with window
+5.5.5.4 Associate menus with window
 ...................................
 
  -- Procedure: set-menu-win! menu win
@@ -7023,7 +6669,7 @@ File: gucu.info,  Node: Associate menus with window,  Prev: Control spacing betw
 
 File: gucu.info,  Node: The curses form library,  Prev: The curses menu library,  Up: Curses Reference
 
-5.7 The curses form library: `(gucu form)'
+5.6 The curses form library: `(gucu form)'
 ==========================================
 
 These are the functions in the `(gucu form)' module.
@@ -7046,7 +6692,7 @@ These are the functions in the `(gucu form)' module.
 
 File: gucu.info,  Node: Forms Overview,  Next: Form procedures,  Prev: The curses form library,  Up: The curses form library
 
-5.7.1 Forms Overview
+5.6.1 Forms Overview
 --------------------
 
 The form library provides terminal-independent facilities for composing
@@ -7055,7 +6701,7 @@ routines, which create and modify form fields; and form routines, which
 group fields into forms, display forms on the screen, and handle
 interaction with the user.
 
-5.7.2 Positioning a form window cursor
+5.6.2 Positioning a form window cursor
 --------------------------------------
 
  -- Procedure: pos-form-cursor form
@@ -7072,7 +6718,7 @@ interaction with the user.
 
 File: gucu.info,  Node: Form procedures,  Next: Making or breaking connections between forms and fields,  Prev: Forms Overview,  Up: The curses form library
 
-5.7.3 Form data
+5.6.3 Form data
 ---------------
 
  -- Procedure: data-ahead? form
@@ -7084,7 +6730,7 @@ File: gucu.info,  Node: Form procedures,  Next: Making or breaking connections b
      variable size (not O_STATIC) and not all text from the entry is
      being displayed.
 
-5.7.4 Command-processing loop of the form system
+5.6.4 Command-processing loop of the form system
 ------------------------------------------------
 
  -- Procedure: form-driver form c
@@ -7227,7 +6873,7 @@ File: gucu.info,  Node: Form procedures,  Next: Making or breaking connections b
 
 File: gucu.info,  Node: Making or breaking connections between forms and fields,  Next: Color and attribute control for form fields,  Prev: Form procedures,  Up: The curses form library
 
-5.7.5 Making or breaking connections between forms and fields
+5.6.5 Making or breaking connections between forms and fields
 -------------------------------------------------------------
 
  -- Procedure: set-form-fields form fields
@@ -7257,7 +6903,7 @@ File: gucu.info,  Node: Making or breaking connections between forms and fields,
 
 File: gucu.info,  Node: Color and attribute control for form fields,  Next: Data type validation for fields,  Prev: Making or breaking connections between forms and fields,  Up: The curses form library
 
-5.7.6 Color and attribute control for form fields
+5.6.6 Color and attribute control for form fields
 -------------------------------------------------
 
  -- Procedure: set-field-fore! field attr
@@ -7290,7 +6936,7 @@ File: gucu.info,  Node: Color and attribute control for form fields,  Next: Data
      in `field'.
 
 
-5.7.7 Field buffer control
+5.6.7 Field buffer control
 --------------------------
 
 There are functions to set and get the text in a field, as well as to
@@ -7321,7 +6967,7 @@ check if that field has been modified.
      argument of zero turns off any maximum size threshold for that
      field.
 
-5.7.8 Retrieving field characteristics
+5.6.8 Retrieving field characteristics
 --------------------------------------
 
  -- Procedure: field-info field
@@ -7337,7 +6983,7 @@ check if that field has been modified.
      maximum size as a list.  The elements of the list are: rows,
      column, and max size.
 
-5.7.9 Retrieving field characteristics
+5.6.9 Retrieving field characteristics
 --------------------------------------
 
  -- Procedure: set-field-just! field justification
@@ -7350,7 +6996,7 @@ check if that field has been modified.
      is one of `NO_JUSTIFICATION', `JUSTIFY_RIGHT', `JUSTIFY_LEFT', or
      `JUSTIFY_CENTER'.
 
-5.7.10 Creating and destroying form fields
+5.6.10 Creating and destroying form fields
 ------------------------------------------
 
  -- Procedure: new-field height width toprow leftcol offscreen nbuffers
@@ -7374,7 +7020,7 @@ check if that field has been modified.
      This explicitly releases the buffer in field, instead of waiting
      for the garbage collector to take care of it.
 
-5.7.11 Setting and getting field options
+5.6.11 Setting and getting field options
 ----------------------------------------
 
  -- Procedure: set-field-opts! field opts
@@ -7433,7 +7079,7 @@ check if that field has been modified.
 
 File: gucu.info,  Node: Data type validation for fields,  Next: Creating forms,  Prev: Color and attribute control for form fields,  Up: The curses form library
 
-5.7.12 Data type validation for fields
+5.6.12 Data type validation for fields
 --------------------------------------
 
 These functions set a field to be able to contain only a certain type
@@ -7510,7 +7156,7 @@ contains invalid input.
 
 File: gucu.info,  Node: Creating forms,  Next: Form pagination functions,  Prev: Data type validation for fields,  Up: The curses form library
 
-5.7.13 Creating forms
+5.6.13 Creating forms
 ---------------------
 
  -- Procedure: new-form fields
@@ -7520,7 +7166,7 @@ File: gucu.info,  Node: Creating forms,  Next: Form pagination functions,  Prev:
 
 File: gucu.info,  Node: Form pagination functions,  Next: Setting and getting form options,  Prev: Creating forms,  Up: The curses form library
 
-5.7.14 Form pagination functions
+5.6.14 Form pagination functions
 --------------------------------
 
  -- Procedure: set-new-page field new-page-flag
@@ -7534,7 +7180,7 @@ File: gucu.info,  Node: Form pagination functions,  Next: Setting and getting fo
 
 File: gucu.info,  Node: Setting and getting form options,  Next: Setting the page number and field,  Prev: Form pagination functions,  Up: The curses form library
 
-5.7.15 Setting and getting form options
+5.6.15 Setting and getting form options
 ---------------------------------------
 
  -- Procedure: set-form-opts form opts
@@ -7565,7 +7211,7 @@ File: gucu.info,  Node: Setting and getting form options,  Next: Setting the pag
 
 File: gucu.info,  Node: Setting the page number and field,  Next: Writing or erasing forms from associated subwindows,  Prev: Setting and getting form options,  Up: The curses form library
 
-5.7.16 Setting the page number and field
+5.6.16 Setting the page number and field
 ----------------------------------------
 
  -- Procedure: set-current-field! form field
@@ -7584,7 +7230,7 @@ File: gucu.info,  Node: Setting the page number and field,  Next: Writing or era
 
 File: gucu.info,  Node: Writing or erasing forms from associated subwindows,  Next: Printable form request names,  Prev: Setting the page number and field,  Up: The curses form library
 
-5.7.17 Writing or erasing forms from associated subwindows
+5.6.17 Writing or erasing forms from associated subwindows
 ----------------------------------------------------------
 
  -- Procedure: post-form form
@@ -7598,7 +7244,7 @@ File: gucu.info,  Node: Writing or erasing forms from associated subwindows,  Ne
 
 File: gucu.info,  Node: Printable form request names,  Next: Form windows,  Prev: Writing or erasing forms from associated subwindows,  Up: The curses form library
 
-5.7.18 Printable form request names
+5.6.18 Printable form request names
 -----------------------------------
 
  -- Procedure: form-request-name request
@@ -7609,7 +7255,7 @@ File: gucu.info,  Node: Printable form request names,  Next: Form windows,  Prev
 
 File: gucu.info,  Node: Form windows,  Prev: Printable form request names,  Up: The curses form library
 
-5.7.19 Form windows
+5.6.19 Form windows
 -------------------
 
  -- Procedure: set-form-win form win
@@ -7629,3 +7275,8 @@ File: gucu.info,  Node: Form windows,  Prev: Printable form request names,  Up: 
      The function scale-form returns the a list of two elements: minimum
      size required for the subwindow of form.
 
+
+
+Local Variables:
+coding: utf-8
+End:

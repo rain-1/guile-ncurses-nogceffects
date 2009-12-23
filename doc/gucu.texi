@@ -3042,11 +3042,6 @@ arguments as the functions in the C-language API.
 The gucu library routines give the user a terminal-independent method
 of updating character screens with reasonable optimization.
 
-@c When the GuCu library is built, it is linked with the most featureful
-@c version of the curses library available.  Depending on the compilation
-@c of the underlying ncurses library, GuCu may or may not have
-@c wide-character functions and curses debugging functions.
-
 The package supports overall screen, window and pad manipulation;
 output to windows and pads; reading terminal input; control over
 terminal and curses input and output options; environment query
@@ -3351,9 +3346,20 @@ The return value is unspecified.
 @subsection Making rendered characters
 
 Many curses functions take rendered, complex characters: characters
-with associated color and attribute information.  There is a family of
-functions to convert unrendered, simple characters or strings to
-rendered complex characters and strings.
+with associated color and attribute information.  
+
+For those who are familiar with the C API for ncurses, they know that
+a rendered character is either a @code{chtype}, which is a 32-bit
+integer containing an 8-bit @code{char} and 24-bits of color and
+rendering information, or is a @code{cchar_t}, which is one or more
+@code{wchar_t} characters plus associated color and rendering
+information.  GuCu abstracts away the difference between these two
+types and presents a consistent API for both.  The GuCu complex
+rendered character will get converted automatically to @code{chtype}
+or @code{cchar_t} when necessary.
+
+There is a family of functions to convert unrendered, simple
+characters or strings to rendered complex characters and strings.
 
 @deffn Procedure blink x
 @deffnx Procedure bold x
@@ -3448,6 +3454,41 @@ a rendered character or string with an assocated color pair @var{n}.
 
 This procedure should only be used if @code{start-color} has been
 called.
+
+@end deffn
+
+There are also a couple of low-level functions to do conversion
+between C characters and Guile characters. 
+
+@deffn Procedure %scheme-char-from-c-char c
+
+Given an 8-bit integer @var{c} that represents a C character in the
+current locale, this returns the associated scheme character.
+
+@end deffn
+
+@deffn Procedure %scheme-char-to-c-char c
+
+This returns an 8-bit integer that is the C representation of
+character @code{c} in the current locale.  If the character cannot be
+represented in the current locale, it will return the integer 63,
+which is the ASCII code for the question mark.
+
+@end deffn
+
+@deffn Procedure %scheme-char-from-c-wchar c
+
+Given an integer @var{c} that represents a wchar_t representation of a
+C wide character, this returns the associated scheme character.
+
+@end deffn
+
+@deffn Procedure %scheme-char-to-c-wchar c
+
+This returns an integer that is the C @code{wchar_t} representation of
+character @code{c}.  If the character cannot be represented in the
+current locale, it will return the integer #xFFFD, which is the
+Unicode codepoint for the replacement character.
 
 @end deffn
 
@@ -3715,7 +3756,7 @@ and color pair) of the given window to @var{attrs}.  Optionally, you
 may split the color-pair information as a third parameter.
 
 @var{attrs} is one of the attribute constants: there is an attribute
-constant for each of the attributes mentioned in @xref{Making rendered
+constant for each of the attributes mentioned in @ref{Making rendered
 characters}: A_BLINK, A_BOLD, A_DIM, A_INVIS, A_NORMAL, A_PROTECT,
 A_REVERSE, A_STANDOUT, A_UNDERLINE, A_HORIZONTAL, A_LEFT, A_LOW,
 A_RIGHT, A_TOP, A_VERTICAL.
