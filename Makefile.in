@@ -459,7 +459,12 @@ NARROWTESTS = \
 	test/m008_menu_cursor.test \
 	test/m009_menu_format.test \
 	test/m010_menu_mark.test \
-	test/m011_menu_options.test
+	test/m011_menu_options.test \
+	test/slk_001_init.test \
+	test/slk_002_init.test \
+	test/slk_003_init.test \
+	test/slk_004_init.test \
+	test/slk_005_demo.test
 
 WIDETESTS = \
 	test/r037_border_set.test \
