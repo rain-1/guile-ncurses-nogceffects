@@ -1,0 +1,34 @@
+;;;; -*- Mode: scheme; -*-
+
+;;;; slk_002_init.test --- set up slk with format one
+
+(use-modules (test lib)
+	     (test lib2)
+	     (gucu curses)
+	     (gucu slk))
+
+(define test (curses-test-start))
+
+(set! *sleep* #t)
+;; Should be able to make a panel
+(with-test-prefix 
+ "init"
+
+ (pass-if "4/4 format"
+	  (slk-init 1)
+	  (let ((win (initscr)))
+	    (slk-set 1 "one" 1)
+	    (slk-set 2 "two" 1)
+	    (slk-set 3 "three" 1)
+	    (slk-set 4 "four" 1)
+	    (slk-set 5 "five" 1)
+	    (slk-set 6 "six" 1)
+	    (slk-set 7 "seven" 1)
+	    (slk-set 8 "eight" 1)
+	    (slk-refresh)
+	    (maybe-sleep 2))
+	  *unspecified*))
+
+(endwin)
+
+(curses-test-end test "slk_002_init.out")
