@@ -1265,12 +1265,7 @@ gucu_nl ()
 SCM
 gucu_nocbreak ()
 {
-  int ret = nocbreak ();
-
-  if (ret == ERR)
-    curs_bad_state_error ("nocbreak!");
-
-  return SCM_UNSPECIFIED;
+  RETURNTF (nocbreak ());
 }
 
 /* Causes getch() to be non-blocking, so that it returns #f if no
