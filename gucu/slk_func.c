@@ -171,20 +171,25 @@ gucu_slk_touch ()
 void 
 gucu_slk_init_function ()
 {
-  scm_c_define_gsubr ("slk-attr-off", 1, 0, 0, gucu_slk_attr_off);
-  scm_c_define_gsubr ("slk-attroff", 1, 0, 0, gucu_slk_attroff);
-  scm_c_define_gsubr ("slk-attr-on", 1, 0, 0, gucu_slk_attr_on);
-  scm_c_define_gsubr ("slk-attron", 1, 0, 0, gucu_slk_attron);
-  scm_c_define_gsubr ("slk-attr-set", 2, 0, 0, gucu_slk_attr_set);
-  scm_c_define_gsubr ("slk-attrset", 1, 0, 0, gucu_slk_attrset);
-  scm_c_define_gsubr ("slk-clear", 0, 0, 0, gucu_slk_clear);
-  scm_c_define_gsubr ("slk-color", 1, 0, 0, gucu_slk_color);
-  scm_c_define_gsubr ("slk-init", 1, 0, 0, gucu_slk_init);
-  scm_c_define_gsubr ("slk-label", 1, 0, 0, gucu_slk_label);
-  scm_c_define_gsubr ("slk-noutrefresh", 0, 0, 0, gucu_slk_noutrefresh);
-  scm_c_define_gsubr ("slk-refresh", 0, 0, 0, gucu_slk_refresh);
-  scm_c_define_gsubr ("slk-restore", 0, 0, 0, gucu_slk_restore);
-  scm_c_define_gsubr ("slk-set", 3, 0, 0, gucu_slk_set);
-  scm_c_define_gsubr ("slk-touch", 0, 0, 0, gucu_slk_touch);
+  static int first = 1;
+  if (first)
+    {
+      scm_c_define_gsubr ("slk-attr-off", 1, 0, 0, gucu_slk_attr_off);
+      scm_c_define_gsubr ("slk-attroff", 1, 0, 0, gucu_slk_attroff);
+      scm_c_define_gsubr ("slk-attr-on", 1, 0, 0, gucu_slk_attr_on);
+      scm_c_define_gsubr ("slk-attron", 1, 0, 0, gucu_slk_attron);
+      scm_c_define_gsubr ("slk-attr-set", 2, 0, 0, gucu_slk_attr_set);
+      scm_c_define_gsubr ("slk-attrset", 1, 0, 0, gucu_slk_attrset);
+      scm_c_define_gsubr ("slk-clear", 0, 0, 0, gucu_slk_clear);
+      scm_c_define_gsubr ("slk-color", 1, 0, 0, gucu_slk_color);
+      scm_c_define_gsubr ("slk-init", 1, 0, 0, gucu_slk_init);
+      scm_c_define_gsubr ("slk-label", 1, 0, 0, gucu_slk_label);
+      scm_c_define_gsubr ("slk-noutrefresh", 0, 0, 0, gucu_slk_noutrefresh);
+      scm_c_define_gsubr ("slk-refresh", 0, 0, 0, gucu_slk_refresh);
+      scm_c_define_gsubr ("slk-restore", 0, 0, 0, gucu_slk_restore);
+      scm_c_define_gsubr ("slk-set", 3, 0, 0, gucu_slk_set);
+      scm_c_define_gsubr ("slk-touch", 0, 0, 0, gucu_slk_touch);
+      first = 0;
+    }
 }
 
