@@ -9,11 +9,10 @@
 #define API
 #endif
 
-SCM gucu_slk_attr_off (SCM arg1) API;
-SCM gucu_slk_attroff (SCM arg1) API;
-SCM gucu_slk_attr_on (SCM arg1) API;
-SCM gucu_slk_attron (SCM arg1) API;
-SCM gucu_slk_attr_set (SCM arg1, SCM arg2) API;
+SCM gucu_slk_attr (void) API;
+SCM gucu_slk_attr_off_x (SCM arg1) API;
+SCM gucu_slk_attr_on_x (SCM arg1) API;
+SCM gucu_slk_attr_set_x (SCM arg1, SCM arg2) API;
 SCM gucu_slk_attrset (SCM arg1) API;
 SCM gucu_slk_clear (void) API;
 SCM gucu_slk_color (SCM arg1) API;

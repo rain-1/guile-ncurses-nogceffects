@@ -5,14 +5,12 @@
 (define-module (gucu slk)
   #:use-module (ice-9 optargs)
   #:export ( 
-	    slk-attr-off
-	    slk-attroff
-	    slk-attr-on
-	    slk-attron
-	    slk-attr-set
-	    slk-attrset
+	    slk-attr
+	    slk-attr-off!
+	    slk-attr-on!
+	    slk-attr-set!
 	    slk-clear
-	    slk-color
+	    slk-color!
 	    slk-init
 	    slk-label
 	    slk-noutrefresh

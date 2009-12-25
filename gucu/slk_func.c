@@ -13,9 +13,23 @@
     return SCM_BOOL_T
 
 SCM
-gucu_slk_attr_off (SCM attrs)
+gucu_slk_attr ()
 {
-  SCM_ASSERT (_scm_is_attr (attrs), attrs, SCM_ARG1, "slk-attr-off");
+  attr_t rendition, attributes;
+  short color_pair_number;
+  rendition = slk_attr ();
+  attributes = rendition;
+  attributes &= A_ATTRIBUTES ^ A_COLOR;
+  color_pair_number = PAIR_NUMBER (rendition & A_COLOR);
+
+  return scm_list_2 (_scm_from_attr (attributes), 
+		     scm_from_short (color_pair_number));
+}
+
+SCM
+gucu_slk_attr_off_x (SCM attrs)
+{
+  SCM_ASSERT (_scm_is_attr (attrs), attrs, SCM_ARG1, "slk-attr-off!");
   
   const attr_t c_attrs = _scm_to_attr (attrs);
 
@@ -24,20 +38,9 @@ gucu_slk_attr_off (SCM attrs)
 }
 
 SCM
-gucu_slk_attroff (SCM attrs)
+gucu_slk_attr_on_x (SCM attrs)
 {
-  SCM_ASSERT (_scm_is_chtype (attrs), attrs, SCM_ARG1, "slk-attroff");
-  
-  const chtype c_attrs = _scm_to_chtype (attrs);
-  
-  int ret = slk_attroff (c_attrs);
-  RETURNTF(ret);
-}
-
-SCM
-gucu_slk_attr_on (SCM attrs)
-{
-  SCM_ASSERT (_scm_is_attr (attrs), attrs, SCM_ARG1, "slk-attr-on");
+  SCM_ASSERT (_scm_is_attr (attrs), attrs, SCM_ARG1, "slk-attr-on!");
 
   const attr_t c_attrs = _scm_to_attr (attrs);
 
@@ -46,38 +49,16 @@ gucu_slk_attr_on (SCM attrs)
 }
 
 SCM
-gucu_slk_attron (SCM attrs)
+gucu_slk_attr_set_x (SCM attrs, SCM color_pair_number)
 {
-  SCM_ASSERT (_scm_is_chtype (attrs), attrs, SCM_ARG1, "slk-attron");
-
-  const chtype c_attrs = _scm_to_chtype (attrs);
-  
-  int ret = slk_attron (c_attrs);
-  RETURNTF(ret);
-}
-
-SCM
-gucu_slk_attr_set (SCM attrs, SCM color_pair_number)
-{
-  SCM_ASSERT (_scm_is_attr (attrs), attrs, SCM_ARG1, "slk-attr-set");
+  SCM_ASSERT (_scm_is_attr (attrs), attrs, SCM_ARG1, "slk-attr-set!");
   SCM_ASSERT (scm_is_integer (color_pair_number), color_pair_number, SCM_ARG2, 
-	      "slk-attr-set");
+	      "slk-attr-set!");
 
   const attr_t c_attrs = _scm_to_attr (attrs);
   short c_color_pair_number = scm_to_short (color_pair_number);
 
   int ret = slk_attr_set (c_attrs, c_color_pair_number, NULL);
-  RETURNTF(ret);
-}
-
-SCM
-gucu_slk_attrset (SCM attrs)
-{
-  SCM_ASSERT (_scm_is_chtype (attrs), attrs, SCM_ARG1, "slk-attrset");
-
-  const chtype c_attrs = _scm_to_chtype (attrs);
-  
-  int ret = slk_attrset (c_attrs);
   RETURNTF(ret);
 }
 
@@ -89,10 +70,10 @@ gucu_slk_clear ()
 }
 
 SCM
-gucu_slk_color (SCM color_pair_number)
+gucu_slk_color_x (SCM color_pair_number)
 {
   SCM_ASSERT (scm_is_integer (color_pair_number), color_pair_number, SCM_ARG1, 
-	      "slk-color");
+	      "slk-color!");
 
   short c_color_pair_number = scm_to_short (color_pair_number);
 
@@ -174,14 +155,12 @@ gucu_slk_init_function ()
   static int first = 1;
   if (first)
     {
-      scm_c_define_gsubr ("slk-attr-off", 1, 0, 0, gucu_slk_attr_off);
-      scm_c_define_gsubr ("slk-attroff", 1, 0, 0, gucu_slk_attroff);
-      scm_c_define_gsubr ("slk-attr-on", 1, 0, 0, gucu_slk_attr_on);
-      scm_c_define_gsubr ("slk-attron", 1, 0, 0, gucu_slk_attron);
-      scm_c_define_gsubr ("slk-attr-set", 2, 0, 0, gucu_slk_attr_set);
-      scm_c_define_gsubr ("slk-attrset", 1, 0, 0, gucu_slk_attrset);
+      scm_c_define_gsubr ("slk-attr", 0, 0, 0, gucu_slk_attr);
+      scm_c_define_gsubr ("slk-attr-off!", 1, 0, 0, gucu_slk_attr_off_x);
+      scm_c_define_gsubr ("slk-attr-on!", 1, 0, 0, gucu_slk_attr_on_x);
+      scm_c_define_gsubr ("slk-attr-set!", 2, 0, 0, gucu_slk_attr_set_x);
       scm_c_define_gsubr ("slk-clear", 0, 0, 0, gucu_slk_clear);
-      scm_c_define_gsubr ("slk-color", 1, 0, 0, gucu_slk_color);
+      scm_c_define_gsubr ("slk-color!", 1, 0, 0, gucu_slk_color_x);
       scm_c_define_gsubr ("slk-init", 1, 0, 0, gucu_slk_init);
       scm_c_define_gsubr ("slk-label", 1, 0, 0, gucu_slk_label);
       scm_c_define_gsubr ("slk-noutrefresh", 0, 0, 0, gucu_slk_noutrefresh);
