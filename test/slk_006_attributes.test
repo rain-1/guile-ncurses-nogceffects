@@ -1,0 +1,168 @@
+;;;; -*- Mode: scheme; -*-
+;;;; slk_006_attributes.test -- test suite for soft key functions
+
+(use-modules (test lib)
+	     (test lib2)
+	     (ice-9 format)
+	     (gucu curses)
+	     (gucu slk))
+
+(define test (curses-test-start))
+
+(slk-init 0)
+(define win (initscr))
+
+(with-test-prefix
+ "attributes"
+
+ (pass-if "set to normal"
+	  (clear win)
+	  (move win 0 0)
+	  (addstr win "Setting soft keys to normal")
+	  (refresh win)
+	  (slk-attr-set! A_NORMAL 0)
+	  (slk-set 1 "normal" 1)
+	  (slk-refresh)
+	  (let* ((rendition (slk-attr))
+		 (attributes (car rendition))
+		 (color (cadr rendition)))
+	    (move win 1 0)
+	    (addstr win (format #f "Curses reports attribute flags are ~32,'0b~%"
+				attributes))
+	    (addstr win (format #f "Normal attribute flags should be   ~32,'0b~%"
+				A_NORMAL))
+	    (addstr win (format #f "Curses reports color pair is ~s~%" color))
+	    (refresh win)
+	    (maybe-sleep 3)
+	    (and
+	     (equal? attributes A_NORMAL)
+	     (equal? color 0))
+	    *unspecified*))
+
+ (pass-if "set to bold"
+	  (clear win)
+	  (move win 0 0)
+	  (addstr win "Setting soft keys to bold")
+	  (refresh win)
+	  (slk-attr-set! A_BOLD 0)
+	  (slk-set 2 "bold" 1)
+	  (slk-refresh)
+	  (let* ((rendition (slk-attr))
+		 (attributes (car rendition))
+		 (color (cadr rendition)))
+	    (move win 1 0)
+	    (addstr win (format #f "Curses reports attribute flags are ~32,'0b~%"
+				attributes))
+	    (addstr win (format #f "Bold attribute flags should be     ~32,'0b~%"
+				A_BOLD))
+	    (addstr win (format #f "Curses reports color pair is ~s~%" color))
+	    (refresh win)
+	    (maybe-sleep 3)
+	    (and
+	     (equal? attributes A_BOLD)
+	     (equal? color 0))
+	    *unspecified*))
+
+ (pass-if "turn off bold"
+	  (clear win)
+	  (move win 0 0)
+	  (addstr win "Turning off bold")
+	  (refresh win)
+	  (slk-attr-off! A_BOLD)
+	  (slk-set 3 "bold" 1)
+	  (slk-refresh)
+	  (let* ((rendition (slk-attr))
+		 (attributes (car rendition))
+		 (color (cadr rendition)))
+	    (move win 1 0)
+	    (addstr win (format #f "Curses reports attribute flags are ~32,'0b~%"
+				attributes))
+	    (addstr win (format #f "Normal attribute flags should be   ~32,'0b~%"
+				A_NORMAL))
+	    (addstr win (format #f "Curses reports color pair is ~s~%" color))
+	    (refresh win)
+	    (maybe-sleep 3)
+	    (and
+	     (equal? attributes A_NORMAL)
+	     (equal? color 0))
+	    *unspecified*))
+
+ (pass-if "turn on dim"
+	  (clear win)
+	  (move win 0 0)
+	  (addstr win "Turning on dim")
+	  (refresh win)
+	  (slk-attr-on! A_DIM)
+	  (slk-set 4 "dim" 1)
+	  (slk-refresh)
+	  (let* ((rendition (slk-attr))
+		 (attributes (car rendition))
+		 (color (cadr rendition)))
+	    (move win 1 0)
+	    (addstr win (format #f "Curses reports attribute flags are ~32,'0b~%"
+				attributes))
+	    (addstr win (format #f "Dim attribute flags should be      ~32,'0b~%"
+				A_DIM))
+	    (addstr win (format #f "Curses reports color pair is ~s~%" color))
+	    (refresh win)
+	    (maybe-sleep 3)
+	    (and
+	     (equal? attributes A_DIM)
+	     (equal? color 0))
+	    *unspecified*))
+
+ (pass-if "turn on underline"
+	  (clear win)
+	  (move win 0 0)
+	  (addstr win "Turning on underline")
+	  (refresh win)
+	  (slk-attr-on! A_UNDERLINE)
+	  (slk-set 5 "underline" 1)
+	  (slk-refresh)
+	  (let* ((rendition (slk-attr))
+		 (attributes (car rendition))
+		 (color (cadr rendition)))
+	    (move win 1 0)
+	    (addstr win (format #f "Curses reports attribute flags are ~32,'0b~%"
+				attributes))
+	    (addstr win (format #f "Attribute flags should be          ~32,'0b~%"
+				(logior A_DIM A_UNDERLINE)))
+	    (addstr win (format #f "Curses reports color pair is ~s~%" color))
+	    (refresh win)
+	    (maybe-sleep 3)
+	    (and
+	     (equal? attributes (logior A_DIM A_UNDERLINE))
+	     (equal? color 0))
+	    *unspecified*))
+
+ (start-color!)
+ (init-pair! 1 COLOR_BLUE COLOR_BLACK)
+
+ (pass-if "add color pair 1"
+	  (clear win)
+	  (move win 0 0)
+	  (addstr win "Turning on colors")
+	  (refresh win)
+	  (slk-color! 1)
+	  (slk-set 6 "color" 1)
+	  (slk-refresh)
+	  (let* ((rendition (slk-attr))
+		 (attributes (car rendition))
+		 (color (cadr rendition)))
+	    (move win 1 0)
+	    (addstr win (format #f "Curses reports attribute flags are ~32,'0b~%"
+				attributes))
+	    (addstr win (format #f "Attribute flags should be          ~32,'0b~%"
+				(logior A_DIM A_UNDERLINE)))
+	    (addstr win (format #f "Curses reports color pair is ~s~%" color))
+	    (refresh win)
+	    (maybe-sleep 3)
+	    (and
+	     (equal? attributes (logior A_DIM A_UNDERLINE))
+	     (equal? color 1))
+	    *unspecified*)))
+
+
+(endwin)
+
+(curses-test-end test "slk_006_attributes.out")

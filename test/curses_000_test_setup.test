@@ -1,5 +1,7 @@
-;;; curses_000_test_setup.test -- print some diagnostic info 
-;;;   for this test
+;;;; -*- Mode: scheme; -*-
+
+;;;; curses_000_test_setup.test -- print some diagnostic info 
+;;;;   for this test
 
 (use-modules (gucu curses))
 

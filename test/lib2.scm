@@ -14,12 +14,9 @@
     (list (second count-reporter)
 	  out-string)))
 
-(define *sleep* #f)
-
 (define (maybe-sleep n)
-  (if *sleep*
+  (if (getenv "GUCU_VERBOSE_TEST")
       (sleep n)))
-
 
 ;; Exit the test.  If an error was detected, save an error
 ;; log into FILENAME.
