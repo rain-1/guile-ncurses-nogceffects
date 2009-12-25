@@ -6074,24 +6074,26 @@ This routine forces all the soft labels to be output next time
 @code{slk-noutrefresh} is performed.
 @end deffn
 
-@deffn Procedure slk-attron attrs
-@deffnx Procedure slk-attroff attrs
-@deffnx Procedure slk-attrset attrs
-@deffnx Procedure slk-attr-on attrs void
-@deffnx Procedure slk-attr-off attrs void
-@deffnx Procedure slk-attr-set attrs color-pair void
-@deffnx Procedure slk-color color-pair
+@deffn Procedure slk-attr-on! attrs
+@deffnx Procedure slk-attr-off! attrs
+@deffnx Procedure slk-attr-set! attrs color-pair
+@deffnx Procedure slk-color! color-pair
 @deffnx Procedure slk-attr
 
-The @code{slk-attron}, @code{slk-attrset}, @code{slk-attroff} and
-@code{slk-attr} routines correspond to @code{attr-on!}, @code{attr-set!},
-@code{attr-off!} and @code{attr-get}.  They have an effect only if soft
+The @code{slk-attr-on!}, @code{slk-attr-set!}, and
+@code{slk-attr-off!} routines correspond to @code{attr-on!},
+@code{attr-set!}, @code{attr-off!}.  They have an effect only if soft
 labels are simulated on the bottom line of the screen.  The default
 highlight for soft keys is @code{A_STANDOUT}.
 
-The @code{slk-color} routine corresponds to @code{color-set!}. It has
+The @code{slk-color!} routine corresponds to @code{color-set!}. It has
 an effect only if soft labels are simulated on the bottom line of the
 screen.
+
+The procedure @code{slk-attr} returns the attributes and color pair
+currently set for the soft keys.  They are returned as a list of two
+elements.  The first element is a bitmap of attributes; the second
+element is a color pair number.
 @end deffn
 
 

@@ -1,7 +1,7 @@
 This is doc/gucu.info, produced by makeinfo version 4.13 from
 ./doc/gucu.texi.
 
-This manual is for Gucu, a Guile Curses library, (version 0.6, 23
+This manual is for Gucu, a Guile Curses library, (version 0.6, 25
 December 2009).  Gucu provides bindings for the Curses library, which
 provides functionality for updating character screens.
 
@@ -42,7 +42,7 @@ File: gucu.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 GuCu: a Guile Curses Library
 ****************************
 
-This manual is for Gucu, a Guile Curses library, (version 0.6, 23
+This manual is for Gucu, a Guile Curses library, (version 0.6, 25
 December 2009).  Gucu provides bindings for the Curses library, which
 provides functionality for updating character screens.
 
@@ -6021,23 +6021,24 @@ hardware support for this mode.
      This routine forces all the soft labels to be output next time
      `slk-noutrefresh' is performed.
 
- -- Procedure: slk-attron attrs
- -- Procedure: slk-attroff attrs
- -- Procedure: slk-attrset attrs
- -- Procedure: slk-attr-on attrs void
- -- Procedure: slk-attr-off attrs void
- -- Procedure: slk-attr-set attrs color-pair void
- -- Procedure: slk-color color-pair
+ -- Procedure: slk-attr-on! attrs
+ -- Procedure: slk-attr-off! attrs
+ -- Procedure: slk-attr-set! attrs color-pair
+ -- Procedure: slk-color! color-pair
  -- Procedure: slk-attr
-     The `slk-attron', `slk-attrset', `slk-attroff' and `slk-attr'
-     routines correspond to `attr-on!', `attr-set!', `attr-off!' and
-     `attr-get'.  They have an effect only if soft labels are simulated
-     on the bottom line of the screen.  The default highlight for soft
-     keys is `A_STANDOUT'.
+     The `slk-attr-on!', `slk-attr-set!', and `slk-attr-off!' routines
+     correspond to `attr-on!', `attr-set!', `attr-off!'.  They have an
+     effect only if soft labels are simulated on the bottom line of the
+     screen.  The default highlight for soft keys is `A_STANDOUT'.
 
-     The `slk-color' routine corresponds to `color-set!'. It has an
+     The `slk-color!' routine corresponds to `color-set!'. It has an
      effect only if soft labels are simulated on the bottom line of the
      screen.
+
+     The procedure `slk-attr' returns the attributes and color pair
+     currently set for the soft keys.  They are returned as a list of
+     two elements.  The first element is a bitmap of attributes; the
+     second element is a color pair number.
 
 
 File: gucu.info,  Node: The curses panel library,  Next: The curses menu library,  Prev: Function key labels library,  Up: Curses Reference

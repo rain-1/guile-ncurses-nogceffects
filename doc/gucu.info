@@ -1,7 +1,7 @@
 This is doc/gucu.info, produced by makeinfo version 4.13 from
 ./doc/gucu.texi.
 
-This manual is for Gucu, a Guile Curses library, (version 0.6, 23
+This manual is for Gucu, a Guile Curses library, (version 0.6, 25
 December 2009).  Gucu provides bindings for the Curses library, which
 provides functionality for updating character screens.
 
@@ -39,7 +39,7 @@ Copyright (C) 2007,2008,2009 Michael L. Gran
 
 Indirect:
 gucu.info-1: 1800
-gucu.info-2: 277753
+gucu.info-2: 277872
 
 Tag Table:
 (Indirect)
@@ -157,36 +157,36 @@ Node: Refresh routines218921
 Node: Miscellaneous utilities220368
 Node: Window creation222903
 Node: Function key labels library226646
-Node: The curses panel library230370
-Node: The curses menu library233439
-Node: Menus Overview233829
-Node: Menu Item Procedures234483
-Node: Menu Procedures237838
-Node: Menu Colors and Attributes238135
-Node: Positioning a menu cursor239534
-Node: The menu driver240007
-Node: Menu sizes244545
-Node: Menu mark strings245544
-Node: Menu creation246392
-Node: Menu options246767
-Node: Menu pattern buffer248261
-Node: Writing or erasing menus from window249306
-Node: Control spacing between menu items250368
-Node: Associate menus with window251863
-Node: The curses form library252906
-Node: Forms Overview253576
-Node: Form procedures254678
-Node: Making or breaking connections between forms and fields261903
-Node: Color and attribute control for form fields263112
-Node: Data type validation for fields269504
-Node: Creating forms273253
-Node: Form pagination functions273583
-Node: Setting and getting form options274081
-Node: Setting the page number and field275217
-Node: Writing or erasing forms from associated subwindows275871
-Node: Printable form request names276463
-Node: Form windows276915
-Node: Index277753
+Node: The curses panel library230489
+Node: The curses menu library233558
+Node: Menus Overview233948
+Node: Menu Item Procedures234602
+Node: Menu Procedures237957
+Node: Menu Colors and Attributes238254
+Node: Positioning a menu cursor239653
+Node: The menu driver240126
+Node: Menu sizes244664
+Node: Menu mark strings245663
+Node: Menu creation246511
+Node: Menu options246886
+Node: Menu pattern buffer248380
+Node: Writing or erasing menus from window249425
+Node: Control spacing between menu items250487
+Node: Associate menus with window251982
+Node: The curses form library253025
+Node: Forms Overview253695
+Node: Form procedures254797
+Node: Making or breaking connections between forms and fields262022
+Node: Color and attribute control for form fields263231
+Node: Data type validation for fields269623
+Node: Creating forms273372
+Node: Form pagination functions273702
+Node: Setting and getting form options274200
+Node: Setting the page number and field275336
+Node: Writing or erasing forms from associated subwindows275990
+Node: Printable form request names276582
+Node: Form windows277034
+Node: Index277872
 
 End Tag Table
 
