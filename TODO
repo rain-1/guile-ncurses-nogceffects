@@ -7,11 +7,6 @@ TODO
 
 * The newterm function is flaky.
 
-* Conditionally compiled functions such as newterm don't 
-  appear even if the system is capable of supporting them
-
-* Menu, form, and slk remain poorly tested.
-
 * Documentation lacks subject index entries.
 
-* Many functions lack unit tests, garbage collection tests.
+* Terminfo and termcap functions have not been wrapped

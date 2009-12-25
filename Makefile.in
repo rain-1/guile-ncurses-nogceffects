@@ -318,8 +318,7 @@ lib_LTLIBRARIES = \
 	gucu/libguile-gucu.la
 
 @DEMO_INSTALL_TRUE@bin_SCRIPTS = \
-@DEMO_INSTALL_TRUE@	tools/gucu-keyboard-test \
-@DEMO_INSTALL_TRUE@	tools/gucu-vi
+@DEMO_INSTALL_TRUE@	tools/gucu-keyboard-test
 
 @DEMO_INSTALL_FALSE@noinst_SCRIPTS = 
 dist_pkgguilesite_DATA = \
@@ -464,7 +463,8 @@ NARROWTESTS = \
 	test/slk_002_init.test \
 	test/slk_003_init.test \
 	test/slk_004_init.test \
-	test/slk_005_demo.test
+	test/slk_005_demo.test \
+	test/slk_006_attributes.test
 
 WIDETESTS = \
 	test/r037_border_set.test \
@@ -1685,8 +1685,7 @@ uninstall-am: uninstall-binPROGRAMS uninstall-binSCRIPTS \
 	uninstall-html-am uninstall-info-am uninstall-libLTLIBRARIES \
 	uninstall-pdf-am uninstall-ps-am
 
-@DEMO_INSTALL_FALSE@	tools/gucu-keyboard-test \
-@DEMO_INSTALL_FALSE@	tools/gucu-vi
+@DEMO_INSTALL_FALSE@	tools/gucu-keyboard-test
 
 ### INSTALLATION ###
 

@@ -1,5 +1,14 @@
 The NEWS file for Guile Curses
 
+Release 0.6
+
+- Make the SLK functions work.
+- Better Guile 2.0.x compatibility.
+
+Release 0.5
+
+- A bug fix release.
+
 Release 0.4 
 
 - Abstracted away the difference between wide and narrow functions

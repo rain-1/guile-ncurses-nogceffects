@@ -1,6 +1,6 @@
 The README file for Guile Curses
 
-This is gucu v0.4, the curses library from the Gano project.  It
+This is gucu v0.6, the curses library from the Gano project.  It
 provides functionality to allow programs written in Guile to interact
 with character screens in a terminal-independent manner.  It is a
 wrapper to the underlying curses library.
@@ -29,6 +29,4 @@ file.
 
 For an explanation of the copying restrictions for this package, see
 COPYING.
-
-
 

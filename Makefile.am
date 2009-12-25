@@ -48,12 +48,10 @@ bin_PROGRAMS = \
 	tools/gucushell
 if DEMO_INSTALL
 bin_SCRIPTS = \
-	tools/gucu-keyboard-test \
-	tools/gucu-vi
+	tools/gucu-keyboard-test
 else
 noinst_SCRIPTS =
-	tools/gucu-keyboard-test \
-	tools/gucu-vi
+	tools/gucu-keyboard-test
 endif
 dist_pkgguilesite_DATA = \
 	gucu/curses.scm \
@@ -199,7 +197,8 @@ NARROWTESTS = \
 	test/slk_002_init.test \
 	test/slk_003_init.test \
 	test/slk_004_init.test \
-	test/slk_005_demo.test
+	test/slk_005_demo.test \
+	test/slk_006_attributes.test
 
 WIDETESTS = \
 	test/r037_border_set.test \
