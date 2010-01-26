@@ -3,14 +3,9 @@
 #include "form_spec.h"
 #include "form_const.h"
 #include "form_type.h"
+#include "visibility.h"
 
-#ifdef DLL_EXPORT
-#define API __attribute__ ((dllexport, cdecl))
-#else
-#define API
-#endif
-
-void gucu_form_init (void) API;
+GUCU_API void gucu_form_init (void);
 
 void
 gucu_form_init ()

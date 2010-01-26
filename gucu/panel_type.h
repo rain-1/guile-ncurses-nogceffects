@@ -3,9 +3,7 @@
 
 #include <libguile.h>
 #include <panel.h>
-#include <panel.h>
-
-extern scm_t_bits panel_tag;
+#include "visibility.h"
 
 struct gucu_panel {
   /* Pointer to the panel */
@@ -18,15 +16,16 @@ struct gucu_panel {
   SCM win_guard;
 };
 
+GUCU_LOCAL extern scm_t_bits panel_tag;
 
-int _scm_is_panel (SCM x);
-PANEL *_scm_to_panel (SCM x);
-SCM _scm_from_panel (PANEL *x);
+GUCU_LOCAL int _scm_is_panel (SCM x);
+GUCU_LOCAL PANEL *_scm_to_panel (SCM x);
+GUCU_LOCAL SCM _scm_from_panel (PANEL *x);
 
-SCM gucu_is_panel_p (SCM x) API;
-SCM gucu_new_panel (SCM arg1) API;
-SCM gucu_del_panel (SCM arg1) API;
+GUCU_API SCM gucu_is_panel_p (SCM x);
+GUCU_API SCM gucu_new_panel (SCM arg1);
+GUCU_API SCM gucu_del_panel (SCM arg1);
 
-void gucu_panel_init_type (void);
+GUCU_LOCAL void gucu_panel_init_type (void);
 
 #endif

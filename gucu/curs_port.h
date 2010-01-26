@@ -3,19 +3,14 @@
 
 #include <libguile.h>
 #include <config.h>
-
-#ifdef DLL_EXPORT
-#define API __attribute__ ((dllexport, cdecl))
-#else
-#define API
-#endif
+#include "visibility.h"
 
 #ifdef HAVE_FOPENCOOKIE
-SCM gucu_newterm (SCM a, SCM b, SCM c) API;
+GUCU_API SCM gucu_newterm (SCM a, SCM b, SCM c);
 #endif
-SCM gucu_getwin (SCM port) API;
-SCM gucu_putwin (SCM win, SCM port) API;
+GUCU_API SCM gucu_getwin (SCM port);
+GUCU_API SCM gucu_putwin (SCM win, SCM port);
 
-void gucu_init_port (void);
+GUCU_LOCAL void gucu_init_port (void);
 
 #endif /* not CURS_PORT_H */

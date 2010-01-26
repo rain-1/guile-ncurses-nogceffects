@@ -3,14 +3,9 @@
 #include "menu_spec.h"
 #include "menu_const.h"
 #include "menu_type.h"
+#include "visibility.h"
 
-#ifdef DLL_EXPORT
-#define API __attribute__ ((dllexport, cdecl))
-#else
-#define API
-#endif
-
-void gucu_menu_init (void) API;
+GUCU_API void gucu_menu_init (void);
 
 void
 gucu_menu_init ()

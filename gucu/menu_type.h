@@ -3,19 +3,14 @@
 
 #include <libguile.h>
 #include <menu.h>
+#include "visibility.h"
 
-extern scm_t_bits item_tag;
+GUCU_LOCAL int _scm_is_item (SCM x);
+GUCU_LOCAL ITEM *_scm_to_item (SCM x);
+GUCU_LOCAL SCM _scm_from_item (ITEM *x);
 
-int _scm_is_item (SCM x);
-ITEM *_scm_to_item (SCM x);
-SCM _scm_from_item (ITEM *x);
-
-SCM gucu_is_item_p (SCM x) API;
-void gucu_item_init_type (void);
-
-SCM gucu_new_item (SCM x, SCM y) API;
-
-extern scm_t_bits menu_tag;
+GUCU_API SCM gucu_is_item_p (SCM x);
+GUCU_API SCM gucu_new_item (SCM x, SCM y);
 
 struct gucu_menu {
   // Pointer to the menu
@@ -27,15 +22,13 @@ struct gucu_menu {
   SCM subwin_guard;
 };
 
+GUCU_LOCAL int _scm_is_menu (SCM x);
+GUCU_LOCAL MENU *_scm_to_menu (SCM x);
+GUCU_LOCAL SCM _scm_from_menu (MENU *x);
 
+GUCU_API SCM gucu_is_menu_p (SCM x);
+GUCU_API SCM gucu_new_menu (SCM x);
 
-int _scm_is_menu (SCM x);
-MENU *_scm_to_menu (SCM x);
-SCM _scm_from_menu (MENU *x);
-
-SCM gucu_is_menu_p (SCM x) API;
-void gucu_menu_init_type (void);
-
-SCM gucu_new_menu (SCM x) API;
+GUCU_LOCAL void gucu_menu_init_type (void);
 
 #endif

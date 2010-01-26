@@ -1,19 +1,13 @@
 #include <libguile.h>
 #include <curses.h>
 #include <config.h>
-#include "curs_func.h"
+#include "visibility.h"
 #include "curs_spec.h"
 #include "curs_const.h"
 #include "curs_port.h"
 #include "type.h"
 
-#ifdef DLL_EXPORT
-#define API __attribute__ ((dllexport, cdecl))
-#else
-#define API
-#endif
-
-void gucu_init (void) API;
+GUCU_API void gucu_init (void);
 
 void
 gucu_init ()
