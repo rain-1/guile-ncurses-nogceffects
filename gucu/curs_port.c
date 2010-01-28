@@ -12,23 +12,19 @@
 #include "curs_port.h"
 #include "compat.h"
 
-#ifdef HAVE_FOPENCOOKIE
+#if defined(HAVE_FOPENCOOKIE) && defined(HAVE_OFF64_T)
 
 #define PORT_ERR (-1)
 #define PORT_OK (0)
 
 static ssize_t port_read (void *cookie, char *buf, size_t siz);
 static ssize_t port_write (void *cookie, const char *buf, size_t siz);
-#ifdef HAVE_OFF64_T
 static int port_seek (void *cookie, off64_t *pos, int whence);
-#else
-static int port_seek (void *cookie, off_t *pos, int whence);
-#endif
 static int port_close (void *cookie);
 
 static cookie_io_functions_t port_funcs;
 
-static ssize_t 
+static ssize_t
 port_read (void *cookie, char *buf, size_t siz)
 {
   SCM port = PTR2SCM(cookie);
@@ -60,7 +56,7 @@ port_read (void *cookie, char *buf, size_t siz)
 #endif
 }
 
-static ssize_t 
+static ssize_t
 port_write (void *cookie, const char *buf, size_t siz)
 {
   size_t i;
@@ -80,7 +76,7 @@ port_write (void *cookie, const char *buf, size_t siz)
 #else
   for (i=0; i < siz; i++)
     {
-      scm_write_char (scm_integer_to_char (scm_from_char (buf[i])), 
+      scm_write_char (scm_integer_to_char (scm_from_char (buf[i])),
 		      port);
     }
 
@@ -88,13 +84,8 @@ port_write (void *cookie, const char *buf, size_t siz)
 #endif
 }
 
-#ifdef HAVE_OFF64_T
-static int 
+static int
 port_seek (void *cookie, off64_t *pos, int whence)
-#else
-static int 
-port_seek (void *cookie, off_t *pos, int whence)
-#endif
 {
   SCM port = PTR2SCM(cookie);
   SCM new_pos;
@@ -125,7 +116,7 @@ gucu_newterm (SCM type, SCM outp, SCM inp)
   SCREEN *ret;
 
   SCM_ASSERT (scm_is_string (type), type, SCM_ARG1, "newterm");
-  SCM_ASSERT (scm_is_true (scm_output_port_p (outp)), outp, SCM_ARG2, 
+  SCM_ASSERT (scm_is_true (scm_output_port_p (outp)), outp, SCM_ARG2,
 	      "newterm");
   SCM_ASSERT (scm_is_true (scm_input_port_p (inp)), inp, SCM_ARG3, "newterm");
 
@@ -147,7 +138,7 @@ gucu_newterm (SCM type, SCM outp, SCM inp)
   if (ret == NULL)
     {
       scm_error_scm (SCM_BOOL_F,
-		     scm_from_locale_string("newterm"), 
+		     scm_from_locale_string("newterm"),
 		     scm_from_locale_string("could not create a terminal"),
 		     SCM_BOOL_F,
 		     SCM_BOOL_F);
@@ -276,7 +267,7 @@ gucu_init_port ()
 
   if (first)
     {
-#ifdef HAVE_FOPENCOOKIE
+#if defined(HAVE_FOPENCOOKIE) && defined(HAVE_OFF64_T)
       port_funcs.read = port_read;
       port_funcs.write = port_write;
       port_funcs.seek = port_seek;
