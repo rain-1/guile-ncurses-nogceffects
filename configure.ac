@@ -24,99 +24,88 @@ AC_PROG_CC
 
 AC_CANONICAL_HOST
 AC_PROG_INSTALL
-
-# AC_PROG_MKDIR_P is the current version of the macro
-# AM_PROG_MKDIR_P is deprecated
-AM_PROG_MKDIR_P
-
-AM_PROG_CC_C_O
-#NCURSESW_PROGS
+AC_PROG_MKDIR_P
 
 ##################
 # Check for Libtool
 
 # New method for when Libtool 2.x is default
-#LT_INIT([dlopen disable-fast-install win32-dll])
-
-# Deprecated method for Libtool 1.x
-AC_LIBTOOL_DLOPEN
-AC_LIBTOOL_WIN32_DLL
-AC_PROG_LIBTOOL
+LT_INIT([dlopen disable-fast-install disable-static win32-dll])
 
 ##################
 # Initial guess of platform specific options
-case $host in
-*-*-cygwin)
-        [force_tex_to_tex=yes]
-	[enable_acs_map_fix=yes] ;;
-*-*-linux*)
-        [force_tex_to_tex=no]
-	[enable_acs_map_fix=no] ;;
+case $host_os in
+cygwin*)
+	[force_tex_to_tex=yes] ;;
 *)
-        [force_tex_to_tex=no]
-	[enable_acs_map_fix=no] ;;
+	[force_tex_to_tex=no] ;;
 esac
 
 AM_CONDITIONAL([FORCE_TEX_TO_TEX], [test "$force_tex_to_tex" = yes])
 
+case $host_os in
+mingw* | cygwin* | os2* | pw32* | cegcc*)
+        [building_dll=yes] ;;
+*)
+	[building_dll=no] ;;
+esac
+
+AM_CONDITIONAL([BUILDING_DLL], [test "$building_dll" = yes])
+
 ##################
 # Check for libraries
 
-AC_CHECK_LIB([guile],	
-             [scm_version], ,
-             # if guile is not ok
-             [AC_MSG_ERROR([libguile not found])])
+# from guile.m4
+# sets: GUILE_CFLAGS and GUILE_LDFLAGS
+GUILE_FLAGS
+
+# GUILE_LDFLAGS is actually a mashup of GUILE_LIBS and GUILE_LDFLAGS
+
+# from the autoconf archive
+# sets: ax_cv_curses, ax_cv_ncurses, ax_cv_ncursesw and CURSES_LIB
+# ac_defines: HAVE_CURSES_H, HAVE_NCURSES_H, HAVE_NCURSES_W
+AX_WITH_CURSES
+
+if test "$ax_cv_ncurses" = no -a "$ax_cv_ncursesw" = no
+then
+  AC_MSG_ERROR([ncurses is required])
+fi
+
+AM_CONDITIONAL([WIDE], [test "$ax_cv_ncursesw" = yes])
 
 
-AC_ARG_WITH([ncursesw],
-            [AS_HELP_STRING([--with-ncursesw],
-                            [use the wide version of the curses libraries])],
-            # if option is selected
-            [libncurses="ncursesw"
-	     libform="formw"
-	     libpanel="panelw"
-	     libmenu="menuw"
-             with_ncursesw="yes"],
-            # if option is not selected
-            [libncurses="ncurses"
-	     libform="form"
-	     libpanel="panel"
-	     libmenu="menu"
-             with_ncursesw="no"])
-	     
-# A conditional to use in the makefiles
-AM_CONDITIONAL([WIDE], [test "$with_ncursesw" = yes])
+# Check for the menu, panel, and form libraries
+if test "$ax_cv_ncursesw" = no
+then
+  AC_CHECK_LIB([menu], [new_menu],
+               [MENU_LIB="-lmenu"],
+               [AC_MSG_ERROR([the ncurses menu library is required])])
+  AC_CHECK_LIB([form], [new_form],
+               [FORM_LIB="-lform"],
+               [AC_MSG_ERROR([the ncurses form library is required])])
+  AC_CHECK_LIB([panel], [new_panel],
+               [PANEL_LIB="-lpanel"],
+               [AC_MSG_ERROR([the ncurses panel library is required])])
+else
+  AC_CHECK_LIB([menuw], [new_menu],
+               [MENU_LIB="-lmenuw"],
+               [AC_MSG_ERROR([the ncurses menuw library is required])])
+  AC_CHECK_LIB([formw], [new_form],
+               [FORM_LIB="-lformw"],
+               [AC_MSG_ERROR([the ncurses formw library is required])])
+  AC_CHECK_LIB([panelw], [new_panel],
+               [PANEL_LIB="-lpanelw"],
+               [AC_MSG_ERROR([the ncurses panelw library is required])])
+  AC_CHECK_LIB([unistring], [u32_strconv_from_locale],
+               [UNISTRING_LIB="-lunistring"],
+               [AC_MSG_ERROR([the unistring library is required when wide curses is used])])
+fi
 
-AS_IF(
-      # if
-      [test "$with_ncursesw" = yes],
-      # then
-      [AC_DEFINE([HAVE_LIBNCURSESW],
-                 [1],
-                 [Define if you are using the wide version of the ncurses library])])
-# The menu, panel, and form libraries should either use the wide or
-# the narrow forms to match the version of the ncurses library being
-# used.
-AC_CHECK_LIB([$libncurses], [initscr], ,[AC_MSG_ERROR([ncurses not found])])
-AC_CHECK_LIB([$libmenu], [new_menu], , ,[-l$libncurses])
-AC_CHECK_LIB([$libpanel], [new_panel], , ,[-l$libncurses])
-AC_CHECK_LIB([$libform], [new_form], , ,[-l$libncurses])
-AC_CHECK_LIB([unistring], [u32_strconv_from_locale])
-
-#
-# In Cygwin NCurses v5.5.20061104, there is a bug in the acs_map table
-# declaration in <curses.h>.  This enables a workaround.
-#
-AC_ARG_ENABLE([acs-map-fix],
-              [AS_HELP_STRING([--enable-acs-map-fix],
-                              [Work around acs_map bug in Cygwin NCurses v 5.5.20061104])])
-AS_IF(
-      # if 
-      [test "$enable_acs_map_fix" = yes],
-      # then
-      [AC_DEFINE([ENABLE_ACS_MAP_FIX], 
-                 [1],
-                 [Define if you have to explicitly declare the curses acs_map])])
+AC_SUBST([CURSES_LIB])
+AC_SUBST([MENU_LIB])
+AC_SUBST([PANEL_LIB])
+AC_SUBST([FORM_LIB])
+AC_SUBST([UNISTRING_LIB])
 
 AC_ARG_ENABLE([warnings],
               [AS_HELP_STRING([--enable-warnings],
@@ -131,17 +120,18 @@ AM_CONDITIONAL([DEMO_INSTALL], [test "$enable_demo_install" = yes])
 
 ##################
 # Check for header files
-AC_CHECK_HEADERS([wchar.h curses.h menu.h form.h panel.h process.h pty.h])
-AC_CHECK_HEADERS([util.h])
+AC_CHECK_HEADERS([process.h pty.h util.h])
 
 ##################
 # Check for types, structures, compiler characteristics
 AC_CHECK_TYPE([off64_t],
               [AC_DEFINE([HAVE_OFF64_T],
                          [1],
-                         [Define if you are have the off64_t type])], 
+                         [Define if you are have the off64_t type])],
               ,
-              [#include <unistd.h>])
+              [#define _LARGEFILE64_SOURCE
+               #include <unistd.h>
+               ])
 AC_CHECK_SIZEOF([int])
 AC_CHECK_SIZEOF([long])
 AC_CHECK_SIZEOF([chtype], ,[#include <curses.h>])
@@ -149,14 +139,17 @@ AC_CHECK_SIZEOF([attr_t], ,[#include <curses.h>])
 AC_CHECK_SIZEOF([wchar_t], ,[#include <stddef.h>])
 AC_CHECK_SIZEOF([wint_t], ,[#include <wchar.h>])
 
-# AC_PROG_CC_C99
+AC_PROG_CC_C99
 
 ##################
 # Check for C library functions
 AC_CHECK_FUNCS([cfmakeraw fopencookie])
 
 # Check for ncurses library functions
+ax_save_LIBS="$LIBS"
+LIBS="$ax_save_LIBS $CURSES_LIB"
 AC_CHECK_FUNCS([key_defined term_attrs])
+LIBS="$ax_save_LIBS"
 
 # Later something should be done with this
 # AC_FUNC_MALLOC
@@ -166,6 +159,7 @@ AC_CHECK_FUNCS([key_defined term_attrs])
 
 ##################
 #  Output
-AC_CONFIG_FILES([Makefile])
+AC_CONFIG_FILES([Makefile gucu/makefile doc/makefile m4/makefile])
+AC_CONFIG_FILES([build_aux/makefile tools/makefile test/makefile])
 AC_CONFIG_FILES([tools/uninstalled-env], [chmod +x tools/uninstalled-env])
 AC_OUTPUT
