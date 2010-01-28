@@ -1,7 +1,7 @@
 #ifndef UNICODE_H
 #define UNICODE_H
 
-#include "features.h"
+#include "gucuconfig.h"
 
 #ifdef GUILE_CHARS_ARE_UCS4
 #include <stddef.h>

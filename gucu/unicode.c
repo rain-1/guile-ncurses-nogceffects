@@ -1,6 +1,6 @@
 #include <config.h>
 #include "unicode.h"
-#include "features.h"
+#include "gucuconfig.h"
 
 #ifdef GUILE_CHARS_ARE_UCS4
 #include <assert.h>
@@ -37,7 +37,7 @@ locale_char_to_codepoint (char c, uint32_t *p_codepoint)
     printf ("Entering locale_char_to_codepoint c = %c\n", c);
 
   assert (p_codepoint != (uint32_t *) NULL);
-  
+
   if (c == '\0')
     {
       if (debug_unicode)
@@ -91,9 +91,9 @@ wchar_to_codepoint (wchar_t c, uint32_t *p_codepoint)
 
   wchar_str[0] = c;
   wchar_str[1] = (wchar_t) 0;
-  u32_str = u32_conv_from_encoding ("WCHAR_T", 
+  u32_str = u32_conv_from_encoding ("WCHAR_T",
                                     iconveh_error,
-                                    (const char *) wchar_str, 
+                                    (const char *) wchar_str,
                                     sizeof(wchar_t),
                                     NULL,
                                     NULL,
@@ -176,7 +176,7 @@ codepoint_to_wchar (uint32_t codepoint, wchar_t *p_c)
   uint32_t u32_str[2];
   wchar_t *wchar_str;
   size_t wchar_len = 0;
-  
+
   assert (p_c != (wchar_t *) NULL);
   assert (codepoint <= 0x10FFFF);
 
@@ -189,7 +189,7 @@ codepoint_to_wchar (uint32_t codepoint, wchar_t *p_c)
   if (stdc_iso_10646)
     {
       if ((SIZEOF_WCHAR_T == 4)
-	  || 
+	  ||
 	  (SIZEOF_WCHAR_T == 2 && codepoint <= 0xFFFF))
 	{
           *p_c = codepoint;

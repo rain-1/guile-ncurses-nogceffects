@@ -12,11 +12,11 @@
 #include "type.h"
 #include "unicode.h"
 #include "compat.h"
-#include "features.h"
+#include "gucuconfig.h"
 
 /* The maximum number of characters in a complex character */
 #ifdef HAVE_LIBNCURSESW
-#define GUCU_CCHARW_MAX (CCHARW_MAX) 
+#define GUCU_CCHARW_MAX (CCHARW_MAX)
 #else
 #define GUCU_CCHARW_MAX (5)
 #endif
@@ -119,17 +119,17 @@ _scm_xchar_from_cchar (cchar_t *x)
      include the trailing NULL. */
   if (NCURSES_VERSION_MAJOR > 5
       || (NCURSES_VERSION_MAJOR == 5 && NCURSES_VERSION_MINOR > 7)
-      || (NCURSES_VERSION_MAJOR == 5 && NCURSES_VERSION_MINOR == 7 
+      || (NCURSES_VERSION_MAJOR == 5 && NCURSES_VERSION_MINOR == 7
 	  && NCURSES_VERSION_PATCH >= 20090718))
     {
       len --;
     }
 
   ret = getcchar(x, wch, &attr, &color_pair, NULL);
-  
+
   if (ret == ERR)
     scm_misc_error (NULL, "Error unpacking complex char", SCM_EOL);
-  
+
   /* Strip the color info from attr */
   attr &= A_ATTRIBUTES ^ A_COLOR;
 
@@ -138,7 +138,7 @@ _scm_xchar_from_cchar (cchar_t *x)
   for (i=0; i<len; i++)
     {
 #ifdef GUILE_CHARS_ARE_UCS4
-      { 
+      {
 	uint32_t cp;
 	ret = wchar_to_codepoint (wch[i], &cp);
 	if (!ret)
@@ -192,7 +192,7 @@ _scm_xchar_from_chtype (chtype x)
   total_list = scm_list_3 (_scm_from_attr (attr), scm_from_short (color_pair),
 			   SCM_MAKE_CHAR (c));
 #endif
-      
+
   return total_list;
 
 }
@@ -204,7 +204,7 @@ _scm_schar_from_char (char c)
 #ifdef GUILE_CHARS_ARE_UCS4
   int ret;
   uint32_t cp;
-  
+
   ret = locale_char_to_codepoint (c, &cp);
   if (!ret)
     return SCM_BOOL_F;
@@ -222,7 +222,7 @@ _scm_schar_from_wchar (wchar_t ch)
 #ifdef GUILE_CHARS_ARE_UCS4
   int ret;
   uint32_t cp;
-  
+
   ret = wchar_to_codepoint (ch, &cp);
   if (!ret)
     return SCM_BOOL_F;
@@ -331,7 +331,7 @@ _scm_xchar_to_chtype (SCM x)
 #else
   assert (_scm_is_xchar (x));
 
-  c = SCM_CHAR (scm_list_ref (x, scm_from_int (2)));  
+  c = SCM_CHAR (scm_list_ref (x, scm_from_int (2)));
   attr = _scm_to_attr (scm_list_ref (x, scm_from_int (0)));
   color_pair = scm_to_short (scm_list_ref (x, scm_from_int (1)));
   ch = (chtype) (unsigned char) c | attr | COLOR_PAIR (color_pair);
@@ -343,7 +343,7 @@ _scm_xchar_to_chtype (SCM x)
 
 wchar_t
 _scm_schar_to_wchar (SCM x)
-{  
+{
 #ifdef GUILE_CHARS_ARE_UCS4
   int ret;
   wchar_t c;
@@ -359,7 +359,7 @@ _scm_schar_to_wchar (SCM x)
   return c;
 #else
   wint_t wc;
-  
+
   assert (SCM_CHARP (x));
   wc = btowc ((int) SCM_CHAR (x));
   if (wc == WEOF)
@@ -371,7 +371,7 @@ _scm_schar_to_wchar (SCM x)
 
 char
 _scm_schar_to_char (SCM x)
-{  
+{
 #ifdef GUILE_CHARS_ARE_UCS4
   int ret;
   char c;
@@ -391,7 +391,7 @@ _scm_schar_to_char (SCM x)
 #endif
 }
 
-SCM 
+SCM
 gucu_schar_from_char (SCM c)
 {
   int c_c;
@@ -400,7 +400,7 @@ gucu_schar_from_char (SCM c)
   return _scm_schar_from_char ((char) (unsigned char) c_c);
 }
 
-SCM 
+SCM
 gucu_schar_to_char (SCM c)
 {
   char c_c;
@@ -409,7 +409,7 @@ gucu_schar_to_char (SCM c)
   return scm_from_uint ((unsigned char) c_c);
 }
 
-SCM 
+SCM
 gucu_schar_from_wchar (SCM wc)
 {
   wchar_t c_wc;
@@ -418,7 +418,7 @@ gucu_schar_from_wchar (SCM wc)
   return _scm_schar_from_wchar (c_wc);
 }
 
-SCM 
+SCM
 gucu_schar_to_wchar (SCM c)
 {
   wchar_t c_c;
@@ -426,7 +426,7 @@ gucu_schar_to_wchar (SCM c)
   c_c = _scm_schar_to_wchar (c);
   return scm_from_uint (c_c);
 }
-  
+
 SCM
 gucu_xchar_from_chtype (SCM c)
 {
@@ -444,7 +444,7 @@ gucu_xchar_to_chtype (SCM c)
 ///////////////////////////////////
 // STRINGS
 
-// Guile strings are either standard strings, a list of chars, or a 
+// Guile strings are either standard strings, a list of chars, or a
 // list of cchars
 
 int
@@ -453,7 +453,7 @@ _scm_is_xstring (SCM x)
   if (scm_is_true (scm_list_p (x)))
     {
       int i, len;
-      
+
       len = scm_to_int (scm_length (x));
       for (i = 0; i < len; i ++)
         {
@@ -470,7 +470,7 @@ _scm_sstring_from_wint_string (const wint_t *x)
 {
   int i, len;
   SCM member, xstring;
-  
+
   assert (x != NULL);
 
   len = 0;
@@ -496,7 +496,7 @@ _scm_sstring_from_wstring (const wchar_t *x)
 {
   size_t i;
   SCM member, xstring;
-  
+
   assert (x != NULL);
 
   xstring = SCM_EOL;
@@ -522,10 +522,10 @@ wchar_t *
 _scm_sstring_to_wstring (SCM x)
 {
   size_t i, len;
-  SCM member;			
+  SCM member;
   wchar_t *wstring;
   wchar_t wchar;
-  
+
   assert (scm_is_string (x));
 
   len = scm_c_string_length (x);
@@ -538,7 +538,7 @@ _scm_sstring_to_wstring (SCM x)
       memcpy(wstring+i, &wchar, sizeof(wchar_t));
     }
   wstring[len] = L'\0';
-  
+
   return wstring;
 }
 
@@ -574,7 +574,7 @@ _scm_xstring_from_cstring (const cchar_t *x)
   wchar_t wch[GUCU_CCHARW_MAX];
   attr_t attrs;
   short color_pair;
-  
+
   assert (x != NULL);
 
   xstring = SCM_EOL;
@@ -587,10 +587,10 @@ _scm_xstring_from_cstring (const cchar_t *x)
       /* Starting from the patch on 2009/07/18, the length returned by
 	 getcchar includes the trailing NULL.  Prior to that, it did not
 	 include the trailing NULL. */
-      
+
       if (NCURSES_VERSION_MAJOR > 5
 	  || (NCURSES_VERSION_MAJOR == 5 && NCURSES_VERSION_MINOR > 7)
-	  || (NCURSES_VERSION_MAJOR == 5 && NCURSES_VERSION_MINOR == 7 
+	  || (NCURSES_VERSION_MAJOR == 5 && NCURSES_VERSION_MINOR == 7
 	      && NCURSES_VERSION_PATCH >= 20090718))
 	{
 	  n --;
@@ -622,14 +622,14 @@ _scm_xstring_from_cstring (const cchar_t *x)
                              _scm_schar_from_wchar (wch[1]),
                              _scm_schar_from_wchar (wch[2]),
                              _scm_schar_from_wchar (wch[3]), SCM_UNDEFINED);
-      
+
       else if (n == 5)
         member = scm_list_n (_scm_from_attr (attrs),
                              scm_from_short (color_pair),
                              _scm_schar_from_wchar (wch[0]),
                              _scm_schar_from_wchar (wch[1]),
                              _scm_schar_from_wchar (wch[2]),
-                             _scm_schar_from_wchar (wch[3]), 
+                             _scm_schar_from_wchar (wch[3]),
                              _scm_schar_from_wchar (wch[4]), SCM_UNDEFINED);
       else
         abort ();
@@ -646,10 +646,10 @@ chtype *
 _scm_xstring_to_chstring (SCM x)
 {
   int i, len;
-  SCM member;			
+  SCM member;
   chtype *chstring;
   chtype ch;
-  
+
   assert (_scm_is_xstring (x));
 
   len = scm_to_int (scm_length (x));
@@ -662,7 +662,7 @@ _scm_xstring_to_chstring (SCM x)
       memcpy(chstring+i, &ch, sizeof(chtype));
     }
   chstring[len] = 0;
-  
+
   return chstring;
 }
 
@@ -671,7 +671,7 @@ cchar_t *
 _scm_xstring_to_cstring (SCM x)
 {
   int i, len;
-  SCM member;			
+  SCM member;
   cchar_t *cstring;
   cchar_t *cchar;
   static cchar_t terminator;
@@ -685,7 +685,7 @@ _scm_xstring_to_cstring (SCM x)
       setcchar(&terminator, &wch, A_NORMAL, 0, NULL);
       first = 0;
     }
-  
+
   len = scm_to_int (scm_length (x));
   cstring = (cchar_t *) scm_malloc (sizeof(cchar_t) * (len + 1));
 
@@ -698,13 +698,13 @@ _scm_xstring_to_cstring (SCM x)
     }
 
   memcpy(cstring+len, &terminator, sizeof(cchar_t));
-  
+
   return cstring;
 }
 
 #endif
 
-	  
+
 
 // chtype -- in C, an integer that contains a characters and its rendition.
 // In Scheme, an integer.
@@ -719,7 +719,7 @@ chtype
 _scm_to_chtype (SCM x)
 {
   assert (_scm_is_chtype (x));
-  
+
   if (SIZEOF_INT == SIZEOF_CHTYPE)
     return (chtype) scm_to_uint (x);
   else if (SIZEOF_LONG == SIZEOF_CHTYPE)
@@ -750,7 +750,7 @@ _scm_is_mevent (SCM x)
   if (scm_is_true (scm_list_p (x)))
     {
       int len = scm_to_int (scm_length (x));
-      
+
       for (i = 0; i < len; i ++)
 	{
 	  member = scm_list_ref (x, scm_from_int (i));
@@ -789,11 +789,11 @@ _scm_from_mevent (MEVENT *me)
 {
   assert (me != NULL);
 
-  return scm_list_5 
-    ( 
+  return scm_list_5
+    (
      scm_from_short (me->id),
      scm_from_int (me->x),
-     scm_from_int (me->y), 
+     scm_from_int (me->y),
      scm_from_int (me->z),
      scm_from_ulong (me->bstate)
      );
@@ -801,7 +801,7 @@ _scm_from_mevent (MEVENT *me)
 
 // screen -- in C, a SCREEN *.  In Scheme, a smob that contains that pointer.
 
-int 
+int
 _scm_is_screen (SCM x)
 {
   if (SCM_SMOB_PREDICATE (screen_tag, x))
@@ -840,7 +840,7 @@ print_screen (SCM x, SCM port, scm_print_state *pstate)
   SCREEN *screen;
   char *str;
 
-  /* Don't use _scm_is_screen in this assert, because it says freed screens aren't 
+  /* Don't use _scm_is_screen in this assert, because it says freed screens aren't
      screens.  */
   assert (SCM_SMOB_PREDICATE (screen_tag, x));
 
@@ -860,8 +860,8 @@ print_screen (SCM x, SCM port, scm_print_state *pstate)
     }
 
   scm_puts (">", port);
-  
-  // non-zero means success 
+
+  // non-zero means success
   return 1;
 }
 
@@ -873,7 +873,7 @@ gucu_is_screen_p (SCM x)
 
 // window -- in C, a WINDOW *.  In Scheme, a smob that contains the pointer
 
-int 
+int
 _scm_is_window (SCM x)
 {
   if (SCM_SMOB_PREDICATE (window_tag, x))
@@ -885,7 +885,7 @@ _scm_is_window (SCM x)
     }
   else
     return 0;
-  
+
 }
 
 WINDOW *
@@ -907,7 +907,7 @@ _scm_from_window (WINDOW *x)
 
   assert (x == (WINDOW *) SCM_SMOB_DATA (s_win));
 
-  if (0) 
+  if (0)
     {
       fprintf (stderr, "Making smob from window at %d, %d\n",
 	       x->_begx, x->_begy);
@@ -995,8 +995,8 @@ print_window (SCM x, SCM port, scm_print_state *pstate)
 	scm_puts (str, port);
     }
   scm_puts (">", port);
-  
-  // non-zero means success 
+
+  // non-zero means success
   return 1;
 }
 
@@ -1007,7 +1007,7 @@ gucu_is_window_p (SCM x)
 }
 
 
-void 
+void
 gucu_init_type ()
 {
   static int first = 1;
@@ -1017,7 +1017,7 @@ gucu_init_type ()
       screen_tag = scm_make_smob_type ("screen", sizeof (SCREEN *));
       scm_set_smob_print (screen_tag, print_screen);
       scm_c_define_gsubr ("screen?", 1, 0, 0, gucu_is_screen_p);
-      
+
       window_tag = scm_make_smob_type ("window", sizeof (WINDOW *));
       scm_set_smob_mark (window_tag, mark_window);
       scm_set_smob_free (window_tag, free_window);
@@ -1031,7 +1031,7 @@ gucu_init_type ()
       scm_c_define_gsubr ("%scheme-char-from-c-wchar", 1, 0, 0, gucu_schar_from_wchar);
       scm_c_define_gsubr ("%xchar-from-chtype", 1, 0, 0, gucu_xchar_from_chtype);
       scm_c_define_gsubr ("%xchar-to-chtype", 1, 0, 0, gucu_xchar_to_chtype);
-      
+
       first = 0;
     }
 }

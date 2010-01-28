@@ -42,7 +42,7 @@ gucu_new_item (SCM name, SCM description)
     {
       if (errno == E_BAD_ARGUMENT)
 	{
-	  scm_error_scm (SCM_BOOL_F, 
+	  scm_error_scm (SCM_BOOL_F,
 			 scm_from_locale_string ("new-item"),
 			 scm_from_locale_string ("bad argument"),
 			 SCM_BOOL_F,
@@ -66,7 +66,7 @@ gucu_new_item (SCM name, SCM description)
 }
 
 
-int 
+int
 _scm_is_item (SCM x)
 {
   return SCM_SMOB_PREDICATE (item_tag, x);
@@ -89,9 +89,9 @@ _scm_from_item (ITEM *x)
 
   assert (x == (ITEM *) SCM_SMOB_DATA (s_item));
 
-  if (0) 
+  if (0)
     {
-      fprintf (stderr, "Making <#item> smob from ITEM * %p\n", 
+      fprintf (stderr, "Making <#item> smob from ITEM * %p\n",
                (void *) x);
     }
 
@@ -151,8 +151,8 @@ print_item (SCM x, SCM port, scm_print_state *pstate __attribute__ ((unused)))
     scm_puts (str, port);
 
   scm_puts (">", port);
-  
-  // non-zero means success 
+
+  // non-zero means success
   return 1;
 }
 
@@ -170,7 +170,7 @@ gucu_is_item_p (SCM x)
 // Note the the C Menu item's internal list of fields must match the SCM
 // list of field to avoid garbage collection madness.
 
-int 
+int
 _scm_is_menu (SCM x)
 {
   if (SCM_SMOB_PREDICATE (menu_tag, x))
@@ -240,14 +240,14 @@ gc_free_menu (SCM x)
   scm_assert_smob_type (menu_tag, x);
 
   gm = (struct gucu_menu *) SCM_SMOB_DATA (x);
-  
+
   assert (gm != NULL);
 
   retval = free_menu (gm->menu);
 
   if (retval == E_BAD_ARGUMENT)
     {
-      scm_error_scm (SCM_BOOL_F, 
+      scm_error_scm (SCM_BOOL_F,
 		     scm_from_locale_string ("garbage collection of menu"),
 		     scm_from_locale_string ("bad argument"),
 		     SCM_BOOL_F,
@@ -299,8 +299,8 @@ print_menu (SCM x, SCM port, scm_print_state *pstate __attribute__ ((unused)))
     scm_puts (str, port);
 
   scm_puts (">", port);
-  
-  // non-zero means success 
+
+  // non-zero means success
   return 1;
 }
 SCM
@@ -321,7 +321,7 @@ gucu_new_menu (SCM items)
 
   /* Step 0: Check input list */
   SCM_ASSERT (scm_is_true (scm_list_p (items)), items, SCM_ARG1, "new-menu");
-  
+
   len = scm_to_size_t (scm_length (items));
   if (len == 0)
     {
@@ -392,8 +392,8 @@ gucu_new_menu (SCM items)
 
   return smob;
 }
-			 
-void 
+
+void
 gucu_menu_init_type ()
 {
   item_tag = scm_make_smob_type ("item", sizeof (ITEM *));

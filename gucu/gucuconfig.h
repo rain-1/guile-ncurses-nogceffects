@@ -1,5 +1,5 @@
-#ifndef FEATURES_H
-#define FEATURES_H
+#ifndef GUCUCONFIG_H
+#define GUCUCONFIG_H
 
 #include <libguile.h>
 

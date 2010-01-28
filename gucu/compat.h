@@ -2,7 +2,7 @@
 #define COMPAT_H
 
 #include <libguile.h>
-#include "features.h"
+#include "gucuconfig.h"
 #include "visibility.h"
 
 #ifdef GUILE_1_POINT_6

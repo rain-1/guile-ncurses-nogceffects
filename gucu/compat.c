@@ -3,7 +3,7 @@
 #include <string.h>
 
 #include "compat.h"
-#include "features.h"
+#include "gucuconfig.h"
 
 #ifdef GUILE_1_POINT_6
 
@@ -33,7 +33,7 @@ SCM scm_from_int (int x)
 }
 
 SCM scm_from_locale_string (const char *str)
-{  
+{
   return scm_makfrom0str (str);
 }
 
@@ -117,7 +117,7 @@ char *scm_to_locale_string (SCM x)
   if (str == NULL)
     return NULL;
   memcpy (str, SCM_VELTS (x), len);
-  str[len] = '\0';  
+  str[len] = '\0';
   return str;
 }
 

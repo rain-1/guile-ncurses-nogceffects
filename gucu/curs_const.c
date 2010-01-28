@@ -5,7 +5,7 @@
 #include "curs_const.h"
 #include "type.h"
 #include "compat.h"
-#include "features.h"
+#include "gucuconfig.h"
 
 #define _GNU_SOURCE
 SCM gucu_EOF;
@@ -165,7 +165,7 @@ SCM gucu_REPORT_MOUSE_POSITION;
 SCM gucu_wide_ncurses;
 SCM gucu_ucs4_chars;
 
-void 
+void
 gucu_init_constant ()
 {
   gucu_EOF = scm_permanent_object (scm_c_define ("EOF", scm_from_int (EOF)));
