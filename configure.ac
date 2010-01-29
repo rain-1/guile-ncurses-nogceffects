@@ -124,6 +124,7 @@ AC_CHECK_HEADERS([process.h pty.h util.h])
 
 ##################
 # Check for types, structures, compiler characteristics
+AX_C___ATTRIBUTE__
 AC_CHECK_TYPE([off64_t],
               [AC_DEFINE([HAVE_OFF64_T],
                          [1],
@@ -138,8 +139,6 @@ AC_CHECK_SIZEOF([chtype], ,[#include <curses.h>])
 AC_CHECK_SIZEOF([attr_t], ,[#include <curses.h>])
 AC_CHECK_SIZEOF([wchar_t], ,[#include <stddef.h>])
 AC_CHECK_SIZEOF([wint_t], ,[#include <wchar.h>])
-
-AC_PROG_CC_C99
 
 ##################
 # Check for C library functions

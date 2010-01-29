@@ -835,7 +835,7 @@ _scm_from_screen (SCREEN *x)
 }
 
 int
-print_screen (SCM x, SCM port, scm_print_state *pstate)
+print_screen (SCM x, SCM port, scm_print_state *pstate UNUSED)
 {
   SCREEN *screen;
   char *str;
@@ -940,7 +940,7 @@ equalp_window (SCM x1, SCM x2)
 }
 
 SCM
-mark_window (SCM x)
+mark_window (SCM x UNUSED)
 {
   // No SCMs in the window type: nothing to do here.
   return (SCM_BOOL_F);
@@ -976,7 +976,7 @@ free_window (SCM x)
 }
 
 int
-print_window (SCM x, SCM port, scm_print_state *pstate)
+print_window (SCM x, SCM port, scm_print_state *pstate UNUSED)
 {
   WINDOW *win = (WINDOW *) SCM_SMOB_DATA (x);
   char *str;

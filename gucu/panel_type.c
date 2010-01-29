@@ -22,7 +22,7 @@ int print_panel (SCM x, SCM port, scm_print_state *pstate);
 
 /* panel -- in C, a PANEL.  In Scheme, a smob that contains the pointer */
 
-int 
+int
 _scm_is_panel (SCM x)
 {
   if (SCM_SMOB_PREDICATE (panel_tag, x))
@@ -40,7 +40,7 @@ PANEL *
 _scm_to_panel (SCM x)
 {
   struct gucu_panel *gp;
-  
+
   scm_assert_smob_type (panel_tag, x);
 
   gp = (struct gucu_panel *) SCM_SMOB_DATA (x);
@@ -63,7 +63,7 @@ _scm_from_panel (PANEL *x)
 
   assert (x == (PANEL *) SCM_SMOB_DATA (s_panel));
 
-  if (0) 
+  if (0)
     {
       fprintf (stderr, "Making smob from panel based on WINDOW * %p\n",
 	       x->win);
@@ -119,7 +119,7 @@ gc_free_panel (SCM x)
   retval = del_panel (gp->panel);
   if (retval != OK)
     {
-      scm_error_scm (SCM_BOOL_F, 
+      scm_error_scm (SCM_BOOL_F,
 		     scm_from_locale_string ("garbage collection of panel"),
 		     scm_from_locale_string ("bad argument"),
 		     SCM_BOOL_F,
@@ -140,12 +140,12 @@ gucu_del_panel (SCM x)
 {
   SCM_ASSERT (_scm_is_panel (x), x, SCM_ARG1, "del-panel");
   gc_free_panel (x);
-  
+
   return SCM_UNSPECIFIED;
 }
 
 int
-print_panel (SCM x, SCM port, scm_print_state *pstate __attribute__ ((unused)))
+print_panel (SCM x, SCM port, scm_print_state *pstate UNUSED)
 {
   PANEL *pnl = (PANEL *) _scm_to_panel (x);
   char *str;
@@ -163,8 +163,8 @@ print_panel (SCM x, SCM port, scm_print_state *pstate __attribute__ ((unused)))
     }
 
   scm_puts (">", port);
-  
-  // non-zero means success 
+
+  // non-zero means success
   return 1;
 }
 
@@ -205,14 +205,14 @@ gucu_new_panel (SCM win)
 #else
   gp->win_guard = scm_make_guardian (SCM_BOOL_F);
 #endif
- 
+
   scm_call_1 (gp->win_guard, win);
-     
+
   return smob;
 }
 
 
-void 
+void
 gucu_panel_init_type ()
 {
   panel_tag = scm_make_smob_type ("panel", sizeof (PANEL *));

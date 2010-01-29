@@ -133,7 +133,7 @@ equalp_field (SCM x1, SCM x2)
 }
 
 SCM
-mark_field (SCM x __attribute__ ((unused)))
+mark_field (SCM x UNUSED)
 {
   // No SCMs in the field type: nothing to do here.
   return (SCM_BOOL_F);
@@ -163,7 +163,7 @@ gc_free_field (SCM field)
 }
 
 int
-print_field (SCM x, SCM port, scm_print_state *pstate __attribute__ ((unused)))
+print_field (SCM x, SCM port, scm_print_state *pstate UNUSED)
 {
   FIELD *fld = (FIELD *) SCM_SMOB_DATA (x);
   char *str;
@@ -300,7 +300,7 @@ gc_free_form (SCM x)
 }
 
 int
-print_form (SCM x, SCM port, scm_print_state *pstate __attribute__ ((unused)))
+print_form (SCM x, SCM port, scm_print_state *pstate UNUSED)
 {
   struct gucu_form *frm = (struct gucu_form *) SCM_SMOB_DATA (x);
   char *str;

@@ -2,8 +2,14 @@
 #define GUCUCONFIG_H
 
 #include <libguile.h>
+#include "config.h"
 
 /* Macros that describe the features of this build of GuCu.  */
+#ifdef HAVE___ATTRIBUTE__
+#define UNUSED __attribute__ ((unused))
+#else
+#define UNUSED
+#endif
 
 /* For 1.6.x, some compatibility functions are required */
 #if SCM_MAJOR_VERSION == 1 && SCM_MINOR_VERSION == 6

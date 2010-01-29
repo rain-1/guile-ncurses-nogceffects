@@ -114,7 +114,7 @@ equalp_item (SCM x1, SCM x2)
 }
 
 SCM
-mark_item (SCM x __attribute__ ((unused)))
+mark_item (SCM x UNUSED)
 {
   // No SCMs in the item type: nothing to do here.
   return (SCM_BOOL_F);
@@ -136,7 +136,7 @@ gc_free_item (SCM item)
 }
 
 int
-print_item (SCM x, SCM port, scm_print_state *pstate __attribute__ ((unused)))
+print_item (SCM x, SCM port, scm_print_state *pstate UNUSED)
 {
   ITEM *frm = (ITEM *) SCM_SMOB_DATA (x);
   char *str;
@@ -284,7 +284,7 @@ gc_free_menu (SCM x)
 }
 
 int
-print_menu (SCM x, SCM port, scm_print_state *pstate __attribute__ ((unused)))
+print_menu (SCM x, SCM port, scm_print_state *pstate UNUSED)
 {
   MENU *menu = _scm_to_menu (x);
   char *str;
