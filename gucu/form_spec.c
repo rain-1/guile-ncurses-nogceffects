@@ -223,13 +223,13 @@ gucu_scale_form (SCM form)
 }
 
 SCM
-gucu_set_field_type (SCM field, SCM type, SCM a, SCM b, SCM c)
+gucu_set_field_type_x (SCM field, SCM type, SCM a, SCM b, SCM c)
 {
   FIELD *c_field;
   int ret;
 
-  SCM_ASSERT (_scm_is_field (field), field, SCM_ARG1, "set-field-type");
-  SCM_ASSERT (scm_is_symbol (type), type, SCM_ARG2, "set-field-type");
+  SCM_ASSERT (_scm_is_field (field), field, SCM_ARG1, "set-field-type!");
+  SCM_ASSERT (scm_is_symbol (type), type, SCM_ARG2, "set-field-type!");
 
   c_field = _scm_to_field (field);
 
@@ -237,7 +237,7 @@ gucu_set_field_type (SCM field, SCM type, SCM a, SCM b, SCM c)
     {
       int c_width;
 
-      SCM_ASSERT (scm_is_integer (a), a, SCM_ARG3, "set-field-type");
+      SCM_ASSERT (scm_is_integer (a), a, SCM_ARG3, "set-field-type!");
       c_width = scm_to_int (a);
       ret = set_field_type (c_field, TYPE_ALNUM, c_width);
     }
@@ -246,7 +246,7 @@ gucu_set_field_type (SCM field, SCM type, SCM a, SCM b, SCM c)
     {
       int c_width;
 
-      SCM_ASSERT (scm_is_integer (a), a, SCM_ARG3, "set-field-type");
+      SCM_ASSERT (scm_is_integer (a), a, SCM_ARG3, "set-field-type!");
       c_width = scm_to_int (a);
       ret = set_field_type (c_field, TYPE_ALPHA, c_width);
     }
@@ -260,13 +260,13 @@ gucu_set_field_type (SCM field, SCM type, SCM a, SCM b, SCM c)
       size_t i;
 
       SCM_ASSERT (scm_is_true (scm_list_p (a)), a, SCM_ARG3,
-		  "set-field-type");
-      SCM_ASSERT (scm_is_integer (b), b, SCM_ARG4, "set-field-type");
-      SCM_ASSERT (scm_is_integer (c), c, SCM_ARG5, "set-field-type");
+		  "set-field-type!");
+      SCM_ASSERT (scm_is_integer (b), b, SCM_ARG4, "set-field-type!");
+      SCM_ASSERT (scm_is_integer (c), c, SCM_ARG5, "set-field-type!");
 
       len = scm_to_size_t (scm_length (a));
       c_str_list =
-	scm_gc_malloc (sizeof (char *) * (len + 1), "set-field-type");
+	scm_gc_malloc (sizeof (char *) * (len + 1), "set-field-type!");
       for (i = 0; i < len; i++)
 	{
 	  c_str_list[i] = (scm_to_locale_string
@@ -293,9 +293,9 @@ gucu_set_field_type (SCM field, SCM type, SCM a, SCM b, SCM c)
       double c_min;
       double c_max;
 
-      SCM_ASSERT (scm_is_integer (a), a, SCM_ARG3, "set-field-type");
-      SCM_ASSERT (scm_is_number (b), b, SCM_ARG4, "set-field-type");
-      SCM_ASSERT (scm_is_number (c), c, SCM_ARG5, "set-field-type");
+      SCM_ASSERT (scm_is_integer (a), a, SCM_ARG3, "set-field-type!");
+      SCM_ASSERT (scm_is_number (b), b, SCM_ARG4, "set-field-type!");
+      SCM_ASSERT (scm_is_number (c), c, SCM_ARG5, "set-field-type!");
 
       c_precision = scm_to_int (a);
       c_min = scm_to_double (b);
@@ -308,7 +308,7 @@ gucu_set_field_type (SCM field, SCM type, SCM a, SCM b, SCM c)
     {
       char *c_reg;
 
-      SCM_ASSERT (scm_is_string (a), a, SCM_ARG3, "set-field-type");
+      SCM_ASSERT (scm_is_string (a), a, SCM_ARG3, "set-field-type!");
 
       c_reg = scm_to_locale_string (a);
 
@@ -323,7 +323,7 @@ gucu_set_field_type (SCM field, SCM type, SCM a, SCM b, SCM c)
     }
   else
     {
-      scm_out_of_range ("set-field-type", type);
+      scm_out_of_range ("set-field-type!", type);
     }
 
   return (scm_from_int (ret));
@@ -340,5 +340,5 @@ gucu_form_init_special ()
   scm_c_define_gsubr ("field-type", 1, 0, 0, gucu_field_type);
   scm_c_define_gsubr ("link-field", 3, 0, 0, gucu_dup_field);
   scm_c_define_gsubr ("scale-form", 1, 0, 0, gucu_scale_form);
-  scm_c_define_gsubr ("set-field-type", 2, 3, 0, gucu_set_field_type);
+  scm_c_define_gsubr ("set-field-type!", 2, 3, 0, gucu_set_field_type_x);
 }

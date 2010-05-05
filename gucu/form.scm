@@ -2,7 +2,7 @@
 ;; -*- Mode: scheme; -*-
 (define-module (gucu form)
         #:use-module (gucu eti)
-	#:export ( 
+	#:export (
 		data-ahead?
 		data-behind?
 		field-back
@@ -128,7 +128,8 @@
 		form-fields
 		link-field
 		scale-form
-		set-field-type
+		set-field-type		; misnamed in 0.6
+		set-field-type!		; the correct name for set-field-type
 		set-form-fields!
 		new-field
 		new-form
@@ -156,5 +157,5 @@
 
         ))
 
-
 (load-extension "libguile-gucu" "gucu_form_init")
+(define set-field-type set-field-type!)

@@ -11,7 +11,7 @@ GUCU_API SCM gucu_field_info (SCM field);
 GUCU_API SCM gucu_field_type (SCM field);
 GUCU_API SCM gucu_link_field (SCM field, SCM x, SCM y);
 GUCU_API SCM gucu_scale_form (SCM form);
-GUCU_API SCM gucu_set_field_type (SCM field, SCM type, SCM a, SCM b, SCM c);
+GUCU_API SCM gucu_set_field_type_x (SCM field, SCM type, SCM a, SCM b, SCM c);
 
 GUCU_LOCAL void gucu_form_init_special (void);
 
