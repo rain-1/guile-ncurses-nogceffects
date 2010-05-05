@@ -158,7 +158,7 @@ LIBS="$ax_save_LIBS"
 
 ##################
 #  Output
-AC_CONFIG_FILES([Makefile gucu/makefile doc/makefile m4/makefile])
-AC_CONFIG_FILES([build_aux/makefile tools/makefile test/makefile])
+AC_CONFIG_FILES([Makefile gucu/Makefile doc/Makefile m4/Makefile])
+AC_CONFIG_FILES([build_aux/Makefile tools/Makefile test/Makefile])
 AC_CONFIG_FILES([tools/uninstalled-env], [chmod +x tools/uninstalled-env])
 AC_OUTPUT
