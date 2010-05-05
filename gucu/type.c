@@ -27,9 +27,9 @@ static scm_t_bits window_tag;
 SCM equalp_window (SCM x1, SCM x2);
 size_t free_window (SCM x);
 SCM mark_window (SCM x);
-int print_window (SCM x, SCM port, scm_print_state *pstate);
+int print_window (SCM x, SCM port, scm_print_state * pstate);
 
-int print_screen (SCM x, SCM port, scm_print_state *pstate);
+int print_screen (SCM x, SCM port, scm_print_state * pstate);
 
 /* attr -- character attributes, bit flags packed into an unsigned:
    probably uint32 */
@@ -88,7 +88,7 @@ _scm_is_xchar (SCM x)
       || !scm_is_integer (scm_list_ref (x, scm_from_int (1))))
     return 0;
 
-  for (i = 2; i < len; i ++)
+  for (i = 2; i < len; i++)
     if (!SCM_CHARP (scm_list_ref (x, scm_from_int (i))))
       return 0;
 
@@ -99,7 +99,7 @@ _scm_is_xchar (SCM x)
 /* Converts a wide NCurses complex character structure to a GuCu
    complex character */
 SCM
-_scm_xchar_from_cchar (cchar_t *x)
+_scm_xchar_from_cchar (cchar_t * x)
 {
   int i;
   int len;
@@ -113,7 +113,7 @@ _scm_xchar_from_cchar (cchar_t *x)
 
   assert (x != NULL);
 
-  len = getcchar(x, 0, 0, 0, 0);
+  len = getcchar (x, 0, 0, 0, 0);
   /* Starting from the patch on 2009/07/18, the length returned by
      getcchar includes the trailing NULL.  Prior to that, it did not
      include the trailing NULL. */
@@ -122,10 +122,10 @@ _scm_xchar_from_cchar (cchar_t *x)
       || (NCURSES_VERSION_MAJOR == 5 && NCURSES_VERSION_MINOR == 7
 	  && NCURSES_VERSION_PATCH >= 20090718))
     {
-      len --;
+      len--;
     }
 
-  ret = getcchar(x, wch, &attr, &color_pair, NULL);
+  ret = getcchar (x, wch, &attr, &color_pair, NULL);
 
   if (ret == ERR)
     scm_misc_error (NULL, "Error unpacking complex char", SCM_EOL);
@@ -133,9 +133,10 @@ _scm_xchar_from_cchar (cchar_t *x)
   /* Strip the color info from attr */
   attr &= A_ATTRIBUTES ^ A_COLOR;
 
-  total_list = scm_list_2 (_scm_from_attr (attr), scm_from_short (color_pair));
+  total_list =
+    scm_list_2 (_scm_from_attr (attr), scm_from_short (color_pair));
 
-  for (i=0; i<len; i++)
+  for (i = 0; i < len; i++)
     {
 #ifdef GUILE_CHARS_ARE_UCS4
       {
@@ -152,7 +153,7 @@ _scm_xchar_from_cchar (cchar_t *x)
 	if (b == EOF)
 	  element = SCM_MAKE_CHAR (GUCU_REPLACEMENT_CHAR);
 	else
-	  element = SCM_MAKE_CHAR ((unsigned char)b);
+	  element = SCM_MAKE_CHAR ((unsigned char) b);
       }
 #endif
       element_list = scm_list_1 (element);
@@ -173,7 +174,7 @@ _scm_xchar_from_chtype (chtype x)
   SCM total_list = SCM_EOL;
 
   attr = x & (A_ATTRIBUTES ^ A_COLOR);
-  color_pair = PAIR_NUMBER(x);
+  color_pair = PAIR_NUMBER (x);
   c = x & A_CHARTEXT;
 
 #ifdef GUILE_CHARS_ARE_UCS4
@@ -182,11 +183,13 @@ _scm_xchar_from_chtype (chtype x)
     uint32_t cp;
     ret = locale_char_to_codepoint (c, &cp);
     if (!ret)
-      total_list = scm_list_3 (_scm_from_attr (attr), scm_from_short (color_pair),
-			       SCM_MAKE_CHAR (GUCU_REPLACEMENT_CODEPOINT));
+      total_list =
+	scm_list_3 (_scm_from_attr (attr), scm_from_short (color_pair),
+		    SCM_MAKE_CHAR (GUCU_REPLACEMENT_CODEPOINT));
     else
-      total_list = scm_list_3 (_scm_from_attr (attr), scm_from_short (color_pair),
-			       SCM_MAKE_CHAR (cp));
+      total_list =
+	scm_list_3 (_scm_from_attr (attr), scm_from_short (color_pair),
+		    SCM_MAKE_CHAR (cp));
   }
 #else
   total_list = scm_list_3 (_scm_from_attr (attr), scm_from_short (color_pair),
@@ -233,7 +236,7 @@ _scm_schar_from_wchar (wchar_t ch)
   if (b == EOF)
     return SCM_BOOL_F;
 
-  return SCM_MAKE_CHAR ((unsigned char)b);
+  return SCM_MAKE_CHAR ((unsigned char) b);
 #endif
 }
 
@@ -244,7 +247,7 @@ _scm_xchar_to_cchar (SCM x)
 {
   int i;
   SCM member;
-  wchar_t wch[GUCU_CCHARW_MAX+1];
+  wchar_t wch[GUCU_CCHARW_MAX + 1];
 
   cchar_t *cchar = (cchar_t *) scm_malloc (sizeof (cchar_t));
   int len = scm_to_int (scm_length (x));
@@ -253,7 +256,7 @@ _scm_xchar_to_cchar (SCM x)
 
   assert (_scm_is_xchar (x));
 
-  for (i=2; i<len; i++)
+  for (i = 2; i < len; i++)
     {
       member = scm_list_ref (x, scm_from_int (i));
 
@@ -267,12 +270,12 @@ _scm_xchar_to_cchar (SCM x)
 	ret = codepoint_to_wchar (codepoint, &wc);
 	if (ret)
 	  {
-	    wch[i-2] = wc;
+	    wch[i - 2] = wc;
 	  }
 	else
 	  {
-	    wch[i-2] = GUCU_REPLACEMENT_WCHAR;
-	    wch[i-1] = L'\0';
+	    wch[i - 2] = GUCU_REPLACEMENT_WCHAR;
+	    wch[i - 1] = L'\0';
 	    break;
 	  }
       }
@@ -282,20 +285,20 @@ _scm_xchar_to_cchar (SCM x)
 	wint = btowc ((int) SCM_CHAR (member));
 	if (wint == WEOF)
 	  {
-	    wch[i-2] = GUCU_REPLACEMENT_WCHAR;
-	    wch[i-1] = L'\0';
+	    wch[i - 2] = GUCU_REPLACEMENT_WCHAR;
+	    wch[i - 1] = L'\0';
 	    break;
 	  }
 	else
 	  {
-	    wch[i-2] = (wchar_t) wint;
+	    wch[i - 2] = (wchar_t) wint;
 	  }
       }
 #endif
     }
-  wch[len-2] = L'\0';
+  wch[len - 2] = L'\0';
 
-  if (OK != setcchar(cchar, wch, attr, color_pair, NULL))
+  if (OK != setcchar (cchar, wch, attr, color_pair, NULL))
     {
       return (cchar_t *) NULL;
     }
@@ -455,18 +458,18 @@ _scm_is_xstring (SCM x)
       int i, len;
 
       len = scm_to_int (scm_length (x));
-      for (i = 0; i < len; i ++)
-        {
-          if (!_scm_is_xchar (scm_list_ref (x, scm_from_int (i))))
-            return 0;
-        }
+      for (i = 0; i < len; i++)
+	{
+	  if (!_scm_is_xchar (scm_list_ref (x, scm_from_int (i))))
+	    return 0;
+	}
     }
   return 1;
 }
 
 #ifdef HAVE_NCURSESW
 SCM
-_scm_sstring_from_wint_string (const wint_t *x)
+_scm_sstring_from_wint_string (const wint_t * x)
 {
   int i, len;
   SCM member, xstring;
@@ -475,14 +478,14 @@ _scm_sstring_from_wint_string (const wint_t *x)
 
   len = 0;
   while (x[len] != 0)
-    len ++;
+    len++;
   xstring = SCM_EOL;
   for (i = 0; i < len; i++)
     {
       if (x[i] <= WCHAR_MAX)
-        member = _scm_schar_from_wchar (x[i]);
+	member = _scm_schar_from_wchar (x[i]);
       else
-        member = SCM_MAKE_CHAR (GUCU_REPLACEMENT_CODEPOINT);
+	member = SCM_MAKE_CHAR (GUCU_REPLACEMENT_CODEPOINT);
       xstring = scm_append (scm_list_2 (xstring, scm_list_1 (member)));
     }
 
@@ -492,7 +495,7 @@ _scm_sstring_from_wint_string (const wint_t *x)
 
 #ifdef HAVE_NCURSESW
 SCM
-_scm_sstring_from_wstring (const wchar_t *x)
+_scm_sstring_from_wstring (const wchar_t * x)
 {
   size_t i;
   SCM member, xstring;
@@ -500,7 +503,7 @@ _scm_sstring_from_wstring (const wchar_t *x)
   assert (x != NULL);
 
   xstring = SCM_EOL;
-  for (i = 0; i < wcslen(x); i++)
+  for (i = 0; i < wcslen (x); i++)
     {
       member = _scm_schar_from_wchar (x[i]);
       xstring = scm_append (scm_list_2 (xstring, scm_list_1 (member)));
@@ -529,13 +532,13 @@ _scm_sstring_to_wstring (SCM x)
   assert (scm_is_string (x));
 
   len = scm_c_string_length (x);
-  wstring = (wchar_t *) scm_malloc (sizeof(wchar_t) * (len + 1));
+  wstring = (wchar_t *) scm_malloc (sizeof (wchar_t) * (len + 1));
 
-  for (i=0; i<len; i++)
+  for (i = 0; i < len; i++)
     {
       member = scm_c_string_ref (x, i);
       wchar = _scm_schar_to_wchar (member);
-      memcpy(wstring+i, &wchar, sizeof(wchar_t));
+      memcpy (wstring + i, &wchar, sizeof (wchar_t));
     }
   wstring[len] = L'\0';
 
@@ -543,7 +546,7 @@ _scm_sstring_to_wstring (SCM x)
 }
 
 SCM
-_scm_xstring_from_chstring (const chtype *x)
+_scm_xstring_from_chstring (const chtype * x)
 {
   size_t i;
   SCM member, xstring;
@@ -558,7 +561,7 @@ _scm_xstring_from_chstring (const chtype *x)
 	break;
       member = _scm_xchar_from_chtype (x[i]);
       xstring = scm_append (scm_list_2 (xstring, scm_list_1 (member)));
-      i ++;
+      i++;
     }
 
   return xstring;
@@ -567,7 +570,7 @@ _scm_xstring_from_chstring (const chtype *x)
 
 #ifdef HAVE_NCURSESW
 SCM
-_scm_xstring_from_cstring (const cchar_t *x)
+_scm_xstring_from_cstring (const cchar_t * x)
 {
   int i, n;
   SCM member, xstring;
@@ -582,60 +585,60 @@ _scm_xstring_from_cstring (const cchar_t *x)
   while (1)
     {
       if (x[i].chars[0] == 0)
-        break;
-      n = getcchar(&(x[i]), NULL, NULL, NULL, NULL);
+	break;
+      n = getcchar (&(x[i]), NULL, NULL, NULL, NULL);
       /* Starting from the patch on 2009/07/18, the length returned by
-	 getcchar includes the trailing NULL.  Prior to that, it did not
-	 include the trailing NULL. */
+         getcchar includes the trailing NULL.  Prior to that, it did not
+         include the trailing NULL. */
 
       if (NCURSES_VERSION_MAJOR > 5
 	  || (NCURSES_VERSION_MAJOR == 5 && NCURSES_VERSION_MINOR > 7)
 	  || (NCURSES_VERSION_MAJOR == 5 && NCURSES_VERSION_MINOR == 7
 	      && NCURSES_VERSION_PATCH >= 20090718))
 	{
-	  n --;
+	  n--;
 	}
 
       if (n == 0)
-        break;
-      getcchar(&(x[i]), wch, &attrs, &color_pair, NULL);
+	break;
+      getcchar (&(x[i]), wch, &attrs, &color_pair, NULL);
       if (n == 1)
-        member = scm_list_3 (_scm_from_attr (attrs),
-                             scm_from_short (color_pair),
-                             _scm_schar_from_wchar (wch[0]));
+	member = scm_list_3 (_scm_from_attr (attrs),
+			     scm_from_short (color_pair),
+			     _scm_schar_from_wchar (wch[0]));
 
       else if (n == 2)
-        member = scm_list_4 (_scm_from_attr (attrs),
-                             scm_from_short (color_pair),
-                             _scm_schar_from_wchar (wch[0]),
-                             _scm_schar_from_wchar (wch[1]));
+	member = scm_list_4 (_scm_from_attr (attrs),
+			     scm_from_short (color_pair),
+			     _scm_schar_from_wchar (wch[0]),
+			     _scm_schar_from_wchar (wch[1]));
       else if (n == 3)
-        member = scm_list_5 (_scm_from_attr (attrs),
-                             scm_from_short (color_pair),
-                             _scm_schar_from_wchar (wch[0]),
-                             _scm_schar_from_wchar (wch[1]),
-                             _scm_schar_from_wchar (wch[2]));
+	member = scm_list_5 (_scm_from_attr (attrs),
+			     scm_from_short (color_pair),
+			     _scm_schar_from_wchar (wch[0]),
+			     _scm_schar_from_wchar (wch[1]),
+			     _scm_schar_from_wchar (wch[2]));
       else if (n == 4)
-        member = scm_list_n (_scm_from_attr (attrs),
-                             scm_from_short (color_pair),
-                             _scm_schar_from_wchar (wch[0]),
-                             _scm_schar_from_wchar (wch[1]),
-                             _scm_schar_from_wchar (wch[2]),
-                             _scm_schar_from_wchar (wch[3]), SCM_UNDEFINED);
+	member = scm_list_n (_scm_from_attr (attrs),
+			     scm_from_short (color_pair),
+			     _scm_schar_from_wchar (wch[0]),
+			     _scm_schar_from_wchar (wch[1]),
+			     _scm_schar_from_wchar (wch[2]),
+			     _scm_schar_from_wchar (wch[3]), SCM_UNDEFINED);
 
       else if (n == 5)
-        member = scm_list_n (_scm_from_attr (attrs),
-                             scm_from_short (color_pair),
-                             _scm_schar_from_wchar (wch[0]),
-                             _scm_schar_from_wchar (wch[1]),
-                             _scm_schar_from_wchar (wch[2]),
-                             _scm_schar_from_wchar (wch[3]),
-                             _scm_schar_from_wchar (wch[4]), SCM_UNDEFINED);
+	member = scm_list_n (_scm_from_attr (attrs),
+			     scm_from_short (color_pair),
+			     _scm_schar_from_wchar (wch[0]),
+			     _scm_schar_from_wchar (wch[1]),
+			     _scm_schar_from_wchar (wch[2]),
+			     _scm_schar_from_wchar (wch[3]),
+			     _scm_schar_from_wchar (wch[4]), SCM_UNDEFINED);
       else
-        abort ();
+	abort ();
 
       xstring = scm_append (scm_list_2 (xstring, scm_list_1 (member)));
-      i ++;
+      i++;
     }
 
   return xstring;
@@ -653,13 +656,13 @@ _scm_xstring_to_chstring (SCM x)
   assert (_scm_is_xstring (x));
 
   len = scm_to_int (scm_length (x));
-  chstring = (chtype *) scm_malloc (sizeof(chtype) * (len + 1));
+  chstring = (chtype *) scm_malloc (sizeof (chtype) * (len + 1));
 
-  for (i=0; i<len; i++)
+  for (i = 0; i < len; i++)
     {
       member = scm_list_ref (x, scm_from_int (i));
       ch = _scm_xchar_to_chtype (member);
-      memcpy(chstring+i, &ch, sizeof(chtype));
+      memcpy (chstring + i, &ch, sizeof (chtype));
     }
   chstring[len] = 0;
 
@@ -682,22 +685,22 @@ _scm_xstring_to_cstring (SCM x)
   if (first)
     {
       wchar_t wch = L'\0';
-      setcchar(&terminator, &wch, A_NORMAL, 0, NULL);
+      setcchar (&terminator, &wch, A_NORMAL, 0, NULL);
       first = 0;
     }
 
   len = scm_to_int (scm_length (x));
-  cstring = (cchar_t *) scm_malloc (sizeof(cchar_t) * (len + 1));
+  cstring = (cchar_t *) scm_malloc (sizeof (cchar_t) * (len + 1));
 
-  for (i=0; i<len; i++)
+  for (i = 0; i < len; i++)
     {
       member = scm_list_ref (x, scm_from_int (i));
       cchar = _scm_xchar_to_cchar (member);
-      memcpy(cstring+i, cchar, sizeof(cchar_t));
-      free(cchar);
+      memcpy (cstring + i, cchar, sizeof (cchar_t));
+      free (cchar);
     }
 
-  memcpy(cstring+len, &terminator, sizeof(cchar_t));
+  memcpy (cstring + len, &terminator, sizeof (cchar_t));
 
   return cstring;
 }
@@ -751,14 +754,14 @@ _scm_is_mevent (SCM x)
     {
       int len = scm_to_int (scm_length (x));
 
-      for (i = 0; i < len; i ++)
+      for (i = 0; i < len; i++)
 	{
 	  member = scm_list_ref (x, scm_from_int (i));
 	  if (!scm_is_integer (member))
-	    err ++;
+	    err++;
 	}
     }
-  err ++;
+  err++;
 
   if (err > 0)
     return 0;
@@ -785,18 +788,14 @@ _scm_to_mevent (SCM x)
 }
 
 SCM
-_scm_from_mevent (MEVENT *me)
+_scm_from_mevent (MEVENT * me)
 {
   assert (me != NULL);
 
   return scm_list_5
-    (
-     scm_from_short (me->id),
+    (scm_from_short (me->id),
      scm_from_int (me->x),
-     scm_from_int (me->y),
-     scm_from_int (me->z),
-     scm_from_ulong (me->bstate)
-     );
+     scm_from_int (me->y), scm_from_int (me->z), scm_from_ulong (me->bstate));
 }
 
 // screen -- in C, a SCREEN *.  In Scheme, a smob that contains that pointer.
@@ -824,7 +823,7 @@ _scm_to_screen (SCM x)
 }
 
 SCM
-_scm_from_screen (SCREEN *x)
+_scm_from_screen (SCREEN * x)
 {
   SCM s_screen;
 
@@ -835,7 +834,7 @@ _scm_from_screen (SCREEN *x)
 }
 
 int
-print_screen (SCM x, SCM port, scm_print_state *pstate UNUSED)
+print_screen (SCM x, SCM port, scm_print_state * pstate UNUSED)
 {
   SCREEN *screen;
   char *str;
@@ -897,7 +896,7 @@ _scm_to_window (SCM x)
 }
 
 SCM
-_scm_from_window (WINDOW *x)
+_scm_from_window (WINDOW * x)
 {
   SCM s_win;
 
@@ -976,7 +975,7 @@ free_window (SCM x)
 }
 
 int
-print_window (SCM x, SCM port, scm_print_state *pstate UNUSED)
+print_window (SCM x, SCM port, scm_print_state * pstate UNUSED)
 {
   WINDOW *win = (WINDOW *) SCM_SMOB_DATA (x);
   char *str;
@@ -1025,11 +1024,16 @@ gucu_init_type ()
       scm_set_smob_equalp (window_tag, equalp_window);
       scm_c_define_gsubr ("window?", 1, 0, 0, gucu_is_window_p);
 
-      scm_c_define_gsubr ("%scheme-char-to-c-char", 1, 0, 0, gucu_schar_to_char);
-      scm_c_define_gsubr ("%scheme-char-to-c-wchar", 1, 0, 0, gucu_schar_to_wchar);
-      scm_c_define_gsubr ("%scheme-char-from-c-char", 1, 0, 0, gucu_schar_from_char);
-      scm_c_define_gsubr ("%scheme-char-from-c-wchar", 1, 0, 0, gucu_schar_from_wchar);
-      scm_c_define_gsubr ("%xchar-from-chtype", 1, 0, 0, gucu_xchar_from_chtype);
+      scm_c_define_gsubr ("%scheme-char-to-c-char", 1, 0, 0,
+			  gucu_schar_to_char);
+      scm_c_define_gsubr ("%scheme-char-to-c-wchar", 1, 0, 0,
+			  gucu_schar_to_wchar);
+      scm_c_define_gsubr ("%scheme-char-from-c-char", 1, 0, 0,
+			  gucu_schar_from_char);
+      scm_c_define_gsubr ("%scheme-char-from-c-wchar", 1, 0, 0,
+			  gucu_schar_from_wchar);
+      scm_c_define_gsubr ("%xchar-from-chtype", 1, 0, 0,
+			  gucu_xchar_from_chtype);
       scm_c_define_gsubr ("%xchar-to-chtype", 1, 0, 0, gucu_xchar_to_chtype);
 
       first = 0;

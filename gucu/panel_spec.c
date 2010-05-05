@@ -60,11 +60,11 @@ gucu_set_panel_userdata (SCM pan, SCM data)
 {
   if (_scm_is_panel (pan))
     {
-      set_panel_userptr (_scm_to_panel (pan), (void *)data);
+      set_panel_userptr (_scm_to_panel (pan), (void *) data);
     }
   else
     scm_wrong_type_arg ("set-panel-userdata", SCM_ARG1, pan);
-  
+
   return SCM_UNDEFINED;
 }
 
@@ -87,10 +87,10 @@ gucu_panel_userdata (SCM pan)
 void
 gucu_panel_init_special (void)
 {
-  #if 0
+#if 0
   scm_c_define_gsubr ("panel-above", 1, 0, 0, gucu_panel_above);
   scm_c_define_gsubr ("panel-below", 1, 0, 0, gucu_panel_below);
   scm_c_define_gsubr ("set-panel-userdata", 2, 0, 0, gucu_set_panel_userdata);
   scm_c_define_gsubr ("panel-userdata", 1, 0, 0, gucu_panel_userdata);
-  #endif
+#endif
 }

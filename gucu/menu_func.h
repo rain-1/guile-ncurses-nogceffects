@@ -51,4 +51,3 @@ GUCU_API SCM gucu_item_visible_p (SCM arg1);
 
 GUCU_LOCAL void gucu_menu_init_function (void);
 #endif
-

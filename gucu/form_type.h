@@ -5,7 +5,8 @@
 #include <form.h>
 #include "visibility.h"
 
-struct gucu_form {
+struct gucu_form
+{
   // Pointer to the FORM structure
   FORM *form;
   // A scheme list containing FIELD SCMs
@@ -22,7 +23,7 @@ struct gucu_form {
 
 GUCU_LOCAL int _scm_is_field (SCM x);
 GUCU_LOCAL FIELD *_scm_to_field (SCM x);
-GUCU_LOCAL SCM _scm_from_field (FIELD *x);
+GUCU_LOCAL SCM _scm_from_field (FIELD * x);
 GUCU_LOCAL int _scm_is_form (SCM x);
 GUCU_LOCAL FORM *_scm_to_form (SCM x);
 

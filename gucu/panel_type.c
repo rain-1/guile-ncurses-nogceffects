@@ -17,7 +17,7 @@ scm_t_bits panel_tag;
 SCM equalp_panel (SCM x1, SCM x2);
 size_t gc_free_panel (SCM x);
 SCM mark_panel (SCM x);
-int print_panel (SCM x, SCM port, scm_print_state *pstate);
+int print_panel (SCM x, SCM port, scm_print_state * pstate);
 
 
 /* panel -- in C, a PANEL.  In Scheme, a smob that contains the pointer */
@@ -53,7 +53,7 @@ _scm_to_panel (SCM x)
    some extra lookup table */
 #if 0
 SCM
-_scm_from_panel (PANEL *x)
+_scm_from_panel (PANEL * x)
 {
   SCM s_panel;
 
@@ -122,8 +122,7 @@ gc_free_panel (SCM x)
       scm_error_scm (SCM_BOOL_F,
 		     scm_from_locale_string ("garbage collection of panel"),
 		     scm_from_locale_string ("bad argument"),
-		     SCM_BOOL_F,
-		     SCM_BOOL_F);
+		     SCM_BOOL_F, SCM_BOOL_F);
     }
 
   /* Release scheme objects from the guardians */
@@ -145,7 +144,7 @@ gucu_del_panel (SCM x)
 }
 
 int
-print_panel (SCM x, SCM port, scm_print_state *pstate UNUSED)
+print_panel (SCM x, SCM port, scm_print_state * pstate UNUSED)
 {
   PANEL *pnl = (PANEL *) _scm_to_panel (x);
   char *str;

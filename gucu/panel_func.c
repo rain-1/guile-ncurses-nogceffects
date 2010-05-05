@@ -13,7 +13,7 @@
 #define cstring_t cchar_t
 
 static SCM
-gucu_xxx_panel (SCM p, int (*func)(PANEL *), const char *funcname)
+gucu_xxx_panel (SCM p, int (*func) (PANEL *), const char *funcname)
 {
   PANEL *c_p;
   int ret;
@@ -22,7 +22,7 @@ gucu_xxx_panel (SCM p, int (*func)(PANEL *), const char *funcname)
 
   c_p = _scm_to_panel (p);
   ret = func (c_p);
-  
+
   /* This should never fail */
   assert (ret == OK);
 
@@ -89,7 +89,7 @@ gucu_replace_panel (SCM pan, SCM win)
   SCM_ASSERT (_scm_is_window (win), win, SCM_ARG2, "replace-panel!");
 
   gp = (struct gucu_panel *) SCM_SMOB_DATA (pan);
-  
+
   /* Release the guardian on the old window */
   while (scm_is_true (scm_call_0 (gp->win_guard)))
     ;
@@ -112,14 +112,14 @@ gucu_move_panel (SCM panel, SCM starty, SCM startx)
   SCM_ASSERT (_scm_is_panel (panel), panel, SCM_ARG1, "move-panel");
   SCM_ASSERT (scm_is_integer (starty), starty, SCM_ARG2, "move-panel");
   SCM_ASSERT (scm_is_integer (startx), startx, SCM_ARG3, "move-panel");
-  
+
   PANEL *c_panel = _scm_to_panel (panel);
   int c_starty = scm_to_int (starty);
   int c_startx = scm_to_int (startx);
-  
+
   int ret = move_panel (c_panel, c_starty, c_startx);
   SCM s_ret = scm_from_int (ret);
-  
+
   return s_ret;
 }
 
@@ -127,9 +127,9 @@ SCM
 gucu_panel_hidden_p (SCM panel)
 {
   SCM_ASSERT (_scm_is_panel (panel), panel, SCM_ARG1, "panel-hidden?");
-  
+
   PANEL *c_panel = _scm_to_panel (panel);
-  
+
   int ret = panel_hidden (c_panel);
 
   if (ret == TRUE)
@@ -141,17 +141,17 @@ gucu_panel_hidden_p (SCM panel)
 }
 
 
-void 
+void
 gucu_panel_init_function ()
 {
-	scm_c_define_gsubr ("bottom-panel", 1, 0, 0, gucu_bottom_panel);
-	scm_c_define_gsubr ("top-panel", 1, 0, 0, gucu_top_panel);
-	scm_c_define_gsubr ("show-panel", 1, 0, 0, gucu_show_panel);
-	scm_c_define_gsubr ("update-panels", 0, 0, 0, gucu_update_panels);
-	scm_c_define_gsubr ("hide-panel", 1, 0, 0, gucu_hide_panel);
-	scm_c_define_gsubr ("panel-window", 1, 0, 0, gucu_panel_window);
-	scm_c_define_gsubr ("replace-panel!", 2, 0, 0, gucu_replace_panel);
-	scm_c_define_gsubr ("move-panel", 3, 0, 0, gucu_move_panel);
-	scm_c_define_gsubr ("panel-hidden?", 1, 0, 0, gucu_panel_hidden_p);
-	scm_c_define_gsubr ("del-panel", 1, 0, 0, gucu_del_panel);
+  scm_c_define_gsubr ("bottom-panel", 1, 0, 0, gucu_bottom_panel);
+  scm_c_define_gsubr ("top-panel", 1, 0, 0, gucu_top_panel);
+  scm_c_define_gsubr ("show-panel", 1, 0, 0, gucu_show_panel);
+  scm_c_define_gsubr ("update-panels", 0, 0, 0, gucu_update_panels);
+  scm_c_define_gsubr ("hide-panel", 1, 0, 0, gucu_hide_panel);
+  scm_c_define_gsubr ("panel-window", 1, 0, 0, gucu_panel_window);
+  scm_c_define_gsubr ("replace-panel!", 2, 0, 0, gucu_replace_panel);
+  scm_c_define_gsubr ("move-panel", 3, 0, 0, gucu_move_panel);
+  scm_c_define_gsubr ("panel-hidden?", 1, 0, 0, gucu_panel_hidden_p);
+  scm_c_define_gsubr ("del-panel", 1, 0, 0, gucu_del_panel);
 }

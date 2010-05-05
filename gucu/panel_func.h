@@ -17,4 +17,3 @@ GUCU_API SCM gucu_panel_hidden_p (SCM arg1);
 
 GUCU_LOCAL void gucu_panel_init_function (void);
 #endif
-

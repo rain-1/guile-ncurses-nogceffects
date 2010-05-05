@@ -7,12 +7,13 @@
 
 GUCU_LOCAL int _scm_is_item (SCM x);
 GUCU_LOCAL ITEM *_scm_to_item (SCM x);
-GUCU_LOCAL SCM _scm_from_item (ITEM *x);
+GUCU_LOCAL SCM _scm_from_item (ITEM * x);
 
 GUCU_API SCM gucu_is_item_p (SCM x);
 GUCU_API SCM gucu_new_item (SCM x, SCM y);
 
-struct gucu_menu {
+struct gucu_menu
+{
   // Pointer to the menu
   MENU *menu;
 
@@ -24,7 +25,7 @@ struct gucu_menu {
 
 GUCU_LOCAL int _scm_is_menu (SCM x);
 GUCU_LOCAL MENU *_scm_to_menu (SCM x);
-GUCU_LOCAL SCM _scm_from_menu (MENU *x);
+GUCU_LOCAL SCM _scm_from_menu (MENU * x);
 
 GUCU_API SCM gucu_is_menu_p (SCM x);
 GUCU_API SCM gucu_new_menu (SCM x);

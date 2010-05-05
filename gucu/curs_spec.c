@@ -19,11 +19,13 @@
 
 #ifdef CYGWIN_CURSES_BUG_FIX
   /* work around bug in Cygwin's ancient NCurses */
-  extern NCURSES_EXPORT_VAR(chtype*) _nc_acs_map(void);
-  #define acs_map (_nc_acs_map())
+extern
+NCURSES_EXPORT_VAR (chtype *)
+_nc_acs_map (void);
+#define acs_map (_nc_acs_map())
 #endif
 
-static void curs_bad_state_error (const char *funcname)
+     static void curs_bad_state_error (const char *funcname)
 {
   scm_misc_error (funcname, "Bad curses internal state", SCM_BOOL_F);
 }
@@ -40,7 +42,7 @@ gucu_wattr_set_x (SCM win, SCM attrs, SCM pair)
   SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "wattr-set!");
   SCM_ASSERT (_scm_is_attr (attrs), attrs, SCM_ARG2, "wattr-set!");
   SCM_ASSERT (scm_is_integer (pair), pair, SCM_ARG3, "wattr-set!");
-  
+
   c_win = _scm_to_window (win);
   c_attrs = _scm_to_attr (attrs);
   c_pair = scm_to_short (pair);
@@ -48,7 +50,7 @@ gucu_wattr_set_x (SCM win, SCM attrs, SCM pair)
   /* wattr_set always returns OK */
   ret = wattr_set (c_win, c_attrs, c_pair, NULL);
   if (ret != OK)
-    abort();
+    abort ();
 
   return SCM_UNSPECIFIED;
 }
@@ -63,18 +65,17 @@ gucu_color_content (SCM s_color)
 
   SCM_ASSERT (scm_is_integer (s_color), s_color, SCM_ARG1, "color-content");
 
-  ret = color_content(scm_to_short (s_color), &c_red, &c_green, &c_blue);
+  ret = color_content (scm_to_short (s_color), &c_red, &c_green, &c_blue);
   if (ret == OK)
     {
-      s_list = scm_list_3 (scm_from_short (c_red), 
-			   scm_from_short (c_green),
-			   scm_from_short (c_blue));
+      s_list = scm_list_3 (scm_from_short (c_red),
+			   scm_from_short (c_green), scm_from_short (c_blue));
     }
   else
     scm_misc_error ("color-content", "Out of range error or not initialized",
 		    SCM_BOOL_F);
 
-  return s_list; 
+  return s_list;
 }
 
 /* Free the C memory of a window */
@@ -82,7 +83,7 @@ SCM
 gucu_delwin (SCM win)
 {
   SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "delwin");
-  
+
   WINDOW *c_win = _scm_to_window (win);
 
   SCM_SET_SMOB_DATA (win, NULL);
@@ -153,11 +154,10 @@ gucu_pair_content (SCM s_pair)
 
   SCM_ASSERT (scm_is_integer (s_pair), s_pair, SCM_ARG1, "pair-content");
 
-  ret = pair_content(scm_to_short (s_pair), &c_fore, &c_back);
+  ret = pair_content (scm_to_short (s_pair), &c_fore, &c_back);
   if (ret == OK)
     {
-      s_list = scm_list_2 (scm_from_short (c_fore),
-			   scm_from_short (c_back));
+      s_list = scm_list_2 (scm_from_short (c_fore), scm_from_short (c_back));
     }
   else
     scm_misc_error ("pair-content", "Out of range or not initialized",
@@ -202,11 +202,11 @@ gucu_ptsmakeraw (SCM fd)
   ret = tcgetattr (c_fd, &terminal_attributes);
   if (ret == -1)
     scm_syserror ("ptsmakeraw");
-  terminal_attributes.c_iflag &= ~(IGNBRK|BRKINT|PARMRK|ISTRIP
-				   |INLCR|IGNCR|ICRNL|IXON);
+  terminal_attributes.c_iflag &= ~(IGNBRK | BRKINT | PARMRK | ISTRIP
+				   | INLCR | IGNCR | ICRNL | IXON);
   terminal_attributes.c_oflag &= ~OPOST;
-  terminal_attributes.c_lflag &= ~(ECHO|ECHONL|ICANON|ISIG|IEXTEN);
-  terminal_attributes.c_cflag &= ~(CSIZE|PARENB);
+  terminal_attributes.c_lflag &= ~(ECHO | ECHONL | ICANON | ISIG | IEXTEN);
+  terminal_attributes.c_cflag &= ~(CSIZE | PARENB);
   terminal_attributes.c_cflag |= CS8;
   ret = tcsetattr (c_fd, TCSANOW, &terminal_attributes);
   if (ret == -1)
@@ -227,13 +227,13 @@ gucu_tget (SCM id)
   ret = tgetnum (id);
   if (id != -1)
     return scm_from_int (ret);
-  
+
   ret = tgetflag (id);
   if (id == 0)
     return SCM_BOOL_T;
 }
 #endif
-  
+
 
 SCM
 gucu_ungetmouse (SCM event)
@@ -282,7 +282,7 @@ gucu_wattr_get (SCM win)
   c_win = _scm_to_window (win);
 
   /* wattr_get appears to be a macro that always returns OK */
-  ret = wattr_get(c_win, &c_attrs, &c_pair, NULL);
+  ret = wattr_get (c_win, &c_attrs, &c_pair, NULL);
   if (ret == OK)
     s_list = scm_list_2 (_scm_from_attr (c_attrs), scm_from_short (c_pair));
   else
@@ -314,8 +314,8 @@ gucu_wgetnstr (SCM win, SCM n)
     c_wstr[c_n] = 0;
     if (ret == OK)
       {
-        s_str = _scm_sstring_from_wint_string (c_wstr);
-        free (c_wstr);
+	s_str = _scm_sstring_from_wint_string (c_wstr);
+	free (c_wstr);
       }
     else if (ret == KEY_RESIZE)
       {
@@ -332,8 +332,8 @@ gucu_wgetnstr (SCM win, SCM n)
     c_str[c_n] = '\0';
     if (ret == OK)
       {
-        s_str = scm_from_locale_string (c_str);
-        free (c_str);
+	s_str = scm_from_locale_string (c_str);
+	free (c_str);
       }
     else if (ret == KEY_RESIZE)
       {
@@ -343,7 +343,7 @@ gucu_wgetnstr (SCM win, SCM n)
       abort ();
   }
 #endif
-  
+
   return (s_str);
 }
 
@@ -355,7 +355,7 @@ gucu_winchnstr (SCM win, SCM n)
   WINDOW *c_win;
   SCM s_str;
   int c_n;
-  
+
   SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "%winchnstr");
   SCM_ASSERT (scm_is_integer (n), n, SCM_ARG2, "%winchnstr");
 
@@ -375,15 +375,15 @@ gucu_winchnstr (SCM win, SCM n)
     s_str = _scm_xstring_from_cstring (c_cstr);
     free (c_cstr);
   }
-#else  
+#else
   {
     int ret;
     chtype *c_chstr = (chtype *) scm_malloc (sizeof (chtype) * (c_n + 1));
     ret = winchnstr (_scm_to_window (win), c_chstr, scm_to_int (n));
     if (ret != ERR)
       {
-        s_str = _scm_xstring_from_chstring (c_chstr);
-        free (c_chstr);
+	s_str = _scm_xstring_from_chstring (c_chstr);
+	free (c_chstr);
       }
     else
       abort ();
@@ -416,11 +416,11 @@ gucu_winnstr (SCM win, SCM n)
   {
     wchar_t *c_wstr;
     c_wstr = (wchar_t *) scm_malloc (sizeof (wchar_t) * (c_n + 1));
-    ret = winnwstr(_scm_to_window (win), c_wstr, c_n);
+    ret = winnwstr (_scm_to_window (win), c_wstr, c_n);
     if (ret != ERR)
       {
-        c_wstr[c_n] = 0;
-        s_str = _scm_sstring_from_wstring (c_wstr);
+	c_wstr[c_n] = 0;
+	s_str = _scm_sstring_from_wstring (c_wstr);
       }
     else
       abort ();
@@ -429,12 +429,12 @@ gucu_winnstr (SCM win, SCM n)
   {
     char *c_str;
     c_str = (char *) scm_malloc (sizeof (char) * (c_n + 1));
-    ret = winnstr (_scm_to_window (win), c_str, c_n+1);
+    ret = winnstr (_scm_to_window (win), c_str, c_n + 1);
     if (ret != ERR)
       {
-        c_str[c_n] = 0;
-        s_str = scm_from_locale_string (c_str);
-        free (c_str);
+	c_str[c_n] = 0;
+	s_str = scm_from_locale_string (c_str);
+	free (c_str);
       }
     else
       abort ();
@@ -446,7 +446,7 @@ gucu_winnstr (SCM win, SCM n)
 
 
 /* Convert mouse coordinates to screen coordinates */
-SCM 
+SCM
 gucu_wmouse_trafo (SCM win, SCM sy, SCM sx, SCM to_screen)
 {
   SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "mouse-trafo");
@@ -510,7 +510,7 @@ gucu_getparyx (SCM win)
 SCM
 gucu_getsyx ()
 {
-  int y=0, x=0;
+  int y = 0, x = 0;
 
   getsyx (y, x);
 
@@ -536,326 +536,326 @@ gucu_getyx (SCM win)
 SCM
 gucu_ACS_ULCORNER ()
 {
-	chtype ret = ACS_ULCORNER;
-	SCM s_ret = _scm_xchar_from_chtype (ret);
+  chtype ret = ACS_ULCORNER;
+  SCM s_ret = _scm_xchar_from_chtype (ret);
 
-	return s_ret;
+  return s_ret;
 }
 
 SCM
 gucu_ACS_LLCORNER ()
 {
-	chtype ret = ACS_LLCORNER;
-	SCM s_ret = _scm_xchar_from_chtype (ret);
+  chtype ret = ACS_LLCORNER;
+  SCM s_ret = _scm_xchar_from_chtype (ret);
 
-	return s_ret;
+  return s_ret;
 }
 
 SCM
 gucu_ACS_URCORNER ()
 {
-	chtype ret = ACS_URCORNER;
-	SCM s_ret = _scm_xchar_from_chtype (ret);
+  chtype ret = ACS_URCORNER;
+  SCM s_ret = _scm_xchar_from_chtype (ret);
 
-	return s_ret;
+  return s_ret;
 }
 
 SCM
 gucu_ACS_LRCORNER ()
 {
-	chtype ret = ACS_LRCORNER;
-	SCM s_ret = _scm_xchar_from_chtype (ret);
+  chtype ret = ACS_LRCORNER;
+  SCM s_ret = _scm_xchar_from_chtype (ret);
 
-	return s_ret;
+  return s_ret;
 }
 
 SCM
 gucu_ACS_LTEE ()
 {
-	chtype ret = ACS_LTEE;
-	SCM s_ret = _scm_xchar_from_chtype (ret);
+  chtype ret = ACS_LTEE;
+  SCM s_ret = _scm_xchar_from_chtype (ret);
 
-	return s_ret;
+  return s_ret;
 }
 
 SCM
 gucu_ACS_RTEE ()
 {
-	chtype ret = ACS_RTEE;
-	SCM s_ret = _scm_xchar_from_chtype (ret);
+  chtype ret = ACS_RTEE;
+  SCM s_ret = _scm_xchar_from_chtype (ret);
 
-	return s_ret;
+  return s_ret;
 }
 
 SCM
 gucu_ACS_BTEE ()
 {
-	chtype ret = ACS_BTEE;
-	SCM s_ret = _scm_xchar_from_chtype (ret);
+  chtype ret = ACS_BTEE;
+  SCM s_ret = _scm_xchar_from_chtype (ret);
 
-	return s_ret;
+  return s_ret;
 }
 
 SCM
 gucu_ACS_TTEE ()
 {
-	chtype ret = ACS_TTEE;
-	SCM s_ret = _scm_xchar_from_chtype (ret);
+  chtype ret = ACS_TTEE;
+  SCM s_ret = _scm_xchar_from_chtype (ret);
 
-	return s_ret;
+  return s_ret;
 }
 
 SCM
 gucu_ACS_HLINE ()
 {
-	chtype ret = ACS_HLINE;
-	SCM s_ret = _scm_xchar_from_chtype (ret);
+  chtype ret = ACS_HLINE;
+  SCM s_ret = _scm_xchar_from_chtype (ret);
 
-	return s_ret;
+  return s_ret;
 }
 
 SCM
 gucu_ACS_VLINE ()
 {
-	chtype ret = ACS_VLINE;
-	SCM s_ret = _scm_xchar_from_chtype (ret);
+  chtype ret = ACS_VLINE;
+  SCM s_ret = _scm_xchar_from_chtype (ret);
 
-	return s_ret;
+  return s_ret;
 }
 
 SCM
 gucu_ACS_PLUS ()
 {
-	chtype ret = ACS_PLUS;
-	SCM s_ret = _scm_xchar_from_chtype (ret);
+  chtype ret = ACS_PLUS;
+  SCM s_ret = _scm_xchar_from_chtype (ret);
 
-	return s_ret;
+  return s_ret;
 }
 
 SCM
 gucu_ACS_S1 ()
 {
-	chtype ret = ACS_S1;
-	SCM s_ret = _scm_xchar_from_chtype (ret);
+  chtype ret = ACS_S1;
+  SCM s_ret = _scm_xchar_from_chtype (ret);
 
-	return s_ret;
+  return s_ret;
 }
 
 SCM
 gucu_ACS_S3 ()
 {
-	chtype ret = ACS_S3;
-	SCM s_ret = _scm_xchar_from_chtype (ret);
+  chtype ret = ACS_S3;
+  SCM s_ret = _scm_xchar_from_chtype (ret);
 
-	return s_ret;
+  return s_ret;
 }
 
 SCM
 gucu_ACS_S7 ()
 {
-	chtype ret = ACS_S7;
-	SCM s_ret = _scm_xchar_from_chtype (ret);
+  chtype ret = ACS_S7;
+  SCM s_ret = _scm_xchar_from_chtype (ret);
 
-	return s_ret;
+  return s_ret;
 }
 
 SCM
 gucu_ACS_S9 ()
 {
-	chtype ret = ACS_S9;
-	SCM s_ret = _scm_xchar_from_chtype (ret);
+  chtype ret = ACS_S9;
+  SCM s_ret = _scm_xchar_from_chtype (ret);
 
-	return s_ret;
+  return s_ret;
 }
 
 SCM
 gucu_ACS_DIAMOND ()
 {
-	chtype ret = ACS_DIAMOND;
-	SCM s_ret = _scm_xchar_from_chtype (ret);
+  chtype ret = ACS_DIAMOND;
+  SCM s_ret = _scm_xchar_from_chtype (ret);
 
-	return s_ret;
+  return s_ret;
 }
 
 SCM
 gucu_ACS_CKBOARD ()
 {
-	chtype ret = ACS_CKBOARD;
-	SCM s_ret = _scm_xchar_from_chtype (ret);
+  chtype ret = ACS_CKBOARD;
+  SCM s_ret = _scm_xchar_from_chtype (ret);
 
-	return s_ret;
+  return s_ret;
 }
 
 SCM
 gucu_ACS_DEGREE ()
 {
-	chtype ret = ACS_DEGREE;
-	SCM s_ret = _scm_xchar_from_chtype (ret);
+  chtype ret = ACS_DEGREE;
+  SCM s_ret = _scm_xchar_from_chtype (ret);
 
-	return s_ret;
+  return s_ret;
 }
 
 SCM
 gucu_ACS_PLMINUS ()
 {
-	chtype ret = ACS_PLMINUS;
-	SCM s_ret = _scm_xchar_from_chtype (ret);
+  chtype ret = ACS_PLMINUS;
+  SCM s_ret = _scm_xchar_from_chtype (ret);
 
-	return s_ret;
+  return s_ret;
 }
 
 SCM
 gucu_ACS_BULLET ()
 {
-	chtype ret = ACS_BULLET;
-	SCM s_ret = _scm_xchar_from_chtype (ret);
+  chtype ret = ACS_BULLET;
+  SCM s_ret = _scm_xchar_from_chtype (ret);
 
-	return s_ret;
+  return s_ret;
 }
 
 SCM
 gucu_ACS_LARROW ()
 {
-	chtype ret = ACS_LARROW;
-	SCM s_ret = _scm_xchar_from_chtype (ret);
+  chtype ret = ACS_LARROW;
+  SCM s_ret = _scm_xchar_from_chtype (ret);
 
-	return s_ret;
+  return s_ret;
 }
 
 SCM
 gucu_ACS_RARROW ()
 {
-	chtype ret = ACS_RARROW;
-	SCM s_ret = _scm_xchar_from_chtype (ret);
+  chtype ret = ACS_RARROW;
+  SCM s_ret = _scm_xchar_from_chtype (ret);
 
-	return s_ret;
+  return s_ret;
 }
 
 SCM
 gucu_ACS_DARROW ()
 {
-	chtype ret = ACS_DARROW;
-	SCM s_ret = _scm_xchar_from_chtype (ret);
+  chtype ret = ACS_DARROW;
+  SCM s_ret = _scm_xchar_from_chtype (ret);
 
-	return s_ret;
+  return s_ret;
 }
 
 SCM
 gucu_ACS_UARROW ()
 {
-	chtype ret = ACS_UARROW;
-	SCM s_ret = _scm_xchar_from_chtype (ret);
+  chtype ret = ACS_UARROW;
+  SCM s_ret = _scm_xchar_from_chtype (ret);
 
-	return s_ret;
+  return s_ret;
 }
 
 SCM
 gucu_ACS_BOARD ()
 {
-	chtype ret = ACS_BOARD;
-	SCM s_ret = _scm_xchar_from_chtype (ret);
+  chtype ret = ACS_BOARD;
+  SCM s_ret = _scm_xchar_from_chtype (ret);
 
-	return s_ret;
+  return s_ret;
 }
 
 SCM
 gucu_ACS_LANTERN ()
 {
-	chtype ret = ACS_LANTERN;
-	SCM s_ret = _scm_xchar_from_chtype (ret);
+  chtype ret = ACS_LANTERN;
+  SCM s_ret = _scm_xchar_from_chtype (ret);
 
-	return s_ret;
+  return s_ret;
 }
 
 SCM
 gucu_ACS_BLOCK ()
 {
-	chtype ret = ACS_BLOCK;
-	SCM s_ret = _scm_xchar_from_chtype (ret);
+  chtype ret = ACS_BLOCK;
+  SCM s_ret = _scm_xchar_from_chtype (ret);
 
-	return s_ret;
+  return s_ret;
 }
 
 SCM
 gucu_ACS_GEQUAL ()
 {
-	chtype ret = ACS_GEQUAL;
-	SCM s_ret = _scm_xchar_from_chtype (ret);
+  chtype ret = ACS_GEQUAL;
+  SCM s_ret = _scm_xchar_from_chtype (ret);
 
-	return s_ret;
+  return s_ret;
 }
 
 SCM
 gucu_ACS_NEQUAL ()
 {
-	chtype ret = ACS_NEQUAL;
-	SCM s_ret = _scm_xchar_from_chtype (ret);
+  chtype ret = ACS_NEQUAL;
+  SCM s_ret = _scm_xchar_from_chtype (ret);
 
-	return s_ret;
+  return s_ret;
 }
 
 SCM
 gucu_ACS_LEQUAL ()
 {
-	chtype ret = ACS_LEQUAL;
-	SCM s_ret = _scm_xchar_from_chtype (ret);
+  chtype ret = ACS_LEQUAL;
+  SCM s_ret = _scm_xchar_from_chtype (ret);
 
-	return s_ret;
+  return s_ret;
 }
 
 SCM
 gucu_ACS_PI ()
 {
-	chtype ret = ACS_PI;
-	SCM s_ret = _scm_xchar_from_chtype (ret);
+  chtype ret = ACS_PI;
+  SCM s_ret = _scm_xchar_from_chtype (ret);
 
-	return s_ret;
+  return s_ret;
 }
 
 SCM
 gucu_ACS_STERLING ()
 {
-	chtype ret = ACS_STERLING;
-	SCM s_ret = _scm_xchar_from_chtype (ret);
+  chtype ret = ACS_STERLING;
+  SCM s_ret = _scm_xchar_from_chtype (ret);
 
-	return s_ret;
+  return s_ret;
 }
 
 
 SCM
 gucu_LINES ()
 {
-	int ret = LINES;
-	SCM s_ret = scm_from_int (ret);
+  int ret = LINES;
+  SCM s_ret = scm_from_int (ret);
 
-	return s_ret;
+  return s_ret;
 }
 
 SCM
 gucu_COLS ()
 {
-	int ret = COLS;
-	SCM s_ret = scm_from_int (ret);
+  int ret = COLS;
+  SCM s_ret = scm_from_int (ret);
 
-	return s_ret;
+  return s_ret;
 }
 
 SCM
 gucu_COLORS ()
 {
-	int ret = COLORS;
-	SCM s_ret = scm_from_int (ret);
+  int ret = COLORS;
+  SCM s_ret = scm_from_int (ret);
 
-	return s_ret;
+  return s_ret;
 }
 
 SCM
 gucu_COLOR_PAIRS ()
 {
-	int ret = COLOR_PAIRS;
-	SCM s_ret = scm_from_int (ret);
+  int ret = COLOR_PAIRS;
+  SCM s_ret = scm_from_int (ret);
 
-	return s_ret;
+  return s_ret;
 }
 
 SCM
@@ -969,4 +969,3 @@ gucu_init_special ()
   scm_c_define_gsubr ("stdscr", 0, 0, 0, gucu_stdscr);
   scm_c_define_gsubr ("curscr", 0, 0, 0, gucu_curscr);
 }
-

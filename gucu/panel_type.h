@@ -5,7 +5,8 @@
 #include <panel.h>
 #include "visibility.h"
 
-struct gucu_panel {
+struct gucu_panel
+{
   /* Pointer to the panel */
   PANEL *panel;
 
@@ -20,7 +21,7 @@ GUCU_LOCAL extern scm_t_bits panel_tag;
 
 GUCU_LOCAL int _scm_is_panel (SCM x);
 GUCU_LOCAL PANEL *_scm_to_panel (SCM x);
-GUCU_LOCAL SCM _scm_from_panel (PANEL *x);
+GUCU_LOCAL SCM _scm_from_panel (PANEL * x);
 
 GUCU_API SCM gucu_is_panel_p (SCM x);
 GUCU_API SCM gucu_new_panel (SCM arg1);

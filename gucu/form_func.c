@@ -17,43 +17,53 @@ extern scm_t_bits field_tag;
 
 /* Errors */
 
-void form_bad_state_error (const char *funcname)
+void
+form_bad_state_error (const char *funcname)
 {
   scm_misc_error (funcname, "Bad state", SCM_BOOL_F);
 }
 
-void form_connected_error (const char *funcname)
+void
+form_connected_error (const char *funcname)
 {
-  scm_misc_error (funcname, "Field is already connected to a form", SCM_BOOL_F);
+  scm_misc_error (funcname, "Field is already connected to a form",
+		  SCM_BOOL_F);
 }
 
-void form_current_field_error (const char *funcname)
+void
+form_current_field_error (const char *funcname)
 {
   scm_misc_error (funcname, "The field is the current field", SCM_BOOL_F);
 }
 
-void form_invalid_field_error (const char *funcname)
+void
+form_invalid_field_error (const char *funcname)
 {
   scm_misc_error (funcname, "The field is invalid", SCM_BOOL_F);
 }
 
-void form_no_room_error (const char *funcname)
+void
+form_no_room_error (const char *funcname)
 {
-  scm_misc_error (funcname, "The form or field can not fit on this screen", 
+  scm_misc_error (funcname, "The form or field can not fit on this screen",
 		  SCM_BOOL_F);
 }
 
-void form_not_connected_error (const char *funcname)
+void
+form_not_connected_error (const char *funcname)
 {
-  scm_misc_error (funcname, "The field is not connected to a form", SCM_BOOL_F);
-} 
+  scm_misc_error (funcname, "The field is not connected to a form",
+		  SCM_BOOL_F);
+}
 
-void form_not_posted_error (const char *funcname)
+void
+form_not_posted_error (const char *funcname)
 {
   scm_misc_error (funcname, "The form is not posted", SCM_BOOL_F);
 }
 
-void form_posted_error (const char *funcname)
+void
+form_posted_error (const char *funcname)
 {
   scm_misc_error (funcname, "The form is posted", SCM_BOOL_F);
 }
@@ -65,7 +75,7 @@ gucu_data_ahead_p (SCM form)
   SCM_ASSERT (_scm_is_form (form), form, SCM_ARG1, "data-ahead?");
 
   const FORM *c_form = _scm_to_form (form);
-  
+
   return scm_from_bool (data_ahead (c_form));
 }
 
@@ -138,7 +148,7 @@ SCM
 gucu_field_just (SCM field)
 {
   SCM_ASSERT (_scm_is_field (field), field, SCM_ARG1, "field-just");
-  
+
   const FIELD *c_field = _scm_to_field (field);
 
   int ret = field_just (c_field);
@@ -154,10 +164,10 @@ gucu_field_opts (SCM field)
   SCM_ASSERT (_scm_is_field (field), field, SCM_ARG1, "field-opts");
 
   const FIELD *c_field = _scm_to_field (field);
-  
+
   Field_Options ret = field_opts (c_field);
   SCM s_ret = scm_from_int (ret);
-  
+
   return s_ret;
 }
 
@@ -167,7 +177,7 @@ gucu_field_opts_off_x (SCM field, SCM opts)
 {
   SCM_ASSERT (_scm_is_field (field), field, SCM_ARG1, "field-opts-off!");
   SCM_ASSERT (scm_is_integer (opts), opts, SCM_ARG2, "field-opts-off!");
-  
+
   FIELD *c_field = _scm_to_field (field);
   Field_Options c_opts = scm_to_int (opts);
 
@@ -226,10 +236,10 @@ gucu_field_status_p (SCM field)
   SCM_ASSERT (_scm_is_field (field), field, SCM_ARG1, "field-status?");
 
   const FIELD *c_field = _scm_to_field (field);
-  
+
   bool ret = field_status (c_field);
   SCM s_ret = scm_from_bool (ret);
-  
+
   return s_ret;
 }
 
@@ -238,7 +248,7 @@ SCM
 gucu_form_driver (SCM form, SCM c)
 {
   SCM_ASSERT (_scm_is_form (form), form, SCM_ARG1, "form-driver");
-  SCM_ASSERT (SCM_CHARP (c) || scm_is_integer (c), c, SCM_ARG2, 
+  SCM_ASSERT (SCM_CHARP (c) || scm_is_integer (c), c, SCM_ARG2,
 	      "form-driver");
 
   int c_c;
@@ -310,12 +320,12 @@ gucu_form_opts_off_x (SCM form, SCM opts)
 
   FORM *c_form = _scm_to_form (form);
   int c_opts = scm_to_int (opts);
-  
+
   int ret = form_opts_off (c_form, c_opts);
 
   if (ret == E_BAD_ARGUMENT)
     scm_out_of_range ("form-opts-off!", opts);
-  
+
   return SCM_UNSPECIFIED;
 }
 
@@ -367,7 +377,7 @@ gucu_form_request_name (SCM req)
   SCM_ASSERT (scm_is_integer (req), req, SCM_ARG1, "form-request-name");
 
   int c_req = scm_to_int (req);
-	
+
   const char *name = form_request_name (c_req);
 
   if (name == NULL)
@@ -437,7 +447,7 @@ gucu_free_form (SCM frm)
   scm_assert_smob_type (form_tag, frm);
 
   gf = (struct gucu_form *) SCM_SMOB_DATA (frm);
-  
+
   int ret = free_form (gf->form);
   if (ret == E_POSTED)
     form_posted_error ("free-form");
@@ -465,7 +475,7 @@ gucu_free_form (SCM frm)
 	;
       gf->sub = NULL;
     }
-  
+
   return SCM_UNSPECIFIED;
 }
 
@@ -534,7 +544,7 @@ gucu_post_form (SCM frm)
   SCM_ASSERT (_scm_is_form (frm), frm, SCM_ARG1, "post-form");
 
   FORM *c_frm = _scm_to_form (frm);
-  
+
   int ret = post_form (c_frm);
   if (ret == E_BAD_ARGUMENT)
     scm_out_of_range ("post-form", frm);
@@ -589,10 +599,10 @@ gucu_set_field_back_x (SCM fld, SCM attr)
 {
   SCM_ASSERT (_scm_is_field (fld), fld, SCM_ARG1, "set-field-back!");
   SCM_ASSERT (_scm_is_chtype (attr), attr, SCM_ARG2, "set-field-back!");
-  
+
   FIELD *c_fld = _scm_to_field (fld);
   chtype c_attr = _scm_to_chtype (attr);
-  
+
   int ret = set_field_back (c_fld, c_attr);
   if (ret == E_BAD_ARGUMENT)
     scm_out_of_range ("set-field-back!", attr);
@@ -634,12 +644,12 @@ gucu_set_field_fore_x (SCM field, SCM attr)
 
   FIELD *c_field = _scm_to_field (field);
   chtype c_attr = _scm_to_chtype (attr);
-  
+
   int ret = set_field_fore (c_field, c_attr);
   if (ret == E_BAD_ARGUMENT)
     scm_out_of_range ("set-field-fore!", attr);
   else if (ret == E_SYSTEM_ERROR)
-    scm_syserror("set-field-fore!");
+    scm_syserror ("set-field-fore!");
 
   return SCM_UNSPECIFIED;
 }
@@ -653,7 +663,7 @@ gucu_set_field_just_x (SCM field, SCM just)
 
   FIELD *c_field = _scm_to_field (field);
   int c_just = scm_to_int (just);
-  
+
   int ret = set_field_just (c_field, c_just);
   if (ret == E_BAD_ARGUMENT)
     scm_out_of_range ("set-field-just!", just);
@@ -730,7 +740,7 @@ gucu_set_form_opts_x (SCM form, SCM opts)
 
   FORM *c_form = _scm_to_form (form);
   Field_Options c_opts = scm_to_int (opts);
-  
+
   int ret = set_form_opts (c_form, c_opts);
   if (ret == E_SYSTEM_ERROR)
     scm_syserror ("set-form-opts!");
@@ -763,7 +773,7 @@ gucu_set_form_page_x (SCM form, SCM n)
     form_posted_error ("set-form-page!");
   else if (ret == E_SYSTEM_ERROR)
     scm_syserror ("set-form-page!");
-  
+
   return SCM_UNSPECIFIED;
 }
 
@@ -807,7 +817,7 @@ gucu_set_form_sub_x (SCM form, SCM win)
       gf->sub = win;
       scm_call_1 (gf->sub_guard, win);
     }
-	
+
   return SCM_UNSPECIFIED;
 }
 
@@ -851,7 +861,7 @@ gucu_set_form_win_x (SCM form, SCM win)
       gf->win = win;
       scm_call_1 (gf->win_guard, win);
     }
-	
+
   return SCM_UNSPECIFIED;
 }
 
@@ -864,7 +874,7 @@ gucu_set_max_field_x (SCM field, SCM n)
 
   FIELD *c_field = _scm_to_field (field);
   int c_n = scm_to_int (n);
-  
+
   int ret = set_max_field (c_field, c_n);
   if (ret == E_BAD_ARGUMENT)
     scm_out_of_range ("set-max-field!", n);
@@ -881,10 +891,10 @@ gucu_set_new_page_x (SCM field, SCM flag)
 {
   SCM_ASSERT (_scm_is_field (field), field, SCM_ARG1, "set-new-page!");
   SCM_ASSERT (scm_is_bool (flag), flag, SCM_ARG2, "set-new-page!");
-  
+
   FIELD *c_field = _scm_to_field (field);
   bool c_flag = scm_to_bool (flag);
-  
+
   int ret = set_new_page (c_field, c_flag);
   if (ret == E_CONNECTED)
     form_connected_error ("set-new-page!");
@@ -892,7 +902,7 @@ gucu_set_new_page_x (SCM field, SCM flag)
     scm_syserror ("set-new-page!");
   else if (ret != E_OK)
     abort ();
-  
+
   return SCM_UNSPECIFIED;
 }
 
@@ -901,9 +911,9 @@ SCM
 gucu_unpost_form (SCM frm)
 {
   SCM_ASSERT (_scm_is_form (frm), frm, SCM_ARG1, "unpost-form");
-  
+
   FORM *c_frm = _scm_to_form (frm);
-  
+
   int ret = unpost_form (c_frm);
   if (ret == E_BAD_ARGUMENT)
     scm_out_of_range ("unpost-form", frm);
@@ -924,7 +934,7 @@ gucu_unpost_form (SCM frm)
 }
 
 
-void 
+void
 gucu_form_init_function ()
 {
   scm_c_define_gsubr ("data-ahead?", 1, 0, 0, gucu_data_ahead_p);
@@ -944,7 +954,7 @@ gucu_form_init_function ()
   scm_c_define_gsubr ("form-opts-on!", 2, 0, 0, gucu_form_opts_on_x);
   scm_c_define_gsubr ("form-opts-off!", 2, 0, 0, gucu_form_opts_off_x);
   scm_c_define_gsubr ("form-page", 1, 0, 0, gucu_form_page);
-  scm_c_define_gsubr ("form-request-by-name", 1, 0, 0, 
+  scm_c_define_gsubr ("form-request-by-name", 1, 0, 0,
 		      gucu_form_request_by_name);
   scm_c_define_gsubr ("form-request-name", 1, 0, 0, gucu_form_request_name);
   scm_c_define_gsubr ("form-sub", 1, 0, 0, gucu_form_sub);
@@ -955,17 +965,15 @@ gucu_form_init_function ()
   scm_c_define_gsubr ("new-page?", 1, 0, 0, gucu_new_page_p);
   scm_c_define_gsubr ("pos-form-cursor", 1, 0, 0, gucu_pos_form_cursor);
   scm_c_define_gsubr ("post-form", 1, 0, 0, gucu_post_form);
-  scm_c_define_gsubr ("set-current-field!", 2, 0, 0, 
+  scm_c_define_gsubr ("set-current-field!", 2, 0, 0,
 		      gucu_set_current_field_x);
   scm_c_define_gsubr ("set-field-back!", 2, 0, 0, gucu_set_field_back_x);
-  scm_c_define_gsubr ("set-field-buffer!", 3, 0, 0, 
-		      gucu_set_field_buffer_x);
+  scm_c_define_gsubr ("set-field-buffer!", 3, 0, 0, gucu_set_field_buffer_x);
   scm_c_define_gsubr ("set-field-fore!", 2, 0, 0, gucu_set_field_fore_x);
   scm_c_define_gsubr ("set-field-just!", 2, 0, 0, gucu_set_field_just_x);
   scm_c_define_gsubr ("set-field-opts!", 2, 0, 0, gucu_set_field_opts_x);
   scm_c_define_gsubr ("set-field-pad!", 2, 0, 0, gucu_set_field_pad_x);
-  scm_c_define_gsubr ("set-field-status!", 2, 0, 0, 
-		      gucu_set_field_status_x);
+  scm_c_define_gsubr ("set-field-status!", 2, 0, 0, gucu_set_field_status_x);
   scm_c_define_gsubr ("set-form-opts!", 2, 0, 0, gucu_set_form_opts_x);
   scm_c_define_gsubr ("set-form-page!", 2, 0, 0, gucu_set_form_page_x);
   scm_c_define_gsubr ("set-form-sub!", 2, 0, 0, gucu_set_form_sub_x);

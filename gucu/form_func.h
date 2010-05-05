@@ -59,4 +59,3 @@ GUCU_API SCM gucu_unpost_form (SCM arg1);
 
 GUCU_LOCAL void gucu_form_init_function (void);
 #endif
-

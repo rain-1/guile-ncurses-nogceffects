@@ -21,19 +21,20 @@ scm_t_bits field_tag;
 SCM equalp_field (SCM x1, SCM x2);
 size_t gc_free_field (SCM x);
 SCM mark_field (SCM x);
-int print_field (SCM x, SCM port, scm_print_state *pstate);
+int print_field (SCM x, SCM port, scm_print_state * pstate);
 
 
 SCM equalp_form (SCM x1, SCM x2);
 size_t gc_free_form (SCM x);
 SCM mark_form (SCM x);
-int print_form (SCM x, SCM port, scm_print_state *pstate);
+int print_form (SCM x, SCM port, scm_print_state * pstate);
 
 
 // field -- in C, a FIELD.  In Scheme, a smob that contains the pointer
 
 SCM
-gucu_new_field (SCM height, SCM width, SCM top, SCM left, SCM offscreen, SCM nbuffers)
+gucu_new_field (SCM height, SCM width, SCM top, SCM left, SCM offscreen,
+		SCM nbuffers)
 {
   SCM_ASSERT (scm_is_integer (height), height, SCM_ARG1, "new-field");
   SCM_ASSERT (scm_is_integer (width), width, SCM_ARG2, "new-field");
@@ -49,7 +50,8 @@ gucu_new_field (SCM height, SCM width, SCM top, SCM left, SCM offscreen, SCM nbu
   int c_offscreen = scm_to_int (offscreen);
   int c_nbuffers = scm_to_int (nbuffers);
 
-  FIELD *f = new_field(c_height, c_width, c_top, c_left, c_offscreen, c_nbuffers);
+  FIELD *f =
+    new_field (c_height, c_width, c_top, c_left, c_offscreen, c_nbuffers);
   if (f == NULL)
     {
       if (errno == E_BAD_ARGUMENT)
@@ -57,16 +59,14 @@ gucu_new_field (SCM height, SCM width, SCM top, SCM left, SCM offscreen, SCM nbu
 	  scm_error_scm (SCM_BOOL_F,
 			 scm_from_locale_string ("new-field"),
 			 scm_from_locale_string ("bad argument"),
-			 SCM_BOOL_F,
-			 SCM_BOOL_F);
+			 SCM_BOOL_F, SCM_BOOL_F);
 	}
       else if (errno == E_SYSTEM_ERROR)
 	{
 	  scm_error_scm (SCM_BOOL_F,
 			 scm_from_locale_string ("new-field"),
 			 scm_from_locale_string ("system error"),
-			 SCM_BOOL_F,
-			 SCM_BOOL_F);
+			 SCM_BOOL_F, SCM_BOOL_F);
 	}
       else
 	abort ();
@@ -98,7 +98,7 @@ _scm_to_field (SCM x)
 }
 
 SCM
-_scm_from_field (FIELD *x)
+_scm_from_field (FIELD * x)
 {
   SCM s_field;
 
@@ -110,8 +110,7 @@ _scm_from_field (FIELD *x)
 
   if (0)
     {
-      fprintf (stderr, "Making <#field> smob from FIELD * %p\n",
-               (void *) x);
+      fprintf (stderr, "Making <#field> smob from FIELD * %p\n", (void *) x);
     }
 
   return (s_field);
@@ -163,7 +162,7 @@ gc_free_field (SCM field)
 }
 
 int
-print_field (SCM x, SCM port, scm_print_state *pstate UNUSED)
+print_field (SCM x, SCM port, scm_print_state * pstate UNUSED)
 {
   FIELD *fld = (FIELD *) SCM_SMOB_DATA (x);
   char *str;
@@ -218,7 +217,7 @@ _scm_to_form (SCM x)
 
 #if 0
 SCM
-_scm_from_form (FORM *x)
+_scm_from_form (FORM * x)
 {
   SCM s_form;
 
@@ -284,23 +283,21 @@ gc_free_form (SCM x)
       scm_error_scm (SCM_BOOL_F,
 		     scm_from_locale_string ("garbace collection of form"),
 		     scm_from_locale_string ("bad argument"),
-		     SCM_BOOL_F,
-		     SCM_BOOL_F);
+		     SCM_BOOL_F, SCM_BOOL_F);
     }
   else if (retval == E_POSTED)
     {
       scm_error_scm (SCM_BOOL_F,
 		     scm_from_locale_string ("garbage collection of form"),
 		     scm_from_locale_string ("posted"),
-		     SCM_BOOL_F,
-		     SCM_BOOL_F);
+		     SCM_BOOL_F, SCM_BOOL_F);
     }
 
   return 0;
 }
 
 int
-print_form (SCM x, SCM port, scm_print_state *pstate UNUSED)
+print_form (SCM x, SCM port, scm_print_state * pstate UNUSED)
 {
   struct gucu_form *frm = (struct gucu_form *) SCM_SMOB_DATA (x);
   char *str;
@@ -330,7 +327,8 @@ gucu_is_form_p (SCM x)
 SCM
 gucu_new_form (SCM fields)
 {
-  SCM_ASSERT (scm_is_true (scm_list_p (fields)), fields, SCM_ARG1, "new-form");
+  SCM_ASSERT (scm_is_true (scm_list_p (fields)), fields, SCM_ARG1,
+	      "new-form");
 
   struct gucu_form *gf;
   size_t len;
@@ -350,7 +348,7 @@ gucu_new_form (SCM fields)
       // Shouldn't get here
       return SCM_UNSPECIFIED;
     }
-  c_fields = scm_gc_malloc (sizeof (FIELD *) * (len+1), "gucu_form");
+  c_fields = scm_gc_malloc (sizeof (FIELD *) * (len + 1), "gucu_form");
 
   // Step 2: initialize it with C code
 
@@ -358,7 +356,7 @@ gucu_new_form (SCM fields)
   SCM_NEWSMOB (smob, form_tag, gf);
 
   // Step 4: Finish the initialization
-  for (i=0; i<len; i++)
+  for (i = 0; i < len; i++)
     {
       entry = scm_list_ref (fields, scm_from_int (i));
       c_fields[i] = _scm_to_field (entry);
@@ -376,24 +374,21 @@ gucu_new_form (SCM fields)
 	  scm_error_scm (SCM_BOOL_F,
 			 scm_from_locale_string ("new-form"),
 			 scm_from_locale_string ("bad argument"),
-			 fields,
-			 SCM_BOOL_F);
+			 fields, SCM_BOOL_F);
 	}
       else if (errno == E_CONNECTED)
 	{
 	  scm_error_scm (SCM_BOOL_F,
 			 scm_from_locale_string ("new-form"),
 			 scm_from_locale_string ("connected"),
-			 SCM_BOOL_F,
-			 SCM_BOOL_F);
+			 SCM_BOOL_F, SCM_BOOL_F);
 	}
       else if (errno == E_SYSTEM_ERROR)
 	{
 	  scm_error_scm (SCM_BOOL_F,
 			 scm_from_locale_string ("new-form"),
 			 scm_from_locale_string ("system error"),
-			 SCM_BOOL_F,
-			 SCM_BOOL_F);
+			 SCM_BOOL_F, SCM_BOOL_F);
 	}
       else
 	abort ();
@@ -404,13 +399,13 @@ gucu_new_form (SCM fields)
   gf->sub = SCM_BOOL_F;
 
 #ifndef GUILE_1_POINT_6
-  gf->fields_guard = scm_make_guardian();
-  gf->win_guard = scm_make_guardian();
-  gf->sub_guard = scm_make_guardian();
+  gf->fields_guard = scm_make_guardian ();
+  gf->win_guard = scm_make_guardian ();
+  gf->sub_guard = scm_make_guardian ();
 #else
-  gf->fields_guard = scm_make_guardian(SCM_BOOL_F);
-  gf->win_guard = scm_make_guardian(SCM_BOOL_F);
-  gf->sub_guard = scm_make_guardian(SCM_BOOL_F);
+  gf->fields_guard = scm_make_guardian (SCM_BOOL_F);
+  gf->win_guard = scm_make_guardian (SCM_BOOL_F);
+  gf->sub_guard = scm_make_guardian (SCM_BOOL_F);
 #endif
 
   scm_call_1 (gf->fields_guard, fields);
@@ -440,7 +435,8 @@ gucu_set_form_fields_x (SCM form, SCM fields)
 {
   SCM_ASSERT (_scm_is_form (form), form, SCM_ARG1, "set-form-fields!");
   /* FIXME: This isn't a complete type check */
-  SCM_ASSERT (scm_is_true (scm_list_p (fields)), fields, SCM_ARG2, "set-form-fields");
+  SCM_ASSERT (scm_is_true (scm_list_p (fields)), fields, SCM_ARG2,
+	      "set-form-fields");
 
   struct gucu_form *gf;
   size_t len;
@@ -462,7 +458,7 @@ gucu_set_form_fields_x (SCM form, SCM fields)
   len = scm_to_size_t (scm_length (fields));
   c_fields = scm_gc_malloc (sizeof (FIELD *) * (len + 1), "set-form-fields");
 
-  for (i=0; i<len; i++)
+  for (i = 0; i < len; i++)
     {
       entry = scm_list_ref (fields, scm_from_int (i));
       c_fields[i] = _scm_to_field (entry);

@@ -74,14 +74,14 @@ is_unix98_pty (const char *name)
 
 /* This function checks if NAME looks like a BSD pseudo-terminal
    device name, aka "/dev/ttyXY".  Returns TRUE or FALSE. */
-int 
+int
 is_bsd_pty (const char *name)
 {
   const char bsd_pty_root[] = "/dev/tty";
   const size_t bsd_pty_root_length = strlen (bsd_pty_root);
   size_t name_length = strlen (name);
   int X, Y;
-  
+
   name_length = strlen (name);
 
   if (name_length != bsd_pty_root_length + 2)
@@ -98,7 +98,7 @@ is_bsd_pty (const char *name)
 
 /* This function checks if NAME looks like a Cygwin pseudo-terminal
    device name, aka "/dev/ttyN".  Returns TRUE or FALSE. */
-int 
+int
 is_cygwin_pty (const char *name)
 {
   const char cygwin_pty_root[] = "/dev/tty";
@@ -130,10 +130,10 @@ is_cygwin_pty (const char *name)
 /* This function forks an xterm that listens to a pseudoterminal,
    PSEUDO_TERMINAL_SLAVE_NAME is the path in /dev of the pty,
    MASTER_FILE_DESCRIPTOR is the file id of the front of the pty, and
-   SLAVE_FILE_DESCRIPTOR is the back of the pty.  
+   SLAVE_FILE_DESCRIPTOR is the back of the pty.
    It returns the process id of the xterm. */
 int
-open_terminal (char *pseudo_terminal_slave_name, 
+open_terminal (char *pseudo_terminal_slave_name,
 	       int master_file_descriptor,
 	       int slave_file_descriptor)
 {
@@ -167,7 +167,7 @@ open_terminal (char *pseudo_terminal_slave_name,
 	}
       else if (is_bsd_pty (pseudo_terminal_slave_name))
 	{
-	  asprintf(&s_flag, "-S%c%c%d", 
+	  asprintf(&s_flag, "-S%c%c%d",
 		   pseudo_terminal_slave_name[bsd_offset],
 		   pseudo_terminal_slave_name[bsd_offset+1],
 		   master_file_descriptor);
@@ -210,7 +210,7 @@ open_terminal (char *pseudo_terminal_slave_name,
 	terminal_attributes.c_cflag |= CS8;
 #endif
 
-      tcsetattr (slave_file_descriptor, TCSANOW, &terminal_attributes); 
+      tcsetattr (slave_file_descriptor, TCSANOW, &terminal_attributes);
       return process_id;
     }
   return 0;
@@ -238,7 +238,7 @@ inner_main (void *data, int argc, char **argv)
       if (!strcmp(argv[i], "--version") || !strcmp(argv[i], "-v"))
 	{
 	  printf ("Gucushell 0.3\n");
-	  printf ("Copyright (c) 2008,2009 Michael L. Gran\n");
+	  printf ("Copyright (c) 2008,2009,2010 Michael L. Gran\n");
 	  printf ("This may be freely distributed\n");
 	  printf ("For details, see the file COPYING, included in the distribution\n");
 	  return;
@@ -248,7 +248,7 @@ inner_main (void *data, int argc, char **argv)
 	  scm_shell (argc, argv);
 	}
     }
-    
+
 
   /* Create a pseudo-terminal */
   if (openpty (&master, &slave, name, &tio, &win) >= 0)
@@ -261,7 +261,7 @@ inner_main (void *data, int argc, char **argv)
 	  close (slave);
 	  fp_slave_read = fdopen (slave_read, "r");
 	  fp_slave_write = fdopen (slave_write, "w");
-	  
+
 
 	  /* Need to wait for xterm to be ready before trying to initalize curses */
 	  for (i = 0; i < 5; i++)
@@ -285,15 +285,15 @@ inner_main (void *data, int argc, char **argv)
 	    printf ("Initialized curses on xterm\n");
 	  erase ();
 	  refresh ();
-	  
+
 	  scm_c_eval_string ("(set! %load-path (append %load-path (list \".\")))");
 	  /* Call the curses libraries */
           printf ("Loading (gucu curses)\n");
           scm_c_eval_string ("(use-modules (gucu curses))");
-	  scm_c_eval_string ("(define stdscr (stdscr))");
+	  /* scm_c_eval_string ("(define stdscr (stdscr))"); */
 
 	  scm_shell (argc, argv);
-	  
+
 	  if (!isendwin ())
 	    endwin ();
 	  delscreen (screen);
@@ -301,14 +301,14 @@ inner_main (void *data, int argc, char **argv)
 	  fclose (fp_slave_write);
 	  close (slave_write);
 	  close (slave_read);
-	  
+
 	  kill (pid, SIGTERM);
 	}
     }
 }
 
-int 
-main (int argc, char **argv) 
+int
+main (int argc, char **argv)
 {
   scm_boot_guile (argc, argv, inner_main, 0);
   return 0;

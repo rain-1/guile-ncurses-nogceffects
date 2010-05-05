@@ -19,7 +19,7 @@
 
 static ssize_t port_read (void *cookie, char *buf, size_t siz);
 static ssize_t port_write (void *cookie, const char *buf, size_t siz);
-static int port_seek (void *cookie, off64_t *pos, int whence);
+static int port_seek (void *cookie, off64_t * pos, int whence);
 static int port_close (void *cookie);
 
 static cookie_io_functions_t port_funcs;
@@ -27,7 +27,7 @@ static cookie_io_functions_t port_funcs;
 static ssize_t
 port_read (void *cookie, char *buf, size_t siz)
 {
-  SCM port = PTR2SCM(cookie);
+  SCM port = PTR2SCM (cookie);
 
 #ifdef GUILE_CHARS_ARE_UCS4
   int c;
@@ -68,7 +68,7 @@ static ssize_t
 port_write (void *cookie, const char *buf, size_t siz)
 {
   size_t i;
-  SCM port = PTR2SCM(cookie);
+  SCM port = PTR2SCM (cookie);
 
 #ifdef GUILE_CHARS_ARE_UCS4
   if (siz > SSIZE_MAX)
@@ -82,10 +82,9 @@ port_write (void *cookie, const char *buf, size_t siz)
       return siz;
     }
 #else
-  for (i=0; i < siz; i++)
+  for (i = 0; i < siz; i++)
     {
-      scm_write_char (scm_integer_to_char (scm_from_char (buf[i])),
-		      port);
+      scm_write_char (scm_integer_to_char (scm_from_char (buf[i])), port);
     }
 
   return siz;
@@ -93,9 +92,9 @@ port_write (void *cookie, const char *buf, size_t siz)
 }
 
 static int
-port_seek (void *cookie, off64_t *pos, int whence)
+port_seek (void *cookie, off64_t * pos, int whence)
 {
-  SCM port = PTR2SCM(cookie);
+  SCM port = PTR2SCM (cookie);
   SCM new_pos;
 
   new_pos = scm_seek (port, scm_from_int64 (*pos), scm_from_int (whence));
@@ -107,7 +106,7 @@ port_seek (void *cookie, off64_t *pos, int whence)
 static int
 port_close (void *cookie)
 {
-  SCM port = PTR2SCM(cookie);
+  SCM port = PTR2SCM (cookie);
 
   scm_close_port (port);
 
@@ -129,12 +128,12 @@ gucu_newterm (SCM type, SCM outp, SCM inp)
   SCM_ASSERT (scm_is_true (scm_input_port_p (inp)), inp, SCM_ARG3, "newterm");
 
   /* Convert the input port to a special stream */
-  c_inp = fopencookie (SCM2PTR(inp), "rb", port_funcs);
+  c_inp = fopencookie (SCM2PTR (inp), "rb", port_funcs);
   if (c_inp == NULL)
     scm_syserror ("newterm");
 
   /* Convert the output port to a special stream */
-  c_outp = fopencookie (SCM2PTR(outp), "w", port_funcs);
+  c_outp = fopencookie (SCM2PTR (outp), "w", port_funcs);
   if (c_outp == NULL)
     scm_out_of_range ("newterm", outp);
 
@@ -144,10 +143,9 @@ gucu_newterm (SCM type, SCM outp, SCM inp)
   if (ret == NULL)
     {
       scm_error_scm (SCM_BOOL_F,
-		     scm_from_locale_string("newterm"),
-		     scm_from_locale_string("could not create a terminal"),
-		     SCM_BOOL_F,
-		     SCM_BOOL_F);
+		     scm_from_locale_string ("newterm"),
+		     scm_from_locale_string ("could not create a terminal"),
+		     SCM_BOOL_F, SCM_BOOL_F);
     }
 
   SCM s_ret = _scm_from_screen (ret);
@@ -166,7 +164,8 @@ gucu_getwin (SCM port)
   SCM s_c;
   unsigned char c;
 
-  SCM_ASSERT (scm_is_true (scm_input_port_p (port)), port, SCM_ARG1, "getwin");
+  SCM_ASSERT (scm_is_true (scm_input_port_p (port)), port, SCM_ARG1,
+	      "getwin");
 
   //ifdef HAVE_FOPENCOOKIE
 #if 0
@@ -180,7 +179,7 @@ gucu_getwin (SCM port)
   fclose (fp);
 #else
   /* Read all of the data in the port and cache it as a temp file */
-  fp = tmpfile();
+  fp = tmpfile ();
   while (TRUE)
     {
       s_c = scm_read_char (port);
@@ -190,7 +189,7 @@ gucu_getwin (SCM port)
 
       c = scm_to_uint8 (scm_char_to_integer (s_c));
 
-      if (fwrite (&c, sizeof(char), 1, fp) != 1)
+      if (fwrite (&c, sizeof (char), 1, fp) != 1)
 	{
 	  scm_syserror ("getwin");
 	}
@@ -239,20 +238,21 @@ gucu_putwin (SCM win, SCM port)
     if (ret == ERR)
       return SCM_BOOL_F;
 
-    debug_str = scm_to_locale_stringn (scm_get_output_string (port), &debug_len);
+    debug_str =
+      scm_to_locale_stringn (scm_get_output_string (port), &debug_len);
     scm_display (scm_from_size_t (debug_len), scm_current_output_port ());
 
     /* The string is not closed here, so that its contents can be read */
     /* fclose (fp); */
   }
 #else
-  fp = tmpfile();
+  fp = tmpfile ();
   ret = putwin (c_win, fp);
   if (ret == OK)
     {
       char c;
       rewind (fp);
-      while (fread (&c, sizeof(char), 1, fp) == 1)
+      while (fread (&c, sizeof (char), 1, fp) == 1)
 	{
 	  scm_write_char (SCM_MAKE_CHAR (c), port);
 	}
@@ -269,7 +269,7 @@ gucu_putwin (SCM win, SCM port)
 void
 gucu_init_port ()
 {
-  static int first=1;
+  static int first = 1;
 
   if (first)
     {

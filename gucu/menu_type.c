@@ -18,12 +18,12 @@ scm_t_bits item_tag;
 SCM equalp_item (SCM x1, SCM x2);
 size_t gc_free_item (SCM x);
 SCM mark_item (SCM x);
-int print_item (SCM x, SCM port, scm_print_state *pstate);
+int print_item (SCM x, SCM port, scm_print_state * pstate);
 
 SCM equalp_menu (SCM x1, SCM x2);
 size_t gc_free_menu (SCM x);
 SCM mark_menu (SCM x);
-int print_menu (SCM x, SCM port, scm_print_state *pstate);
+int print_menu (SCM x, SCM port, scm_print_state * pstate);
 
 /* item -- in C, an ITEM *.  In Scheme, a smob that contains the
  * pointer */
@@ -45,16 +45,14 @@ gucu_new_item (SCM name, SCM description)
 	  scm_error_scm (SCM_BOOL_F,
 			 scm_from_locale_string ("new-item"),
 			 scm_from_locale_string ("bad argument"),
-			 SCM_BOOL_F,
-			 SCM_BOOL_F);
+			 SCM_BOOL_F, SCM_BOOL_F);
 	}
       else if (errno == E_SYSTEM_ERROR)
 	{
 	  scm_error_scm (SCM_BOOL_F,
 			 scm_from_locale_string ("new-item"),
 			 scm_from_locale_string ("system error"),
-			 SCM_BOOL_F,
-			 SCM_BOOL_F);
+			 SCM_BOOL_F, SCM_BOOL_F);
 	}
       else
 	abort ();
@@ -79,7 +77,7 @@ _scm_to_item (SCM x)
 }
 
 SCM
-_scm_from_item (ITEM *x)
+_scm_from_item (ITEM * x)
 {
   SCM s_item;
 
@@ -91,8 +89,7 @@ _scm_from_item (ITEM *x)
 
   if (0)
     {
-      fprintf (stderr, "Making <#item> smob from ITEM * %p\n",
-               (void *) x);
+      fprintf (stderr, "Making <#item> smob from ITEM * %p\n", (void *) x);
     }
 
   return (s_item);
@@ -136,7 +133,7 @@ gc_free_item (SCM item)
 }
 
 int
-print_item (SCM x, SCM port, scm_print_state *pstate UNUSED)
+print_item (SCM x, SCM port, scm_print_state * pstate UNUSED)
 {
   ITEM *frm = (ITEM *) SCM_SMOB_DATA (x);
   char *str;
@@ -250,24 +247,21 @@ gc_free_menu (SCM x)
       scm_error_scm (SCM_BOOL_F,
 		     scm_from_locale_string ("garbage collection of menu"),
 		     scm_from_locale_string ("bad argument"),
-		     SCM_BOOL_F,
-		     SCM_BOOL_F);
+		     SCM_BOOL_F, SCM_BOOL_F);
     }
   else if (retval == E_POSTED)
     {
       scm_error_scm (SCM_BOOL_F,
 		     scm_from_locale_string ("garbage collection of menu"),
 		     scm_from_locale_string ("posted"),
-		     SCM_BOOL_F,
-		     SCM_BOOL_F);
+		     SCM_BOOL_F, SCM_BOOL_F);
     }
   else if (retval == E_SYSTEM_ERROR)
     {
       scm_error_scm (SCM_BOOL_F,
 		     scm_from_locale_string ("garbage collection of menu"),
 		     scm_from_locale_string ("posted"),
-		     SCM_BOOL_F,
-		     SCM_BOOL_F);
+		     SCM_BOOL_F, SCM_BOOL_F);
     }
 
   /* Release scheme objects from the guardians */
@@ -284,7 +278,7 @@ gc_free_menu (SCM x)
 }
 
 int
-print_menu (SCM x, SCM port, scm_print_state *pstate UNUSED)
+print_menu (SCM x, SCM port, scm_print_state * pstate UNUSED)
 {
   MENU *menu = _scm_to_menu (x);
   char *str;
@@ -303,6 +297,7 @@ print_menu (SCM x, SCM port, scm_print_state *pstate UNUSED)
   // non-zero means success
   return 1;
 }
+
 SCM
 gucu_is_menu_p (SCM x)
 {
@@ -328,7 +323,7 @@ gucu_new_menu (SCM items)
       scm_wrong_type_arg ("new-menu", SCM_ARG1, items);
       return (SCM_UNSPECIFIED);
     }
-  for (i = 0; i < len; i ++)
+  for (i = 0; i < len; i++)
     {
       entry = scm_list_ref (items, scm_from_int (i));
       if (!_scm_is_item (entry))
@@ -338,7 +333,7 @@ gucu_new_menu (SCM items)
   // Step 1: allocate memory
   gm = scm_gc_malloc (sizeof (struct gucu_menu), "gucu_menu");
 
-  c_items = scm_gc_malloc (sizeof (ITEM *) * (len+1), "gucu_menu");
+  c_items = scm_gc_malloc (sizeof (ITEM *) * (len + 1), "gucu_menu");
 
   // Step 2: initialize it with C code
 
@@ -346,7 +341,7 @@ gucu_new_menu (SCM items)
   SCM_NEWSMOB (smob, menu_tag, gm);
 
   // Step 4: finish the initialization
-  for (i=0; i<len; i++)
+  for (i = 0; i < len; i++)
     {
       entry = scm_list_ref (items, scm_from_int (i));
       c_items[i] = _scm_to_item (entry);
@@ -369,8 +364,7 @@ gucu_new_menu (SCM items)
 	  scm_error_scm (SCM_BOOL_F,
 			 scm_from_locale_string ("new-menu"),
 			 scm_from_locale_string ("system error"),
-			 SCM_BOOL_F,
-			 SCM_BOOL_F);
+			 SCM_BOOL_F, SCM_BOOL_F);
 	}
       else
 	abort ();
