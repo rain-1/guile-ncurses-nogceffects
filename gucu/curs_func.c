@@ -957,13 +957,13 @@ SCM
 gucu_key_defined (SCM str)
 {
   SCM_ASSERT (scm_is_string (str), str, SCM_ARG1, "key-defined");
-  
+
   char *c_str = scm_to_locale_string (str);
   int key = key_defined (c_str);
   free (c_str);
   if (key == 0)
     return SCM_BOOL_F;
-  
+
   return scm_from_int (key);
 }
 #endif
@@ -996,6 +996,9 @@ gucu_keyname (SCM ch)
       ret = keyname (c_ch);
     }
 #endif
+  if (ret == NULL)
+    return scm_from_locale_string ("(unknown)");
+
   return scm_from_locale_string (ret);
 }
 
