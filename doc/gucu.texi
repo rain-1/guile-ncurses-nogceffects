@@ -20,35 +20,35 @@ This manual is for Gucu, a Guile Curses library, (version
 Curses library, which provides functionality for updating character
 screens.
 
-Copyright @copyright{} 1998-2007 Free Software Foundation, Inc. @*             
+Copyright @copyright{} 1998-2007 Free Software Foundation, Inc. @*
 Copyright @copyright{} 2001-2005 Pradeep Padala @*
 Copyright @copyright{} 2007,2008,2009 Michael L. Gran
 
 @quotation
-                                                                         
-Permission is hereby granted, free of charge, to any person obtaining a  
-copy of this software and associated documentation files (the            
-"Software"), to deal in the Software without restriction, including      
-without limitation the rights to use, copy, modify, merge, publish,      
-distribute, distribute with modifications, sublicense, and/or sell       
-copies of the Software, and to permit persons to whom the Software is    
-furnished to do so, subject to the following conditions:                 
-                                                                         
-The above copyright notice and this permission notice shall be included  
-in all copies or substantial portions of the Software.                   
-                                                                         
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS  
-OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF               
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.   
-IN NO EVENT SHALL THE ABOVE COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,   
-DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR    
-OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR    
-THE USE OR OTHER DEALINGS IN THE SOFTWARE.                               
-                                                                         
-Except as contained in this notice, the name(s) of the above copyright   
-holders shall not be used in advertising or otherwise to promote the     
-sale, use or other dealings in this Software without prior written       
-authorization.                                                           
+
+Permission is hereby granted, free of charge, to any person obtaining a
+copy of this software and associated documentation files (the
+"Software"), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, distribute with modifications, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included
+in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE ABOVE COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR
+THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+Except as contained in this notice, the name(s) of the above copyright
+holders shall not be used in advertising or otherwise to promote the
+sale, use or other dealings in this Software without prior written
+authorization.
 
 @end quotation
 @end copying
@@ -77,221 +77,221 @@ authorization.
 @end ifnottex
 
 @menu
-* Introduction::                
-* Components of a Curses Interface::  
-* Types and encodings::         
-* Curses Tutorial::             
-* Curses Reference::            
-* Index::                       
+* Introduction::
+* Components of a Curses Interface::
+* Types and encodings::
+* Curses Tutorial::
+* Curses Reference::
+* Index::
 
 @detailmenu
  --- The Detailed Node Listing ---
 
 Introduction
 
-* Authors::                     
+* Authors::
 
 Components of a Curses Interface
 
-* Terminal Capabilities::       
-* Keyboards and Keys::          
-* Characters::                  
-* Windows::                     
+* Terminal Capabilities::
+* Keyboards and Keys::
+* Characters::
+* Windows::
 
 Types and encodings
 
-* Character types::             
-* Opaque types::                
+* Character types::
+* Opaque types::
 
 Curses Tutorial
 
-* Hello World!!!::              
-* Interactive sessions and @code{gucushell}::  
-* The Gory Details::            
-* Initialization::              
-* A word about windows::        
-* Output functions::            
-* Input functions::             
-* Attributes::                  
-* Windows Tutorial::            
-* Colors::                      
-* Interfacing with the keyboard::  
-* Interfacing with the mouse::  
-* Panels Library::              
-* Menu Library::                
-* Forms Library::               
+* Hello World!!!::
+* Interactive sessions and @code{gucushell}::
+* The Gory Details::
+* Initialization::
+* A word about windows::
+* Output functions::
+* Input functions::
+* Attributes::
+* Windows Tutorial::
+* Colors::
+* Interfacing with the keyboard::
+* Interfacing with the mouse::
+* Panels Library::
+* Menu Library::
+* Forms Library::
 
 Hello World!!!
 
-* Using the Guile Curses module::  
+* Using the Guile Curses module::
 
 Initialization
 
-* Initialization Functions::    
-* An example::                  
+* Initialization Functions::
+* An example::
 
 Output functions
 
-* The @code{addch} procedure::  
-* @code{addstr} class of functions::  
-* A simple @code{addstr} example::  
-* A word of caution::           
+* The @code{addch} procedure::
+* @code{addstr} class of functions::
+* A simple @code{addstr} example::
+* A word of caution::
 
 @code{addstr} class of functions
 
-* A simple @code{addstr} example::  
-* A word of caution::           
+* A simple @code{addstr} example::
+* A word of caution::
 
 Input functions
 
-* @code{getch} class of functions::  
-* @code{getnstr} class of functions::  
-* An example of @code{getnstr} and @code{getch}::  
+* @code{getch} class of functions::
+* @code{getnstr} class of functions::
+* An example of @code{getnstr} and @code{getch}::
 
 Attributes
 
-* The details::                 
-* @code{attr-on!} vs @code{attr-set!}::  
-* @code{attr-get}::             
-* @code{chgat} function::       
+* The details::
+* @code{attr-on!} vs @code{attr-set!}::
+* @code{attr-get}::
+* @code{chgat} function::
 
 Windows Tutorial
 
-* The basics::                  
-* Let there be a window::       
-* Other functions::             
-* Other border functions::      
+* The basics::
+* Let there be a window::
+* Other functions::
+* Other border functions::
 
 Colors
 
-* The basics of color::         
-* Changing color definitions::  
+* The basics of color::
+* Changing color definitions::
 
 Interfacing with the keyboard
 
-* The basics of keys::          
-* A simple key usage example::  
+* The basics of keys::
+* A simple key usage example::
 
 Interfacing with the mouse
 
-* The basics of the mouse::     
-* Getting the events::          
-* Miscellaneous functions::     
+* The basics of the mouse::
+* Getting the events::
+* Miscellaneous functions::
 
 Panels Library
 
-* Panels Basics::               
-* Compiling With the Panels Library::  
-* Moving and Resizing Panels::  
+* Panels Basics::
+* Compiling With the Panels Library::
+* Moving and Resizing Panels::
 
 Menu Library
 
-* Menu Basics::                 
-* Menu Driver::                 
-* Menu Windows::                
-* Scrolling Menus::             
+* Menu Basics::
+* Menu Driver::
+* Menu Windows::
+* Scrolling Menus::
 
 Forms Library
 
-* The Basics (Forms)::          
-* A Form Example::              
-* Making it useful::            
-* Playing with fields::         
-* Field Display Attributes::    
-* Field Option Bits::           
-* Field Status::                
-* Variable-Sized Fields::       
-* Form Windows::                
-* Field Validation::            
-* The Form Driver::             
+* The Basics (Forms)::
+* A Form Example::
+* Making it useful::
+* Playing with fields::
+* Field Display Attributes::
+* Field Option Bits::
+* Field Status::
+* Variable-Sized Fields::
+* Form Windows::
+* Field Validation::
+* The Form Driver::
 
 Curses Reference
 
-* The naming of routines::      
-* The basic curses library::    
-* Function key labels library::  
-* The curses panel library::    
-* The curses menu library::     
-* The curses form library::     
+* The naming of routines::
+* The basic curses library::
+* Function key labels library::
+* The curses panel library::
+* The curses menu library::
+* The curses form library::
 
 The basic curses library: @code{(gucu curses)}
 
-* Overview::                    
-* Curses screen initialization and manipulation routines::  
-* Making rendered characters::  
-* Adding characters::           
-* Adding strings of characters and attributes::  
-* Character and window attribute control routines::  
-* Bell and screen flash routines::  
-* Window background manipulation routines::  
-* Borders and lines::           
-* Clearing windows and parts of window::  
-* Color manipulation routines::  
-* Deleting the character under the cursor::  
-* Deleting and inserting lines::  
-* Getting characters from the keyboard::  
-* Receiving strings from the keyboard::  
-* Cursor location and window coordinates::  
-* Getting a rendered character from the window::  
-* Getting a string of characters and attributes from a window::  
-* Input options::               
-* Inserting a character before the cursor::  
-* Inserting a string before the cursor::  
-* Getting a string of characters from the screen::  
-* Low-level routines::          
-* Mouse handling::              
-* Moving the cursor ::          
-* Output options::              
-* Overlay and manipulate overlapped windows::  
-* Create and display pads::     
-* Refresh windows and lines::   
-* Reading and writing a curses screen to a file::  
-* Scroll a window::             
-* Terminal attributes::         
-* Refresh routines::            
-* Miscellaneous utilities::     
-* Window creation::             
+* Overview::
+* Curses screen initialization and manipulation routines::
+* Making rendered characters::
+* Adding characters::
+* Adding strings of characters and attributes::
+* Character and window attribute control routines::
+* Bell and screen flash routines::
+* Window background manipulation routines::
+* Borders and lines::
+* Clearing windows and parts of window::
+* Color manipulation routines::
+* Deleting the character under the cursor::
+* Deleting and inserting lines::
+* Getting characters from the keyboard::
+* Receiving strings from the keyboard::
+* Cursor location and window coordinates::
+* Getting a rendered character from the window::
+* Getting a string of characters and attributes from a window::
+* Input options::
+* Inserting a character before the cursor::
+* Inserting a string before the cursor::
+* Getting a string of characters from the screen::
+* Low-level routines::
+* Mouse handling::
+* Moving the cursor ::
+* Output options::
+* Overlay and manipulate overlapped windows::
+* Create and display pads::
+* Refresh windows and lines::
+* Reading and writing a curses screen to a file::
+* Scroll a window::
+* Terminal attributes::
+* Refresh routines::
+* Miscellaneous utilities::
+* Window creation::
 
 The Coordinate System
 
 
 The curses menu library: @code{(gucu menu)}
 
-* Menus Overview::              
-* Menu Item Procedures::        
-* Menu Procedures::             
-* Menu creation ::              
-* Menu options::                
+* Menus Overview::
+* Menu Item Procedures::
+* Menu Procedures::
+* Menu creation ::
+* Menu options::
 
 Menu Procedures
 
-* Menu Colors and Attributes::  
-* Positioning a menu cursor::   
-* The menu driver::             
-* Menu sizes::                  
-* Menu mark strings::           
+* Menu Colors and Attributes::
+* Positioning a menu cursor::
+* The menu driver::
+* Menu sizes::
+* Menu mark strings::
 
 Menu options
 
-* Menu pattern buffer::         
-* Writing or erasing menus from window::  
-* Control spacing between menu items::  
-* Associate menus with window::  
+* Menu pattern buffer::
+* Writing or erasing menus from window::
+* Control spacing between menu items::
+* Associate menus with window::
 
 The curses form library: @code{(gucu form)}
 
-* Forms Overview::              
-* Form procedures::             
-* Making or breaking connections between forms and fields::  
-* Color and attribute control for form fields::  
-* Data type validation for fields::  
-* Creating forms::              
-* Form pagination functions::   
-* Setting and getting form options::  
-* Setting the page number and field::  
-* Writing or erasing forms from associated subwindows::  
-* Printable form request names::  
-* Form windows::                
+* Forms Overview::
+* Form procedures::
+* Making or breaking connections between forms and fields::
+* Color and attribute control for form fields::
+* Data type validation for fields::
+* Creating forms::
+* Form pagination functions::
+* Setting and getting form options::
+* Setting the page number and field::
+* Writing or erasing forms from associated subwindows::
+* Printable form request names::
+* Form windows::
 
 @end detailmenu
 @end menu
@@ -300,7 +300,7 @@ The curses form library: @code{(gucu form)}
 @chapter Introduction
 
 @menu
-* Authors::                     
+* Authors::
 @end menu
 
 @node Authors,  , Introduction, Introduction
@@ -318,39 +318,39 @@ do so; however, one should not get the impression that he approves of
 the GuCu project or that he is involved with the GuCu project, or,
 indeed, that he is even aware of it.
 
-The license for the original ncurses documentation is as follows. 
+The license for the original ncurses documentation is as follows.
 
 @quotation
-Copyright (c) 1998-2005,2006 Free Software Foundation, Inc.              
-                                                                         
-Permission is hereby granted, free of charge, to any person obtaining a  
-copy of this software and associated documentation files (the            
-"Software"), to deal in the Software without restriction, including      
-without limitation the rights to use, copy, modify, merge, publish,      
-distribute, distribute with modifications, sublicense, and/or sell       
-copies of the Software, and to permit persons to whom the Software is    
-furnished to do so, subject to the following conditions:                 
-                                                                         
-The above copyright notice and this permission notice shall be included  
-in all copies or substantial portions of the Software.                   
-                                                                         
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS  
-OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF               
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.   
-IN NO EVENT SHALL THE ABOVE COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,   
-DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR    
-OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR    
-THE USE OR OTHER DEALINGS IN THE SOFTWARE.                               
-                                                                         
-Except as contained in this notice, the name(s) of the above copyright   
-holders shall not be used in advertising or otherwise to promote the     
-sale, use or other dealings in this Software without prior written       
-authorization.                                                           
+Copyright (c) 1998-2005,2006 Free Software Foundation, Inc.
+
+Permission is hereby granted, free of charge, to any person obtaining a
+copy of this software and associated documentation files (the
+"Software"), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, distribute with modifications, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included
+in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE ABOVE COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR
+THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+Except as contained in this notice, the name(s) of the above copyright
+holders shall not be used in advertising or otherwise to promote the
+sale, use or other dealings in this Software without prior written
+authorization.
 @end quotation
 
 The tutorial for the curses library is adapted from the @emph{ncurses
 Programming HowTo} by Pradeep Padala, modified by Michael Gran to make
-it specific to the Guile binding.  
+it specific to the Guile binding.
 
 Again, I've put his name on the title page, because it would seem rude
 not to do so; however, one should not get the impression that he
@@ -374,18 +374,18 @@ furnished to do so, subject to the following conditions.
 The above copyright notice and this permission notice shall be
 included in all copies or substantial portions of the Software.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS  
-OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF               
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.   
-IN NO EVENT SHALL THE ABOVE COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,   
-DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR    
-OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR    
-THE USE OR OTHER DEALINGS IN THE SOFTWARE.                               
-                                                                         
-Except as contained in this notice, the name(s) of the above copyright   
-holders shall not be used in advertising or otherwise to promote the     
-sale, use or other dealings in this Software without prior written       
-authorization.                                                           
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE ABOVE COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR
+THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+Except as contained in this notice, the name(s) of the above copyright
+holders shall not be used in advertising or otherwise to promote the
+sale, use or other dealings in this Software without prior written
+authorization.
 @end quotation
 
 @node Components of a Curses Interface, Types and encodings, Introduction, Top
@@ -421,10 +421,10 @@ color, or to erase the screen?
 @end itemize
 
 @menu
-* Terminal Capabilities::       
-* Keyboards and Keys::          
-* Characters::                  
-* Windows::                     
+* Terminal Capabilities::
+* Keyboards and Keys::
+* Characters::
+* Windows::
 @end menu
 
 @node Terminal Capabilities, Keyboards and Keys, Components of a Curses Interface, Components of a Curses Interface
@@ -451,7 +451,7 @@ encoding 142 (@key{c}) which can be understood to mean the letter ``c''.
 For other keys on the keypad, like @key{F1} or @key{HOME}, the
 encoding can take multiple bytes and can differ from terminal to
 terminal.  On some terminals, for example, pressing @key{F1} is the
-same as if the user had typed @kbd{@key{ESC} O P}.  
+same as if the user had typed @kbd{@key{ESC} O P}.
 
 The @code{terminfo} database provides information that helps associate
 multibyte codes to keys on the keypad, and there are curses functions
@@ -511,8 +511,8 @@ standard scheme types, while others are represented as opaque types
 (SMOBs).
 
 @menu
-* Character types::             
-* Opaque types::                
+* Character types::
+* Opaque types::
 @end menu
 
 
@@ -530,7 +530,7 @@ often have to convert simple characters to complex characters and vice
 versa, so it is important to understand their differences and
 applications.
 
-Simple characters are the Guile native character type.  
+Simple characters are the Guile native character type.
 
 For older versions of Guile, such as the 1.6.x and the 1.8.x versions,
 characters were limited to being 8-bit.  The lower 128 characters were
@@ -558,13 +558,13 @@ code points typically write them like this: @code{U+XXXX}, where
 
 @table @code
 
-@item simple characters 
+@item simple characters
 
 An simple character is a standard Guile character, such as @code{#\x}.
 It is also referred to as an unrendered characters.  It is
 @emph{unrendered} because it has no associated color or attributes.
 
-@item simple strings 
+@item simple strings
 
 A simple string, also called an unrendered string, is a standard Guile
 string, such as @code{"hello"}, which is a sequence of unrendered
@@ -592,13 +592,13 @@ Here are examples of the constructors used to make complex characters.
 These constructors will be described in more detail later on.
 @example
 ;; A constructor for a letter 'x' using the default colors
-> (normal #\x) 
+> (normal #\x)
 
 ;; The display format of the resulting complex character
 ==> #<xchar #\x>
 
 ;; A constrctor for a bold letter 'L' using default colors
-> (bold #\L) 
+> (bold #\L)
 
 ;; The display format of the resulting bold 'L' character
 ==> #<xchar bold #\L>
@@ -615,15 +615,15 @@ Rendered, complex strings are lists of rendered, complex characters.
 An example of the constructor for a rendered complex string, and the
 display format of that string
 @example
-;; The constructor for a complex string: the word 'hello' in 
+;; The constructor for a complex string: the word 'hello' in
 ;; reverse video
 > (inverse "hello")
 
 ;; The display format of the resulting string could be...
-==> (#<xchar reverse color-pair #0 [white on black] #\h> 
-     #<xchar reverse color-pair #0 [white on black] #\e> 
-     #<xchar reverse color-pair #0 [white on black] #\l> 
-     #<xchar reverse color-pair #0 [white on black] #\l> 
+==> (#<xchar reverse color-pair #0 [white on black] #\h>
+     #<xchar reverse color-pair #0 [white on black] #\e>
+     #<xchar reverse color-pair #0 [white on black] #\l>
+     #<xchar reverse color-pair #0 [white on black] #\l>
      #<xchar reverse color-pair #0 [white on black] #\o>)
 @end example
 
@@ -710,21 +710,21 @@ elements of type @code{#<field>}.
 @chapter Curses Tutorial
 
 @menu
-* Hello World!!!::              
-* Interactive sessions and @code{gucushell}::  
-* The Gory Details::            
-* Initialization::              
-* A word about windows::        
-* Output functions::            
-* Input functions::             
-* Attributes::                  
-* Windows Tutorial::            
-* Colors::                      
-* Interfacing with the keyboard::  
-* Interfacing with the mouse::  
-* Panels Library::              
-* Menu Library::                
-* Forms Library::               
+* Hello World!!!::
+* Interactive sessions and @code{gucushell}::
+* The Gory Details::
+* Initialization::
+* A word about windows::
+* Output functions::
+* Input functions::
+* Attributes::
+* Windows Tutorial::
+* Colors::
+* Interfacing with the keyboard::
+* Interfacing with the mouse::
+* Panels Library::
+* Menu Library::
+* Forms Library::
 @end menu
 
 @node Hello World!!!, Interactive sessions and @code{gucushell}, Curses Tutorial, Curses Tutorial
@@ -735,14 +735,14 @@ look into its various features, let's write a simple program and say
 hello to the world.
 
 @menu
-* Using the Guile Curses module::  
+* Using the Guile Curses module::
 @end menu
 
 @node Using the Guile Curses module,  , Hello World!!!, Hello World!!!
 @subsection Using the Guile Curses module
 
 To use ncurses library functions, you have to load the @code{(gucu
-curses)} module into the program.  
+curses)} module into the program.
 
 @cindex Hello, world
 
@@ -878,8 +878,8 @@ initialize the mouse, etc.  Let's discuss some of the functions that
 are normally called immediately after @code{initscr}.
 
 @menu
-* Initialization Functions::    
-* An example::                  
+* Initialization Functions::
+* An example::
 @end menu
 
 @node Initialization Functions, An example, Initialization, Initialization
@@ -988,7 +988,7 @@ you need to call it on the window that was updated.
 
 For many functions, there are optional key parameters.
 @example
-(addstr stdscr string)             ; Print on stdscr at present 
+(addstr stdscr string)             ; Print on stdscr at present
                                    ; cursor location
 (addstr stdscr string #:y y #:x x) ; Move to (y, x) then print string
 @end example
@@ -1015,10 +1015,10 @@ characters and strings to the screen.
 @end enumerate
 
 @menu
-* The @code{addch} procedure::  
-* @code{addstr} class of functions::  
-* A simple @code{addstr} example::  
-* A word of caution::           
+* The @code{addch} procedure::
+* @code{addstr} class of functions::
+* A simple @code{addstr} example::
+* A word of caution::
 @end menu
 
 @node The @code{addch} procedure, @code{addstr} class of functions, Output functions, Output functions
@@ -1121,8 +1121,8 @@ They can be used effectively in conjuntion with the @code{format}
 procedure from @code{(ice-9 format)}.
 
 @menu
-* A simple @code{addstr} example::  
-* A word of caution::           
+* A simple @code{addstr} example::
+* A word of caution::
 @end menu
 
 @node A simple @code{addstr} example, A word of caution, @code{addstr} class of functions, Output functions
@@ -1131,7 +1131,7 @@ procedure from @code{(ice-9 format)}.
 @example
 @verbatiminclude ex_centered_screen.scm
 @end example
-     
+
 The above program demonstrates how easy it is to combine @code{addstr}
 and @code{move} to print at a specific location on the screen.  It
 also shows how to use the equivalent key parameters @code{#:y} and
@@ -1149,7 +1149,7 @@ number of columns and the number of rows in a given window.
 
 The @code{move} function takes the @code{y} coordinate first and then
 @code{x} as its arguments.  A common mistake by beginners is to pass
-@code{x}, @code{y} in that order.  
+@code{x}, @code{y} in that order.
 
 If you use the @code{#:y} and @code{#:x} key parameters that most
 output procedures have in lieu of using the @code{move} statement, you
@@ -1166,7 +1166,7 @@ you.
 @section Input functions
 
 Well, printing without taking input is boring.  Let's see functions
-which allow us to get input from the user.  
+which allow us to get input from the user.
 @enumerate
 @item
 @code{getch}: get a character
@@ -1176,13 +1176,13 @@ which allow us to get input from the user.
 
 
 @menu
-* @code{getch} class of functions::  
-* @code{getnstr} class of functions::  
-* An example of @code{getnstr} and @code{getch}::  
+* @code{getch} class of functions::
+* @code{getnstr} class of functions::
+* An example of @code{getnstr} and @code{getch}::
 @end menu
 
 @node @code{getch} class of functions, @code{getnstr} class of functions, Input functions, Input functions
-@subsection @code{getch} 
+@subsection @code{getch}
 @cindex Inputting characters
 @cindex Echoing
 
@@ -1223,7 +1223,7 @@ of string that it will allow to be input.
 
 Attributes can be used to print characters with some special effects.
 Attributes, when set prudently, can present information in an easy,
-understandable manner.  
+understandable manner.
 
 The following program takes a scheme file as input and prints the file
 with comments in bold.  It does so by turning on the @code{A_BOLD}
@@ -1257,10 +1257,10 @@ these lines once could write a more useful program which reads a scheme
 file, parses it, and prints it in different colors.
 
 @menu
-* The details::                 
-* @code{attr-on!} vs @code{attr-set!}::  
-* @code{attr-get}::             
-* @code{chgat} function::       
+* The details::
+* @code{attr-on!} vs @code{attr-set!}::
+* @code{attr-get}::
+* @code{chgat} function::
 @end menu
 
 @node The details, @code{attr-on!} vs @code{attr-set!}, Attributes, Attributes
@@ -1281,7 +1281,7 @@ video attributes can be passed to these functions.
 Normal display (no highlight)
 @item A_STANDOUT
 Best highlighting mode of the terminal
-@item A_UNDERLINE 
+@item A_UNDERLINE
 Underlining
 @item A_REVERSE
 Reverse video
@@ -1364,7 +1364,7 @@ attributes of a given number of characters starting at the current
 cursor location.
 
 You can pass it -1 as the character count to update until the end of
-the current line.  
+the current line.
 
 The following example changes the attributes of characters from the
 current position to the end of the line to reverse video on a window
@@ -1410,7 +1410,7 @@ before you start doing anything.
 
 Now, anyone that has worked with a modern GUI has an intuitive
 understanding of what a ``window'' is.  You will need to unlearn this
-knowledge when programming curses windows.  
+knowledge when programming curses windows.
 
 First off, a curses window doesn't necessarily have any sort of border
 or decoration that separates it from the rest of the terminal.  You
@@ -1421,10 +1421,10 @@ Second, curses windows don't normally overlap.  They are usually
 distinct, non-overlapping regions of the screen.
 
 @menu
-* The basics::                  
-* Let there be a window::       
-* Other functions::             
-* Other border functions::      
+* The basics::
+* Let there be a window::
+* Other functions::
+* Other border functions::
 @end menu
 
 @node The basics, Let there be a window, Windows Tutorial, Windows Tutorial
@@ -1434,7 +1434,7 @@ distinct, non-overlapping regions of the screen.
 A window can be created by calling the function @code{newwin}. It
 doesn't draw anything on the screen initially.  It allocates memory
 for a structure to manipulate the window and updates the structure with
-data regarding the window, like it's size, position, etc. 
+data regarding the window, like it's size, position, etc.
 
 The function @code{newwin}, like @code{initscr}, returns a
 @code{#<window>}.  Just like the @code{stdscr} created by
@@ -1498,7 +1498,7 @@ corners and the four lines.  To put it clearly, if you called border
 as below:
 
 @example
-(border win 
+(border win
         (normal #\|)
         (normal #\|)
         (normal #\-)
@@ -1513,9 +1513,9 @@ it produces something like this
    +-----+
    |     |
    |     |
-   |     | 
+   |     |
    +-----+
-@end verbatim 
+@end verbatim
 
 It wouldn't have been sufficient to use @code{(box win (normal #\sp)
 (normal #\sp))} to erase the box, because the @code{box} procedure
@@ -1556,8 +1556,8 @@ which is the upper-right corner of a box.
 @section Colors
 
 @menu
-* The basics of color::         
-* Changing color definitions::  
+* The basics of color::
+* Changing color definitions::
 @end menu
 
 @node The basics of color, Changing color definitions, Colors, Colors
@@ -1641,8 +1641,8 @@ combination of a color pair.
 @section Interfacing with the keyboard
 
 @menu
-* The basics of keys::          
-* A simple key usage example::  
+* The basics of keys::
+* A simple key usage example::
 @end menu
 
 @node The basics of keys, A simple key usage example, Interfacing with the keyboard, Interfacing with the keyboard
@@ -1704,9 +1704,9 @@ the mouse.  Usually each UI allows the user to interact with both
 keyboard and mouse.
 
 @menu
-* The basics of the mouse::     
-* Getting the events::          
-* Miscellaneous functions::     
+* The basics of the mouse::
+* Getting the events::
+* Miscellaneous functions::
 @end menu
 
 @node The basics of the mouse, Getting the events, Interfacing with the mouse, Interfacing with the mouse
@@ -1836,9 +1836,9 @@ their overlapping and update the screen properly. So why wait? Let's
 take a close peek into panels.
 
 @menu
-* Panels Basics::               
-* Compiling With the Panels Library::  
-* Moving and Resizing Panels::  
+* Panels Basics::
+* Compiling With the Panels Library::
+* Moving and Resizing Panels::
 @end menu
 
 @node Panels Basics, Compiling With the Panels Library, Panels Library, Panels Library
@@ -1860,7 +1860,7 @@ The general flow of a panel program goes like this:
 @enumerate
 @item
 Create the windows (with @code{newwin}) to be attached to the panels.
-   
+
 @item
 Create panels with the chosen visibility order. Stack them up
 according to the desired visibility. The function @code{new-panel} is
@@ -1870,16 +1870,16 @@ used to create panels.
 Call @code{update-panels} to write the panels to the virtual screen in
 correct visibility order. Do a @code{doupdate} to show it on the
 screen.
-   
+
 @item
 Mainpulate the panels with @code{show-panel}, @code{hide-panel},
 @code{move-panel} etc.  Make use of helper functions like
-@code{panel-hidden} and @code{panel-window}. 
-   
+@code{panel-hidden} and @code{panel-window}.
+
 @item
 When you are done with the panel use @code{del-panel} to delete the
 panel.
-   
+
 @end enumerate
 
 Let's make the concepts clear, with some programs. The following is a simple
@@ -1940,10 +1940,10 @@ more than one item as the preferred choice. This is dealt with in a
 later section. Now it is time for some rudiments.
 
 @menu
-* Menu Basics::                 
-* Menu Driver::                 
-* Menu Windows::                
-* Scrolling Menus::             
+* Menu Basics::
+* Menu Driver::
+* Menu Windows::
+* Scrolling Menus::
 @end menu
 
 @node Menu Basics, Menu Driver, Menu Library, Menu Library
@@ -1960,7 +1960,7 @@ The general flow of control of a menu program looks like this.
 @item
 Initialize curses
 
-@item   
+@item
 Create items using @code{new-item}. You can specify a name and
 description for the items.
 
@@ -1968,17 +1968,17 @@ description for the items.
 Create the menu with @code{new-menu} by specifying the items with
 which it is to be attached.
 
-@item 
+@item
 Post the menu with @code{menu-post} and refresh the screen.
 
 @item
 Process the user requests with a loop and do necessary updates to menu
 with @code{menu-driver}.
 
-@item   
+@item
 Unpost the menu with @code{menu-unpost}.
-   
-@item   
+
+@item
 End curses.
 
 @end enumerate
@@ -2007,40 +2007,40 @@ special key associated with a mouse event.
 
 The menu_driver accepts following navigational requests.
 @table @code
-@item REQ_LEFT_ITEM         
-Move left to an item.                                  
-@item REQ_RIGHT_ITEM 
-Move right to an item.                                   
-@item REQ_UP_ITEM 
-Move up to an item.                                      
-@item REQ_DOWN_ITEM 
-Move down to an item.                                    
-@item REQ_SCR_ULINE 
-Scroll up a line.                                        
-@item REQ_SCR_DLINE 
-Scroll down a line.                                   
-@item REQ_SCR_DPAGE 
-Scroll down a page.                                   
-@item REQ_SCR_UPAGE 
-Scroll up a page.                                      
-@item REQ_FIRST_ITEM 
-Move to the first item.                                   
-@item REQ_LAST_ITEM 
-Move to the last item.                                 
-@item REQ_NEXT_ITEM 
-Move to the next item.                                 
-@item REQ_PREV_ITEM 
-Move to the previous item.                             
-@item REQ_TOGGLE_ITEM 
-Select/deselect an item.                                 
-@item REQ_CLEAR_PATTERN 
-Clear the menu pattern buffer.                         
-@item REQ_BACK_PATTERN 
-Delete the previous character from the pattern buffer. 
-@item REQ_NEXT_MATCH 
-Move to the next item matching the pattern match.         
-@item REQ_PREV_MATCH 
-Move to the previous item matching the pattern match.     
+@item REQ_LEFT_ITEM
+Move left to an item.
+@item REQ_RIGHT_ITEM
+Move right to an item.
+@item REQ_UP_ITEM
+Move up to an item.
+@item REQ_DOWN_ITEM
+Move down to an item.
+@item REQ_SCR_ULINE
+Scroll up a line.
+@item REQ_SCR_DLINE
+Scroll down a line.
+@item REQ_SCR_DPAGE
+Scroll down a page.
+@item REQ_SCR_UPAGE
+Scroll up a page.
+@item REQ_FIRST_ITEM
+Move to the first item.
+@item REQ_LAST_ITEM
+Move to the last item.
+@item REQ_NEXT_ITEM
+Move to the next item.
+@item REQ_PREV_ITEM
+Move to the previous item.
+@item REQ_TOGGLE_ITEM
+Select/deselect an item.
+@item REQ_CLEAR_PATTERN
+Clear the menu pattern buffer.
+@item REQ_BACK_PATTERN
+Delete the previous character from the pattern buffer.
+@item REQ_NEXT_MATCH
+Move to the next item matching the pattern match.
+@item REQ_PREV_MATCH
+Move to the previous item matching the pattern match.
 @end table
 
 Don't get overwhelmed by the number of options. We will see them
@@ -2061,7 +2061,7 @@ key. Let's dissect the different navigational requests.
 
 @table @code
 @item REQ_LEFT_ITEM and REQ_RIGHT_ITEM
-   
+
 A menu can be displayed with multiple columns for more than one item.
 This can be done by using the @code{menu-format} function. When a
 multicolumnar menu is displayed these requests cause the menu driver
@@ -2074,7 +2074,7 @@ when given, makes the @code{menu-driver} to move the current selection
 to an item up or down.
 
 @item REQ_SCR_* options
-   
+
 The four options @code{REQ_SCR_ULINE}, @code{REQ_SCR_DLINE},
 @code{REQ_SCR_DPAGE}, @code{REQ_SCR_UPAGE} are related to
 scrolling. If all the items in the menu cannot be displayed in the
@@ -2083,18 +2083,18 @@ given to the @code{menu-driver} to do the scrolling either one line
 up, down or one page down or up respectively.
 
 @item REQ_FIRST_ITEM, REQ_LAST_ITEM, REQ_NEXT_ITEM and REQ_PREV_ITEM
-   
+
 Easy enough.
 
 @item REQ_TOGGLE_ITEM
-   
+
 This request when given, toggles the present selection. This option is
 to be used only in a multivalued menu. So to use this request the
 option @code{O_ONEVALUE} must be off. This option can be made off or
 on with @code{set_menu_opts}.
 
 @item Pattern Requests
-   
+
 Every menu has an associated pattern buffer, which is used to find the
 nearest match to the ascii characters entered by the user. Whenever
 ascii characters are given to menu_driver, it puts in to the pattern
@@ -2108,7 +2108,7 @@ matched items can be cycled through @code{REQ_NEXT_MATCH} and
 previous matches respectively.
 
 @item Mouse Requests
-   
+
 In case of @code{KEY_MOUSE} requests, according to the mouse position
 an action is taken accordingly. The action to be taken is explained in
 the man page as, If the second argument is the @code{KEY_MOUSE}
@@ -2125,7 +2125,7 @@ region of the menu, a REQ_SCR_DLINE is generated, if you doubleclick a
 display area of the menu, the menu cursor is positioned to that item.
 
 @end table
-   
+
 Each of the above requests will be explained in the following lines with
 several examples whenever appropriate.
 
@@ -2177,20 +2177,20 @@ fields, and so on.  Let's see it in full flow.
 
 A form is a collection of fields. Each field can be either a label
 (static text) or a data-entry location.  The forms library also
-provices functions to divide forms into multiple pages.  
+provices functions to divide forms into multiple pages.
 
 @menu
-* The Basics (Forms)::          
-* A Form Example::              
-* Making it useful::            
-* Playing with fields::         
-* Field Display Attributes::    
-* Field Option Bits::           
-* Field Status::                
-* Variable-Sized Fields::       
-* Form Windows::                
-* Field Validation::            
-* The Form Driver::             
+* The Basics (Forms)::
+* A Form Example::
+* Making it useful::
+* Playing with fields::
+* Field Display Attributes::
+* Field Option Bits::
+* Field Status::
+* Variable-Sized Fields::
+* Form Windows::
+* Field Validation::
+* The Form Driver::
 @end menu
 
 @node  The Basics (Forms), A Form Example, Forms Library, Forms Library
@@ -2281,11 +2281,11 @@ the fields, but, it doesn't perform the useful function of allowing
 the program to fetch the contents of those fields.  Also, the basic
 editing features like @key{BS} and @key{DELETE} are not connected.
 
-To make it useful, it needs a couple of important 
+To make it useful, it needs a couple of important
 changes.  First, it passes more of the important editing commands like
 @key{BS} and @key{DELETE} to the form driver for processing.  Second,
 it fetches the final content of the fields as one would normally do in
-a form application. 
+a form application.
 
 A more complete editing loop might look like this
 @example
@@ -2384,7 +2384,7 @@ will be filled in the unfilled portion of the field.  The pad
 character is set with a call to @code{set-field-pad!}.  Default pad
 value is space.  The functions @code{field-fore} , @code{field-back},
 and @code{field-pad} can be used to query the present foreground
-background attributes and pad character for the field. 
+background attributes and pad character for the field.
 
 Though the functions seem quite simple, using colors with
 @code{set-field-fore!} may be frustrating in the beginning.  Let me
@@ -2404,7 +2404,7 @@ clarifying color attributes.
 Play with the color pairs and try to understand the foreground and
 background attributes.  Color pair 1 is used for the character that
 have been typed into the form, and color pair 2 is used for the empty
-spaces in the form.  
+spaces in the form.
 
 @node  Field Option Bits, Field Status, Field Display Attributes, Forms Library
 @subsection Field Option Bits
@@ -2527,18 +2527,18 @@ password-like field where the characters are hidden from view.
 (keypad! stdscr #t)
 
 ;; Initialize the fields
-(define field (map-in-order 
+(define field (map-in-order
 	       (lambda (y)
-		 (new-field 1 
-			    WIDTH 
+		 (new-field 1
+			    WIDTH
 			    (+ (* y 2) STARTY)
 			    STARTX
-			    0 
+			    0
 			    0))
 	       (iota N_FIELDS)))
 
 ;; Set field options
-(set-field-back! (first field) A_UNDERLINE) 
+(set-field-back! (first field) A_UNDERLINE)
 ;; Don't go to the next field when this field is filled up
 
 ;; This field is a static label
@@ -2582,7 +2582,7 @@ password-like field where the characters are hidden from view.
 	  (form-driver my-form ch)
 	  (loop (getch)))))))
 
-;; Unpost the form 
+;; Unpost the form
 (unpost-form my-form)
 
 (endwin)
@@ -2668,13 +2668,13 @@ similar example.
   (let ((length (string-length str)))
 
     (attr-on! win color)
-    (addstr win str 
-	    #:y starty 
+    (addstr win str
+	    #:y starty
 	    #:x (+ startx (/ (- width length) 2)))
 
     (attr-off! win color)
     (refresh)))
-    
+
 
 ;; Initialize curses
 (define stdscr (initscr))
@@ -2723,7 +2723,7 @@ similar example.
 (post-form my-form)
 (refresh my-form-win)
 
-(addstr stdscr "Use UP, DOWN arrow keys to switch between fields" 
+(addstr stdscr "Use UP, DOWN arrow keys to switch between fields"
 	#:y (- (lines) 2) #:x 0)
 (refresh stdscr)
 
@@ -2749,7 +2749,7 @@ similar example.
 	  (form-driver my-form ch)
 	  (loop (getch my-form-win)))))))
 
-;; Unpost the form 
+;; Unpost the form
 (unpost-form my-form)
 
 (endwin)
@@ -2796,7 +2796,7 @@ This field type accepts alphabetic data and digits.  No blanks, no
 special characters.  It also has a width argument.
 
 @example
-(set-field-type1 field TYPE_ALPHA width)
+(set-field-type! field TYPE_ALPHA width)
 @end example
 
 @item TYPE_ENUM
@@ -2841,7 +2841,7 @@ This accepts a decimal number.
 @end example
 
 Valid characters consist of a leading minus and digits, possibly
-including a deciman point.  The range check is performed on exit.  
+including a deciman point.  The range check is performed on exit.
 
 If the value passes its range check, it is padded with as many
 trailing zero digits as necessary to meet the padding argument.
@@ -2947,12 +2947,12 @@ The gucu package provides the following modules:
 @end enumerate
 
 @menu
-* The naming of routines::      
-* The basic curses library::    
-* Function key labels library::  
-* The curses panel library::    
-* The curses menu library::     
-* The curses form library::     
+* The naming of routines::
+* The basic curses library::
+* Function key labels library::
+* The curses panel library::
+* The curses menu library::
+* The curses form library::
 @end menu
 
 @node The naming of routines, The basic curses library, Curses Reference, Curses Reference
@@ -2999,41 +2999,41 @@ of the procedures in the library have approximately the same name and
 arguments as the functions in the C-language API.
 
 @menu
-* Overview::                    
-* Curses screen initialization and manipulation routines::  
-* Making rendered characters::  
-* Adding characters::           
-* Adding strings of characters and attributes::  
-* Character and window attribute control routines::  
-* Bell and screen flash routines::  
-* Window background manipulation routines::  
-* Borders and lines::           
-* Clearing windows and parts of window::  
-* Color manipulation routines::  
-* Deleting the character under the cursor::  
-* Deleting and inserting lines::  
-* Getting characters from the keyboard::  
-* Receiving strings from the keyboard::  
-* Cursor location and window coordinates::  
-* Getting a rendered character from the window::  
-* Getting a string of characters and attributes from a window::  
-* Input options::               
-* Inserting a character before the cursor::  
-* Inserting a string before the cursor::  
-* Getting a string of characters from the screen::  
-* Low-level routines::          
-* Mouse handling::              
-* Moving the cursor ::          
-* Output options::              
-* Overlay and manipulate overlapped windows::  
-* Create and display pads::     
-* Refresh windows and lines::   
-* Reading and writing a curses screen to a file::  
-* Scroll a window::             
-* Terminal attributes::         
-* Refresh routines::            
-* Miscellaneous utilities::     
-* Window creation::             
+* Overview::
+* Curses screen initialization and manipulation routines::
+* Making rendered characters::
+* Adding characters::
+* Adding strings of characters and attributes::
+* Character and window attribute control routines::
+* Bell and screen flash routines::
+* Window background manipulation routines::
+* Borders and lines::
+* Clearing windows and parts of window::
+* Color manipulation routines::
+* Deleting the character under the cursor::
+* Deleting and inserting lines::
+* Getting characters from the keyboard::
+* Receiving strings from the keyboard::
+* Cursor location and window coordinates::
+* Getting a rendered character from the window::
+* Getting a string of characters and attributes from a window::
+* Input options::
+* Inserting a character before the cursor::
+* Inserting a string before the cursor::
+* Getting a string of characters from the screen::
+* Low-level routines::
+* Mouse handling::
+* Moving the cursor ::
+* Output options::
+* Overlay and manipulate overlapped windows::
+* Create and display pads::
+* Refresh windows and lines::
+* Reading and writing a curses screen to a file::
+* Scroll a window::
+* Terminal attributes::
+* Refresh routines::
+* Miscellaneous utilities::
+* Window creation::
 @end menu
 
 @node Overview, Curses screen initialization and manipulation routines, The basic curses library, The basic curses library
@@ -3144,7 +3144,7 @@ and @code{KEY_LEFT}.
 If the environment variables @env{LINES} and @env{COLUMNS} are set, or
 if the program is executing in a window environment, line and column
 information in the environment will override information read by
-terminfo.  
+terminfo.
 
 If the environment variable @env{TERMINFO} is defined, any program
 using curses checks for a local terminal definition before checking in
@@ -3216,7 +3216,7 @@ applications, @code{newterm} may be called before @code{initscr}.
 
 The @code{initscr} code determines the terminal type and initializes
 all curses data structures.  @code{initscr} also causes the first call
-to @code{refresh} to clear the screen.  
+to @code{refresh} to clear the screen.
 
 The @code{#<window>} returned by @code{initscr} should be held in a
 variable that exists for the lifetime of a curses program.  If it is
@@ -3249,11 +3249,11 @@ input to the terminal.  It must be a file port, and cannot be a string
 port.
 
 @code{newterm} will internally use a duplicate port to the file
-pointed to by @var{inport}.  @var{inport} won't be used except to get a 
+pointed to by @var{inport}.  @var{inport} won't be used except to get a
 file descriptor for the underlying file.
 
 Immediately following the call to newterm, one should create a window
-for the terminal by using the @code{stdscr} procedure.  So the standard way 
+for the terminal by using the @code{stdscr} procedure.  So the standard way
 to initialize it would be something like.
 @example
 (newterm "vt220" outport inport)
@@ -3346,7 +3346,7 @@ The return value is unspecified.
 @subsection Making rendered characters
 
 Many curses functions take rendered, complex characters: characters
-with associated color and attribute information.  
+with associated color and attribute information.
 
 For those who are familiar with the C API for ncurses, they know that
 a rendered character is either a @code{chtype}, which is a 32-bit
@@ -3458,7 +3458,7 @@ called.
 @end deffn
 
 There are also a couple of low-level functions to do conversion
-between C characters and Guile characters. 
+between C characters and Guile characters.
 
 @deffn Procedure %scheme-char-from-c-char c
 
@@ -3493,7 +3493,7 @@ Unicode codepoint for the replacement character.
 @end deffn
 
 @node Adding characters, Adding strings of characters and attributes, Making rendered characters, The basic curses library
-@subsection Outputting characters 
+@subsection Outputting characters
 @cindex Characters, output
 @cindex Outputting characters
 
@@ -3501,7 +3501,7 @@ There are two primary functions that add a rendered character
 to a curses window, and then advance the cursor.
 
 @deffn Procedure addch win ch #:key y x
-@findex scrollok! 
+@findex scrollok!
 
 The @code{addch} routine puts the rendered character @var{ch} into the
 given window at its current window position, which is then advanced.
@@ -3589,7 +3589,7 @@ The set of line-graphics characters is given in @ref{tab:ACS}.
 @headitem name @tab default @tab description
 
 @item @code{acs-block}
-@tab #		
+@tab #
 @tab solid square block
 @item @code{acs-board}
 @tab #
@@ -3598,7 +3598,7 @@ The set of line-graphics characters is given in @ref{tab:ACS}.
 @tab +
 @tab bottom tee
 @item @code{acs-bullet}
-@tab o		
+@tab o
 @tab bullet
 @item @code{acs-ckboard}
 @tab :
@@ -3741,7 +3741,7 @@ written into the window with @code{addch} and @code{addstr}.
 Attributes are a property of the character, and move with the
 character through any scrolling and insert/delete line/character
 operations.  To the extent possible, they are displayed as appropriate
-modifications to the graphic rendition of characters put on the 
+modifications to the graphic rendition of characters put on the
 screen.
 
 @deffn Procedure attr-set! win attrs #:optional color
@@ -3803,7 +3803,7 @@ color pair number was too large.
 @end deffn
 
 @deffn Procedure attr-get
- 
+
 The routine @code{attr-get} returns the current attribute and color
 pair for the given window.  They are returned as a list containing two
 elements.  The first element is a bitmap containing all the
@@ -3934,7 +3934,7 @@ flashing, @code{#f} otherwise.
 @cindex Windows, background
 @cindex Background
 
-@deffn Procedure bkgdset! win ch 
+@deffn Procedure bkgdset! win ch
 @findex addch
 
 The @code{bkgdset!} routine manipulates the background of the named
@@ -4004,7 +4004,7 @@ It returns @code{#f} on failure and @code{#t} on success.
 @end deffn
 
 @deffn Procedure box win verch horch
-@code{box} is a shorthand for the following call:	 
+@code{box} is a shorthand for the following call:
 @example
 (border win verch verch horch horch 0 0 0 0)
 @end example
@@ -4173,7 +4173,7 @@ of the last three arguments must be a value between 0 and 1000.  When
 @code{init-color!} is used, all occurrences of that color on the screen
 immediately change to the new definition.
 
-It returns @code{#f} on failure and @code{#t} on success.  Failure may 
+It returns @code{#f} on failure and @code{#t} on success.  Failure may
 indicate that, for the current terminal, the colors cannot be modified.
 @end deffn
 
@@ -4208,7 +4208,7 @@ number @code{-1} can be used as @var{fore-color} or
 foreground or background color for this screen, which is usually white
 on black.
 
-It returns @code{#f} on failure and @code{#t} on success.  Failure may 
+It returns @code{#f} on failure and @code{#t} on success.  Failure may
 indicate an attempt to change a color pair beyond the allow range of
 color pairs.
 @end deffn
@@ -4281,7 +4281,7 @@ the capability to set color pair 0.
 @findex init-pair!
 
 This procedure allow the modification of special color pair 0, which
-cannot be modified by @code{init-pair!}.  
+cannot be modified by @code{init-pair!}.
 
 It returns @code{#t} if successful or @code{#f} is the terminal lacks
 the capability to set color pair 0.
@@ -4312,7 +4312,7 @@ It returns @code{#f} on failure and @code{#t} on success.
 The @code{deleteln} procedure deletes the line under the cursor in the
 window; all lines below the current line are moved up one line.  The
 bottom line of the window is cleared.  The cursor position does not
-change.  
+change.
 
 It returns @code{#f} on failure and @code{#t} on success.
 @end deffn
@@ -4324,7 +4324,7 @@ lines into the specified window above the current line.  The @var{n}
 bottom lines are lost.  For negative @var{n}, it deletes n lines
 (starting with the one under the cursor), and move the remaining lines
 up.  The bottom n lines are cleared.  The current cursor position
-remains the same.  
+remains the same.
 
 It returns @code{#f} on failure and @code{#t} on success.
 @end deffn
@@ -4332,7 +4332,7 @@ It returns @code{#f} on failure and @code{#t} on success.
 @deffn Procedure insertln win
 
 The @code{insertln} routine inserts a blank line above the current
-line and the bottom line is lost.  
+line and the bottom line is lost.
 
 It returns @code{#f} on failure and @code{#t} on success.
 @end deffn
@@ -4617,7 +4617,7 @@ resulting string is returned.
 @code{getnstr} reads at most @var{n} characters, thus preventing a
 possible overflow of the input buffer.  Any attempt to enter more
 characters (other than the terminating newline or carriage return)
-causes a beep.  Function keys also cause a beep and are ignored. 
+causes a beep.  Function keys also cause a beep and are ignored.
 
 The user's erase and kill characters are interpreted. If keypad mode
 is on for the window, @code{KEY_LEFT} and @code{KEY_BACKSPACE} are
@@ -4666,7 +4666,7 @@ with its rendition.
 @deffn Procedure inch
 
 These routines return the rendered complex character at the current
-position in the named window. 
+position in the named window.
 @end deffn
 
 
@@ -4710,7 +4710,7 @@ Initially the terminal may or may not be in @code{cbreak} mode, as the
 mode is inherited; therefore, a program should call @code{cbreak!} or
 @code{nocbreak!} explicitly.  Most interactive programs using curses
 set the @code{cbreak!} mode.  Note that @code{cbreak!} overrides
-@code{raw!}.  
+@code{raw!}.
 
 @end deffn
 
@@ -4759,7 +4759,7 @@ output in the tty driver queue will be flushed, giving the effect of
 faster response to the interrupt, but causing curses to have the wrong
 idea of what is on the screen.  Disabling (@var{bf} is @code{#f}), the
 option prevents the flush.  The default for the option is inherited
-from the tty driver settings.  
+from the tty driver settings.
 
 The return value is unspecified.
 
@@ -4899,7 +4899,7 @@ checking is done.
 
 The routine returns @code{#t} if the mode could be set and @code{#f}
 on failure.
-@end deffn 
+@end deffn
 
 @node Inserting a character before the cursor, Inserting a string before the cursor, Input options, The basic curses library
 @subsection Inserting a character before the cursor
@@ -5036,14 +5036,14 @@ These functions provide an interface to mouse events.
 Mouse events are represented by @code{KEY_MOUSE} pseudo-key values in the
 @code{wgetch} input stream.
 
-To make mouse events visible, use the @code{mousemask} function.  
+To make mouse events visible, use the @code{mousemask} function.
 
 @deffn Procedure mousemask mask
 
 This will set the mouse events to be reported.  By default, no mouse
 events are reported.  The function will return a mask to indicate
 which of the specified mouse events can be reported; on complete
-failure it returns 0.  
+failure it returns 0.
 
 As a side effect, setting a zero mousemask may turn off the mouse
 pointer; setting a nonzero mask may turn it on.  Whether this happens
@@ -5087,7 +5087,7 @@ clicked
 @item @code{BUTTON5_CLICKED} @tab mouse button 5 clicked
 @item @code{BUTTON5_DOUBLE_CLICKED} @tab mouse button 5 double clicked
 @item @code{BUTTON5_TRIPLE_CLICKED} @tab mouse button 5 triple clicked
-@item 
+@item
 @item @code{BUTTON_SHIFT} @tab shift was down during button state
 change
 @item @code{BUTTON_CTRL} @tab control was down during button state
@@ -5175,7 +5175,7 @@ default is one sixth of a second.
 @end deffn
 
 @node Moving the cursor , Output options, Mouse handling, The basic curses library
-@subsection Moving the cursor 
+@subsection Moving the cursor
 
 @deffn Procedure move win y x
 
@@ -5211,7 +5211,7 @@ If @code{clearok!} is called with @var{bf} as @code{#t},
 the next call to @code{refresh} with this window will clear the
 screen completely and redraw the entire screen from scratch.  This is
 useful when the contents of the screen are uncertain, or in some cases
-for a more pleasing visual effect.  
+for a more pleasing visual effect.
 
 @c If the @var{win} argument to
 @c @code{clearok} is the global variable @code{curscr}, the next call to
@@ -5355,7 +5355,7 @@ The return values are unspecified.
 @cindex Overlaying windows
 @cindex Windows, copying
 @cindex Windows, overlaying
-@findex overlay 
+@findex overlay
 @findex overwrite
 @findex prefresh
 
@@ -5524,7 +5524,7 @@ ambiguous.  What actually happens is that all touched (changed) lines
 in the window are copied to the virtual screen.  This affects programs
 that use overlapping windows; it means that if two windows overlap,
 you can refresh them in either order and the overlap region will be
-modified only when it is explicitly changed.  
+modified only when it is explicitly changed.
 
 @deffn Procedure redrawwin win
 @deffnx Procedure redrawln win beg-line num-lines
@@ -5688,8 +5688,8 @@ The killchar routine returns the user's current line kill character.
 
 @deffn Procedure longname
 
-The @code{longname} routine returns a string that is a 
-verbose description of the current terminal.  
+The @code{longname} routine returns a string that is a
+verbose description of the current terminal.
 
 @end deffn
 
@@ -5731,7 +5731,7 @@ been changed, beginning with line @var{start}.
 
 @deffn Procedure is-linetouched? win line
 
-Returns @code{#t} if the specified window and line was modified since the 
+Returns @code{#t} if the specified window and line was modified since the
 last call to @code{refresh}.
 
 @end deffn
@@ -5743,7 +5743,7 @@ to @code{refresh}>
 
 @end deffn
 
-@deffn Procedure untouchwin win 
+@deffn Procedure untouchwin win
 
 @findex refresh
 
@@ -5781,7 +5781,7 @@ Printing characters are displayed as is.
 The @code{keyname} routine returns a character string corresponding to
 the key @var{ch}.  Control characters are displayed in the @code{^X}
 notation.  Values above 128 are either meta characters, shown in the
-@code{M-X} notation, or the names of function keys, or null.  
+@code{M-X} notation, or the names of function keys, or null.
 
 @end deffn
 
@@ -5828,12 +5828,12 @@ window using that data.  It returns a new @code{#<window>}
 
 The @code{delay-output} routine inserts an @var{ms} millisecond pause
 in output.  This routine should not be used extensively because
-padding characters are used rather than a CPU pause. 
+padding characters are used rather than a CPU pause.
 
 The return value is unspecified.
 
 @end deffn
- 
+
 @deffn Procedure flushinp
 @cindex Flushing input
 @cindex Input, flushing
@@ -5848,7 +5848,7 @@ The return value is unspecified.
 
 @deffn Procedure curses-version
 @cindex Ncurses, version information
-@cindex Version information 
+@cindex Version information
 
 Returns a string that indicates the version of ncurses being used.
 
@@ -5931,7 +5931,7 @@ that @var{begin-y} and @var{begin-x} are relative to the origin of the
 window @var{orig} rather than the screen. There is no difference
 between the subwindows and the derived windows.
 
-It returns a window that shares memory with @var{orig}, or @code{#f} 
+It returns a window that shares memory with @var{orig}, or @code{#f}
 if the window could not be created.
 
 @end deffn
@@ -5949,12 +5949,12 @@ The return value is unspecified.
 @end deffn
 
 
-@deffn Procedure dupwin win 
+@deffn Procedure dupwin win
 @cindex Windows, duplication
 
 Calling @code{dupwin} creates an exact duplicate of the window @var{win}.
 
-@end deffn 
+@end deffn
 
 @deffn Procedure wsyncup win
 @findex syncok!
@@ -5964,11 +5964,11 @@ that are changed in @var{win}.  If @code{syncok!} is called with second
 argument @code{#t} then @code{wsyncup} is called automatically
 whenever there is a change in the window.
 
-@end deffn 
+@end deffn
 
 @deffn Procecure syncok! win bf
 
-If @code{syncok!} is called with the second argument @code{#t} then 
+If @code{syncok!} is called with the second argument @code{#t} then
 @code{wsyncup} is called automatically whenever there is a change in the
 window.
 
@@ -5984,7 +5984,7 @@ has been touched in any of its ancestor windows. This routine is
 called by @code{refresh}, so it should almost never be necessary to
 call it manually.
 
-@end deffn 
+@end deffn
 
 
 @deffn Procedure wcursyncup win
@@ -5994,7 +5994,7 @@ all the ancestors of the window to reflect the current cursor position
 of the window.
 
 The return value is unspecified.
-@end deffn 
+@end deffn
 
 @node Function key labels library, The curses panel library, The basic curses library, Curses Reference
 @section The Function Key Label Library: @code{(gucu slk)}
@@ -6166,7 +6166,7 @@ the panels in the panel stack.
 
 @deffn Procedure top-panel pan
 This procedure puts the given visible panel on top of all panels in
-the stack. 
+the stack.
 @end deffn
 
 @deffn Procedure bottom-panel pan
@@ -6197,11 +6197,11 @@ Returns the window of a given panel
 These are the functions in the @code{(gucu menu)} module.
 
 @menu
-* Menus Overview::              
-* Menu Item Procedures::        
-* Menu Procedures::             
-* Menu creation ::              
-* Menu options::                
+* Menus Overview::
+* Menu Item Procedures::
+* Menu Procedures::
+* Menu creation ::
+* Menu options::
 @end menu
 
 @node Menus Overview, Menu Item Procedures, The curses menu library, The curses menu library
@@ -6264,7 +6264,7 @@ on failure.
 @deffn Procedure item-index item
 This procedure returns the zero-origin index of this item in its
 containing menu's item list or @code{#f} on failure.
-@end deffn 
+@end deffn
 
 @deffn Procedure item-name item
 Returns, as a string, the name of the menu item @var{item}.
@@ -6282,7 +6282,7 @@ only one option bit mask, @code{O_SELECTABLE}.  When this is on, the
 item may be selected during menu processing.  It defaults to on.
 
 The procedure @code{set-item-opts} sets the bit mask of @var{item} to
-@var{opts}.  
+@var{opts}.
 
 The procedure @code{menu-opts-on} turns the bits of @var{opts} on in @var{item}.
 The procedure @code{menu-opts-off} turns off the bits on @var{opts} in
@@ -6318,11 +6318,11 @@ menu items will be mapped onto the screen.
 @subsection Menu Procedures
 
 @menu
-* Menu Colors and Attributes::  
-* Positioning a menu cursor::   
-* The menu driver::             
-* Menu sizes::                  
-* Menu mark strings::           
+* Menu Colors and Attributes::
+* Positioning a menu cursor::
+* The menu driver::
+* Menu sizes::
+* Menu mark strings::
 @end menu
 
 @node Menu Colors and Attributes, Positioning a menu cursor, Menu Procedures, Menu Procedures
@@ -6471,7 +6471,7 @@ a REQ_LAST_ITEM is generated for a triple-click.
 
 If you click at an item inside the display area of the menu:
 @itemize @bullet
-@item 
+@item
 the menu cursor is positioned to that item.
 @item
 If you double-click an item a @code{REQ_TOGGLE_ITEM} is generated and
@@ -6490,9 +6490,9 @@ translated into a menu request an E_REQUEST_DENIED is returned.
 The procedure @code{menu-driver} returns one of the following error codes:
 
 @table @code
-@item E_OK 
+@item E_OK
 The routine succeeded.
-@item E_SYSTEM_ERROR 
+@item E_SYSTEM_ERROR
 System error occurred (see errno).
 @item E_BAD_ARGUMENT
 Routine detected an incorrect or out-of-range argument.
@@ -6546,16 +6546,16 @@ the mark string.  Note that changing the length of the mark string for
 a menu while the menu is posted is likely to produce unhelpful
 behavior.
 
-The default string is ``-'' (a dash). 
+The default string is ``-'' (a dash).
 @end deffn
 
 @deffn Procedure menu-mark menu
 Returns, as a string, the prefix string used by the menu library to
 designate the selected item.
 @end deffn
- 
+
 @node Menu creation , Menu options, Menu Procedures, The curses menu library
-@subsection Menu creation 
+@subsection Menu creation
 
 @deffn Procdure new-menu items
 Given a list of items, where each item was created by the procedure
@@ -6605,10 +6605,10 @@ Returns the bitmask of the @var{menu}'s options.
 @end deffn
 
 @menu
-* Menu pattern buffer::         
-* Writing or erasing menus from window::  
-* Control spacing between menu items::  
-* Associate menus with window::  
+* Menu pattern buffer::
+* Writing or erasing menus from window::
+* Control spacing between menu items::
+* Associate menus with window::
 @end menu
 
 @node Menu pattern buffer, Writing or erasing menus from window, Menu options, Menu options
@@ -6713,18 +6713,18 @@ or @code{E_POSTED} if the menu has already been posted.
 These are the functions in the @code{(gucu form)} module.
 
 @menu
-* Forms Overview::              
-* Form procedures::             
-* Making or breaking connections between forms and fields::  
-* Color and attribute control for form fields::  
-* Data type validation for fields::  
-* Creating forms::              
-* Form pagination functions::   
-* Setting and getting form options::  
-* Setting the page number and field::  
-* Writing or erasing forms from associated subwindows::  
-* Printable form request names::  
-* Form windows::                
+* Forms Overview::
+* Form procedures::
+* Making or breaking connections between forms and fields::
+* Color and attribute control for form fields::
+* Data type validation for fields::
+* Creating forms::
+* Form pagination functions::
+* Setting and getting form options::
+* Setting the page number and field::
+* Writing or erasing forms from associated subwindows::
+* Printable form request names::
+* Form windows::
 @end menu
 
 @node Forms Overview, Form procedures, The curses form library, The curses form library
@@ -6758,7 +6758,7 @@ if the routine detected an incorrect or out-of-range argument,
 
 @deffn Procedure data-ahead? form
 @deffnx Procedure data-behind? form
-These procedures test if there is ahead or behind the current screen 
+These procedures test if there is ahead or behind the current screen
 of the given form @var{form}.  They return @code{#t} or @code{#f}.
 
 This could be because a text entry has been declared to have variable
@@ -6919,9 +6919,9 @@ area or the decoration window) are handled.
 
 If you click above the display region of the form:
 @itemize @bullet
-@item 
+@item
 a REQ_PREV_FIELD is generated for a single click,
-@item 
+@item
 a REQ_PREV_PAGE is generated for a double-click and
 @item
 a REQ_FIRST_FIELD is generated for a triple-click.
@@ -6983,7 +6983,7 @@ request code.
 @deffn Procedure set-form-fields form fields
 
 This procedure takes a @var{fields}, which is a scheme list of field
-types, and assigns them to @var{form}.  
+types, and assigns them to @var{form}.
 
 It returns an integer that will have the value @code{E_OK} on success,
 @code{E_BAD_ARGUMENT}, @code{E_CONNECTED} if the fields are already
@@ -7019,7 +7019,7 @@ or @code{E_SYSTEM_ERROR} if a system error occurred.
 @deffnx Procedure set-field-back! field attr
 
 The procedure @code{set-field-fore!} sets the attributes of the contents
-of a field, and @code{set-field-back!} set the attributes of the unused 
+of a field, and @code{set-field-back!} set the attributes of the unused
 portion of a field.
 
 They return the constants @code{E_OK} on success, @code{E_BAD_ARGUMENT},
@@ -7039,7 +7039,7 @@ portion of a field.
 @deffn Procedure set-field-pad! field pad
 
 The procedure @code{set-field-pad!} sets the character used as blank in
-the field to the codepoint @code{pad}. 
+the field to the codepoint @code{pad}.
 
 They return the constants @code{E_OK} on success, @code{E_BAD_ARGUMENT},
 or @code{E_SYSTEM_ERROR}.
@@ -7227,7 +7227,7 @@ using a list that lives in automatic variables on the stack.
 Integer data.  Requires a third int argument controlling the
 precision, a fourth long argument constraining minimum value, and a
 fifth long constraining maximum value.  If the maximum value is less
-than or equal to the minimum value, the range is simply ignored. 
+than or equal to the minimum value, the range is simply ignored.
 @item TYPE_NUMERIC
 Numeric data (may have a decimal-point part). Requires a third int
 argument controlling the precision, a fourth double argument con-
