@@ -1,11 +1,12 @@
 #include <libguile.h>
 #include <curses.h>
 #include <config.h>
-#include "visibility.h"
-#include "curs_spec.h"
 #include "curs_const.h"
+#include "curs_func.h"
 #include "curs_port.h"
+#include "curs_spec.h"
 #include "type.h"
+#include "visibility.h"
 
 GUCU_API void gucu_init (void);
 
