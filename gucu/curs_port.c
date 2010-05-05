@@ -67,7 +67,6 @@ port_read (void *cookie, char *buf, size_t siz)
 static ssize_t
 port_write (void *cookie, const char *buf, size_t siz)
 {
-  size_t i;
   SCM port = PTR2SCM (cookie);
 
 #ifdef GUILE_CHARS_ARE_UCS4
@@ -82,10 +81,14 @@ port_write (void *cookie, const char *buf, size_t siz)
       return siz;
     }
 #else
-  for (i = 0; i < siz; i++)
-    {
-      scm_write_char (scm_integer_to_char (scm_from_char (buf[i])), port);
-    }
+  {
+    size_t i;
+
+    for (i = 0; i < siz; i++)
+      {
+	scm_write_char (scm_integer_to_char (scm_from_char (buf[i])), port);
+      }
+  }
 
   return siz;
 #endif

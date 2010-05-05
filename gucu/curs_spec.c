@@ -129,8 +129,10 @@ gucu_grantpt (SCM fd)
 {
   int c_fd;
   int ret;
+
   SCM_ASSERT (scm_is_integer (fd), fd, SCM_ARG1, "grantpt");
-  ret = grantpt (scm_to_int (fd));
+  c_fd = scm_to_int (fd);
+  ret = grantpt (c_fd);
   if (ret == -1)
     scm_syserror ("grantpt");
 
@@ -256,7 +258,6 @@ gucu_ungetmouse (SCM event)
 SCM
 gucu_unlockpt (SCM fd)
 {
-  int c_fd;
   int ret;
   SCM_ASSERT (scm_is_integer (fd), fd, SCM_ARG1, "unlockpt");
   ret = unlockpt (scm_to_int (fd));
