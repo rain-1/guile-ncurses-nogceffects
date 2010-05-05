@@ -10,16 +10,18 @@ GUILE_AUTO_COMPILE=0 exec guile -e main -s $0 "$@"
 (use-modules (gucu curses))
 
 (define (main args)
+  (setlocale LC_ALL "")
   (let* ((option-spec '((version (single-char #\v) (value #f))
                         (help    (single-char #\h) (value #f))))
          (options (getopt-long args option-spec))
          (help-wanted (option-ref options 'help #f))
          (version-wanted (option-ref options 'version #f)))
-    (cond 
+
+    (cond
      ((or version-wanted help-wanted)
       (begin
         (if version-wanted
-            (display 
+            (display
              (string-append
               "gucu-keyboard-test (gucu) 0.5\n"
               "Copyright (C) 2009 Michael Gran\n"
@@ -28,7 +30,7 @@ GUILE_AUTO_COMPILE=0 exec guile -e main -s $0 "$@"
               "There is NO WARRANTY, to the extent permitted by law.\n")))
         (if help-wanted
             (display
-             (string-append 
+             (string-append
               "gucu-keyboard-test \n"
               "\n"
               "This interactive program help a developer find the terminal keycodes\n"
@@ -55,7 +57,7 @@ GUILE_AUTO_COMPILE=0 exec guile -e main -s $0 "$@"
     (nonl!)
     (scrollok! stdscr #t)
     (mousemask ALL_MOUSE_EVENTS)
-    
+
     (move stdscr 0 0)
     (addstr stdscr "Press any key to see its name\n")
     (addstr stdscr "Press TAB to toggle the interpretation of function keys\n")
@@ -63,7 +65,9 @@ GUILE_AUTO_COMPILE=0 exec guile -e main -s $0 "$@"
     (while #t
            (begin
              (set! c (getch stdscr))
-             (addstr stdscr (format #f "~S ~S~%" c (keyname c)))
+	     (if c
+		 (addstr stdscr (format #f "~S ~S~%" c (keyname c)))
+		 (addstr stdscr (format #f "(invalid char for this locale)~%")))
              (if (eqv? c 3)
                  (break))
              (if (eqv? c 9)
@@ -73,7 +77,7 @@ GUILE_AUTO_COMPILE=0 exec guile -e main -s $0 "$@"
              (if (eqv? c KEY_MOUSE)
                  (let* ((m (getmouse))
                         (mflag (fifth m)))
-                   (addstr stdscr (format #f "x=~a y=~a flag=~x~%" 
+                   (addstr stdscr (format #f "x=~a y=~a flag=~x~%"
                                           (second m)
                                           (third m)
                                           mflag))
