@@ -869,8 +869,12 @@
 
 ;; These functions may not exist depending on the
 ;; compile time options
-(if (defined? 'newterm)      (export newterm))
-(if (defined? 'key-defined)  (export key-defined))
 (if (defined? 'KEY_EVENT)    (export KEY_EVENT))
-
+(if (defined? 'grantpt)      (export grantpt))
+(if (defined? 'key-defined)  (export key-defined))
+(if (defined? 'newterm)      (export newterm))
+(if (defined? 'ptsname)      (export ptsname))
+(if (defined? 'ptsraw)       (export ptsraw))
+(if (defined? 'ptsmakeraw)   (export ptsmakeraw))
+(if (defined? 'unlockpt)     (export unlockpt))
 
