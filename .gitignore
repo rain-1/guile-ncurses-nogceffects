@@ -27,6 +27,7 @@
 .deps
 .dirstamp
 .libs
+INSTALL
 Makefile
 Makefile.in
 TAGS
@@ -51,3 +52,4 @@ stamp-vti
 texinfo.tex
 uninstalled-env
 version.texi
+
