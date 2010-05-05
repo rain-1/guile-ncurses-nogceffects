@@ -199,7 +199,7 @@ open_terminal (char *pseudo_terminal_slave_name,
 
       /* Set to raw mode */
       tcgetattr (slave_file_descriptor, &terminal_attributes);
-#ifdef HAVE_CFMAKERAQ
+#ifdef HAVE_CFMAKERAW
 	cfmakeraw (&terminal_attributes);
 #else
 	terminal_attributes.c_iflag &= ~(IGNBRK|BRKINT|PARMRK|ISTRIP
