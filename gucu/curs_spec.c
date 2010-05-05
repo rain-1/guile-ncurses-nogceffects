@@ -1,5 +1,15 @@
+#define _XOPEN_SOURCE
 #include <curses.h>
 #include <libguile.h>
+#include <stdlib.h>
+#include <termios.h>
+
+/* Work around unistring bug */
+#ifndef _UNUSED_PARAMETER_
+#define _UNUSED_PARAMETER_
+#endif
+
+#include <unistr.h>
 
 #include "type.h"
 #include "curs_spec.h"
@@ -11,7 +21,7 @@
   /* work around bug in Cygwin's ancient NCurses */
   extern NCURSES_EXPORT_VAR(chtype*) _nc_acs_map(void);
   #define acs_map (_nc_acs_map())
-#endif 
+#endif
 
 static void curs_bad_state_error (const char *funcname)
 {
@@ -105,10 +115,27 @@ gucu_getmouse ()
     {
       s_me = SCM_BOOL_F;
     }
-  
+
   return s_me;
 }
 
+#ifdef HAVE_GRANTPT
+/* If FD is the file descriptor of a master pseudo-terminal, this
+   changes the mode and permissions of the slave pseudo-terminal
+   so that it can be used.  */
+SCM
+gucu_grantpt (SCM fd)
+{
+  int c_fd;
+  int ret;
+  SCM_ASSERT (scm_is_integer (fd), fd, SCM_ARG1, "grantpt");
+  ret = grantpt (scm_to_int (fd));
+  if (ret == -1)
+    scm_syserror ("grantpt");
+
+  return SCM_UNSPECIFIED;
+}
+#endif
 
 SCM
 gucu_mousemask (SCM x)
@@ -129,14 +156,62 @@ gucu_pair_content (SCM s_pair)
   ret = pair_content(scm_to_short (s_pair), &c_fore, &c_back);
   if (ret == OK)
     {
-      s_list = scm_list_2 (scm_from_short (c_fore), 
+      s_list = scm_list_2 (scm_from_short (c_fore),
 			   scm_from_short (c_back));
     }
   else
-    scm_misc_error ("pair-content", "Out of range or not initialized", 
+    scm_misc_error ("pair-content", "Out of range or not initialized",
 		    SCM_BOOL_F);
 
-  return s_list; 
+  return s_list;
+}
+
+#ifdef HAVE_PTSNAME
+/* If FD, a file descriptor, is a master pseudo-terminal device, this
+   returns a string that contains the name of the slave
+   pseudo-terminal device.  */
+SCM
+gucu_ptsname (SCM fd)
+{
+  int c_fd;
+  char *name;
+
+  SCM_ASSERT (scm_is_integer (fd), fd, SCM_ARG1, "ptsname");
+
+  c_fd = scm_to_int (fd);
+  name = ptsname (c_fd);
+  if (name == NULL)
+    return SCM_BOOL_F;
+
+  return scm_from_locale_string (name);
+}
+#endif
+
+/* IF FD is a file descriptor of a pseudo-terminal device,
+   this sets that pseudoterminal to RAW mode. */
+SCM
+gucu_ptsmakeraw (SCM fd)
+{
+  int c_fd;
+  int ret;
+  struct termios terminal_attributes;
+
+  SCM_ASSERT (scm_is_integer (fd), fd, SCM_ARG1, "ptsmakeraw");
+
+  c_fd = scm_to_int (fd);
+  ret = tcgetattr (c_fd, &terminal_attributes);
+  if (ret == -1)
+    scm_syserror ("ptsmakeraw");
+  terminal_attributes.c_iflag &= ~(IGNBRK|BRKINT|PARMRK|ISTRIP
+				   |INLCR|IGNCR|ICRNL|IXON);
+  terminal_attributes.c_oflag &= ~OPOST;
+  terminal_attributes.c_lflag &= ~(ECHO|ECHONL|ICANON|ISIG|IEXTEN);
+  terminal_attributes.c_cflag &= ~(CSIZE|PARENB);
+  terminal_attributes.c_cflag |= CS8;
+  ret = tcsetattr (c_fd, TCSANOW, &terminal_attributes);
+  if (ret == -1)
+    scm_syserror ("ptsmakeraw");
+  return SCM_UNDEFINED;
 }
 
 #if 0
@@ -174,6 +249,24 @@ gucu_ungetmouse (SCM event)
   return (scm_from_int (ret));
 }
 
+#ifdef HAVE_UNLOCKPT
+/* If FD is the file descriptor of a master pseudo-terminal, this
+   changes the mode and permissions of the slave pseudo-terminal
+   so that it can be used.  */
+SCM
+gucu_unlockpt (SCM fd)
+{
+  int c_fd;
+  int ret;
+  SCM_ASSERT (scm_is_integer (fd), fd, SCM_ARG1, "unlockpt");
+  ret = unlockpt (scm_to_int (fd));
+  if (ret == -1)
+    scm_syserror ("unlockpt");
+
+  return SCM_UNSPECIFIED;
+}
+#endif
+
 /* Get the attributes and color pair number of a window */
 SCM
 gucu_wattr_get (SCM win)
@@ -183,7 +276,7 @@ gucu_wattr_get (SCM win)
   short c_pair;
   SCM s_list;
   int ret;
-  
+
   SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "%wattr-get");
 
   c_win = _scm_to_window (win);
@@ -804,7 +897,7 @@ gucu_curscr ()
 
   return s_ret;
 }
-  
+
 void
 gucu_init_special ()
 {
@@ -812,9 +905,19 @@ gucu_init_special ()
   scm_c_define_gsubr ("color-content", 1, 0, 0, gucu_color_content);
   scm_c_define_gsubr ("delwin", 1, 0, 0, gucu_delwin);
   scm_c_define_gsubr ("getmouse", 0, 0, 0, gucu_getmouse);
+#ifdef HAVE_GRANTPT
+  scm_c_define_gsubr ("grantpt", 1, 0, 0, gucu_grantpt);
+#endif
   scm_c_define_gsubr ("mousemask", 1, 0, 0, gucu_mousemask);
+#ifdef HAVE_PTSNAME
+  scm_c_define_gsubr ("ptsname", 1, 0, 0, gucu_ptsname);
+#endif
+  scm_c_define_gsubr ("ptsmakeraw", 1, 0, 0, gucu_ptsmakeraw);
   scm_c_define_gsubr ("pair-content", 1, 0, 0, gucu_pair_content);
   scm_c_define_gsubr ("ungetmouse", 1, 0, 0, gucu_ungetmouse);
+#ifdef HAVE_UNLOCKPT
+  scm_c_define_gsubr ("unlockpt", 1, 0, 0, gucu_unlockpt);
+#endif
   scm_c_define_gsubr ("%wattr-get", 1, 0, 0, gucu_wattr_get);
   scm_c_define_gsubr ("%wgetnstr", 2, 0, 0, gucu_wgetnstr);
   scm_c_define_gsubr ("%winchnstr", 2, 0, 0, gucu_winchnstr);

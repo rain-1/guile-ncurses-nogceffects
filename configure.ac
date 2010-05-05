@@ -142,7 +142,7 @@ AC_CHECK_SIZEOF([wint_t], ,[#include <wchar.h>])
 
 ##################
 # Check for C library functions
-AC_CHECK_FUNCS([cfmakeraw fopencookie])
+AC_CHECK_FUNCS([cfmakeraw fopencookie ptsname grantpt unlockpt])
 
 # Check for ncurses library functions
 ax_save_LIBS="$LIBS"
