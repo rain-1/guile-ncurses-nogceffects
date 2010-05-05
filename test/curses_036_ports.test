@@ -53,32 +53,33 @@
 
        ;;(pass-if "getch"
        ;;         (not (not (getch win))))
-       )
+       ))
+    (display "No newterm function in this configuration\n"))
 
-      (with-test-prefix
-       "set-term"
-       (pass-if "switch"
-                (set! scr2 (newterm "xterm" output-port input-port))
-                (set-term scr2)
-                (set! win2 (stdscr))
-                (and
-                 (screen? scr2)
-                 (window? win2)
-                 (not (eq? win win2))))
+(with-test-prefix
+ "set-term"
+ (pass-if "switch"
+	  (set! scr2 (newterm "xterm" output-port input-port))
+	  (set-term scr2)
+	  (set! win2 (stdscr))
+	  (and
+	   (screen? scr2)
+	   (window? win2)
+	   (not (eq? win win2))))
 
-       ;; Should be false because it should not be possible to restore
-       ;; the "shell mode" of a port
-       (pass-if "endwin"
-                (let* ((x1 (endwin))
-                       (x2 (window? win2)))
-                  (and (not x1) x2)))
+ ;; Should be false because it should not be possible to restore
+ ;; the "shell mode" of a port
+ (pass-if "endwin"
+	  (let* ((x1 (endwin))
+		 (x2 (window? win2)))
+	    (and (not x1) x2)))
 
-       (pass-if "delscreen"
-                (not (not (false-if-exception (delscreen scr2))))))
+ (pass-if "delscreen"
+	  (not (not (false-if-exception (delscreen scr2))))))
 
-      (endwin)
-      (close input-port)
-      (delete-file tmpl)))
+(endwin)
+(close input-port)
+(delete-file tmpl)
 
 
 (curses-test-end test "curses_036_ports.out")
