@@ -1,5 +1,5 @@
-#!/usr/bin/guile \
--e main -s
+#!/bin/sh
+GUILE_AUTO_COMPILE=0 exec guile -e main -s $0 "$@"
 !#
 ;;; gucu-keyboard-test -- examine the raw keycodes returned when keys
 ;;; are pressed
