@@ -213,7 +213,7 @@ gucu_wgetnstr (SCM win, SCM n)
   if (c_n <= 0)
     scm_out_of_range ("%wgetnstr", n);
 
-#ifdef HAVE_LIBNCURSESW
+#ifdef HAVE_NCURSESW
   {
     wint_t *c_wstr = (wint_t *) scm_malloc (sizeof (wint_t) * (c_n + 1));
 
@@ -271,7 +271,7 @@ gucu_winchnstr (SCM win, SCM n)
   if (c_n == -1)
     c_n = COLS;
 
-#ifdef HAVE_LIBNCURSESW
+#ifdef HAVE_NCURSESW
   {
     int ret;
     cchar_t *c_cstr = (cchar_t *) scm_malloc (sizeof (cchar_t) * (c_n + 1));
@@ -319,7 +319,7 @@ gucu_winnstr (SCM win, SCM n)
       getmaxyx (_scm_to_window (win), y, x);
       c_n = x;
     }
-#ifdef HAVE_LIBNCURSESW
+#ifdef HAVE_NCURSESW
   {
     wchar_t *c_wstr;
     c_wstr = (wchar_t *) scm_malloc (sizeof (wchar_t) * (c_n + 1));

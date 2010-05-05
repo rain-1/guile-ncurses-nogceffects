@@ -34,15 +34,15 @@ int is_unix98_pty (const char *);
 int is_bsd_pty (const char *);
 int is_cygwin_pty (const char *);
 
-#ifdef HAVE_LIBNCURSESW
-const int _HAVE_LIBNCURSESW = TRUE;
+#ifdef HAVE_NCURSESW
+const int _HAVE_NCURSESW = TRUE;
 #else
-const int _HAVE_LIBNCURSESW = FALSE;
+const int _HAVE_NCURSESW = FALSE;
 #endif
 
 /* This function checks if NAME looks like a Unix98 pseudo-terminal
    device name, aka "/dev/pts/XXX".  Returns TRUE or FALSE. */
-int 
+int
 is_unix98_pty (const char *name)
 {
   const char unix_pty_root[] = "/dev/pts/";
@@ -50,7 +50,7 @@ is_unix98_pty (const char *name)
   size_t name_length = strlen (name);
   char const *slave_name;
   size_t i;
-  
+
 
   name_length = strlen (name);
 

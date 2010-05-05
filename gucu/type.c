@@ -15,7 +15,7 @@
 #include "gucuconfig.h"
 
 /* The maximum number of characters in a complex character */
-#ifdef HAVE_LIBNCURSESW
+#ifdef HAVE_NCURSESW
 #define GUCU_CCHARW_MAX (CCHARW_MAX)
 #else
 #define GUCU_CCHARW_MAX (5)
@@ -95,7 +95,7 @@ _scm_is_xchar (SCM x)
   return 1;
 }
 
-#ifdef HAVE_LIBNCURSESW
+#ifdef HAVE_NCURSESW
 /* Converts a wide NCurses complex character structure to a GuCu
    complex character */
 SCM
@@ -237,7 +237,7 @@ _scm_schar_from_wchar (wchar_t ch)
 #endif
 }
 
-#ifdef HAVE_LIBNCURSESW
+#ifdef HAVE_NCURSESW
 /* Converts a GuCu complex character to a wide NCurses complex character */
 cchar_t *
 _scm_xchar_to_cchar (SCM x)
@@ -464,7 +464,7 @@ _scm_is_xstring (SCM x)
   return 1;
 }
 
-#ifdef HAVE_LIBNCURSESW
+#ifdef HAVE_NCURSESW
 SCM
 _scm_sstring_from_wint_string (const wint_t *x)
 {
@@ -490,7 +490,7 @@ _scm_sstring_from_wint_string (const wint_t *x)
 }
 #endif
 
-#ifdef HAVE_LIBNCURSESW
+#ifdef HAVE_NCURSESW
 SCM
 _scm_sstring_from_wstring (const wchar_t *x)
 {
@@ -565,7 +565,7 @@ _scm_xstring_from_chstring (const chtype *x)
 }
 
 
-#ifdef HAVE_LIBNCURSESW
+#ifdef HAVE_NCURSESW
 SCM
 _scm_xstring_from_cstring (const cchar_t *x)
 {
@@ -666,7 +666,7 @@ _scm_xstring_to_chstring (SCM x)
   return chstring;
 }
 
-#ifdef HAVE_LIBNCURSESW
+#ifdef HAVE_NCURSESW
 cchar_t *
 _scm_xstring_to_cstring (SCM x)
 {

@@ -114,7 +114,7 @@ gucu_bkgd (SCM win, SCM ch)
 
   c_win = _scm_to_window (win);
 
-#ifdef HAVE_LIBNCURSESW
+#ifdef HAVE_NCURSESW
   {
     cchar_t *c_ch = _scm_xchar_to_cchar (ch);
     ret = wbkgrnd (c_win, c_ch);
@@ -143,7 +143,7 @@ gucu_bkgdset_x (SCM win, SCM ch)
 
   c_win = _scm_to_window (win);
 
-#ifdef HAVE_LIBNCURSESW
+#ifdef HAVE_NCURSESW
   {
     cchar_t *c_ch = _scm_xchar_to_cchar (ch);
     wbkgrndset (c_win, c_ch);
@@ -154,7 +154,7 @@ gucu_bkgdset_x (SCM win, SCM ch)
   {
     chtype c_ch;
     c_ch = _scm_xchar_to_chtype (ch);
-    
+
     wbkgdset (c_win, c_ch);
   }
 #endif
@@ -163,7 +163,7 @@ gucu_bkgdset_x (SCM win, SCM ch)
 }
 
 SCM
-gucu_border (SCM win, SCM left, SCM right, SCM top, SCM bottom, 
+gucu_border (SCM win, SCM left, SCM right, SCM top, SCM bottom,
              SCM topleft, SCM topright, SCM bottomleft, SCM bottomright)
 {
   WINDOW *c_win;
@@ -181,7 +181,7 @@ gucu_border (SCM win, SCM left, SCM right, SCM top, SCM bottom,
 
   c_win = _scm_to_window (win);
 
-#ifdef HAVE_LIBNCURSESW
+#ifdef HAVE_NCURSESW
   {
     cchar_t *c_left, *c_right, *c_top, *c_bottom;
     cchar_t *c_topleft, *c_topright, *c_bottomleft, *c_bottomright;
@@ -612,7 +612,7 @@ gucu_erase (SCM win)
   int ret;
 
   SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "erase");
-  
+
   c_win = _scm_to_window (win);
 
   ret = werase (c_win);
@@ -623,7 +623,7 @@ gucu_erase (SCM win)
 SCM
 gucu_erasechar ()
 {
-#ifdef HAVE_LIBNCURSESW
+#ifdef HAVE_NCURSESW
   {
     wchar_t ch;
     int ret = erasewchar (&ch);
@@ -674,7 +674,7 @@ gucu_getbkgd (SCM win)
   SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "getbkgd");
 
   c_win = _scm_to_window (win);
-#ifdef HAVE_LIBNCURSESW
+#ifdef HAVE_NCURSESW
   {
     cchar_t ch;
     int ret = wgetbkgrnd (c_win, &ch);
@@ -982,7 +982,7 @@ gucu_keyname (SCM ch)
       c_key = scm_to_int (ch);
       ret = keyname (c_key);
     }
-#ifdef HAVE_LIBNCURSESW
+#ifdef HAVE_NCURSESW
   else
     {
       wchar_t c_ch = _scm_schar_to_wchar (ch);
@@ -1024,7 +1024,7 @@ gucu_keypad_x (SCM win, SCM bf)
 SCM
 gucu_killchar ()
 {
-#ifdef HAVE_LIBNCURSESW
+#ifdef HAVE_NCURSESW
   wchar_t ch;
   int ret = killwchar (&ch);
   if (ret == ERR)
@@ -1427,7 +1427,7 @@ gucu_pechochar (SCM pad, SCM ch)
   c_pad = _scm_to_window (pad);
   if (!(c_pad->_flags & _ISPAD))
     scm_misc_error ("%pechochar", "not a pad", scm_list_1 (pad));
-#ifdef HAVE_LIBNCURSESW
+#ifdef HAVE_NCURSESW
   {
     cchar_t *c_ch = _scm_xchar_to_cchar (ch);
 
@@ -1900,7 +1900,7 @@ gucu_ungetch (SCM ch)
 {
   int ret;
 
-#ifdef HAVE_LIBNCURSESW
+#ifdef HAVE_NCURSESW
   {
     if (SCM_CHARP (ch))
       {
@@ -1984,7 +1984,7 @@ gucu_waddch (SCM win, SCM ch)
   SCM_ASSERT (_scm_is_xchar (ch), ch, SCM_ARG2, "%waddch");
 
   c_win = _scm_to_window (win);
-#ifdef HAVE_LIBNCURSESW
+#ifdef HAVE_NCURSESW
   {
     cchar_t *c_ch = _scm_xchar_to_cchar (ch);
     ret = wadd_wch (c_win, c_ch);
@@ -2016,7 +2016,7 @@ gucu_waddchnstr (SCM win, SCM chstr, SCM n)
   c_win = _scm_to_window (win);
   c_n = scm_to_int (n);
 
-#ifdef HAVE_LIBNCURSESW
+#ifdef HAVE_NCURSESW
   {
     cchar_t *c_str = _scm_xstring_to_cstring (chstr);
     ret = wadd_wchnstr (c_win, c_str, c_n);
@@ -2046,7 +2046,7 @@ gucu_waddnstr (SCM win, SCM str, SCM n)
 
   c_win = _scm_to_window (win);
   c_n = scm_to_int (n);
-#ifdef HAVE_LIBNCURSESW
+#ifdef HAVE_NCURSESW
   {
     wchar_t *c_str = _scm_sstring_to_wstring (str);
     ret = waddnwstr (c_win, c_str, c_n);
@@ -2059,7 +2059,7 @@ gucu_waddnstr (SCM win, SCM str, SCM n)
     free (c_str);
   }
 #endif
-  
+
   RETURNTF(ret);
 }
 
@@ -2139,7 +2139,7 @@ gucu_wechochar (SCM win, SCM ch)
   SCM_ASSERT (_scm_is_xchar (ch), ch, SCM_ARG2, "%echochar");
 
   c_win = _scm_to_window (win);
-#ifdef HAVE_LIBNCURSESW
+#ifdef HAVE_NCURSESW
   {
     cchar_t *c_ch;
     c_ch = _scm_xchar_to_cchar (ch);
@@ -2191,12 +2191,12 @@ gucu_wgetch (SCM win)
 
   c_win = _scm_to_window (win);
 
-#ifdef HAVE_LIBNCURSESW
+#ifdef HAVE_NCURSESW
   {
     wint_t wch = 0;
     uint32_t cp;
     ret = wget_wch (_scm_to_window (win), &wch);
-    
+
     if (ret == OK)
       {
 	return _scm_schar_from_wchar (wch);
@@ -2229,7 +2229,7 @@ gucu_whline (SCM win, SCM ch, SCM n)
 {
   WINDOW *c_win;
   int c_n, ret;
-    
+
   SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "%whline");
   SCM_ASSERT (_scm_is_xchar (ch), ch, SCM_ARG2, "%whline");
   SCM_ASSERT (scm_is_integer (n), n, SCM_ARG3, "%whline");
@@ -2237,7 +2237,7 @@ gucu_whline (SCM win, SCM ch, SCM n)
   c_win = _scm_to_window (win);
   c_n = scm_to_int (n);
 
-#ifdef HAVE_LIBNCURSESW
+#ifdef HAVE_NCURSESW
   {
     cchar_t *c_ch;
     c_ch = _scm_xchar_to_cchar (ch);
@@ -2253,11 +2253,11 @@ gucu_whline (SCM win, SCM ch, SCM n)
 #endif
   if (ret == ERR)
     curs_bad_state_error ("%whline");
-  
+
   return SCM_UNSPECIFIED;
 }
 
-/* Return the character at the cursor position in the given window */ 
+/* Return the character at the cursor position in the given window */
 SCM
 gucu_winch (SCM win)
 {
@@ -2267,7 +2267,7 @@ gucu_winch (SCM win)
   SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "%winch");
 
   c_win = _scm_to_window (win);
-#ifdef HAVE_LIBNCURSESW
+#ifdef HAVE_NCURSESW
   {
     int ret;
     cchar_t c_ch;
@@ -2297,7 +2297,7 @@ gucu_winsch (SCM win, SCM ch)
   SCM_ASSERT (_scm_is_xchar (ch), ch, SCM_ARG2, "%winsch");
 
   c_win = _scm_to_window (win);
-#ifdef HAVE_LIBNCURSESW
+#ifdef HAVE_NCURSESW
   {
     cchar_t *c_ch = _scm_xchar_to_cchar (ch);
     ret = wins_wch (c_win, c_ch);
@@ -2349,7 +2349,7 @@ gucu_winsnstr (SCM win, SCM str, SCM n)
   c_win = _scm_to_window (win);
   c_n = scm_to_int (n);
 
-#ifdef HAVE_LIBNCURSESW
+#ifdef HAVE_NCURSESW
   {
     wchar_t *c_str = _scm_sstring_to_wstring (str);
     ret = wins_nwstr (c_win, c_str, c_n);
@@ -2476,7 +2476,7 @@ gucu_wvline (SCM win, SCM ch, SCM n)
 {
   WINDOW *c_win;
   int c_n, ret;
-    
+
   SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "%wvline");
   SCM_ASSERT (_scm_is_xchar (ch), ch, SCM_ARG2, "%wvline");
   SCM_ASSERT (scm_is_integer (n), n, SCM_ARG3, "%wvline");
@@ -2484,7 +2484,7 @@ gucu_wvline (SCM win, SCM ch, SCM n)
   c_win = _scm_to_window (win);
   c_n = scm_to_int (n);
 
-#ifdef HAVE_LIBNCURSESW
+#ifdef HAVE_NCURSESW
   {
     cchar_t *c_ch;
     c_ch = _scm_xchar_to_cchar (ch);
@@ -2495,20 +2495,20 @@ gucu_wvline (SCM win, SCM ch, SCM n)
   {
     chtype c_ch;
     c_ch = _scm_xchar_to_chtype (ch);
-    
+
     ret = wvline (c_win, c_ch, c_n);
   }
 #endif
   if (ret == ERR)
     curs_bad_state_error ("%wvline");
-  
+
   return SCM_UNSPECIFIED;
 }
 
-void 
+void
 gucu_init_function ()
 {
-  scm_c_define_gsubr ("assume-default-colors", 2, 0, 0, 
+  scm_c_define_gsubr ("assume-default-colors", 2, 0, 0,
 		      gucu_assume_default_colors);
   scm_c_define_gsubr ("attr-off!", 2, 0, 0, gucu_attr_off_x);
   scm_c_define_gsubr ("attr-on!", 2, 0, 0, gucu_attr_on_x);
@@ -2517,7 +2517,7 @@ gucu_init_function ()
   scm_c_define_gsubr ("%bkgd", 2, 0, 0, gucu_bkgd);
   scm_c_define_gsubr ("%bkgdset!", 2, 0, 0, gucu_bkgdset_x);
   scm_c_define_gsubr ("%border", 9, 0, 0, gucu_border);
-  scm_c_define_gsubr ("can-change-color?", 0, 0, 0, 
+  scm_c_define_gsubr ("can-change-color?", 0, 0, 0,
 		      gucu_can_change_color_p);
   scm_c_define_gsubr ("cbreak!", 0, 0, 0, gucu_cbreak);
   scm_c_define_gsubr ("clear", 1, 0, 0, gucu_clear);
