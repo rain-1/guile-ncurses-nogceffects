@@ -34,14 +34,15 @@ LT_INIT([dlopen disable-fast-install disable-static win32-dll])
 
 ##################
 # Initial guess of platform specific options
-case $host_os in
-cygwin*)
-	[force_tex_to_tex=yes] ;;
-*)
-	[force_tex_to_tex=no] ;;
-esac
 
-AM_CONDITIONAL([FORCE_TEX_TO_TEX], [test "$force_tex_to_tex" = yes])
+dnl case $host_os in
+dnl cygwin*)
+dnl 	[force_tex_to_tex=yes] ;;
+dnl *)
+dnl 	[force_tex_to_tex=no] ;;
+dnl esac
+
+dnl AM_CONDITIONAL([FORCE_TEX_TO_TEX], [test "$force_tex_to_tex" = yes])
 
 case $host_os in
 mingw* | cygwin* | os2* | pw32* | cegcc*)
