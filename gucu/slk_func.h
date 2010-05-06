@@ -19,6 +19,7 @@ GUCU_API SCM gucu_slk_restore (void);
 GUCU_API SCM gucu_slk_set (SCM arg1, SCM arg2, SCM arg3);
 GUCU_API SCM gucu_slk_touch (void);
 
+GUCU_API void gucu_slk_init_function (void);
 GUCU_LOCAL void gucu_slk_init_function (void);
 
 #endif
