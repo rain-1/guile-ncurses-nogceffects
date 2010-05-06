@@ -293,6 +293,29 @@ gc_free_form (SCM x)
 		     SCM_BOOL_F, SCM_BOOL_F);
     }
 
+  /* Release scheme objects from the guardians */
+  /* Detach the fields */
+  if (form->fields)
+    {
+      while (scm_is_true (scm_call_0 (form->fields_guard)))
+	;
+      form->fields = NULL;
+    }
+  if (form->win != NULL)
+    {
+      while (scm_is_true (scm_call_0 (form->win_guard)))
+	;
+      form->win = NULL;
+    }
+  if (form->sub != NULL)
+    {
+      while (scm_is_true (scm_call_0 (form->sub_guard)))
+	;
+      form->sub = NULL;
+    }
+
+  SCM_SET_SMOB_DATA (x, NULL);
+
   return 0;
 }
 
