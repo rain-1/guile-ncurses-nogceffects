@@ -83,7 +83,12 @@
               (addstr win (format #f "Long Terminal Name: ~a" c))
               (refresh win)
               (maybe-sleep 1)
-              (not (not (string= c "xterm" 0 4 0 4))))))
+              (not (not (string= c "xterm" 
+				 0 
+				 (min (string-length c)
+				      (string-length "xterm"))
+				 0 
+				 (string-length "xterm")))))))
 
  (pass-if "termname"
           (begin
