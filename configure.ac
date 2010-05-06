@@ -148,7 +148,7 @@ AC_CHECK_FUNCS([cfmakeraw fopencookie ptsname grantpt unlockpt])
 # Check for ncurses library functions
 ax_save_LIBS="$LIBS"
 LIBS="$ax_save_LIBS $CURSES_LIB"
-AC_CHECK_FUNCS([key_defined term_attrs])
+AC_CHECK_FUNCS([key_defined term_attrs set_tabsize])
 LIBS="$ax_save_LIBS"
 
 # Later something should be done with this

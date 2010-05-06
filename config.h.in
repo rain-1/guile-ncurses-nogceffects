@@ -45,6 +45,9 @@
 /* Define to 1 if you have the <pty.h> header file. */
 #undef HAVE_PTY_H
 
+/* Define to 1 if you have the `set_tabsize' function. */
+#undef HAVE_SET_TABSIZE
+
 /* Define to 1 if you have the <stdint.h> header file. */
 #undef HAVE_STDINT_H
 

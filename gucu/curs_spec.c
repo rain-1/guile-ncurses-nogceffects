@@ -873,7 +873,12 @@ gucu_set_TABSIZE (SCM t)
 {
   SCM_ASSERT (scm_is_integer (t), t, SCM_ARG1, "set-tabsize!");
 
+#ifdef HAVE_SET_TABSIZE
+  set_tabsize (scm_to_int (t));
+#else
   TABSIZE = scm_to_int (t);
+#endif
+
   return SCM_UNSPECIFIED;
 }
 
