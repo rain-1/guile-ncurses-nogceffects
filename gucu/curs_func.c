@@ -1,6 +1,7 @@
 #include <config.h>
 #include <curses.h>
 #include <libguile.h>
+#include <string.h>
 
 #include "curs_func.h"
 #include "type.h"
@@ -1081,6 +1082,11 @@ gucu_longname ()
   SCM s_ret;
 
   ret = longname ();
+
+  /* Longname can return an empty string. */
+  if (strlen (ret) == 0)
+    return gucu_termname ();
+
   s_ret = scm_from_locale_string (ret);
 
   /* No need to free static string returned by longname */
