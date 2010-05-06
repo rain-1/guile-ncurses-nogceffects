@@ -1,0 +1,17 @@
+
+My current cygwin box is
+CYGWIN_NT-6.1 1.7.5 on i686 with Guile 1.8.2 and NCurses 5.7.x
+
+On my box, to get it to build, I used the following:
+
+> CPPFLAGS="-I/usr/include/ncurses" ./configure --without-ncursesw
+> make
+
+Even though Cygwin includes the wide versions of ncurses, the narrow
+one must be used, because the GuCu uses the libunistring library
+to deal with Unicode.  Libunistring is not currently part of the
+Cygwin distro.
+
+Until Cygwin moves to Guile 2.0.x, the wide version of Unicode isn't 
+going to be of any benefit anyway, since Guile 1.8.x uses only 8-bit 
+characters.

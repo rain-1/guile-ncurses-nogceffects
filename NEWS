@@ -1,5 +1,11 @@
 The NEWS file for Guile Curses
 
+Release 0.7
+- rename set-field-type to set-field-type!
+- return build system to a more traditional autotools build
+- support NCURSES_OPAQUE
+- better Cygwin 1.7.1 support
+
 Release 0.6
 
 - Make the SLK functions work.
