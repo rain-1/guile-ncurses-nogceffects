@@ -908,8 +908,12 @@ _scm_from_window (WINDOW * x)
 
   if (0)
     {
+#ifdef NCURSES_OPAQUE
+      fprintf (stderr, "Making smob from window\n");
+#else
       fprintf (stderr, "Making smob from window at %d, %d\n",
 	       x->_begx, x->_begy);
+#endif
     }
 
   return (s_win);

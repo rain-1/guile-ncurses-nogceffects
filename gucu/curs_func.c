@@ -544,12 +544,20 @@ gucu_derwin (SCM orig, SCM nlines, SCM ncols, SCM begin_y, SCM begin_x)
     scm_out_of_range ("derwin", begin_x);
   if (c_nlines < 0)
     scm_out_of_range ("derwin", nlines);
+
+  /* FIXME: add test to see if windows is a complete type.  */
+#ifndef NCURSES_OPAQUE
   if (c_begin_y + c_nlines > c_orig->_maxy + 1)
     scm_out_of_range ("derwin", nlines);
+#endif
+
   if (c_ncols < 0)
     scm_out_of_range ("derwin", ncols);
+
+#ifndef NCURSES_OPAQUE
   if (c_begin_x + c_ncols > c_orig->_maxx + 1)
     scm_out_of_range ("derwin", ncols);
+#endif
 
   ret = derwin (c_orig, c_nlines, c_ncols, c_begin_y, c_begin_x);
   if (ret == 0)
@@ -1154,10 +1162,13 @@ gucu_mvderwin (SCM win, SCM par_y, SCM par_x)
     scm_out_of_range ("mvderwin", par_x);
   if (c_par_y < 0)
     scm_out_of_range ("mvderwin", par_y);
+
+#ifndef NCURSES_OPAQUE
   if (c_par_x + getmaxx (c_win) > getmaxx (c_win->_parent))
     scm_out_of_range ("mvderwin", par_x);
   if (c_par_y + getmaxy (c_win) > getmaxy (c_win->_parent))
     scm_out_of_range ("mvderwin", par_y);
+#endif
 
   ret = mvderwin (c_win, c_par_y, c_par_x);
   if (ret == ERR)
@@ -1431,8 +1442,12 @@ gucu_pechochar (SCM pad, SCM ch)
   SCM_ASSERT (_scm_is_xchar (ch), ch, SCM_ARG2, "%pechochar");
 
   c_pad = _scm_to_window (pad);
+
+#ifndef NCURSES_OPAQUE
   if (!(c_pad->_flags & _ISPAD))
     scm_misc_error ("%pechochar", "not a pad", scm_list_1 (pad));
+#endif
+
 #ifdef HAVE_NCURSESW
   {
     cchar_t *c_ch = _scm_xchar_to_cchar (ch);
@@ -2466,8 +2481,11 @@ gucu_wtouchln (SCM win, SCM y, SCM n, SCM touched)
 
   if (c_n < 0)
     scm_out_of_range ("%wtouchln", n);
+
+#ifndef NCURSES_OPAQUE
   if (c_y < 0 || c_y > c_win->_maxy)
     scm_out_of_range ("%wtouchln", y);
+#endif
 
   ret = wtouchln (c_win, c_y, c_n, c_touched);
   if (ret == ERR)
