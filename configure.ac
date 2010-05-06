@@ -3,7 +3,7 @@
 ##################
 # Package info
 AC_PREREQ(2.59)
-AC_INIT([gucu],[0.6],[spk121@yahoo.com])
+AC_INIT([gucu],[0.7],[spk121@yahoo.com])
 AC_CONFIG_AUX_DIR([build_aux])
 AM_INIT_AUTOMAKE([gnu std-options -Wall])
 AC_CONFIG_SRCDIR([config.h.in])
@@ -13,7 +13,7 @@ AC_CONFIG_MACRO_DIR([m4])
 ##################
 # Set some version constants
 LIBGUILE_GUCU_CURSES_MAJOR=0
-LIBGUILE_GUCU_CURSES_INTERFACE="4:0:0"
+LIBGUILE_GUCU_CURSES_INTERFACE="5:0:0"
 AC_SUBST(LIBGUILE_GUCU_CURSES_MAJOR)
 AC_SUBST(LIBGUILE_GUCU_CURSES_INTERFACE)
 
