@@ -281,7 +281,7 @@ gc_free_form (SCM x)
   if (retval == E_BAD_ARGUMENT)
     {
       scm_error_scm (SCM_BOOL_F,
-		     scm_from_locale_string ("garbace collection of form"),
+		     scm_from_locale_string ("garbage collection of form"),
 		     scm_from_locale_string ("bad argument"),
 		     SCM_BOOL_F, SCM_BOOL_F);
     }
