@@ -76,7 +76,7 @@ AM_CONDITIONAL([WIDE], [test "$ax_cv_ncursesw" = yes])
 
 
 # Check for the menu, panel, and form libraries
-if test "$ax_cv_ncursesw" = no
+if test "$ax_cv_ncursesw" != "yes"
 then
   AC_CHECK_LIB([menu], [new_menu],
                [MENU_LIB="-lmenu"],
