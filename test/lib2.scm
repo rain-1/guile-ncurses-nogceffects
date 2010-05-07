@@ -6,6 +6,8 @@
            maybe-sleep
            *sleep*))
 
+(define *sleep* #f)
+
 (define (curses-test-start)
   (let ((count-reporter (make-count-reporter))
 	(out-string (open-output-string)))
@@ -15,7 +17,8 @@
 	  out-string)))
 
 (define (maybe-sleep n)
-  (if (getenv "GUCU_VERBOSE_TEST")
+  (if (or *sleep* 
+	  (getenv "GUCU_VERBOSE_TEST"))
       (sleep n)))
 
 ;; Exit the test.  If an error was detected, save an error

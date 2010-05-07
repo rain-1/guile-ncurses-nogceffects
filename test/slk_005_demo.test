@@ -9,7 +9,7 @@
 
 (define test (curses-test-start))
 
-(set! *sleep* #t)
+(set! *sleep* #f)
 
 (slk-init 1)
 (define win (initscr))
