@@ -4794,7 +4794,7 @@ state'' error.
 @end deffn
 
 
-@deffn Procedure meta! win bf
+@deffn Procedure meta! bf
 @cindex 7-bit characters
 @cindex 8-bit characters
 
@@ -4803,15 +4803,15 @@ and not the wide version, it operates on 8-bit characters.
 
 Initially, whether the terminal returns 7 or 8 significant bits on
 input depends on the control mode of the tty driver.  To force 8 bits
-to be returned, invoke @code{(meta! win #t)}.  This is equivalent,
+to be returned, invoke @code{(meta! #t)}.  This is equivalent,
 under POSIX, to setting the CS8 flag on the terminal.  To force 7 bits
-to be returned, invoke @code{(meta! win #f)}.  This is equivalent,
+to be returned, invoke @code{(meta! #f)}.  This is equivalent,
 under POSIX, to setting the CS7 flag on the terminal.  The window
 argument, @var{win}, is always ignored. If the terminfo capabilities
 @code{smm} (@code{meta-on}) and @code{rmm} (@code{meta-off}) are
 defined for the terminal.  The code for @code{smm} is sent to the
-terminal when @code{(meta! win #t)} is called and @code{rmm} is sent
-when @code{(meta! win #f)} is called.
+terminal when @code{(meta! #t)} is called and @code{rmm} is sent
+when @code{(meta! #f)} is called.
 
 The return value is unspecified.
 @end deffn
