@@ -884,7 +884,7 @@ gucu_intrflush (SCM bf)
   bool c_bf;
   int ret;
 
-  SCM_ASSERT (scm_is_bool (bf), bf, SCM_ARG2, "intrflush!");
+  SCM_ASSERT (scm_is_bool (bf), bf, SCM_ARG1, "intrflush!");
 
   c_bf = scm_to_bool (bf);
 
@@ -2586,7 +2586,7 @@ gucu_init_function ()
   scm_c_define_gsubr ("initscr", 0, 0, 0, gucu_initscr);
   scm_c_define_gsubr ("init-color!", 4, 0, 0, gucu_init_color);
   scm_c_define_gsubr ("init-pair!", 3, 0, 0, gucu_init_pair);
-  scm_c_define_gsubr ("intrflush!", 2, 0, 0, gucu_intrflush);
+  scm_c_define_gsubr ("intrflush!", 1, 0, 0, gucu_intrflush);
   scm_c_define_gsubr ("isendwin?", 0, 0, 0, gucu_isendwin_p);
   scm_c_define_gsubr ("is-linetouched?", 2, 0, 0, gucu_is_linetouched_p);
   scm_c_define_gsubr ("is-wintouched?", 1, 0, 0, gucu_is_wintouched_p);
