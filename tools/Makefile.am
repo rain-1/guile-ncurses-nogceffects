@@ -19,4 +19,4 @@ endif
 
 LDADD = @CURSES_LIB@ -lutil @GUILE_LDFLAGS@
 
-EXTRA_DIST = uninstalled-env.in gucu-keyboard-test gucu-vi
+EXTRA_DIST = uninstalled-env.in gucu-keyboard-test
