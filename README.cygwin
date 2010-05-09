@@ -1,17 +1,50 @@
-
-My current cygwin box is
+This build has been tested on
 CYGWIN_NT-6.1 1.7.5 on i686 with Guile 1.8.2 and NCurses 5.7.x
 
-On my box, to get it to build, I used the following:
+There are some special things to watch out for when building on cygwin
 
-> CPPFLAGS="-I/usr/include/ncurses" ./configure --without-ncursesw
-> make
+1. The location of ncurses header files
 
-Even though Cygwin includes the wide versions of ncurses, the narrow
-one must be used, because the GuCu uses the libunistring library
-to deal with Unicode.  Libunistring is not currently part of the
-Cygwin distro.
+   My Cygwin box has the ncurses.h header files installed in an
+   unusual location: /usr/include/ncurses/ncurses.h
 
-Until Cygwin moves to Guile 2.0.x, the wide version of Unicode isn't 
-going to be of any benefit anyway, since Guile 1.8.x uses only 8-bit 
-characters.
+   To get it to build, I had to put that path in my CPPFLAGS
+
+   One can do that by invoking configure like this...
+
+   > CPPFLAGS="-I/usr/include/ncurses" ./configure
+
+2. Lack of libunistring
+
+  Even though Cygwin includes the wide versions of ncurses, the narrow
+  one must be used if the libunistring library is not available.  GuCu
+  uses libunistring to convert locale characters to Ncurses wide
+  characters.  Libunistring is not currently part of the Cygwin
+  distro.
+
+  Until Cygwin moves to Guile 2.0.x, the wide version of Unicode isn't
+  going to be of any benefit anyway, since Guile 1.8.x uses only 8-bit
+  characters.
+
+  To avoid using wide ncurses, invoke configure like this...
+
+  > ./configure --without-ncursesw
+
+3. The mysterious error "texinfo.tex appears to be broken, quitting"
+
+  This problem seems to be fixed now, but, it used to crop up all
+  the time when building on Cygwin.
+
+  Cygwin's texi2dvi can try to call etex, resulting in this error:
+  "texinfo.tex appears to be broken, quitting"
+  The problem lies in Cygwin's etex.fmt file
+
+  You can work around this problem by making sure that "tex" and
+  not "etex" is called.
+
+  That could be accomplished by setting the TEX and TEX2DVI envirnoment
+  flags
+
+  TEX=tex
+  TEXI2DVI="TEX=tex texi2dvi"
+
