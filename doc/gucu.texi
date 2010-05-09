@@ -3226,6 +3226,13 @@ If errors occur, @code{initscr} throws and error and exits; otherwise,
 a @code{#<window>} referencing @code{stdscr} is returned.
 @end deffn
 
+@deffn Procedure cols
+@deffnx Procedure lines
+
+These procedures, if called after @code{initscr} has been called,
+will return the size of the screen at the time initscr was called.
+@end deffn
+
 @tindex #<screen>
 @vindex $TERM
 @tindex #<file>
@@ -5872,7 +5879,7 @@ Calling @code{newwin} creates and returns a pointer to a new window
 with the given number of lines and columns.  The upper left-hand
 corner of the window is at line @var{begin-y}, column @var{begin-x}.
 If either @var{nlines} or @var{ncols} is zero, they default to
-@code{(- (LINES) begin-y)} and @code{(- (COLS) begin-x)}.  A new
+@code{(- (lines) begin-y)} and @code{(- (cols) begin-x)}.  A new
 full-screen window is created by calling @code{(newwin 0 0 0 0)}.
 
 @end deffn
