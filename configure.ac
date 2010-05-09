@@ -11,10 +11,8 @@ AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_MACRO_DIR([m4])
 
 ##################
-# Set some version constants
-LIBGUILE_GUCU_CURSES_MAJOR=0
+# Set the library libtool version constant
 LIBGUILE_GUCU_CURSES_INTERFACE="5:0:0"
-AC_SUBST(LIBGUILE_GUCU_CURSES_MAJOR)
 AC_SUBST(LIBGUILE_GUCU_CURSES_INTERFACE)
 
 ##################
