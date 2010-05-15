@@ -1,17 +1,13 @@
-
-#include <libguile.h>
-#include <curses.h>
-#include <menu.h>
 #include <config.h>
+#include <curses.h>
+#include <libguile.h>
+#include <libintl.h>
+#include <menu.h>
 
-#include "menu_func.h"
-#include "type.h"
-#include "menu_type.h"
 #include "compat.h"
-
-#define _GNU_SOURCE
-#define cstring_t cchar_t
-
+#include "menu_func.h"
+#include "menu_type.h"
+#include "type.h"
 
 static void
 menu_posted_error (const char *funcname)

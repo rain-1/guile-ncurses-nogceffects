@@ -1,10 +1,9 @@
 #include <libguile.h>
 #include <menu.h>
 
-#include "menu_const.h"
 #include "compat.h"
+#include "menu_const.h"
 
-#define _GNU_SOURCE
 SCM gucu_REQ_LEFT_ITEM;
 SCM gucu_REQ_RIGHT_ITEM;
 SCM gucu_REQ_UP_ITEM;

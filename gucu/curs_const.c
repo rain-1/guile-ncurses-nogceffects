@@ -2,12 +2,11 @@
 #include <libguile.h>
 #include <wchar.h>
 
-#include "curs_const.h"
-#include "type.h"
 #include "compat.h"
+#include "curs_const.h"
 #include "gucuconfig.h"
+#include "type.h"
 
-#define _GNU_SOURCE
 SCM gucu_EOF;
 SCM gucu_ERR;
 SCM gucu_FALSE;

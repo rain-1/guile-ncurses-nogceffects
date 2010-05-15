@@ -1,16 +1,15 @@
-#define _GNU_SOURCE
 #include <assert.h>
+#include <config.h>
 #include <curses.h>
 #include <libguile.h>
+#include <libintl.h>
 #include <panel.h>
 #include <stdio.h>
 #include <string.h>
 
-#include <config.h>
-
-#include "type.h"
-#include "panel_type.h"
 #include "compat.h"
+#include "panel_type.h"
+#include "type.h"
 
 scm_t_bits panel_tag;
 

@@ -1,15 +1,13 @@
-
 #include <curses.h>
-#include <libguile.h>
 #include <form.h>
+#include <libguile.h>
 #include <wchar.h>
 
-#include "form_const.h"
-#include "type.h"
-#include "form_type.h"
 #include "compat.h"
+#include "form_const.h"
+#include "form_type.h"
+#include "type.h"
 
-#define _GNU_SOURCE
 SCM gucu_NO_JUSTIFICATION;
 SCM gucu_JUSTIFY_LEFT;
 SCM gucu_JUSTIFY_CENTER;

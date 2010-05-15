@@ -1,6 +1,7 @@
 #define _XOPEN_SOURCE
 #include <curses.h>
 #include <libguile.h>
+#include <libintl.h>
 #include <stdlib.h>
 #include <termios.h>
 
@@ -11,9 +12,9 @@
 
 #include <unistr.h>
 
-#include "type.h"
-#include "curs_spec.h"
 #include "compat.h"
+#include "curs_spec.h"
+#include "type.h"
 
 #define MAXLEN 1000
 
@@ -25,7 +26,7 @@ _nc_acs_map (void);
 #define acs_map (_nc_acs_map())
 #endif
 
-     static void curs_bad_state_error (const char *funcname)
+static void curs_bad_state_error (const char *funcname)
 {
   scm_misc_error (funcname, "Bad curses internal state", SCM_BOOL_F);
 }

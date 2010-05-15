@@ -1,15 +1,13 @@
-#include <libguile.h>
+#include <config.h>
 #include <curses.h>
 #include <form.h>
-#include <config.h>
+#include <libguile.h>
+#include <libintl.h>
 
-#include "form_func.h"
-#include "type.h"
-#include "form_type.h"
 #include "compat.h"
-
-#define _GNU_SOURCE
-#define cstring_t cchar_t
+#include "form_func.h"
+#include "form_type.h"
+#include "type.h"
 
 extern scm_t_bits form_tag;
 extern scm_t_bits field_tag;

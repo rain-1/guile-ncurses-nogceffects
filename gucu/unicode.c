@@ -1,10 +1,12 @@
 #include <config.h>
+
 #include "unicode.h"
 #include "gucuconfig.h"
 
 #ifdef GUILE_CHARS_ARE_UCS4
 #include <assert.h>
 #include <langinfo.h>
+#include <libintl.h>
 #include <stddef.h>
 #include <stdint.h>
 #include <stdlib.h>

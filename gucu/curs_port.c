@@ -1,5 +1,4 @@
 #define _LARGEFILE64_SOURCE
-#define _GNU_SOURCE
 
 #include <config.h>
 

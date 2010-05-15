@@ -1,12 +1,11 @@
 #include <curses.h>
-#include <libguile.h>
 #include <form.h>
+#include <libguile.h>
 #include <menu.h>
 
-#include "eti_const.h"
 #include "compat.h"
+#include "eti_const.h"
 
-#define _GNU_SOURCE
 SCM gucu_E_OK;
 SCM gucu_E_SYSTEM_ERROR;
 SCM gucu_E_BAD_ARGUMENT;

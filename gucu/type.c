@@ -1,18 +1,17 @@
-#define _GNU_SOURCE
 #include <assert.h>
+#include <config.h>
 #include <curses.h>
 #include <errno.h>
 #include <libguile.h>
+#include <libintl.h>
 #include <limits.h>
 #include <stdio.h>
 #include <string.h>
 
-#include <config.h>
-
-#include "type.h"
-#include "unicode.h"
 #include "compat.h"
 #include "gucuconfig.h"
+#include "type.h"
+#include "unicode.h"
 
 /* The maximum number of characters in a complex character */
 #ifdef HAVE_NCURSESW

@@ -1,8 +1,8 @@
-#define _GNU_SOURCE
 #include <assert.h>
 #include <curses.h>
 #include <errno.h>
 #include <libguile.h>
+#include <libintl.h>
 #include <form.h>
 #include <stdio.h>
 #include <string.h>

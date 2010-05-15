@@ -1,12 +1,13 @@
 #include <config.h>
 #include <curses.h>
 #include <libguile.h>
+#include <libintl.h>
 #include <string.h>
 
+#include "compat.h"
 #include "curs_func.h"
 #include "type.h"
 #include "unicode.h"
-#include "compat.h"
 
 #define RETURNTF(x) \
   if(x==ERR) \

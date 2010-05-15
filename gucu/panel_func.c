@@ -1,16 +1,14 @@
 #include <assert.h>
-#include <libguile.h>
-#include <curses.h>
-#include <panel.h>
 #include <config.h>
+#include <curses.h>
+#include <libguile.h>
+#include <libintl.h>
+#include <panel.h>
 
-#include "panel_func.h"
-#include "type.h"
-#include "panel_type.h"
 #include "compat.h"
-
-#define _GNU_SOURCE
-#define cstring_t cchar_t
+#include "panel_func.h"
+#include "panel_type.h"
+#include "type.h"
 
 static SCM
 gucu_xxx_panel (SCM p, int (*func) (PANEL *), const char *funcname)

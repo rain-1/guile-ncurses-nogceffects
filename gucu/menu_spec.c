@@ -1,13 +1,14 @@
+#include <config.h>
 #include <curses.h>
 #include <errno.h>
 #include <libguile.h>
-#include <config.h>
+#include <libintl.h>
 #include <menu.h>
 
-#include "type.h"
-#include "menu_type.h"
-#include "menu_spec.h"
 #include "compat.h"
+#include "menu_spec.h"
+#include "menu_type.h"
+#include "type.h"
 
 
 // Return the minimum size of a window necessary to contain the MENU
