@@ -11,7 +11,7 @@
 #include "curs_port.h"
 #include "compat.h"
 
-#if defined(HAVE_FOPENCOOKIE) && defined(HAVE_OFF64_T)
+#if defined HAVE_FOPENCOOKIE && defined HAVE_OFF64_T
 
 #define PORT_ERR (-1)
 #define PORT_OK (0)
@@ -275,7 +275,7 @@ gucu_init_port ()
 
   if (first)
     {
-#if defined(HAVE_FOPENCOOKIE) && defined(HAVE_OFF64_T)
+#if defined HAVE_FOPENCOOKIE && defined HAVE_OFF64_T
       port_funcs.read = port_read;
       port_funcs.write = port_write;
       port_funcs.seek = port_seek;
