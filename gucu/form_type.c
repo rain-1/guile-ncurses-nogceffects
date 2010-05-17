@@ -1,19 +1,19 @@
+#include <config.h>
+
 #include <assert.h>
 #include <curses.h>
 #include <errno.h>
-#include <libguile.h>
-#include <libintl.h>
 #include <form.h>
+#include <libguile.h>
 #include <stdio.h>
 #include <string.h>
 
-#include <config.h>
-
-#include "type.h"
+#include "compat.h"
 #include "form_func.h"
 #include "form_type.h"
-#include "compat.h"
+#include "gettext.h"
 #include "gucuconfig.h"
+#include "type.h"
 
 scm_t_bits form_tag;
 scm_t_bits field_tag;

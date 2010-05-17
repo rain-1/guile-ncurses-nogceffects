@@ -1,3 +1,5 @@
+#include <config.h>
+
 #include <libguile.h>
 #include <menu.h>
 

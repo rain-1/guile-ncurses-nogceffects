@@ -1,10 +1,11 @@
-#include <libguile.h>
-#include <curses.h>
 #include <config.h>
 
+#include <curses.h>
+#include <libguile.h>
+
+#include "compat.h"
 #include "slk_func.h"
 #include "type.h"
-#include "compat.h"
 
 #define RETURNTF(x) \
   if(x==ERR) \

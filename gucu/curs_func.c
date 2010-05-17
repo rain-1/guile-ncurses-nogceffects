@@ -1,11 +1,12 @@
 #include <config.h>
+
 #include <curses.h>
 #include <libguile.h>
-#include <libintl.h>
 #include <string.h>
 
 #include "compat.h"
 #include "curs_func.h"
+#include "gettext.h"
 #include "type.h"
 #include "unicode.h"
 

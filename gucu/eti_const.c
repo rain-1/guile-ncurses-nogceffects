@@ -1,3 +1,5 @@
+#include <config.h>
+
 #include <curses.h>
 #include <form.h>
 #include <libguile.h>

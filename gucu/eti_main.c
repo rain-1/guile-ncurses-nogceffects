@@ -1,4 +1,5 @@
 #include <config.h>
+
 #include "eti_const.h"
 #include "visibility.h"
 

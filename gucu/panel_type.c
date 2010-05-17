@@ -1,15 +1,18 @@
-#include <assert.h>
 #include <config.h>
+
+#include <assert.h>
 #include <curses.h>
 #include <libguile.h>
-#include <libintl.h>
 #include <panel.h>
 #include <stdio.h>
 #include <string.h>
 
 #include "compat.h"
+#include "gettext.h"
 #include "panel_type.h"
 #include "type.h"
+
+#define _(STRING) gettext (STRING)
 
 scm_t_bits panel_tag;
 

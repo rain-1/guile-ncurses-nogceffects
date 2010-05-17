@@ -1,13 +1,14 @@
 #ifndef TYPE_H
 #define TYPE_H 1
 
+#include <config.h>
+
 #include <curses.h>
 #include <libguile.h>
 #include <stddef.h>
 #include <stdio.h>
 #include <wchar.h>
 
-#include <config.h>
 #include "visibility.h"
 
 /*****************************************************************************/

@@ -1,5 +1,6 @@
-#include <assert.h>
 #include <config.h>
+
+#include <assert.h>
 #include <curses.h>
 #include <libguile.h>
 #include <libintl.h>

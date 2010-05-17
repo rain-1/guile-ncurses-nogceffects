@@ -1,8 +1,10 @@
 #ifndef CURS_PORT_H
 #define CURS_PORT_H 1
 
-#include <libguile.h>
 #include <config.h>
+
+#include <libguile.h>
+
 #include "visibility.h"
 
 #ifdef HAVE_FOPENCOOKIE

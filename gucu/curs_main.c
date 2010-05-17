@@ -1,6 +1,9 @@
-#include <libguile.h>
-#include <curses.h>
 #include <config.h>
+
+#include <curses.h>
+#include <libguile.h>
+#include <libintl.h>
+
 #include "curs_const.h"
 #include "curs_func.h"
 #include "curs_port.h"

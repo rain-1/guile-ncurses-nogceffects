@@ -1,4 +1,5 @@
 #include <config.h>
+
 #include <curses.h>
 #include <errno.h>
 #include <libguile.h>

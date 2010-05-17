@@ -2,6 +2,7 @@
 
 #include "unicode.h"
 #include "gucuconfig.h"
+#include "gettext.h"
 
 #ifdef GUILE_CHARS_ARE_UCS4
 #include <assert.h>

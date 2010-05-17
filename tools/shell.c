@@ -1,6 +1,9 @@
 #define _XOPEN_SOURCE
 #include <config.h>
 
+#include <libintl.h>
+#include <locale.h>
+
 /* libc and libutil */
 #include <ctype.h>
 #include <locale.h>

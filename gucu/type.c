@@ -1,14 +1,15 @@
-#include <assert.h>
 #include <config.h>
+
+#include <assert.h>
 #include <curses.h>
 #include <errno.h>
 #include <libguile.h>
-#include <libintl.h>
 #include <limits.h>
 #include <stdio.h>
 #include <string.h>
 
 #include "compat.h"
+#include "gettext.h"
 #include "gucuconfig.h"
 #include "type.h"
 #include "unicode.h"

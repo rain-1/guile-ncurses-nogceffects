@@ -1,10 +1,12 @@
+#include <config.h>
+
 #include <curses.h>
 #include <libguile.h>
-#include <config.h>
 #include <panel.h>
-#include "type.h"
-#include "panel_type.h"
+
 #include "panel_spec.h"
+#include "panel_type.h"
+#include "type.h"
 
 /* This won't work because of the guardians */
 #if 0

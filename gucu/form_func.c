@@ -2,11 +2,11 @@
 #include <curses.h>
 #include <form.h>
 #include <libguile.h>
-#include <libintl.h>
 
 #include "compat.h"
 #include "form_func.h"
 #include "form_type.h"
+#include "gettext.h"
 #include "type.h"
 
 extern scm_t_bits form_tag;

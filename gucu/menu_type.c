@@ -1,16 +1,16 @@
+#include <config.h>
+
 #include <assert.h>
 #include <errno.h>
 #include <libguile.h>
-#include <libintl.h>
 #include <menu.h>
 #include <stdio.h>
 #include <string.h>
 
-#include <config.h>
-
-#include "type.h"
-#include "menu_type.h"
 #include "compat.h"
+#include "gettext.h"
+#include "menu_type.h"
+#include "type.h"
 
 scm_t_bits menu_tag;
 scm_t_bits item_tag;

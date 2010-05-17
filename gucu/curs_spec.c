@@ -1,3 +1,5 @@
+#include <config.h>
+
 #define _XOPEN_SOURCE
 #include <curses.h>
 #include <libguile.h>

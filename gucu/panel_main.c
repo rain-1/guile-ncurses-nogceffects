@@ -1,4 +1,5 @@
 #include <config.h>
+
 #include "panel_func.h"
 #include "panel_spec.h"
 #include "panel_type.h"

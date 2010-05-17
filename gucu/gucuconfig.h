@@ -1,8 +1,9 @@
 #ifndef GUCUCONFIG_H
 #define GUCUCONFIG_H
 
+#include <config.h>
+
 #include <libguile.h>
-#include "config.h"
 
 /* Macros that describe the features of this build of GuCu.  */
 #ifdef HAVE___ATTRIBUTE__

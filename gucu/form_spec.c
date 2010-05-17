@@ -1,13 +1,14 @@
-#include <curses.h>
-#include <libguile.h>
 #include <config.h>
+
+#include <curses.h>
 #include <errno.h>
 #include <form.h>
+#include <libguile.h>
 
-#include "form_type.h"
+#include "compat.h"
 #include "form_func.h"
 #include "form_spec.h"
-#include "compat.h"
+#include "form_type.h"
 
 // Create a copy of FIELD with a different TOPROW and LEFTCOL
 SCM
