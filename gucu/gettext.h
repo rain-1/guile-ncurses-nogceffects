@@ -1,5 +1,5 @@
 /* Convenience header for conditional use of GNU <libintl.h>.
-   Copyright (C) 1995-1998, 2000-2002, 2004-2006 Free Software Foundation, Inc.
+   Copyright (C) 1995-1998, 2000-2002, 2004-2006, 2010 Free Software Foundation, Inc.
 
    This program is free software; you can redistribute it and/or modify it
    under the terms of the GNU General Public License as published
@@ -45,14 +45,14 @@
    as well because people using "gettext.h" will not include <libintl.h>,
    and also including <libintl.h> would fail on SunOS 4, whereas <locale.h>
    is OK.  */
-#if defined(__sun)
+#ifdef __sun
 # include <locale.h>
 #endif
 
 /* Many header files from the libstdc++ coming with g++ 3.3 or newer include
    <libintl.h>, which chokes if dcgettext is defined as a macro.  So include
    it now, to make later inclusions of <libintl.h> a NOP.  */
-#if defined(__cplusplus) && defined(__GNUG__) && (__GNUC__ >= 3)
+#if defined __cplusplus && defined __GNUG__  &&  (__GNUC__ >= 3)
 # include <cstdlib>
 # if (__GLIBC__ >= 2) || _GLIBCXX_HAVE_LIBINTL_H
 #  include <libintl.h>
