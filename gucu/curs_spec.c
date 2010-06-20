@@ -871,19 +871,17 @@ gucu_TABSIZE ()
   return s_ret;
 }
 
+#ifdef HAVE_SET_TABSIZE
 SCM
 gucu_set_TABSIZE (SCM t)
 {
   SCM_ASSERT (scm_is_integer (t), t, SCM_ARG1, "set-tabsize!");
 
-#ifdef HAVE_SET_TABSIZE
   set_tabsize (scm_to_int (t));
-#else
-  TABSIZE = scm_to_int (t);
-#endif
 
   return SCM_UNSPECIFIED;
 }
+#endif
 
 SCM
 gucu_stdscr ()
@@ -974,7 +972,9 @@ gucu_init_special ()
   scm_c_define_gsubr ("colors", 0, 0, 0, gucu_COLORS);
   scm_c_define_gsubr ("color-pairs", 0, 0, 0, gucu_COLOR_PAIRS);
   scm_c_define_gsubr ("tabsize", 0, 0, 0, gucu_TABSIZE);
+#ifdef HAVE_SET_TABSIZE
   scm_c_define_gsubr ("set-tabsize!", 1, 0, 0, gucu_set_TABSIZE);
+#endif
   scm_c_define_gsubr ("stdscr", 0, 0, 0, gucu_stdscr);
   scm_c_define_gsubr ("curscr", 0, 0, 0, gucu_curscr);
 }
