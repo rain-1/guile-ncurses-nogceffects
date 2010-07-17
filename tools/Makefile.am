@@ -6,7 +6,7 @@ endif
 
 bin_PROGRAMS = gucushell
 gucushell_SOURCES = shell.c
-AM_CPPFLAGS = $(GUILE_CFLAGS)
+AM_CPPFLAGS = $(GUILE_CFLAGS) -I $(top_builddir)/lib
 if WARN
 AM_CPPFLAGS += 	-Wall -Wextra -Wstrict-prototypes			\
 -Wmissing-prototypes -Wpointer-arith -Wreturn-type -Wcast-qual		\
@@ -17,6 +17,6 @@ if WIDE
 AM_CPPFLAGS += -D_XOPEN_SOURCE_EXTENDED
 endif
 
-LDADD = @CURSES_LIB@ -lutil @GUILE_LDFLAGS@
+LDADD = $(CURSES_LIB) -lutil $(GUILE_LDFLAGS) $(top_builddir)/lib/libgnu.a
 
 EXTRA_DIST = uninstalled-env.in gucu-keyboard-test

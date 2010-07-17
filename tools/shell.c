@@ -32,6 +32,8 @@
 #include <curses.h>    /* all: newterm; */
 #include <libguile.h>  /* all: scm_shell; */
 
+#include "progname.h"
+
 int open_terminal (char *, int, int);
 int is_unix98_pty (const char *);
 int is_bsd_pty (const char *);
@@ -233,6 +235,8 @@ inner_main (void *data, int argc, char **argv)
   int i;
 
   setlocale (LC_ALL, "");
+
+  set_program_name (argv[0]);
 
   /* The command line arguments are going to be passed down to Guile,
      but, we need to check here for --version and --help. */
