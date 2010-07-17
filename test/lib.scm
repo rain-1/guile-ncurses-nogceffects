@@ -1,28 +1,29 @@
 ;;;; test-suite/lib.scm --- generic support for testing
-;;;; Copyright (C) 1999, 2000, 2001, 2004, 2006, 2007 Free Software Foundation, Inc.
+;;;; Copyright (C) 1999, 2000, 2001, 2004, 2006, 2007, 2009, 2010 Free Software Foundation, Inc.
 ;;;;
-;;;; This program is free software; you can redistribute it and/or modify
-;;;; it under the terms of the GNU General Public License as published by
-;;;; the Free Software Foundation; either version 2, or (at your option)
-;;;; any later version.
+;;;; This program is free software; you can redistribute it and/or
+;;;; modify it under the terms of the GNU Lesser General Public
+;;;; License as published by the Free Software Foundation; either
+;;;; version 3, or (at your option) any later version.
 ;;;;
 ;;;; This program is distributed in the hope that it will be useful,
 ;;;; but WITHOUT ANY WARRANTY; without even the implied warranty of
 ;;;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-;;;; GNU General Public License for more details.
+;;;; GNU Lesser General Public License for more details.
 ;;;;
-;;;; You should have received a copy of the GNU General Public License
-;;;; along with this software; see the file COPYING.  If not, write to
-;;;; the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
-;;;; Boston, MA 02110-1301 USA
+;;;; You should have received a copy of the GNU Lesser General Public
+;;;; License along with this software; see the file COPYING.LESSER.
+;;;; If not, write to the Free Software Foundation, Inc., 51 Franklin
+;;;; Street, Fifth Floor, Boston, MA 02110-1301 USA
 
-(define-module (test lib)
+(define-module (test-suite lib)
   :use-module (ice-9 stack-catch)
   :use-module (ice-9 regex)
-  :use-module (srfi srfi-1)
+  :autoload   (srfi srfi-1)  (append-map)
   :export (
 
  ;; Exceptions which are commonly being tested for.
+ exception:syntax-pattern-unmatched
  exception:bad-variable
  exception:missing-expression
  exception:out-of-range exception:unbound-var
@@ -31,8 +32,12 @@
  exception:numerical-overflow
  exception:struct-set!-denied
  exception:system-error
+ exception:encoding-error
  exception:miscellaneous-error
  exception:string-contains-nul
+ exception:read-error
+ exception:null-pointer-error
+ exception:vm-error
 
  ;; Reporting passes and failures.
  run-test
@@ -42,6 +47,12 @@
  ;; Naming groups of tests in a regular fashion.
  with-test-prefix with-test-prefix* current-test-prefix
  format-test-name
+
+ ;; Using the debugging evaluator.
+ with-debugging-evaluator with-debugging-evaluator*
+
+ ;; Using a given locale
+ with-locale with-locale* with-latin1-locale with-latin1-locale*
 
  ;; Reporting results in various ways.
  register-reporter unregister-reporter reporter-registered?
@@ -241,6 +252,8 @@
 ;;;;
 
 ;;; Define some exceptions which are commonly being tested for.
+(define exception:syntax-pattern-unmatched
+  (cons 'syntax-error "source expression failed to match any pattern"))
 (define exception:bad-variable
   (cons 'syntax-error "Bad variable"))
 (define exception:missing-expression
@@ -261,8 +274,16 @@
   (cons 'misc-error "^set! denied for field"))
 (define exception:system-error
   (cons 'system-error ".*"))
+(define exception:encoding-error
+  (cons 'encoding-error "(cannot convert to output locale|input locale conversion error)"))
 (define exception:miscellaneous-error
   (cons 'misc-error "^.*"))
+(define exception:read-error
+  (cons 'read-error "^.*$"))
+(define exception:null-pointer-error
+  (cons 'null-pointer-error "^.*$"))
+(define exception:vm-error
+  (cons 'vm-error "^.*$"))
 
 ;; as per throw in scm_to_locale_stringn()
 (define exception:string-contains-nul
@@ -315,20 +336,24 @@
   (set! run-test local-run-test))
 
 ;;; A short form for tests that are expected to pass, taken from Greg.
-(defmacro pass-if (name . rest)
-  (if (and (null? rest) (pair? name))
-      ;; presume this is a simple test, i.e. (pass-if (even? 2))
-      ;; where the body should also be the name.
-      `(run-test ',name #t (lambda () ,name))
-      `(run-test ,name #t (lambda () ,@rest))))
+(define-syntax pass-if
+  (syntax-rules ()
+    ((_ name)
+     ;; presume this is a simple test, i.e. (pass-if (even? 2))
+     ;; where the body should also be the name.
+     (run-test 'name #t (lambda () name)))
+    ((_ name rest ...)
+     (run-test name #t (lambda () rest ...)))))
 
 ;;; A short form for tests that are expected to fail, taken from Greg.
-(defmacro expect-fail (name . rest)
-  (if (and (null? rest) (pair? name))
-      ;; presume this is a simple test, i.e. (expect-fail (even? 2))
-      ;; where the body should also be the name.
-      `(run-test ',name #f (lambda () ,name))
-      `(run-test ,name #f (lambda () ,@rest))))
+(define-syntax expect-fail
+  (syntax-rules ()
+    ((_ name)
+     ;; presume this is a simple test, i.e. (expect-fail (even? 2))
+     ;; where the body should also be the name.
+     (run-test 'name #f (lambda () name)))
+    ((_ name rest ...)
+     (run-test name #f (lambda () rest ...)))))
 
 ;;; A helper function to implement the macros that test for exceptions.
 (define (run-test-exception name exception expect-pass thunk)
@@ -360,12 +385,16 @@
             (apply throw key proc message rest))))))))
 
 ;;; A short form for tests that expect a certain exception to be thrown.
-(defmacro pass-if-exception (name exception body . rest)
-  `(,run-test-exception ,name ,exception #t (lambda () ,body ,@rest)))
+(define-syntax pass-if-exception
+  (syntax-rules ()
+    ((_ name exception body rest ...)
+     (run-test-exception name exception #t (lambda () body rest ...)))))
 
 ;;; A short form for tests expected to fail to throw a certain exception.
-(defmacro expect-fail-exception (name exception body . rest)
-  `(,run-test-exception ,name ,exception #f (lambda () ,body ,@rest)))
+(define-syntax expect-fail-exception
+  (syntax-rules ()
+    ((_ name exception body rest ...)
+     (run-test-exception name exception #f (lambda () body rest ...)))))
 
 
 ;;;; TEST NAMES
@@ -373,15 +402,18 @@
 
 ;;;; Turn a test name into a nice human-readable string.
 (define (format-test-name name)
-  (call-with-output-string
-   (lambda (port)
-     (let loop ((name name)
-		(separator ""))
-       (if (pair? name)
-	   (begin
-	     (display separator port)
-	     (display (car name) port)
-	     (loop (cdr name) ": ")))))))
+  ;; Choose a Unicode-capable encoding so that the string port can contain any
+  ;; valid Unicode character.
+  (with-fluids ((%default-port-encoding "UTF-8"))
+    (call-with-output-string
+     (lambda (port)
+       (let loop ((name name)
+                  (separator ""))
+         (if (pair? name)
+             (begin
+               (display separator port)
+               (display (car name) port)
+               (loop (cdr name) ": "))))))))
 
 ;;;; For a given test-name, deliver the full name including all prefixes.
 (define (full-name name)
@@ -408,6 +440,71 @@
 ;;; BODY expression.
 (defmacro with-test-prefix (prefix . body)
   `(with-test-prefix* ,prefix (lambda () ,@body)))
+
+;;; Call THUNK using the debugging evaluator.
+(define (with-debugging-evaluator* thunk)
+  (let ((dopts #f))
+    (dynamic-wind
+	(lambda ()
+	  (set! dopts (debug-options))
+	  (debug-enable 'debug))
+	thunk
+	(lambda ()
+	  (debug-options dopts)))))
+
+;;; Evaluate BODY... using the debugging evaluator.
+(define-macro (with-debugging-evaluator . body)
+  `(with-debugging-evaluator* (lambda () ,@body)))
+
+;;; Call THUNK with a given locale
+(define (with-locale* nloc thunk)
+  (let ((loc #f))
+    (dynamic-wind
+	(lambda ()
+          (if (defined? 'setlocale)
+              (begin
+                (set! loc (false-if-exception (setlocale LC_ALL)))
+                (if (or (not loc)
+                        (not (false-if-exception (setlocale LC_ALL nloc))))
+                    (throw 'unresolved)))
+              (throw 'unresolved)))
+	thunk
+	(lambda ()
+          (if (and (defined? 'setlocale) loc)
+              (setlocale LC_ALL loc))))))
+
+;;; Evaluate BODY... using the given locale.
+(define-syntax with-locale
+  (syntax-rules ()
+    ((_ loc body ...)
+     (with-locale* loc (lambda () body ...)))))
+
+;;; Try out several ISO-8859-1 locales and run THUNK under the one that works
+;;; (if any).
+(define (with-latin1-locale* thunk)
+  (define %locales
+    (append-map (lambda (name)
+                  (list (string-append name ".ISO-8859-1")
+                        (string-append name ".iso88591")
+                        (string-append name ".ISO8859-1")))
+                '("ca_ES" "da_DK" "de_DE" "es_ES" "es_MX" "en_GB" "en_US"
+                  "fr_FR" "pt_PT" "nl_NL" "sv_SE")))
+
+  (let loop ((locales %locales))
+    (if (null? locales)
+        (throw 'unresolved)
+        (catch 'unresolved
+          (lambda ()
+            (with-locale* (car locales) thunk))
+          (lambda (key . args)
+            (loop (cdr locales)))))))
+
+;;; Evaluate BODY... using an ISO-8859-1 locale or throw `unresolved' if none
+;;; was found.
+(define-syntax with-latin1-locale
+  (syntax-rules ()
+    ((_ body ...)
+     (with-latin1-locale* (lambda () body ...)))))
 
 
 ;;;; REPORTERS
@@ -478,8 +575,7 @@
 	  (if (pair? args)
 	      (begin
 		(display " - arguments: " port)
-		(write args port)
-		))
+		(write args port)))
 	  (newline port))
 	(error "(test-suite lib) FULL-REPORTER: unrecognized result: "
 	       result))))
