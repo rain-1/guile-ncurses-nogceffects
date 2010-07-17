@@ -20,7 +20,7 @@ This manual is for Gucu, a Guile Curses library, (version
 Curses library, which provides functionality for updating character
 screens.
 
-Copyright @copyright{} 1998-2007 Free Software Foundation, Inc. @*
+Copyright @copyright{} 1998-2007,2010 Free Software Foundation, Inc. @*
 Copyright @copyright{} 2001-2005 Pradeep Padala @*
 Copyright @copyright{} 2007,2008,2009 Michael L. Gran
 
