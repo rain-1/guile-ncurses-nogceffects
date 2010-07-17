@@ -127,6 +127,14 @@ AC_CHECK_TYPE([off64_t],
               [#define _LARGEFILE64_SOURCE
                #include <unistd.h>
                ])
+AC_CHECK_TYPE([cookie_io_functions_t],
+              [AC_DEFINE([HAVE_COOKIE_IO_FUNCTIONS_T],
+                         [1],
+                         [Define if you are have the cookie_io_functions_t type])],
+              ,
+              [#define _GNU_SOURCE
+               #include <stdio.h>
+               ])
 AC_CHECK_SIZEOF([int])
 AC_CHECK_SIZEOF([long])
 AC_CHECK_SIZEOF([chtype], ,[#include <curses.h>])

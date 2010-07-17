@@ -3,6 +3,9 @@
 /* Define to 1 if you have the `cfmakeraw' function. */
 #undef HAVE_CFMAKERAW
 
+/* Define if you are have the cookie_io_functions_t type */
+#undef HAVE_COOKIE_IO_FUNCTIONS_T
+
 /* Define if you have curses.h */
 #undef HAVE_CURSES_H
 

@@ -1,4 +1,11 @@
+#if defined HAVE_FOPENCOOKIE && defined HAVE_COOKIE_IO_FUNCTIONS_T && defined HAVE_OFF64_T
+#define GUCU_USE_COOKIE
+#endif
+
+#ifdef GUCU_USE_COOKIE
+#define _GNU_SOURCE
 #define _LARGEFILE64_SOURCE
+#endif
 
 #include <config.h>
 
@@ -11,7 +18,7 @@
 #include "curs_port.h"
 #include "compat.h"
 
-#if defined HAVE_FOPENCOOKIE && defined HAVE_OFF64_T
+#ifdef GUCU_USE_COOKIE
 
 #define PORT_ERR (-1)
 #define PORT_OK (0)
@@ -169,8 +176,7 @@ gucu_getwin (SCM port)
   SCM_ASSERT (scm_is_true (scm_input_port_p (port)), port, SCM_ARG1,
 	      "getwin");
 
-  //ifdef HAVE_FOPENCOOKIE
-#if 0
+#ifdef GUCU_USE_COOKIE
   fp = fopencookie (&port, "rb", port_funcs);
 
   if (fp == NULL)
@@ -224,8 +230,7 @@ gucu_putwin (SCM win, SCM port)
 
   c_win = _scm_to_window (win);
 
-  //#ifdef HAVE_FOPENCOOKIE
-#if 0
+#ifdef GUCU_USE_COOKIE
   {
     char *debug_str;
     size_t debug_len;
@@ -275,7 +280,7 @@ gucu_init_port ()
 
   if (first)
     {
-#if defined HAVE_FOPENCOOKIE && defined HAVE_OFF64_T
+#ifdef GUCU_USE_COOKIE
       port_funcs.read = port_read;
       port_funcs.write = port_write;
       port_funcs.seek = port_seek;
