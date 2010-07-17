@@ -16,7 +16,7 @@
 ;;;; If not, write to the Free Software Foundation, Inc., 51 Franklin
 ;;;; Street, Fifth Floor, Boston, MA 02110-1301 USA
 
-(define-module (test-suite lib)
+(define-module (test lib)
   :use-module (ice-9 stack-catch)
   :use-module (ice-9 regex)
   :autoload   (srfi srfi-1)  (append-map)
@@ -289,6 +289,8 @@
 (define exception:string-contains-nul
   (cons 'misc-error "^string contains #\\\\nul character"))
 
+(if (not (defined? '%default-port-encoding))
+    (define %default-port-encoding (make-fluid)))
 
 ;;; Display all parameters to the default output port, followed by a newline.
 (define (display-line . objs)
@@ -336,24 +338,20 @@
   (set! run-test local-run-test))
 
 ;;; A short form for tests that are expected to pass, taken from Greg.
-(define-syntax pass-if
-  (syntax-rules ()
-    ((_ name)
-     ;; presume this is a simple test, i.e. (pass-if (even? 2))
-     ;; where the body should also be the name.
-     (run-test 'name #t (lambda () name)))
-    ((_ name rest ...)
-     (run-test name #t (lambda () rest ...)))))
+(defmacro pass-if (name . rest)
+  (if (and (null? rest) (pair? name))
+      ;; presume this is a simple test, i.e. (pass-if (even? 2))
+      ;; where the body should also be the name.
+      `(run-test ',name #t (lambda () ,name))
+      `(run-test ,name #t (lambda () ,@rest))))
 
 ;;; A short form for tests that are expected to fail, taken from Greg.
-(define-syntax expect-fail
-  (syntax-rules ()
-    ((_ name)
-     ;; presume this is a simple test, i.e. (expect-fail (even? 2))
-     ;; where the body should also be the name.
-     (run-test 'name #f (lambda () name)))
-    ((_ name rest ...)
-     (run-test name #f (lambda () rest ...)))))
+(defmacro expect-fail (name . rest)
+  (if (and (null? rest) (pair? name))
+      ;; presume this is a simple test, i.e. (expect-fail (even? 2))
+      ;; where the body should also be the name.
+      `(run-test ',name #f (lambda () ,name))
+      `(run-test ,name #f (lambda () ,@rest))))
 
 ;;; A helper function to implement the macros that test for exceptions.
 (define (run-test-exception name exception expect-pass thunk)
@@ -385,16 +383,12 @@
             (apply throw key proc message rest))))))))
 
 ;;; A short form for tests that expect a certain exception to be thrown.
-(define-syntax pass-if-exception
-  (syntax-rules ()
-    ((_ name exception body rest ...)
-     (run-test-exception name exception #t (lambda () body rest ...)))))
+(defmacro pass-if-exception (name exception body . rest)
+  `(,run-test-exception ,name ,exception #t (lambda () ,body ,@rest)))
 
 ;;; A short form for tests expected to fail to throw a certain exception.
-(define-syntax expect-fail-exception
-  (syntax-rules ()
-    ((_ name exception body rest ...)
-     (run-test-exception name exception #f (lambda () body rest ...)))))
+(defmacro expect-fail-exception (name exception body . rest)
+  `(,run-test-exception ,name ,exception #f (lambda () ,body ,@rest)))
 
 
 ;;;; TEST NAMES
@@ -473,12 +467,6 @@
           (if (and (defined? 'setlocale) loc)
               (setlocale LC_ALL loc))))))
 
-;;; Evaluate BODY... using the given locale.
-(define-syntax with-locale
-  (syntax-rules ()
-    ((_ loc body ...)
-     (with-locale* loc (lambda () body ...)))))
-
 ;;; Try out several ISO-8859-1 locales and run THUNK under the one that works
 ;;; (if any).
 (define (with-latin1-locale* thunk)
@@ -498,13 +486,6 @@
             (with-locale* (car locales) thunk))
           (lambda (key . args)
             (loop (cdr locales)))))))
-
-;;; Evaluate BODY... using an ISO-8859-1 locale or throw `unresolved' if none
-;;; was found.
-(define-syntax with-latin1-locale
-  (syntax-rules ()
-    ((_ body ...)
-     (with-latin1-locale* (lambda () body ...)))))
 
 
 ;;;; REPORTERS
