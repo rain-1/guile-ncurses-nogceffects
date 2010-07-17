@@ -4,4 +4,3 @@ SUBDIRS = gucu doc m4 build_aux tools test lib
 
 ACLOCAL_AMFLAGS = -I m4 --install
 EXTRA_DIST = AUTHORS INSTALL NEWS README README.cygwin COPYING
-

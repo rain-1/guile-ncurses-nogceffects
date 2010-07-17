@@ -13,9 +13,9 @@
 (define x_normal (normal #\x))
 (define x_bold (bold #\x))
 
-(with-test-prefix 
+(with-test-prefix
  "addch"
-		  
+
  (pass-if "addch"
 	  (begin
 	    (clear win)
@@ -25,7 +25,7 @@
 	    (move win 0 0)
 	    (let ((x2 (inch win)))
 	      (xchar-equal? x_normal x2))))
-                  
+
  (pass-if "addch #:y #:x"
 	  (begin
 	    (clear win)
@@ -41,8 +41,7 @@
 	    (echochar win x_normal)
 	    (let ((x2 (inch win #:y 2 #:x 0)))
 	      (xchar-equal? x_normal x2)))))
-			      
+
 (endwin)
 
 (curses-test-end test "curses_005_addch.out")
-

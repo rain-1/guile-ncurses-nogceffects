@@ -47,4 +47,3 @@ There are some special things to watch out for when building on cygwin
 
   TEX=tex
   TEXI2DVI="TEX=tex texi2dvi"
-

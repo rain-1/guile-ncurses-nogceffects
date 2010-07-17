@@ -32,4 +32,3 @@
 (endwin)
 
 (curses-test-end test "curses_029_refresh.out")
-

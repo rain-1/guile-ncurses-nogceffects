@@ -2,7 +2,7 @@
 ;; -*- Mode: scheme; -*-
 (define-module (gucu menu)
         #:use-module (gucu eti)
-	#:export ( 
+	#:export (
 		set-menu-fore!
 		menu-fore
 		set-menu-back!
@@ -103,4 +103,3 @@
 
         ))
 (load-extension "libguile-gucu" "gucu_menu_init")
-

@@ -35,4 +35,3 @@
 (endwin)
 
 (curses-test-end test "curses_030_scr_dump.out")
-

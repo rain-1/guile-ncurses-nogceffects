@@ -110,4 +110,3 @@ PATH="${top_srcdir}/tools:${PATH}"
 export PATH
 
 exec "$@"
-

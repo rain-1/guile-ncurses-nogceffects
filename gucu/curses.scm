@@ -877,4 +877,3 @@
 (if (defined? 'ptsraw)       (export ptsraw))
 (if (defined? 'ptsmakeraw)   (export ptsmakeraw))
 (if (defined? 'unlockpt)     (export unlockpt))
-

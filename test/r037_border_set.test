@@ -17,13 +17,13 @@
 (define win (initscr))
 
 ;; Should be able to draw borders
-(with-test-prefix 
+(with-test-prefix
  "border-set"
-		  
+
  (pass-if "border default (unicode)"
 	  (begin
 	    (clear win)
-	    (border win 
+	    (border win
                     (normal #\│) (normal #\│) (normal #\─) (normal #\─)
                     (normal #\┌) (normal #\┐) (normal #\└) (normal #\┘))
 	    (refresh win)
@@ -67,15 +67,15 @@
  (pass-if "border dashed (unicode)"
 	  (begin
 	    (clear win)
-	    (border win 
+	    (border win
 			(normal (integer->char #x2506)) ; dashed vert
 			(normal (integer->char #x2506)) ; dashed vert
 			(normal (integer->char #x2504)) ; dashed horiz
 			(normal (integer->char #x2504)) ; dashed horiz
-			(normal (integer->char #x250C)) 
-			(normal (integer->char #x2510)) 
-			(normal (integer->char #x2514)) 
-			(normal (integer->char #x2518))) 
+			(normal (integer->char #x250C))
+			(normal (integer->char #x2510))
+			(normal (integer->char #x2514))
+			(normal (integer->char #x2518)))
 	    (refresh win)
             (maybe-sleep 3)
 	    (let ((l  (inch win #:y 1 		#:x 0))
@@ -97,7 +97,7 @@
               (addstr win (format #f "~a" br) #:y 7 #:x 0)
               (refresh win)
               (maybe-sleep 3)
-              
+
  	      (and
  	       (equal? l (normal (integer->char #x2506)))
  	       (equal? r (normal (integer->char #x2506)))
@@ -120,7 +120,7 @@
 	      (and
 	       (equal? x1 (normal #\─))
 	       (equal? x2 (normal #\─))))))
- 
+
  (pass-if "vline (unicode)"
 	  (begin
 	    (clear win)
@@ -133,7 +133,7 @@
 	      (and
 	       (equal? x1 (normal #\━))
 	       (equal? x2 (normal #\━))))))
- 
+
  (pass-if "hline-set #:x #:y (unicode)"
 	  (begin
 	    (clear win)
@@ -163,4 +163,3 @@
 (endwin)
 
 (curses-test-end test "r037_border_set.out")
-

@@ -15,14 +15,14 @@ Release 0.5
 
 - A bug fix release.
 
-Release 0.4 
+Release 0.4
 
 - Abstracted away the difference between wide and narrow functions
 - Created a new xchar (rendered complex character) scheme type
   to replace the old complex char and chtype
 - Created new xchar creation functions, like (bold #\x) and (blink
   #\x)
-- Jiggled the naming conventions, adding exclamation points and 
+- Jiggled the naming conventions, adding exclamation points and
   question marks.
 - Tried to add some Guile 1.6.x and Guile 2.0.x compatibility
 - Changed the build system to no use recursive Makefiles
@@ -54,6 +54,3 @@ mode: text
 fill-column: 70
 mode: auto-fill
 End:
-
-
-

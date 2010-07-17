@@ -8,9 +8,9 @@
 
 (setlocale LC_ALL "")
 
-(with-test-prefix 
+(with-test-prefix
  "conversion"
-		  
+
  (pass-if "ascii x to #\\x"
 	  (eqv? (%scheme-char-from-c-char 120)
 		#\x))
@@ -20,4 +20,3 @@
 		#\x)))
 
 (curses-test-end test "curses_001_char_conversion.test")
-
