@@ -8,7 +8,7 @@ bin_PROGRAMS = gucushell
 gucushell_SOURCES = shell.c
 AM_CPPFLAGS = $(GUILE_CFLAGS) -I $(top_builddir)/lib
 if WARN
-AM_CPPFLAGS += 	-Wall -Wextra -Wstrict-prototypes			\
+AM_CPPFLAGS +=  -Wall -Wextra -Wstrict-prototypes			\
 -Wmissing-prototypes -Wpointer-arith -Wreturn-type -Wcast-qual		\
 -Wswitch -Wshadow -Wcast-align -Wwrite-strings -Wchar-subscripts	\
 -Winline -Wnested-externs -Wredundant-decls -Wunused -Wformat=2

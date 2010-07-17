@@ -1238,7 +1238,7 @@ newline is detected.  Have a look.
 One important thing to note is that in this program, @code{addch} is
 always passed a normal, un-bolded, character.  Note the line
 @example
-	  (addch stdscr (normal ch))
+          (addch stdscr (normal ch))
 @end example
 But yet, the character printed by @code{addch} may still appear as
 bold on the screen.  This is because the character attributes passed
@@ -2293,28 +2293,28 @@ A more complete editing loop might look like this
 (let loop ((ch (getch win)))
   (if (not (eqv? ch (key-f 1)))
       (begin
-	(cond
-	 ((eqv? ch KEY_DOWN)
-	  (begin
-	    ;; Go to the end of the next field
-	    (form-driver my-form REQ_NEXT_FIELD)
-	    (form-driver my-form REQ_END_LINE)))
-	 ((eqv? ch KEY_UP)
-	  (begin
-	    ;; Go to the end of the previous field
-	    (form-driver my-form REQ_PREV_FIELD)
-	    (form-driver my-form REQ_END_LINE)))
-	 ((eqv? ch KEY_LEFT)
-	  (form-driver my-form REQ_PREV_CHAR))
-	 ((eqv? ch KEY_RIGHT)
-	  (form-driver my-form REQ_NEXT_CHAR))
-	 ((eqv? ch KEY_DC)
-	  (form-driver my-form REQ_DEL_CHAR))
-	 ((eqv? ch KEY_BACKSPACE)
-	  (form-driver my-form REQ_DEL_PREV))
-	 (else
-	  (form-driver my-form ch)))
-	(loop (getch win)))))
+        (cond
+         ((eqv? ch KEY_DOWN)
+          (begin
+            ;; Go to the end of the next field
+            (form-driver my-form REQ_NEXT_FIELD)
+            (form-driver my-form REQ_END_LINE)))
+         ((eqv? ch KEY_UP)
+          (begin
+            ;; Go to the end of the previous field
+            (form-driver my-form REQ_PREV_FIELD)
+            (form-driver my-form REQ_END_LINE)))
+         ((eqv? ch KEY_LEFT)
+          (form-driver my-form REQ_PREV_CHAR))
+         ((eqv? ch KEY_RIGHT)
+          (form-driver my-form REQ_NEXT_CHAR))
+         ((eqv? ch KEY_DC)
+          (form-driver my-form REQ_DEL_CHAR))
+         ((eqv? ch KEY_BACKSPACE)
+          (form-driver my-form REQ_DEL_PREV))
+         (else
+          (form-driver my-form ch)))
+        (loop (getch win)))))
 @end example
 
 And, gathering the contents of the form can be accomplished like this:
@@ -2511,8 +2511,8 @@ password-like field where the characters are hidden from view.
 !#
 
 (use-modules (srfi srfi-1)
-	     (gucu curses)
-	     (gucu form))
+             (gucu curses)
+             (gucu form))
 
 ;; Constants
 (define STARTX 15)
@@ -2528,14 +2528,14 @@ password-like field where the characters are hidden from view.
 
 ;; Initialize the fields
 (define field (map-in-order
-	       (lambda (y)
-		 (new-field 1
-			    WIDTH
-			    (+ (* y 2) STARTY)
-			    STARTX
-			    0
-			    0))
-	       (iota N_FIELDS)))
+               (lambda (y)
+                 (new-field 1
+                            WIDTH
+                            (+ (* y 2) STARTY)
+                            STARTX
+                            0
+                            0))
+               (iota N_FIELDS)))
 
 ;; Set field options
 (set-field-back! (first field) A_UNDERLINE)
@@ -2565,22 +2565,22 @@ password-like field where the characters are hidden from view.
   (if (not (eqv? ch (key-f 1)))
       (cond
        ((eqv? ch KEY_DOWN)
-	(begin
-	  ;; Go to the end of the next field
-	  (form-driver my-form REQ_NEXT_FIELD)
-	  (form-driver my-form REQ_END_LINE)
-	  (loop (getch))))
+        (begin
+          ;; Go to the end of the next field
+          (form-driver my-form REQ_NEXT_FIELD)
+          (form-driver my-form REQ_END_LINE)
+          (loop (getch))))
        ((eqv? ch KEY_UP)
-	(begin
-	  ;; Go to the end of the previous field
-	  (form-driver my-form REQ_PREV_FIELD)
-	  (form-driver my-form REQ_END_LINE)
-	  (loop (getch))))
+        (begin
+          ;; Go to the end of the previous field
+          (form-driver my-form REQ_PREV_FIELD)
+          (form-driver my-form REQ_END_LINE)
+          (loop (getch))))
        (else
-	(begin
-	  ;; Print any normal character
-	  (form-driver my-form ch)
-	  (loop (getch)))))))
+        (begin
+          ;; Print any normal character
+          (form-driver my-form ch)
+          (loop (getch)))))))
 
 ;; Unpost the form
 (unpost-form my-form)
@@ -2660,8 +2660,8 @@ similar example.
 !#
 
 (use-modules (srfi srfi-1)
-	     (gucu curses)
-	     (gucu form))
+             (gucu curses)
+             (gucu form))
 
 ;; Helper procedure to center a text
 (define (print-in-middle win starty startx width str color)
@@ -2669,8 +2669,8 @@ similar example.
 
     (attr-on! win color)
     (addstr win str
-	    #:y starty
-	    #:x (+ startx (/ (- width length) 2)))
+            #:y starty
+            #:x (+ startx (/ (- width length) 2)))
 
     (attr-off! win color)
     (refresh)))
@@ -2687,8 +2687,8 @@ similar example.
 (init-pair! 1 COLOR_RED COLOR_BLACK)
 
 (define field (list
-	       (new-field 1 10 6 1 0 0)
-	       (new-field 1 10 8 1 0 0)))
+               (new-field 1 10 6 1 0 0)
+               (new-field 1 10 8 1 0 0)))
 
 ;; Set field options
 (set-field-back! (first field) A_UNDERLINE)
@@ -2707,9 +2707,9 @@ similar example.
 
 ;; Create the window to be associated with the form
 (define my-form-win (newwin (+ 4 rows)
-			    (+ 4 cols)
-			    4
-			    4))
+                            (+ 4 cols)
+                            4
+                            4))
 (keypad! my-form-win #t)
 
 ;; Set main window and subwindow
@@ -2724,7 +2724,7 @@ similar example.
 (refresh my-form-win)
 
 (addstr stdscr "Use UP, DOWN arrow keys to switch between fields"
-	#:y (- (lines) 2) #:x 0)
+        #:y (- (lines) 2) #:x 0)
 (refresh stdscr)
 
 ;; Loop through to get user requests
@@ -2732,22 +2732,22 @@ similar example.
   (if (not (eqv? ch (key-f 1)))
       (cond
        ((eqv? ch KEY_DOWN)
-	(begin
-	  ;; Go to the end of the next field
-	  (form-driver my-form REQ_NEXT_FIELD)
-	  (form-driver my-form REQ_END_LINE)
-	  (loop (getch my-form-win))))
+        (begin
+          ;; Go to the end of the next field
+          (form-driver my-form REQ_NEXT_FIELD)
+          (form-driver my-form REQ_END_LINE)
+          (loop (getch my-form-win))))
        ((eqv? ch KEY_UP)
-	(begin
-	  ;; Go to the end of the previous field
-	  (form-driver my-form REQ_PREV_FIELD)
-	  (form-driver my-form REQ_END_LINE)
-	  (loop (getch my-form-win))))
+        (begin
+          ;; Go to the end of the previous field
+          (form-driver my-form REQ_PREV_FIELD)
+          (form-driver my-form REQ_END_LINE)
+          (loop (getch my-form-win))))
        (else
-	(begin
-	  ;; Print any normal character
-	  (form-driver my-form ch)
-	  (loop (getch my-form-win)))))))
+        (begin
+          ;; Print any normal character
+          (form-driver my-form ch)
+          (loop (getch my-form-win)))))))
 
 ;; Unpost the form
 (unpost-form my-form)
@@ -3769,8 +3769,8 @@ A_REVERSE, A_STANDOUT, A_UNDERLINE, A_HORIZONTAL, A_LEFT, A_LOW,
 A_RIGHT, A_TOP, A_VERTICAL.
 
 @comment A_ALTCHARSET,  A_ATTRIBUTES
-@comment 	    A_CHARTEXT
-@comment	    A_COLOR
+@comment            A_CHARTEXT
+@comment            A_COLOR
 
 The following two calls are equivalent:
 @example
@@ -6749,7 +6749,7 @@ screen, and handle interaction with the user.
 
 @deffn Procedure pos-form-cursor form
 
-The function  @code{pos-form-cursor}  restores	the  cursor  to	 the  position
+The function  @code{pos-form-cursor}  restores	the  cursor  to          the  position
 required for the forms driver to continue processing requests.  This is
 useful after curses routines have been called to do screen-painting  in
 response to a form operation.
