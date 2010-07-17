@@ -136,7 +136,7 @@ gucu_panel_hidden_p (SCM panel)
   else if (ret == FALSE)
     return SCM_BOOL_F;
   else
-    scm_misc_error ("panel-hidden?", "Bad panel", SCM_BOOL_F);
+    scm_misc_error ("panel-hidden?", "bad panel", SCM_BOOL_F);
 }
 
 

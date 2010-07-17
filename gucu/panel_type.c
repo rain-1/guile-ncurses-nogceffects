@@ -197,7 +197,7 @@ gucu_new_panel (SCM win)
   gp->panel = new_panel (_scm_to_window (win));
   if (gp->panel == NULL)
     {
-      scm_misc_error ("new-panel", "Bad window", SCM_BOOL_F);
+      scm_misc_error ("new-panel", "bad window", SCM_BOOL_F);
     }
   gp->window = win;
 

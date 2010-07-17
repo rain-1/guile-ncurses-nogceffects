@@ -128,7 +128,7 @@ _scm_xchar_from_cchar (cchar_t * x)
   ret = getcchar (x, wch, &attr, &color_pair, NULL);
 
   if (ret == ERR)
-    scm_misc_error (NULL, "Error unpacking complex char", SCM_EOL);
+    scm_misc_error (NULL, "error unpacking complex char", SCM_EOL);
 
   /* Strip the color info from attr */
   attr &= A_ATTRIBUTES ^ A_COLOR;

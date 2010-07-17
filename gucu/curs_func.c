@@ -19,13 +19,13 @@
 static void
 curs_bad_state_error (const char *funcname)
 {
-  scm_misc_error (funcname, "Bad curses internal state", SCM_BOOL_F);
+  scm_misc_error (funcname, "bad curses internal state", SCM_BOOL_F);
 }
 
 static void
 curs_param_or_bad_state_error (const char *funcname)
 {
-  scm_misc_error (funcname, "Invalid parameters or bad curses internal state",
+  scm_misc_error (funcname, "invalid parameters or bad curses internal state",
 		  SCM_BOOL_F);
 }
 
@@ -510,7 +510,7 @@ gucu_delscreen (SCM scr)
 
   if (!isendwin ())
     scm_misc_error ("delscreen",
-		    "The terminal was freed while still in curses mode: ~A",
+		    "the terminal was freed while still in curses mode: ~A",
 		    scr);
 
   delscreen (c_scr);
