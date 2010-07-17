@@ -27,11 +27,13 @@
 .deps
 .dirstamp
 .libs
+GNUmakefile
 INSTALL
 Makefile
 Makefile.in
 TAGS
 autom4te.cache
+cfg.mk
 config.guess
 config.h
 config.log
@@ -46,6 +48,7 @@ install-sh
 libtool
 libtool.m4
 ltmain.sh
+maint.mk
 mdate-sh
 missing
 stamp-h1

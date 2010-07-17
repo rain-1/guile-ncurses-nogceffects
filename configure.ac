@@ -19,7 +19,7 @@ AC_SUBST(LIBGUILE_GUCU_CURSES_INTERFACE)
 # Check for Programs
 
 AC_PROG_CC
-
+gl_EARLY
 AC_CANONICAL_HOST
 AC_PROG_INSTALL
 AC_PROG_MKDIR_P
@@ -29,6 +29,10 @@ AC_PROG_MKDIR_P
 
 # New method for when Libtool 2.x is default
 LT_INIT([dlopen disable-fast-install disable-static win32-dll])
+
+##################
+# Gnulib
+gl_INIT
 
 ##################
 # Initial guess of platform specific options
@@ -150,5 +154,6 @@ LIBS="$ax_save_LIBS"
 #  Output
 AC_CONFIG_FILES([Makefile gucu/Makefile doc/Makefile m4/Makefile])
 AC_CONFIG_FILES([build_aux/Makefile tools/Makefile test/Makefile])
+AC_CONFIG_FILES([lib/Makefile])
 AC_CONFIG_FILES([tools/uninstalled-env], [chmod +x tools/uninstalled-env])
 AC_OUTPUT
