@@ -32,9 +32,9 @@ libguile_gucu_la_CPPFLAGS += -DGUCU_DLL -DGUCU_DLL_EXPORTS
 endif
 
 libguile_gucu_la_LDFLAGS = -module -no-undefined \
--version-info @LIBGUILE_GUCU_CURSES_INTERFACE@ @GUILE_LDFLAGS@
+-version-info $(LIBGUILE_GUCU_CURSES_INTERFACE) $(GUILE_LDFLAGS)
 
-libguile_gucu_la_LIBADD = $(CURSES_LIB) @PANEL_LIB@ $(MENU_LIB) $(FORM_LIB)
+libguile_gucu_la_LIBADD = $(CURSES_LIB) $(PANEL_LIB) $(MENU_LIB) $(FORM_LIB)
 
 if WIDE
 libguile_gucu_la_LIBADD += $(UNISTRING_LIB)
