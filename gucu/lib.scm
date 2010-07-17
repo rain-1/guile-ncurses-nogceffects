@@ -29,7 +29,7 @@
    ((= n COLOR_MAGENTA) "magenta")
    ((= n COLOR_CYAN) "cyan")
    ((= n COLOR_WHITE) "white")
-   (else 
+   (else
     (let* ((cc (color-content n))
            (r (list-ref cc 0))
            (g (list-ref cc 1))
@@ -57,7 +57,7 @@
 
 (define (acs-char-name c)
   (let ((n (normal c)))
-    (cond 
+    (cond
      ((xchar-equal? n (acs-ulcorner)) "ULCORNER")
      ((xchar-equal? n (acs-llcorner)) "LLCORNER")
      ((xchar-equal? n (acs-urcorner)) "URCORNER")
@@ -89,9 +89,9 @@
      ((xchar-equal? n (acs-nequal)) "NEQUAL")
      ((xchar-equal? n (acs-lantern)) "LANTERN")
      ((xchar-equal? n (acs-sterling)) "STERLING")
-     (else 
+     (else
       "UNKNOWN SURROGATE"))))
-            
+
 
 (define (print-xchar x port)
   (let ((attrs (attr-name (xchar-attr x)))

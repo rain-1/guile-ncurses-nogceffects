@@ -2,8 +2,8 @@
 !#
 
 (use-modules (srfi srfi-1)
-	     (gucu curses)
-	     (gucu form))
+             (gucu curses)
+             (gucu form))
 
 ;; Initialize curses
 (define stdscr (initscr))
@@ -13,12 +13,12 @@
 
 ;; Initialize the fields
 (define field (list
-	       (new-field 1 10 4 18 0 0)
-	       (new-field 1 10 6 18 0 0)))
+               (new-field 1 10 4 18 0 0)
+               (new-field 1 10 6 18 0 0)))
 
 ;; Set field options
 ;; Print a line for the options
-(set-field-back! (first field) A_UNDERLINE) 
+(set-field-back! (first field) A_UNDERLINE)
 ;; Don't go to the next field when this field is filled up
 (field-opts-off! (first field) O_AUTOSKIP)
 (set-field-back! (second field) A_UNDERLINE)
@@ -38,24 +38,24 @@
   (if (not (eqv? ch (key-f 1)))
       (cond
        ((eqv? ch KEY_DOWN)
-	(begin
-	  ;; Go to the end of the next field
-	  (form-driver my-form REQ_NEXT_FIELD)
-	  (form-driver my-form REQ_END_LINE)
-	  (loop (getch stdscr))))
+        (begin
+          ;; Go to the end of the next field
+          (form-driver my-form REQ_NEXT_FIELD)
+          (form-driver my-form REQ_END_LINE)
+          (loop (getch stdscr))))
        ((eqv? ch KEY_UP)
-	(begin
-	  ;; Go to the end of the previous field
-	  (form-driver my-form REQ_PREV_FIELD)
-	  (form-driver my-form REQ_END_LINE)
-	  (loop (getch stdscr))))
+        (begin
+          ;; Go to the end of the previous field
+          (form-driver my-form REQ_PREV_FIELD)
+          (form-driver my-form REQ_END_LINE)
+          (loop (getch stdscr))))
        (else
-	(begin
-	  ;; Print any normal character
-	  (form-driver my-form ch)
-	  (loop (getch stdscr)))))))
+        (begin
+          ;; Print any normal character
+          (form-driver my-form ch)
+          (loop (getch stdscr)))))))
 
-;; Unpost the form 
+;; Unpost the form
 (unpost-form my-form)
 
 (endwin)

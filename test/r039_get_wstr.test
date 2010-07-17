@@ -2,8 +2,8 @@
 ;;;; r039_getstr.test --- test suite for curses's get_wstr
 
 (use-modules (test lib)
-	     (test lib2)
-	     (gucu curses))
+             (test lib2)
+             (gucu curses))
 
 (define test (curses-test-start))
 
@@ -14,13 +14,13 @@
 
 ;; Should be able to get strings from the keyboard
 
-(with-test-prefix 
+(with-test-prefix
  "ungetch/getnstr"
- 
+
  (pass-if "HI"
-	  (begin
-	    (erase win)
-	    (refresh win)
+          (begin
+            (erase win)
+            (refresh win)
             (noecho!)
             (let ((str "HI\n"))
               (map (lambda (c)
@@ -36,9 +36,9 @@
                 pass))))
 
  (pass-if "ĤĨ"
-	  (begin
-	    (erase win)
-	    (refresh win)
+          (begin
+            (erase win)
+            (refresh win)
             (noecho!)
             (let ((str "ĤĨ\n"))
               (map (lambda (c)
@@ -56,17 +56,17 @@
                 pass))))
 
  (pass-if "getnstr #:y #:x (wide)"
-	  (begin
-	    (erase win)
-	    (refresh win)
-	    (ungetch #\nl)
-	    (ungetch #\P)
-	    (ungetch #\Ĩ)
-	    (ungetch #\Ĥ)
-	    (let ((s1 (getnstr win 2 #:y 1 #:x 1)))
-	      (begin
-		(refresh win)
-		(string=? s1 "ĤĨ")
+          (begin
+            (erase win)
+            (refresh win)
+            (ungetch #\nl)
+            (ungetch #\P)
+            (ungetch #\Ĩ)
+            (ungetch #\Ĥ)
+            (let ((s1 (getnstr win 2 #:y 1 #:x 1)))
+              (begin
+                (refresh win)
+                (string=? s1 "ĤĨ")
                 ;; This functionality is broken in ncurses.  Tested
                 ;; with ncurses-5.7-20090808
                 *unspecified*)))))

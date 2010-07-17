@@ -12,7 +12,7 @@
      win)				; Returns the window to the caller
 
    (newwin height width starty startx))) ; Create a window and apply it
-					; to the lambda function
+                                        ; to the lambda function
 
 ;; This procedure erases the box around a window and then deletes it
 (define (destroy-win win)
@@ -38,42 +38,42 @@
        (width 10)
        (starty (round (/ (- (lines) height) 2)))
        (startx (round (/ (- (cols) width) 2))))
-      
+
   (addstr stdscr "Press F1 to exit")
   (refresh stdscr)
   (let loop ((starty starty)
-	     (startx startx)
-	     (my-win (create-newwin height width starty startx))
-	     (ch (getch stdscr)))
+             (startx startx)
+             (my-win (create-newwin height width starty startx))
+             (ch (getch stdscr)))
     (cond
      ((eqv? ch KEY_LEFT)
       (loop starty
-	    (- startx 1)
-	    (move-win my-win height width starty (- startx 1))
-	    (getch stdscr)))
-     
+            (- startx 1)
+            (move-win my-win height width starty (- startx 1))
+            (getch stdscr)))
+
      ((eqv? ch KEY_RIGHT)
       (loop starty
-	    (+ startx 1)
-	    (move-win my-win height width starty (+ startx 1))
-	    (getch stdscr)))
-     
+            (+ startx 1)
+            (move-win my-win height width starty (+ startx 1))
+            (getch stdscr)))
+
      ((eqv? ch KEY_UP)
       (loop (- starty 1)
-	    startx
-	    (move-win my-win height width (- starty 1) startx)
-	    (getch stdscr)))
-     
+            startx
+            (move-win my-win height width (- starty 1) startx)
+            (getch stdscr)))
+
      ((eqv? ch KEY_DOWN)
       (loop (+ starty 1)
-	    startx
-	    (move-win my-win height width (+ starty 1) startx)
-	    (getch stdscr)))
-     
+            startx
+            (move-win my-win height width (+ starty 1) startx)
+            (getch stdscr)))
+
      ((eqv? ch (key-f 1))
       #f)
-     
+
      (else
       (loop starty startx my-win (getch stdscr)))))
-  
+
   (endwin))

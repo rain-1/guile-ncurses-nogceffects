@@ -15,20 +15,20 @@
        (names '("Choice 1" "Choice 2" "Choice 3" "Choice 4" "Exit"))
        (descriptions '("Description 1" "Description 2" "Description 3"
                        "Description 4" ""))
-       
-       ;; Create menu items for each label 
-       (my-items (map (lambda (name desc) (new-item name desc)) 
+
+       ;; Create menu items for each label
+       (my-items (map (lambda (name desc) (new-item name desc))
                       names
                       descriptions))
        ;; Create the menu
        (my-menu (new-menu my-items)))
-  
+
   ;; Draw the menu
   (move stdscr (- (lines) 2) 0)
   (addstr stdscr "Press 'q' to Quit")
   (post-menu my-menu)
   (refresh stdscr)
-  
+
   ;; Process the up and down arrow keys.  Break the loop if F1 is
   ;; pressed.  Ignore other keys.
   (let loop ((c (getch stdscr)))
@@ -59,10 +59,9 @@
                         (item-name (current-item my-menu))))
         (refresh stdscr)
         (sleep 2)))
-     
+
      ;; If 'Q' or 'q'  is pressed, quit.  Otherwise, loop.
      ((not (or (eqv? c #\Q) (eqv? c #\q)))
       (loop (getch stdscr)))))
-  
+
   (endwin))
-  

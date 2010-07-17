@@ -2994,9 +2994,9 @@ macros in the C Ncurses library, for example @code{lines} and
 These are the functions in the @code{(gucu curses)} module.
 
 The procedures in the curses library closely follow the functions in
-the C-language @acronym{API, application programming interface}.  Most
-of the procedures in the library have approximately the same name and
-arguments as the functions in the C-language API.
+the C-language API.  Most of the procedures in the library have
+approximately the same name and arguments as the functions in the
+C-language API.
 
 @menu
 * Overview::

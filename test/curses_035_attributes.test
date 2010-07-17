@@ -3,10 +3,10 @@
 ;;;; conversion functions
 
 (use-modules (test lib)
-	     (test lib2)
-	     (gucu curses)
-	     (srfi srfi-1)
-             (srfi srfi-13))  ; for Guile 1.6.x's string= 
+             (test lib2)
+             (gucu curses)
+             (srfi srfi-1)
+             (srfi srfi-13))  ; for Guile 1.6.x's string=
 
 (define test (curses-test-start))
 
@@ -14,383 +14,383 @@
 (endwin)
 (set! *sleep* #f)
 
-(with-test-prefix 
+(with-test-prefix
  "simple chars"
 
  (pass-if "(normal #\a) == (normal-on #\a)"
-	  (xchar-equal? (normal #\a) (normal-on #\a)))
+          (xchar-equal? (normal #\a) (normal-on #\a)))
 
  (pass-if "(normal #\a) == (normal-off #\a)"
-	  (xchar-equal? (normal #\a) (normal-off #\a)))
+          (xchar-equal? (normal #\a) (normal-off #\a)))
 
  (pass-if "(bold #\a) == (bold-on #\a)"
-	  (xchar-equal? (bold #\a) (bold-on #\a)))
+          (xchar-equal? (bold #\a) (bold-on #\a)))
 
  (pass-if "(bold-off #\a) == (normal #\a)"
-	  (xchar-equal? (bold-off #\a) (normal #\a))))
+          (xchar-equal? (bold-off #\a) (normal #\a))))
 
-(with-test-prefix 
+(with-test-prefix
  "xchars"
- 
+
  ;; normal
  (pass-if "(normal (normal #\a)) == (normal #\a)"
-	  (xchar-equal? (normal (normal #\a)) (normal #\a)))
+          (xchar-equal? (normal (normal #\a)) (normal #\a)))
 
  (pass-if "(normal (normal-on #\a)) == (normal #\a)"
-	  (xchar-equal? (normal (normal-on #\a)) (normal #\a)))
+          (xchar-equal? (normal (normal-on #\a)) (normal #\a)))
 
  (pass-if "(normal (normal-off #\a)) == (normal #\a)"
-	  (xchar-equal? (normal (normal-off #\a)) (normal #\a)))
+          (xchar-equal? (normal (normal-off #\a)) (normal #\a)))
 
  (pass-if "(normal (bold #\a)) == (normal #\a)"
-	  (xchar-equal? (normal (bold #\a)) (normal #\a)))
-		  
+          (xchar-equal? (normal (bold #\a)) (normal #\a)))
+
  (pass-if "(normal (bold-on #\a)) == (normal #\a)"
-	  (xchar-equal? (normal (bold-on #\a)) (normal #\a)))
-		  
+          (xchar-equal? (normal (bold-on #\a)) (normal #\a)))
+
  (pass-if "(normal (bold-off #\a)) == (normal #\a)"
-	  (xchar-equal? (normal (bold-off #\a)) (normal #\a)))
+          (xchar-equal? (normal (bold-off #\a)) (normal #\a)))
 
  ;; normal-on
  (pass-if "(normal-on (normal #\a)) == (normal #\a)"
-	  (xchar-equal? (normal-on (normal #\a)) (normal #\a)))
+          (xchar-equal? (normal-on (normal #\a)) (normal #\a)))
 
  (pass-if "(normal-on (normal-on #\a)) == (normal #\a)"
-	  (xchar-equal? (normal-on (normal-on #\a)) (normal #\a)))
+          (xchar-equal? (normal-on (normal-on #\a)) (normal #\a)))
 
  (pass-if "(normal-on (normal-off #\a)) == (normal #\a)"
-	  (xchar-equal? (normal-on (normal-off #\a)) (normal #\a)))
+          (xchar-equal? (normal-on (normal-off #\a)) (normal #\a)))
 
  (pass-if "(normal-on (bold #\a)) == (bold #\a)"
-	  (xchar-equal? (normal-on (bold #\a)) (bold #\a)))
-		  
+          (xchar-equal? (normal-on (bold #\a)) (bold #\a)))
+
  (pass-if "(normal-on (bold-on #\a)) == (bold #\a)"
-	  (xchar-equal? (normal-on (bold-on #\a)) (bold #\a)))
-		  
+          (xchar-equal? (normal-on (bold-on #\a)) (bold #\a)))
+
  (pass-if "(normal-on (bold-off #\a)) == (normal #\a)"
-	  (xchar-equal? (normal-on (bold-off #\a)) (normal #\a)))
+          (xchar-equal? (normal-on (bold-off #\a)) (normal #\a)))
 
  ;; normal-off
  (pass-if "(normal-off (normal #\a)) == (normal #\a)"
-	  (xchar-equal? (normal-off (normal #\a)) (normal #\a)))
+          (xchar-equal? (normal-off (normal #\a)) (normal #\a)))
 
  (pass-if "(normal-of (normal-on #\a)) == (normal #\a)"
-	  (xchar-equal? (normal-off (normal-on #\a)) (normal #\a)))
+          (xchar-equal? (normal-off (normal-on #\a)) (normal #\a)))
 
  (pass-if "(normal-off (normal-off #\a)) == (normal #\a)"
-	  (xchar-equal? (normal-off (normal-off #\a)) (normal #\a)))
+          (xchar-equal? (normal-off (normal-off #\a)) (normal #\a)))
 
  (pass-if "(normal-off (bold #\a)) == (bold #\a)"
-	  (xchar-equal? (normal-off (bold #\a)) (bold #\a)))
-		  
+          (xchar-equal? (normal-off (bold #\a)) (bold #\a)))
+
  (pass-if "(normal-off (bold-on #\a)) == (bold #\a)"
-	  (xchar-equal? (normal-off (bold-on #\a)) (bold #\a)))
+          (xchar-equal? (normal-off (bold-on #\a)) (bold #\a)))
 
  (pass-if "(normal-off (bold-off #\a)) == (normal #\a)"
-	  (xchar-equal? (normal-off (bold-off #\a)) (normal #\a)))
+          (xchar-equal? (normal-off (bold-off #\a)) (normal #\a)))
 
  ;; bold
  (pass-if "(bold (normal #\a)) == (bold #\a)"
-	  (xchar-equal? (bold (normal #\a)) (bold #\a)))
+          (xchar-equal? (bold (normal #\a)) (bold #\a)))
 
  (pass-if "(bold (normal-on #\a)) == (bold #\a)"
-	  (xchar-equal? (bold (normal-on #\a)) (bold #\a)))
+          (xchar-equal? (bold (normal-on #\a)) (bold #\a)))
 
  (pass-if "(bold (normal-off #\a)) == (bold #\a)"
-	  (xchar-equal? (bold (normal-off #\a)) (bold #\a)))
+          (xchar-equal? (bold (normal-off #\a)) (bold #\a)))
 
  (pass-if "(bold (bold #\a)) == (bold #\a)"
-	  (xchar-equal? (bold (bold #\a)) (bold #\a)))
-		  
+          (xchar-equal? (bold (bold #\a)) (bold #\a)))
+
  (pass-if "(bold (bold-on #\a)) == (bold #\a)"
-	  (xchar-equal? (bold (bold-on #\a)) (bold #\a)))
+          (xchar-equal? (bold (bold-on #\a)) (bold #\a)))
 
  (pass-if "(bold (bold-off #\a)) == (bold #\a)"
-	  (xchar-equal? (bold (bold-off #\a)) (bold #\a)))
+          (xchar-equal? (bold (bold-off #\a)) (bold #\a)))
 
  ;; bold-on
  (pass-if "(bold-on (normal #\a)) == (bold #\a)"
-	  (xchar-equal? (bold-on (normal #\a)) (bold #\a)))
+          (xchar-equal? (bold-on (normal #\a)) (bold #\a)))
 
  (pass-if "(bold-on (normal-on #\a)) == (bold #\a)"
-	  (xchar-equal? (bold-on (normal-on #\a)) (bold #\a)))
+          (xchar-equal? (bold-on (normal-on #\a)) (bold #\a)))
 
  (pass-if "(bold-on (normal-off #\a)) == (bold #\a)"
-	  (xchar-equal? (bold-on (normal-off #\a)) (bold #\a)))
+          (xchar-equal? (bold-on (normal-off #\a)) (bold #\a)))
 
  (pass-if "(bold-on (bold #\a)) == (bold #\a)"
-	  (xchar-equal? (bold-on (bold #\a)) (bold #\a)))
-		  
+          (xchar-equal? (bold-on (bold #\a)) (bold #\a)))
+
  (pass-if "(bold-on (bold-on #\a)) == (bold #\a)"
-	  (xchar-equal? (bold-on (bold-on #\a)) (bold #\a)))
+          (xchar-equal? (bold-on (bold-on #\a)) (bold #\a)))
 
  (pass-if "(bold-on (bold-off #\a)) == (bold #\a)"
-	  (xchar-equal? (bold-on (bold-off #\a)) (bold #\a)))
+          (xchar-equal? (bold-on (bold-off #\a)) (bold #\a)))
 
  ;; bold-off
  (pass-if "(bold-off (normal #\a)) == (normal #\a)"
-	  (xchar-equal? (bold-off (normal #\a)) (normal #\a)))
+          (xchar-equal? (bold-off (normal #\a)) (normal #\a)))
 
  (pass-if "(bold-off (normal-on #\a)) == (normal #\a)"
-	  (xchar-equal? (bold-off (normal-on #\a)) (normal #\a)))
+          (xchar-equal? (bold-off (normal-on #\a)) (normal #\a)))
 
  (pass-if "(bold-off (normal-off #\a)) == (normal #\a)"
-	  (xchar-equal? (bold-off (normal-off #\a)) (normal #\a)))
+          (xchar-equal? (bold-off (normal-off #\a)) (normal #\a)))
 
  (pass-if "(bold-off (bold #\a)) == (normal #\a)"
-	  (xchar-equal? (bold-off (bold #\a)) (normal #\a)))
-		  
+          (xchar-equal? (bold-off (bold #\a)) (normal #\a)))
+
  (pass-if "(bold-off (bold-on #\a)) == (normal #\a)"
-	  (xchar-equal? (bold-off (bold-on #\a)) (normal #\a)))
+          (xchar-equal? (bold-off (bold-on #\a)) (normal #\a)))
 
  (pass-if "(bold-off (bold-off #\a)) == (normal #\a)"
-	  (xchar-equal? (bold-off (bold-off #\a)) (normal #\a)))
+          (xchar-equal? (bold-off (bold-off #\a)) (normal #\a)))
 
  ;; inverse
  (pass-if "(inverse (normal #\a)) == (inverse #\a)"
-	  (xchar-equal? (inverse (normal #\a)) (inverse #\a)))
+          (xchar-equal? (inverse (normal #\a)) (inverse #\a)))
 
  (pass-if "(inverse (normal-on #\a)) == (inverse #\a)"
-	  (xchar-equal? (inverse (normal-on #\a)) (inverse #\a)))
+          (xchar-equal? (inverse (normal-on #\a)) (inverse #\a)))
 
  (pass-if "(inverse (normal-off #\a)) == (inverse #\a)"
-	  (xchar-equal? (inverse (normal-off #\a)) (inverse #\a)))
+          (xchar-equal? (inverse (normal-off #\a)) (inverse #\a)))
 
  (pass-if "(inverse (bold #\a)) == (inverse #\a)"
-	  (xchar-equal? (inverse (bold #\a)) (inverse #\a)))
-		  
+          (xchar-equal? (inverse (bold #\a)) (inverse #\a)))
+
  (pass-if "(inverse (bold-on #\a)) == (inverse #\a)"
-	  (xchar-equal? (inverse (bold-on #\a)) (inverse #\a)))
+          (xchar-equal? (inverse (bold-on #\a)) (inverse #\a)))
 
  (pass-if "(inverse (bold-off #\a)) == (inverse #\a)"
-	  (xchar-equal? (inverse (bold-off #\a)) (inverse #\a)))
+          (xchar-equal? (inverse (bold-off #\a)) (inverse #\a)))
 
  ;; inverse-on
  (pass-if "(inverse-on (normal #\a)) == (inverse #\a)"
-	  (xchar-equal? (inverse-on (normal #\a)) (inverse #\a)))
+          (xchar-equal? (inverse-on (normal #\a)) (inverse #\a)))
 
  (pass-if "(inverse-on (normal-on #\a)) == (inverse #\a)"
-	  (xchar-equal? (inverse-on (normal-on #\a)) (inverse #\a)))
+          (xchar-equal? (inverse-on (normal-on #\a)) (inverse #\a)))
 
  (pass-if "(inverse-on (normal-off #\a)) == (inverse #\a)"
-	  (xchar-equal? (inverse-on (normal-off #\a)) (inverse #\a)))
+          (xchar-equal? (inverse-on (normal-off #\a)) (inverse #\a)))
 
  (pass-if "(inverse-on (bold #\a)) == (bold-on (inverse #\a))"
-	  (xchar-equal? (inverse-on (bold #\a)) (bold-on (inverse #\a))))
-		  
+          (xchar-equal? (inverse-on (bold #\a)) (bold-on (inverse #\a))))
+
  (pass-if "(inverse-on (bold-on #\a)) == (bold-on (inverse #\a))"
-	  (xchar-equal? (inverse-on (bold-on #\a)) (bold-on (inverse #\a))))
+          (xchar-equal? (inverse-on (bold-on #\a)) (bold-on (inverse #\a))))
 
  (pass-if "(inverse-on (bold-off #\a)) == (inverse #\a)"
-	  (xchar-equal? (inverse-on (bold-off #\a)) (inverse #\a)))
+          (xchar-equal? (inverse-on (bold-off #\a)) (inverse #\a)))
 
  ;; inverse-off
  (pass-if "(inverse-off (normal #\a)) == (normal #\a)"
-	  (xchar-equal? (inverse-off (normal #\a)) (normal #\a)))
+          (xchar-equal? (inverse-off (normal #\a)) (normal #\a)))
 
  (pass-if "(inverse-off (normal-on #\a)) == (normal #\a)"
-	  (xchar-equal? (inverse-off (normal-on #\a)) (normal #\a)))
+          (xchar-equal? (inverse-off (normal-on #\a)) (normal #\a)))
 
  (pass-if "(inverse-off (normal-off #\a)) == (normal #\a)"
-	  (xchar-equal? (inverse-off (normal-off #\a)) (normal #\a)))
+          (xchar-equal? (inverse-off (normal-off #\a)) (normal #\a)))
 
  (pass-if "(inverse-off (bold #\a)) == (bold #\a)"
-	  (xchar-equal? (inverse-off (bold #\a)) (bold #\a)))
-		  
+          (xchar-equal? (inverse-off (bold #\a)) (bold #\a)))
+
  (pass-if "(inverse-off (bold-on #\a)) == (bold #\a)"
-	  (xchar-equal? (inverse-off (bold-on #\a)) (bold #\a)))
+          (xchar-equal? (inverse-off (bold-on #\a)) (bold #\a)))
 
  (pass-if "(inverse-off (bold-off #\a)) == (normal #\a)"
-	  (xchar-equal? (inverse-off (bold-off #\a)) (normal #\a))))
+          (xchar-equal? (inverse-off (bold-off #\a)) (normal #\a))))
 
-(with-test-prefix 
+(with-test-prefix
  "strings"
 
  (pass-if "(normal \"hi\") == (normal-on \"hi\")"
-	  (list= xchar-equal? (normal "hi") (normal-on "hi")))
+          (list= xchar-equal? (normal "hi") (normal-on "hi")))
 
  (pass-if "(normal \"hi\") == (normal-off \"hi\")"
-	  (list= xchar-equal? (normal "hi") (normal-off "hi")))
+          (list= xchar-equal? (normal "hi") (normal-off "hi")))
 
  (pass-if "(bold \"hi\") == (bold-on \"hi\")"
-	  (list= xchar-equal? (bold "hi") (bold-on "hi")))
+          (list= xchar-equal? (bold "hi") (bold-on "hi")))
 
  (pass-if "(bold-off \"hi\") == (normal \"hi\")"
-	  (list= xchar-equal? (bold-off "hi") (normal "hi"))))
+          (list= xchar-equal? (bold-off "hi") (normal "hi"))))
 
-(with-test-prefix 
+(with-test-prefix
  "xchar-strings"
- 
+
  ;; normal
  (pass-if "(normal (normal \"hi\")) == (normal \"hi\")"
-	  (list= xchar-equal? (normal (normal "hi")) (normal "hi")))
+          (list= xchar-equal? (normal (normal "hi")) (normal "hi")))
 
  (pass-if "(normal (normal-on \"hi\")) == (normal \"hi\")"
-	  (list= xchar-equal? (normal (normal-on "hi")) (normal "hi")))
+          (list= xchar-equal? (normal (normal-on "hi")) (normal "hi")))
 
  (pass-if "(normal (normal-off \"hi\")) == (normal \"hi\")"
-	  (list= xchar-equal? (normal (normal-off "hi")) (normal "hi")))
+          (list= xchar-equal? (normal (normal-off "hi")) (normal "hi")))
 
  (pass-if "(normal (bold \"hi\")) == (normal \"hi\")"
-	  (list= xchar-equal? (normal (bold "hi")) (normal "hi")))
-		  
+          (list= xchar-equal? (normal (bold "hi")) (normal "hi")))
+
  (pass-if "(normal (bold-on \"hi\")) == (normal \"hi\")"
-	  (list= xchar-equal? (normal (bold-on "hi")) (normal "hi")))
-		  
+          (list= xchar-equal? (normal (bold-on "hi")) (normal "hi")))
+
  (pass-if "(normal (bold-off \"hi\")) == (normal \"hi\")"
-	  (list= xchar-equal? (normal (bold-off "hi")) (normal "hi")))
+          (list= xchar-equal? (normal (bold-off "hi")) (normal "hi")))
 
  ;; normal-on
  (pass-if "(normal-on (normal \"hi\")) == (normal \"hi\")"
-	  (list= xchar-equal? (normal-on (normal "hi")) (normal "hi")))
+          (list= xchar-equal? (normal-on (normal "hi")) (normal "hi")))
 
  (pass-if "(normal-on (normal-on \"hi\")) == (normal \"hi\")"
-	  (list= xchar-equal? (normal-on (normal-on "hi")) (normal "hi")))
+          (list= xchar-equal? (normal-on (normal-on "hi")) (normal "hi")))
 
  (pass-if "(normal-on (normal-off \"hi\")) == (normal \"hi\")"
-	  (list= xchar-equal? (normal-on (normal-off "hi")) (normal "hi")))
+          (list= xchar-equal? (normal-on (normal-off "hi")) (normal "hi")))
 
  (pass-if "(normal-on (bold \"hi\")) == (bold \"hi\")"
-	  (list= xchar-equal? (normal-on (bold "hi")) (bold "hi")))
-		  
+          (list= xchar-equal? (normal-on (bold "hi")) (bold "hi")))
+
  (pass-if "(normal-on (bold-on \"hi\")) == (bold \"hi\")"
-	  (list= xchar-equal? (normal-on (bold-on "hi")) (bold "hi")))
-		  
+          (list= xchar-equal? (normal-on (bold-on "hi")) (bold "hi")))
+
  (pass-if "(normal-on (bold-off \"hi\")) == (normal \"hi\")"
-	  (list= xchar-equal? (normal-on (bold-off "hi")) (normal "hi")))
+          (list= xchar-equal? (normal-on (bold-off "hi")) (normal "hi")))
 
  ;; normal-off
  (pass-if "(normal-off (normal \"hi\")) == (normal \"hi\")"
-	  (list= xchar-equal? (normal-off (normal "hi")) (normal "hi")))
+          (list= xchar-equal? (normal-off (normal "hi")) (normal "hi")))
 
  (pass-if "(normal-of (normal-on \"hi\")) == (normal \"hi\")"
-	  (list= xchar-equal? (normal-off (normal-on "hi")) (normal "hi")))
+          (list= xchar-equal? (normal-off (normal-on "hi")) (normal "hi")))
 
  (pass-if "(normal-off (normal-off \"hi\")) == (normal \"hi\")"
-	  (list= xchar-equal? (normal-off (normal-off "hi")) (normal "hi")))
+          (list= xchar-equal? (normal-off (normal-off "hi")) (normal "hi")))
 
  (pass-if "(normal-off (bold \"hi\")) == (bold \"hi\")"
-	  (list= xchar-equal? (normal-off (bold "hi")) (bold "hi")))
-		  
+          (list= xchar-equal? (normal-off (bold "hi")) (bold "hi")))
+
  (pass-if "(normal-off (bold-on \"hi\")) == (bold \"hi\")"
-	  (list= xchar-equal? (normal-off (bold-on "hi")) (bold "hi")))
+          (list= xchar-equal? (normal-off (bold-on "hi")) (bold "hi")))
 
  (pass-if "(normal-off (bold-off \"hi\")) == (normal \"hi\")"
-	  (list= xchar-equal? (normal-off (bold-off "hi")) (normal "hi")))
+          (list= xchar-equal? (normal-off (bold-off "hi")) (normal "hi")))
 
  ;; bold
  (pass-if "(bold (normal \"hi\")) == (bold \"hi\")"
-	  (list= xchar-equal? (bold (normal "hi")) (bold "hi")))
+          (list= xchar-equal? (bold (normal "hi")) (bold "hi")))
 
  (pass-if "(bold (normal-on \"hi\")) == (bold \"hi\")"
-	  (list= xchar-equal? (bold (normal-on "hi")) (bold "hi")))
+          (list= xchar-equal? (bold (normal-on "hi")) (bold "hi")))
 
  (pass-if "(bold (normal-off \"hi\")) == (bold \"hi\")"
-	  (list= xchar-equal? (bold (normal-off "hi")) (bold "hi")))
+          (list= xchar-equal? (bold (normal-off "hi")) (bold "hi")))
 
  (pass-if "(bold (bold \"hi\")) == (bold \"hi\")"
-	  (list= xchar-equal? (bold (bold "hi")) (bold "hi")))
-		  
+          (list= xchar-equal? (bold (bold "hi")) (bold "hi")))
+
  (pass-if "(bold (bold-on \"hi\")) == (bold \"hi\")"
-	  (list= xchar-equal? (bold (bold-on "hi")) (bold "hi")))
+          (list= xchar-equal? (bold (bold-on "hi")) (bold "hi")))
 
  (pass-if "(bold (bold-off \"hi\")) == (bold \"hi\")"
-	  (list= xchar-equal? (bold (bold-off "hi")) (bold "hi")))
+          (list= xchar-equal? (bold (bold-off "hi")) (bold "hi")))
 
  ;; bold-on
  (pass-if "(bold-on (normal \"hi\")) == (bold \"hi\")"
-	  (list= xchar-equal? (bold-on (normal "hi")) (bold "hi")))
+          (list= xchar-equal? (bold-on (normal "hi")) (bold "hi")))
 
  (pass-if "(bold-on (normal-on \"hi\")) == (bold \"hi\")"
-	  (list= xchar-equal? (bold-on (normal-on "hi")) (bold "hi")))
+          (list= xchar-equal? (bold-on (normal-on "hi")) (bold "hi")))
 
  (pass-if "(bold-on (normal-off \"hi\")) == (bold \"hi\")"
-	  (list= xchar-equal? (bold-on (normal-off "hi")) (bold "hi")))
+          (list= xchar-equal? (bold-on (normal-off "hi")) (bold "hi")))
 
  (pass-if "(bold-on (bold \"hi\")) == (bold \"hi\")"
-	  (list= xchar-equal? (bold-on (bold "hi")) (bold "hi")))
-		  
+          (list= xchar-equal? (bold-on (bold "hi")) (bold "hi")))
+
  (pass-if "(bold-on (bold-on \"hi\")) == (bold \"hi\")"
-	  (list= xchar-equal? (bold-on (bold-on "hi")) (bold "hi")))
+          (list= xchar-equal? (bold-on (bold-on "hi")) (bold "hi")))
 
  (pass-if "(bold-on (bold-off \"hi\")) == (bold \"hi\")"
-	  (list= xchar-equal? (bold-on (bold-off "hi")) (bold "hi")))
+          (list= xchar-equal? (bold-on (bold-off "hi")) (bold "hi")))
 
  ;; bold-off
  (pass-if "(bold-off (normal \"hi\")) == (normal \"hi\")"
-	  (list= xchar-equal? (bold-off (normal "hi")) (normal "hi")))
+          (list= xchar-equal? (bold-off (normal "hi")) (normal "hi")))
 
  (pass-if "(bold-off (normal-on \"hi\")) == (normal \"hi\")"
-	  (list= xchar-equal? (bold-off (normal-on "hi")) (normal "hi")))
+          (list= xchar-equal? (bold-off (normal-on "hi")) (normal "hi")))
 
  (pass-if "(bold-off (normal-off \"hi\")) == (normal \"hi\")"
-	  (list= xchar-equal? (bold-off (normal-off "hi")) (normal "hi")))
+          (list= xchar-equal? (bold-off (normal-off "hi")) (normal "hi")))
 
  (pass-if "(bold-off (bold \"hi\")) == (normal \"hi\")"
-	  (list= xchar-equal? (bold-off (bold "hi")) (normal "hi")))
-		  
+          (list= xchar-equal? (bold-off (bold "hi")) (normal "hi")))
+
  (pass-if "(bold-off (bold-on \"hi\")) == (normal \"hi\")"
-	  (list= xchar-equal? (bold-off (bold-on "hi")) (normal "hi")))
+          (list= xchar-equal? (bold-off (bold-on "hi")) (normal "hi")))
 
  (pass-if "(bold-off (bold-off \"hi\")) == (normal \"hi\")"
-	  (list= xchar-equal? (bold-off (bold-off "hi")) (normal "hi")))
+          (list= xchar-equal? (bold-off (bold-off "hi")) (normal "hi")))
 
  ;; inverse
  (pass-if "(inverse (normal \"hi\")) == (inverse \"hi\")"
-	  (list= xchar-equal? (inverse (normal "hi")) (inverse "hi")))
+          (list= xchar-equal? (inverse (normal "hi")) (inverse "hi")))
 
  (pass-if "(inverse (normal-on \"hi\")) == (inverse \"hi\")"
-	  (list= xchar-equal? (inverse (normal-on "hi")) (inverse "hi")))
+          (list= xchar-equal? (inverse (normal-on "hi")) (inverse "hi")))
 
  (pass-if "(inverse (normal-off \"hi\")) == (inverse \"hi\")"
-	  (list= xchar-equal? (inverse (normal-off "hi")) (inverse "hi")))
+          (list= xchar-equal? (inverse (normal-off "hi")) (inverse "hi")))
 
  (pass-if "(inverse (bold \"hi\")) == (inverse \"hi\")"
-	  (list= xchar-equal? (inverse (bold "hi")) (inverse "hi")))
-		  
+          (list= xchar-equal? (inverse (bold "hi")) (inverse "hi")))
+
  (pass-if "(inverse (bold-on \"hi\")) == (inverse \"hi\")"
-	  (list= xchar-equal? (inverse (bold-on "hi")) (inverse "hi")))
+          (list= xchar-equal? (inverse (bold-on "hi")) (inverse "hi")))
 
  (pass-if "(inverse (bold-off \"hi\")) == (inverse \"hi\")"
-	  (list= xchar-equal? (inverse (bold-off "hi")) (inverse "hi")))
+          (list= xchar-equal? (inverse (bold-off "hi")) (inverse "hi")))
 
  ;; inverse-on
  (pass-if "(inverse-on (normal \"hi\")) == (inverse \"hi\")"
-	  (list= xchar-equal? (inverse-on (normal "hi")) (inverse "hi")))
+          (list= xchar-equal? (inverse-on (normal "hi")) (inverse "hi")))
 
  (pass-if "(inverse-on (normal-on \"hi\")) == (inverse \"hi\")"
-	  (list= xchar-equal? (inverse-on (normal-on "hi")) (inverse "hi")))
+          (list= xchar-equal? (inverse-on (normal-on "hi")) (inverse "hi")))
 
  (pass-if "(inverse-on (normal-off \"hi\")) == (inverse \"hi\")"
-	  (list= xchar-equal? (inverse-on (normal-off "hi")) (inverse "hi")))
+          (list= xchar-equal? (inverse-on (normal-off "hi")) (inverse "hi")))
 
  (pass-if "(inverse-on (bold \"hi\")) == (bold-on (inverse \"hi\"))"
-	  (list= xchar-equal? (inverse-on (bold "hi")) (bold-on (inverse "hi"))))
-		  
+          (list= xchar-equal? (inverse-on (bold "hi")) (bold-on (inverse "hi"))))
+
  (pass-if "(inverse-on (bold-on \"hi\")) == (bold-on (inverse \"hi\"))"
-	  (list= xchar-equal? (inverse-on (bold-on "hi")) (bold-on (inverse "hi"))))
+          (list= xchar-equal? (inverse-on (bold-on "hi")) (bold-on (inverse "hi"))))
 
  (pass-if "(inverse-on (bold-off \"hi\")) == (inverse \"hi\")"
-	  (list= xchar-equal? (inverse-on (bold-off "hi")) (inverse "hi")))
+          (list= xchar-equal? (inverse-on (bold-off "hi")) (inverse "hi")))
 
  ;; inverse-off
  (pass-if "(inverse-off (normal \"hi\")) == (normal \"hi\")"
-	  (list= xchar-equal? (inverse-off (normal "hi")) (normal "hi")))
+          (list= xchar-equal? (inverse-off (normal "hi")) (normal "hi")))
 
  (pass-if "(inverse-off (normal-on \"hi\")) == (normal \"hi\")"
-	  (list= xchar-equal? (inverse-off (normal-on "hi")) (normal "hi")))
+          (list= xchar-equal? (inverse-off (normal-on "hi")) (normal "hi")))
 
  (pass-if "(inverse-off (normal-off \"hi\")) == (normal \"hi\")"
-	  (list= xchar-equal? (inverse-off (normal-off "hi")) (normal "hi")))
+          (list= xchar-equal? (inverse-off (normal-off "hi")) (normal "hi")))
 
  (pass-if "(inverse-off (bold \"hi\")) == (bold \"hi\")"
-	  (list= xchar-equal? (inverse-off (bold "hi")) (bold "hi")))
-		  
+          (list= xchar-equal? (inverse-off (bold "hi")) (bold "hi")))
+
  (pass-if "(inverse-off (bold-on \"hi\")) == (bold \"hi\")"
-	  (list= xchar-equal? (inverse-off (bold-on "hi")) (bold "hi")))
+          (list= xchar-equal? (inverse-off (bold-on "hi")) (bold "hi")))
 
  (pass-if "(inverse-off (bold-off \"hi\")) == (normal \"hi\")"
-	  (list= xchar-equal? (inverse-off (bold-off "hi")) (normal "hi"))))
+          (list= xchar-equal? (inverse-off (bold-off "hi")) (normal "hi"))))
 
 
 (curses-test-end test "curses_035_attributes.out")

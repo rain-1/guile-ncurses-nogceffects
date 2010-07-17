@@ -83,12 +83,12 @@
               (addstr win (format #f "Long Terminal Name: ~a" c))
               (refresh win)
               (maybe-sleep 1)
-              (not (not (string= c "xterm" 
-				 0 
-				 (min (string-length c)
-				      (string-length "xterm"))
-				 0 
-				 (string-length "xterm")))))))
+              (not (not (string= c "xterm"
+                                 0
+                                 (min (string-length c)
+                                      (string-length "xterm"))
+                                 0
+                                 (string-length "xterm")))))))
 
  (pass-if "termname"
           (begin
@@ -108,7 +108,7 @@
                         A_ALTCHARSET
                         A_BLINK
                         A_BOLD
-			;; A_DIM
+                        ;; A_DIM
                         A_COLOR
                         A_INVIS
                         ;; A_PROTECT
@@ -116,8 +116,8 @@
                         A_STANDOUT
                         A_UNDERLINE)))
               (move win 0 0)
-	      (addchstr win (underline-on (bold-on "Terminal Capabilities")))
-	      (move win 1 0)
+              (addchstr win (underline-on (bold-on "Terminal Capabilities")))
+              (move win 1 0)
               (addstr win (format #f "this term ~32,'0b~%" ta))
               (addstr win (format #f "  PROTECT ~32,'0b~%" A_PROTECT))
               (addstr win (format #f "INVISIBLE ~32,'0b~%" A_INVIS))

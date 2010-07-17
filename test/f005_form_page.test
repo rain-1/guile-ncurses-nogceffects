@@ -2,62 +2,62 @@
 ;;;; f005_form_page.test --- test suite for curses's form page functions
 
 (use-modules (test lib)
-	     (test lib2)
-	     (srfi srfi-1)
-	     (gucu curses)
-	     (gucu form))
+             (test lib2)
+             (srfi srfi-1)
+             (gucu curses)
+             (gucu form))
 
 (define test (curses-test-start))
 
 (define stdscr (initscr))
 
 ;; Should be able to make a form with pages
-(with-test-prefix 
+(with-test-prefix
  "form: page"
- 
+
  ;; Check that the form's field can be set by reference
  (pass-if "set-current-field"
-	  (let* ((field1 (new-field 1 10 0 0 0 0))
-		 (field2 (new-field 1 10 1 0 0 0))
-		 (form1 (new-form (list field1 field2))))
-	    (post-form form1)
-	    (set-current-field! form1 field2)
-	    (addstr stdscr (format #f "~a" (field-index field2)) #:x 0 #:y 5)
-	    (refresh stdscr)
-	    (eq? (field-index field2) 1)))
- 
+          (let* ((field1 (new-field 1 10 0 0 0 0))
+                 (field2 (new-field 1 10 1 0 0 0))
+                 (form1 (new-form (list field1 field2))))
+            (post-form form1)
+            (set-current-field! form1 field2)
+            (addstr stdscr (format #f "~a" (field-index field2)) #:x 0 #:y 5)
+            (refresh stdscr)
+            (eq? (field-index field2) 1)))
+
  ;; Check that the page can be set
  (pass-if "first page"
-	  (let* ((field1 (new-field 1 10 0 0 0 0))
-		 (field2 (new-field 1 10 1 0 0 0)))
-	    ;; Put the second field on the second page
-	    (set-new-page! field2 #t)
-	    (set-field-buffer! field1 0 "Page 1")
-	    (set-field-buffer! field2 0 "Page 2")
-	    (let* ((form1 (new-form (list field1 field2)))
-		   (test1 #f)
-		   (test2 #f))
-	      
-	      ;; Post the first page
-	      (set-form-page! form1 0)
-	      (post-form form1)
-	      ;; Paint it
-	      (refresh stdscr)	
-	      ;; Get the page number
-	      (set! test1 (form-page form1))
-	      ;;(sleep 1)
-	      
-	      ;; Post the second page
-	      (set-form-page! form1 1)
-	      ;; Paint it
-	      (refresh stdscr)
-	      ;; Get the page number
-	      (set! test2 (form-page form1))
-	      
-	      (addstr stdscr (format #f "~a" (list test1 test2)) #:x 0 #:y 5)
-	      ;;(sleep 1)
-	      (and (eq? test1 0)
-		   (eq? test2 1))))))
+          (let* ((field1 (new-field 1 10 0 0 0 0))
+                 (field2 (new-field 1 10 1 0 0 0)))
+            ;; Put the second field on the second page
+            (set-new-page! field2 #t)
+            (set-field-buffer! field1 0 "Page 1")
+            (set-field-buffer! field2 0 "Page 2")
+            (let* ((form1 (new-form (list field1 field2)))
+                   (test1 #f)
+                   (test2 #f))
+
+              ;; Post the first page
+              (set-form-page! form1 0)
+              (post-form form1)
+              ;; Paint it
+              (refresh stdscr)
+              ;; Get the page number
+              (set! test1 (form-page form1))
+              ;;(sleep 1)
+
+              ;; Post the second page
+              (set-form-page! form1 1)
+              ;; Paint it
+              (refresh stdscr)
+              ;; Get the page number
+              (set! test2 (form-page form1))
+
+              (addstr stdscr (format #f "~a" (list test1 test2)) #:x 0 #:y 5)
+              ;;(sleep 1)
+              (and (eq? test1 0)
+                   (eq? test2 1))))))
 
 (endwin)
 

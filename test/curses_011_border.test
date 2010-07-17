@@ -93,7 +93,7 @@
  (pass-if "hline #:y #:x"
           (begin
             (clear win)
-            (hline win (normal #\A) 2 #:y 1 #:x 1) 
+            (hline win (normal #\A) 2 #:y 1 #:x 1)
             (refresh win)
             (let ((x1  (mvinch 1 1))
                   (x2  (mvinch 1 2)))

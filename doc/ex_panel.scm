@@ -2,7 +2,7 @@
 !#
 
 (use-modules (gucu curses)
-	     (gucu panel))
+             (gucu panel))
 
 (define stdscr (initscr))
 
@@ -31,7 +31,7 @@
   (update-panels)
   (doupdate)
   (sleep 1)
-  
+
   ;; Hide panel 1
   (addstr win1 "hide   " #:y 1 #:x 1)
   (hide-panel panel1)

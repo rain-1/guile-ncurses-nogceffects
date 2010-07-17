@@ -164,7 +164,7 @@ gucu_is_item_p (SCM x)
 // menu -- in C, a MENU *.  In Scheme, a smob that contains the pointer
 // to a form along with a list that contains the SCM of the fields
 
-// Note the the C Menu item's internal list of fields must match the SCM
+// Note the C Menu item's internal list of fields must match the SCM
 // list of field to avoid garbage collection madness.
 
 int

@@ -2,10 +2,10 @@
 ;;;; f004_form_field.test --- test suite for curses's form fields
 
 (use-modules (test lib)
-	     (test lib2)
-	     (srfi srfi-1)
-	     (gucu curses)
-	     (gucu form))
+             (test lib2)
+             (srfi srfi-1)
+             (gucu curses)
+             (gucu form))
 
 (define test (curses-test-start))
 
@@ -13,36 +13,36 @@
 
 ;; Should be able to make a form
 (with-test-prefix "form: field"
-		  
-		  ;; Check that the count of fields can be returned
-		  (pass-if "field-count (one)"
-			   (let* ((field1 (new-field 1 10 0 0 0 0))
-				  (form1 (new-form (list field1))))
-			     (eq? (field-count form1) 1)))
-		  
-		  ;; Check that the fields can be replaced
-		  (pass-if "set-form-fields"
-			   (let* ((field1 (new-field 1 10 0 0 0 0))
-				  (field2 (new-field 1 10 1 0 0 0))
-				  (form1 (new-form (list field1))))
-			     (set-form-fields! form1 (list field1 field2))
-			     (eq? (field-count form1) 2)))
-		  
-		  ;; Move an unposted field from row 0 to row 1
-		  (pass-if "move-field"
-			   (let* ((OLDROW 0)
-				  (NEWROW 1)
-				  (field1 (new-field 1 10 OLDROW 0 0 0)))
-			     (set-field-back! field1 A_REVERSE)
-			     (move-field field1 NEWROW 0)
-			     (let ((finfo1 (field-info field1))
-				   (form1 (new-form (list field1))))
-			       (post-form form1)
-			       (addstr stdscr 
-				       (format #f "~a" finfo1) 
-				       #:y 5 #:x 0)
-			       (refresh stdscr)
-			       (eqv? (third finfo1) NEWROW)))))
+
+                  ;; Check that the count of fields can be returned
+                  (pass-if "field-count (one)"
+                           (let* ((field1 (new-field 1 10 0 0 0 0))
+                                  (form1 (new-form (list field1))))
+                             (eq? (field-count form1) 1)))
+
+                  ;; Check that the fields can be replaced
+                  (pass-if "set-form-fields"
+                           (let* ((field1 (new-field 1 10 0 0 0 0))
+                                  (field2 (new-field 1 10 1 0 0 0))
+                                  (form1 (new-form (list field1))))
+                             (set-form-fields! form1 (list field1 field2))
+                             (eq? (field-count form1) 2)))
+
+                  ;; Move an unposted field from row 0 to row 1
+                  (pass-if "move-field"
+                           (let* ((OLDROW 0)
+                                  (NEWROW 1)
+                                  (field1 (new-field 1 10 OLDROW 0 0 0)))
+                             (set-field-back! field1 A_REVERSE)
+                             (move-field field1 NEWROW 0)
+                             (let ((finfo1 (field-info field1))
+                                   (form1 (new-form (list field1))))
+                               (post-form form1)
+                               (addstr stdscr
+                                       (format #f "~a" finfo1)
+                                       #:y 5 #:x 0)
+                               (refresh stdscr)
+                               (eqv? (third finfo1) NEWROW)))))
 
 (endwin)
 

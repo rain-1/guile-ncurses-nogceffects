@@ -3,9 +3,9 @@
 ;;;; functions
 
 (use-modules (test lib)
-	     (test lib2)
-	     (srfi srfi-1)
-	     (gucu curses))
+             (test lib2)
+             (srfi srfi-1)
+             (gucu curses))
 
 
 (define test (curses-test-start))
@@ -22,50 +22,49 @@
 (clear win)
 (standend! win)
 
-(with-test-prefix 
+(with-test-prefix
  "bkgd"
- 
+
  (pass-if "bkgd"
-	  (begin
-	    (addstr win "This is bold and has periods as background" 
-		    #:y 0 #:x 0)
-	    (bkgd win (bold #\.))
-	    (addstr win "This is bold has periods as background" 
-		    #:y 1 #:x 0)
-	    (refresh win)
-	    (maybe-sleep 2)
-	    (let ((x1 (inch win #:y 0 #:x 4)) ; Loc of space between
-					      ; "This" and "is"
-		  (x2 (inch win #:y 1 #:x 4)))
-	      (begin
-		(bkgd win (normal #\space)) ; clear bkgd
-		(clear win)
-		(refresh win)
-		(and
-		 (xchar-equal? (bold #\.) x1)
-		 (xchar-equal? (bold #\.) x2))))))
- 
+          (begin
+            (addstr win "This is bold and has periods as background"
+                    #:y 0 #:x 0)
+            (bkgd win (bold #\.))
+            (addstr win "This is bold has periods as background"
+                    #:y 1 #:x 0)
+            (refresh win)
+            (maybe-sleep 2)
+            (let ((x1 (inch win #:y 0 #:x 4)) ; Loc of space between
+                                              ; "This" and "is"
+                  (x2 (inch win #:y 1 #:x 4)))
+              (begin
+                (bkgd win (normal #\space)) ; clear bkgd
+                (clear win)
+                (refresh win)
+                (and
+                 (xchar-equal? (bold #\.) x1)
+                 (xchar-equal? (bold #\.) x2))))))
+
  (pass-if "bkgdset"
-	  (begin
-	    (standend! win)
-	    (addstr win "This has default colors and spaces as background" 
-		    #:y 0 #:x 0)
+          (begin
+            (standend! win)
+            (addstr win "This has default colors and spaces as background"
+                    #:y 0 #:x 0)
             (bkgdset! win (color 1 (dim #\+)))
-	    (addstr win "This is black on red and has plus signs as background" 
-		    #:y 1 #:x 0)
-	    (refresh win)
-	    (maybe-sleep 2)
-	    (let ((x1 (inch win #:y 0 #:x 4))
-		  (x2 (inch win #:y 1 #:x 4)))
-	      (begin
-		(bkgd win (normal #\space)) ; clear bkgd
-		(clear win)
-		(refresh win)
-		(and
-		 (xchar-equal? (normal #\space) x1)
-		 (xchar-equal? (color 1 (dim #\+)) x2)))))))
+            (addstr win "This is black on red and has plus signs as background"
+                    #:y 1 #:x 0)
+            (refresh win)
+            (maybe-sleep 2)
+            (let ((x1 (inch win #:y 0 #:x 4))
+                  (x2 (inch win #:y 1 #:x 4)))
+              (begin
+                (bkgd win (normal #\space)) ; clear bkgd
+                (clear win)
+                (refresh win)
+                (and
+                 (xchar-equal? (normal #\space) x1)
+                 (xchar-equal? (color 1 (dim #\+)) x2)))))))
 
 (endwin)
 
 (curses-test-end test "curses_010_bkgd.out")
-		  

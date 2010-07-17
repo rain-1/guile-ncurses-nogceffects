@@ -3,9 +3,9 @@
 ;;;; functions
 
 (use-modules (test lib)
-	     (test lib2)
-	     (srfi srfi-1)
-	     (gucu curses))
+             (test lib2)
+             (srfi srfi-1)
+             (gucu curses))
 
 (define test (curses-test-start))
 
@@ -16,46 +16,46 @@
 (define hello-bold (bold "hello"))
 (define he-bold (bold "he"))
 
-(with-test-prefix 
+(with-test-prefix
  "addchstr"
-		  
+
  (pass-if "addchstr"
-	  (begin
-	    (clear stdscr)
-	    (move stdscr 0 0)
-	    (addchstr stdscr hello)
-	    (refresh stdscr)
-	    (let ((w2 (inchstr stdscr #:y 0 #:x 0 #:n 10)))
-	      (lset= xchar-equal? hello (list-head w2 (length hello))))))
+          (begin
+            (clear stdscr)
+            (move stdscr 0 0)
+            (addchstr stdscr hello)
+            (refresh stdscr)
+            (let ((w2 (inchstr stdscr #:y 0 #:x 0 #:n 10)))
+              (lset= xchar-equal? hello (list-head w2 (length hello))))))
 
  (pass-if "addchstr #:n"
-	  (begin
-	    (clear stdscr)
-	    (move stdscr 0 0)
-	    (addchstr stdscr hello #:n 2)
-	    (refresh stdscr)
-	    (let ((w2 (inchstr stdscr #:y 0 #:x 0 #:n 10)))
-	      (lset= xchar-equal? he (list-head w2 (length he))))))
+          (begin
+            (clear stdscr)
+            (move stdscr 0 0)
+            (addchstr stdscr hello #:n 2)
+            (refresh stdscr)
+            (let ((w2 (inchstr stdscr #:y 0 #:x 0 #:n 10)))
+              (lset= xchar-equal? he (list-head w2 (length he))))))
 
  (pass-if "addchstr #:y #:x"
-	  (begin
-	    (clear stdscr)
-	    (addchstr stdscr hello-bold #:y 1 #:x 0)
-	    (refresh stdscr)
-	    (let ((x2 (inchstr stdscr #:y 1 #:x 0 #:n 10)))
-	      (lset= xchar-equal? 
-		     hello-bold 
-		     (list-head x2 (length hello-bold))))))
+          (begin
+            (clear stdscr)
+            (addchstr stdscr hello-bold #:y 1 #:x 0)
+            (refresh stdscr)
+            (let ((x2 (inchstr stdscr #:y 1 #:x 0 #:n 10)))
+              (lset= xchar-equal?
+                     hello-bold
+                     (list-head x2 (length hello-bold))))))
 
  (pass-if "addchstr #:y #:x #:n"
-	  (begin
-	    (clear stdscr)
-	    (addchstr stdscr hello-bold #:y 1 #:x 0 #:n 2)
-	    (refresh stdscr)
-	    (let ((x2 (inchstr stdscr #:y 1 #:x 0 #:n 10)))
-	      (lset= xchar-equal? 
-		     he-bold 
-		     (list-head x2 (length he-bold)))))))
+          (begin
+            (clear stdscr)
+            (addchstr stdscr hello-bold #:y 1 #:x 0 #:n 2)
+            (refresh stdscr)
+            (let ((x2 (inchstr stdscr #:y 1 #:x 0 #:n 10)))
+              (lset= xchar-equal?
+                     he-bold
+                     (list-head x2 (length he-bold)))))))
 
 (endwin)
 

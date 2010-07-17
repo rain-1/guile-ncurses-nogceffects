@@ -1,8 +1,8 @@
 ;;;; -*- Mode: scheme; -*-
 ;;;; r000_initscr.test -- test suite for curses initialization functions
 (use-modules (test lib)
-	     (test lib2)
-	     (gucu curses))
+             (test lib2)
+             (gucu curses))
 
 (define test (curses-test-start))
 
@@ -14,46 +14,46 @@
 
 (define mainwin #f)
 
-(with-test-prefix 
+(with-test-prefix
  "initscr"
 
  (pass-if "(default)"
-	  (set! mainwin (initscr))
-	  (window? mainwin)))
+          (set! mainwin (initscr))
+          (window? mainwin)))
 
-(with-test-prefix 
+(with-test-prefix
  "isendwin?"
 
  (pass-if "before endwin"
-	  (equal? #f (isendwin?))))
+          (equal? #f (isendwin?))))
 
 ;; Leave curses
-(with-test-prefix 
+(with-test-prefix
  "endwin"
 
  (pass-if "1"
-	  (equal? #t (endwin))))
+          (equal? #t (endwin))))
 
-(with-test-prefix 
+(with-test-prefix
  "isendwin?"
 
  (pass-if "after endwin"
-	  (equal? #t (isendwin?))))
+          (equal? #t (isendwin?))))
 
 ;; Reenter curses
 (refresh mainwin)
 
-(with-test-prefix 
+(with-test-prefix
  "isendwin?"
 
  (pass-if "after refresh"
-	  (equal? #f (isendwin?))))
+          (equal? #f (isendwin?))))
 
 ;; Leave curses again
-(with-test-prefix 
+(with-test-prefix
  "endwin"
 
  (pass-if "2"
-	  (equal? #t (endwin))))
+          (equal? #t (endwin))))
 
 (curses-test-end test "curses_002_initscr.out")

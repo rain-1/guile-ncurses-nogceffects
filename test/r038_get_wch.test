@@ -2,9 +2,9 @@
 ;;;; r038_get_wch.test --- test suite for curses's get-wch
 
 (use-modules (test lib)
-	     (test lib2)
-	     (srfi srfi-1)
-	     (gucu curses))
+             (test lib2)
+             (srfi srfi-1)
+             (gucu curses))
 
 (setlocale LC_ALL "")
 (define test (curses-test-start))
@@ -20,12 +20,12 @@
 (echo!)
 
 ;; Should be able to get characters from the keyboard
-(with-test-prefix 
+(with-test-prefix
  "get-wch"
-	
+
  (pass-if "ungetch / getch (wide)"
-	  (begin
-            (ungetch #\ż) ; LATIN SMALL LETTER Z WITH DOT ABOVE 
+          (begin
+            (ungetch #\ż) ; LATIN SMALL LETTER Z WITH DOT ABOVE
             (equal? #\ż (getch win))
             ;; This should work, but as of 20090808, the underlying
             ;; ncurses library can't ungetch non-ASCII chars
@@ -43,17 +43,17 @@
               ;; This should work, but as of 20090808, the underlying
               ;; ncurses library can't ungetch non-ASCII chars
               *unspecified*)))
-					  
+
 (refresh win)
 (scrollok! win #t)
 (move win 0 0)
 (map (lambda (key)
        (pass-if (keyname key)
-		(begin
-		  ;; (addstr win (format #f "~S ~S\n" key (keyname key)))
-		  ;; (refresh win)
-		  ;; (usleep 10000)
-		  (string? (keyname key)))))
+                (begin
+                  ;; (addstr win (format #f "~S ~S\n" key (keyname key)))
+                  ;; (refresh win)
+                  ;; (usleep 10000)
+                  (string? (keyname key)))))
      (list
       KEY_BREAK
       KEY_DOWN

@@ -2,10 +2,10 @@
 ;;;; f003_field_attributes.test --- test suite for curses's form field attributes
 
 (use-modules (test lib)
-	     (test lib2)
-	     (srfi srfi-1)
-	     (gucu curses)
-	     (gucu form))
+             (test lib2)
+             (srfi srfi-1)
+             (gucu curses)
+             (gucu form))
 
 (define test (curses-test-start))
 
@@ -14,123 +14,123 @@
 ;; Create a two-page form.  Set the form to the first page.  Thus data-ahead
 ;; should be true and data behind should be false
 (with-test-prefix "form: field-attributes"
-		  (pass-if "foreground attributes"
-			   (let* ((field1 (new-field 1 10 0 0 0 0))
-				  (field2 (new-field 1 10 1 0 0 0))
-				  (field3 (new-field 1 10 2 0 0 0))
-				  (field4 (new-field 1 10 3 0 0 0))
-				  (field5 (new-field 1 10 4 0 0 0))
-				  (field6 (new-field 1 10 5 0 0 0))
-				  (field7 (new-field 1 10 6 0 0 0)))
-			     
-			     (set-field-fore! field1 A_BLINK)	
-			     (set-field-buffer! field1 0 "Blink")
-			     
-			     (set-field-fore! field2 A_BOLD)
-			     (set-field-buffer! field2 0 "Bold")
+                  (pass-if "foreground attributes"
+                           (let* ((field1 (new-field 1 10 0 0 0 0))
+                                  (field2 (new-field 1 10 1 0 0 0))
+                                  (field3 (new-field 1 10 2 0 0 0))
+                                  (field4 (new-field 1 10 3 0 0 0))
+                                  (field5 (new-field 1 10 4 0 0 0))
+                                  (field6 (new-field 1 10 5 0 0 0))
+                                  (field7 (new-field 1 10 6 0 0 0)))
 
-			     (set-field-fore! field3 A_DIM)
-			     (set-field-buffer! field3 0 "Dim")
+                             (set-field-fore! field1 A_BLINK)
+                             (set-field-buffer! field1 0 "Blink")
 
-			     (set-field-fore! field4 A_INVIS)
-			     (set-field-buffer! field4 0 "Invis")
+                             (set-field-fore! field2 A_BOLD)
+                             (set-field-buffer! field2 0 "Bold")
 
-			     (set-field-fore! field5 A_NORMAL)
-			     (set-field-buffer! field5 0 "Normal")
-			     
-			     (set-field-fore! field6 A_REVERSE)
-			     (set-field-buffer! field6 0 "Reverse")
-			     
-			     (set-field-fore! field7 A_UNDERLINE)
-			     (set-field-buffer! field7 0 "Underline")
-			     
-			     (let* (
-				    ;; Post that form
-				    (frm (new-form (list field1 field2 field3 field4 field5 field6 field7))))
-			       (post-form frm)
-			       ;; Paint it
-			       (refresh stdscr)
-			       ;;(sleep 1)
-			       (unpost-form frm)
-			       (and (eqv? (field-fore field1) A_BLINK)
-				    (eqv? (field-fore field2) A_BOLD)
-				    (eqv? (field-fore field3) A_DIM)
-				    (eqv? (field-fore field4) A_INVIS)
-				    (eqv? (field-fore field5) A_NORMAL)
-				    (eqv? (field-fore field6) A_REVERSE)
-				    (eqv? (field-fore field7) A_UNDERLINE)))))
-		  
-		  (pass-if "background attributes"
-			   (let* ((field1 (new-field 1 10 0 0 0 0))
-				  (field2 (new-field 1 10 1 0 0 0))
-				  (field3 (new-field 1 10 2 0 0 0))
-				  (field4 (new-field 1 10 3 0 0 0))
-				  (field5 (new-field 1 10 4 0 0 0))
-				  (field6 (new-field 1 10 5 0 0 0))
-				  (field7 (new-field 1 10 6 0 0 0)))
-			     
-			     (set-field-back! field1 A_BLINK)	
-			     (set-field-buffer! field1 0 "Blink")
-			     
-			     (set-field-back! field2 A_BOLD)
-			     (set-field-buffer! field2 0 "Bold")
+                             (set-field-fore! field3 A_DIM)
+                             (set-field-buffer! field3 0 "Dim")
 
-			     (set-field-back! field3 A_DIM)
-			     (set-field-buffer! field3 0 "Dim")
+                             (set-field-fore! field4 A_INVIS)
+                             (set-field-buffer! field4 0 "Invis")
 
-			     (set-field-back! field4 A_INVIS)
-			     (set-field-buffer! field4 0 "Invis")
+                             (set-field-fore! field5 A_NORMAL)
+                             (set-field-buffer! field5 0 "Normal")
 
-			     (set-field-back! field5 A_NORMAL)
-			     (set-field-buffer! field5 0 "Normal")
+                             (set-field-fore! field6 A_REVERSE)
+                             (set-field-buffer! field6 0 "Reverse")
 
-			     (set-field-back! field6 A_REVERSE)
-			     (set-field-buffer! field6 0 "Reverse")
+                             (set-field-fore! field7 A_UNDERLINE)
+                             (set-field-buffer! field7 0 "Underline")
 
-			     (set-field-back! field7 A_UNDERLINE)
-			     (set-field-buffer! field7 0 "Underline")
-			     
-			     (let* (
-				    ;; Post that form
-				    (frm (new-form (list field1 field2 field3 field4 field5 field6 field7))))
-			       (post-form frm)
-			       ;; Paint it
-			       (refresh stdscr)
-			       ;;(sleep 1)
-			       (unpost-form frm)
-			       (and (eqv? (field-back field1) A_BLINK)
-				    (eqv? (field-back field2) A_BOLD)
-				    (eqv? (field-back field3) A_DIM)
-				    (eqv? (field-back field4) A_INVIS)
-				    (eqv? (field-back field5) A_NORMAL)
-				    (eqv? (field-back field6) A_REVERSE)
-				    (eqv? (field-back field7) A_UNDERLINE)))))
+                             (let* (
+                                    ;; Post that form
+                                    (frm (new-form (list field1 field2 field3 field4 field5 field6 field7))))
+                               (post-form frm)
+                               ;; Paint it
+                               (refresh stdscr)
+                               ;;(sleep 1)
+                               (unpost-form frm)
+                               (and (eqv? (field-fore field1) A_BLINK)
+                                    (eqv? (field-fore field2) A_BOLD)
+                                    (eqv? (field-fore field3) A_DIM)
+                                    (eqv? (field-fore field4) A_INVIS)
+                                    (eqv? (field-fore field5) A_NORMAL)
+                                    (eqv? (field-fore field6) A_REVERSE)
+                                    (eqv? (field-fore field7) A_UNDERLINE)))))
+
+                  (pass-if "background attributes"
+                           (let* ((field1 (new-field 1 10 0 0 0 0))
+                                  (field2 (new-field 1 10 1 0 0 0))
+                                  (field3 (new-field 1 10 2 0 0 0))
+                                  (field4 (new-field 1 10 3 0 0 0))
+                                  (field5 (new-field 1 10 4 0 0 0))
+                                  (field6 (new-field 1 10 5 0 0 0))
+                                  (field7 (new-field 1 10 6 0 0 0)))
+
+                             (set-field-back! field1 A_BLINK)
+                             (set-field-buffer! field1 0 "Blink")
+
+                             (set-field-back! field2 A_BOLD)
+                             (set-field-buffer! field2 0 "Bold")
+
+                             (set-field-back! field3 A_DIM)
+                             (set-field-buffer! field3 0 "Dim")
+
+                             (set-field-back! field4 A_INVIS)
+                             (set-field-buffer! field4 0 "Invis")
+
+                             (set-field-back! field5 A_NORMAL)
+                             (set-field-buffer! field5 0 "Normal")
+
+                             (set-field-back! field6 A_REVERSE)
+                             (set-field-buffer! field6 0 "Reverse")
+
+                             (set-field-back! field7 A_UNDERLINE)
+                             (set-field-buffer! field7 0 "Underline")
+
+                             (let* (
+                                    ;; Post that form
+                                    (frm (new-form (list field1 field2 field3 field4 field5 field6 field7))))
+                               (post-form frm)
+                               ;; Paint it
+                               (refresh stdscr)
+                               ;;(sleep 1)
+                               (unpost-form frm)
+                               (and (eqv? (field-back field1) A_BLINK)
+                                    (eqv? (field-back field2) A_BOLD)
+                                    (eqv? (field-back field3) A_DIM)
+                                    (eqv? (field-back field4) A_INVIS)
+                                    (eqv? (field-back field5) A_NORMAL)
+                                    (eqv? (field-back field6) A_REVERSE)
+                                    (eqv? (field-back field7) A_UNDERLINE)))))
 
 
-		  (pass-if "pad"
-			   (let* ((field1 (new-field 1 10 0 0 0 0))
-				  (field2 (new-field 1 10 1 0 0 0))
-				  (field3 (new-field 1 10 2 0 0 0)))
-	
-			     (set-field-pad! field1 #\sp)	
-			     (set-field-buffer! field1 0 "Space")
+                  (pass-if "pad"
+                           (let* ((field1 (new-field 1 10 0 0 0 0))
+                                  (field2 (new-field 1 10 1 0 0 0))
+                                  (field3 (new-field 1 10 2 0 0 0)))
 
-			     (set-field-pad! field2 #\.)
-			     (set-field-buffer! field2 0 "Period")
-			     
-			     (set-field-pad! field3 #\+)
-			     (set-field-buffer! field3 0 "Plus")
-			     
-			     (let* (
-				    ;; Post that form
-				    (frm (new-form (list field1 field2 field3))))
-			       (post-form frm)
-			       ;; Paint it
-			       (refresh stdscr)
-			       ;;(sleep 1)
-			       (and (eqv? (field-pad field1) #\sp)
-				    (eqv? (field-pad field2) #\.)
-				    (eqv? (field-pad field3) #\+))))))
+                             (set-field-pad! field1 #\sp)
+                             (set-field-buffer! field1 0 "Space")
+
+                             (set-field-pad! field2 #\.)
+                             (set-field-buffer! field2 0 "Period")
+
+                             (set-field-pad! field3 #\+)
+                             (set-field-buffer! field3 0 "Plus")
+
+                             (let* (
+                                    ;; Post that form
+                                    (frm (new-form (list field1 field2 field3))))
+                               (post-form frm)
+                               ;; Paint it
+                               (refresh stdscr)
+                               ;;(sleep 1)
+                               (and (eqv? (field-pad field1) #\sp)
+                                    (eqv? (field-pad field2) #\.)
+                                    (eqv? (field-pad field3) #\+))))))
 
 
 (endwin)

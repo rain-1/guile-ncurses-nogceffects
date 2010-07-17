@@ -2,70 +2,70 @@
 ;;;; f007_form_field_opts.test --- test suite for curses's field option getter/setter
 
 (use-modules (test lib)
-	     (test lib2)
-	     (srfi srfi-1)
-	     (gucu curses)
-	     (gucu form)
-	     (ice-9 format))
+             (test lib2)
+             (srfi srfi-1)
+             (gucu curses)
+             (gucu form)
+             (ice-9 format))
 
 (define test (curses-test-start))
 (set! *sleep* #f)
 (define stdscr (initscr))
 
-(with-test-prefix 
+(with-test-prefix
  "form: field opts"
- 
+
  (pass-if "default"
-	  (begin
-	    (let* ((field1 (new-field 1 10 0 0 0 0))
-		   (fo (field-opts field1))
-		   (fo2 (logior O_VISIBLE
-				O_ACTIVE
-				O_PUBLIC
-				O_EDIT
-				O_WRAP
-				O_BLANK
-				O_AUTOSKIP
-				O_NULLOK
-				O_STATIC
-				O_PASSOK)))
-	      
-	      
-	      (addstr stdscr 
-		      (format #f "VISIBL ~16,'0b~%" O_VISIBLE) #:y 6 #:x 0)
-	      (addstr stdscr (format #f "ACTIVE ~16,'0b~%" O_ACTIVE))
-	      (addstr stdscr (format #f "PUBLIC ~16,'0b~%" O_PUBLIC))
-	      (addstr stdscr (format #f "  EDIT ~16,'0b~%" O_EDIT))
-	      (addstr stdscr (format #f "  WRAP ~16,'0b~%" O_WRAP))
-	      (addstr stdscr (format #f " BLANK ~16,'0b~%" O_BLANK))
-	      (addstr stdscr (format #f "  SKIP ~16,'0b~%" O_AUTOSKIP))
-	      (addstr stdscr (format #f "NULLOK ~16,'0b~%" O_NULLOK))
-	      (addstr stdscr (format #f "STATIC ~16,'0b~%" O_STATIC))
-	      (addstr stdscr (format #f "PASSOK ~16,'0b~%" O_PASSOK))
-	      (addstr stdscr (format #f "DEFALT ~16,'0b~%" fo))
-	      (refresh stdscr)
-	      (maybe-sleep 1)
-	      (eqv? fo fo2))))
+          (begin
+            (let* ((field1 (new-field 1 10 0 0 0 0))
+                   (fo (field-opts field1))
+                   (fo2 (logior O_VISIBLE
+                                O_ACTIVE
+                                O_PUBLIC
+                                O_EDIT
+                                O_WRAP
+                                O_BLANK
+                                O_AUTOSKIP
+                                O_NULLOK
+                                O_STATIC
+                                O_PASSOK)))
+
+
+              (addstr stdscr
+                      (format #f "VISIBL ~16,'0b~%" O_VISIBLE) #:y 6 #:x 0)
+              (addstr stdscr (format #f "ACTIVE ~16,'0b~%" O_ACTIVE))
+              (addstr stdscr (format #f "PUBLIC ~16,'0b~%" O_PUBLIC))
+              (addstr stdscr (format #f "  EDIT ~16,'0b~%" O_EDIT))
+              (addstr stdscr (format #f "  WRAP ~16,'0b~%" O_WRAP))
+              (addstr stdscr (format #f " BLANK ~16,'0b~%" O_BLANK))
+              (addstr stdscr (format #f "  SKIP ~16,'0b~%" O_AUTOSKIP))
+              (addstr stdscr (format #f "NULLOK ~16,'0b~%" O_NULLOK))
+              (addstr stdscr (format #f "STATIC ~16,'0b~%" O_STATIC))
+              (addstr stdscr (format #f "PASSOK ~16,'0b~%" O_PASSOK))
+              (addstr stdscr (format #f "DEFALT ~16,'0b~%" fo))
+              (refresh stdscr)
+              (maybe-sleep 1)
+              (eqv? fo fo2))))
 
  (pass-if "set"
-	  (begin
-	    (let ((field1 (new-field 1 10 0 0 0 0)))
-	      (set-field-opts! field1 O_VISIBLE)
-	      (eqv? (field-opts field1) O_VISIBLE))))
+          (begin
+            (let ((field1 (new-field 1 10 0 0 0 0)))
+              (set-field-opts! field1 O_VISIBLE)
+              (eqv? (field-opts field1) O_VISIBLE))))
 
  (pass-if "off"
-	  (begin
-	    (let ((field1 (new-field 1 10 0 0 0 0)))
-	      (set-field-opts! field1 O_VISIBLE)
-	      (field-opts-off! field1 O_VISIBLE)
-	      (eqv? (field-opts field1) 0))))
+          (begin
+            (let ((field1 (new-field 1 10 0 0 0 0)))
+              (set-field-opts! field1 O_VISIBLE)
+              (field-opts-off! field1 O_VISIBLE)
+              (eqv? (field-opts field1) 0))))
 
  (pass-if "on"
-	  (begin
-	    (let ((field1 (new-field 1 10 0 0 0 0)))
-	      (set-field-opts! field1 O_VISIBLE)
-	      (field-opts-on! field1 O_ACTIVE)
-	      (eqv? (field-opts field1) (logior O_VISIBLE O_ACTIVE))))))
+          (begin
+            (let ((field1 (new-field 1 10 0 0 0 0)))
+              (set-field-opts! field1 O_VISIBLE)
+              (field-opts-on! field1 O_ACTIVE)
+              (eqv? (field-opts field1) (logior O_VISIBLE O_ACTIVE))))))
 
 
 (endwin)

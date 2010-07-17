@@ -2,11 +2,11 @@
 ;;;; m003_mitem_name.test --- item-name, item-description
 
 (use-modules (test lib)
-	     (test lib2)
-	     (srfi srfi-1)
+             (test lib2)
+             (srfi srfi-1)
              (srfi srfi-13)
-	     (gucu curses)
-	     (gucu menu))
+             (gucu curses)
+             (gucu menu))
 
 (define test (curses-test-start))
 
@@ -15,22 +15,21 @@
 ;; Should be able to make a menu
 (with-test-prefix "mitem-name"
 
-		  (pass-if "item-description"
-			   (let* ((item1 (new-item "item1" "description1"))
-				  (item2 (new-item "item2" "description2"))
-				  (m (new-menu (list item1 item2))))
-			     (post-menu m)
-			     (refresh win)
-			     ;; (sleep 1)
-			     (let ((ret (and (string= (item-name item1) "item1")
-					     (string= (item-description item1) "description1")
-					     (string= (item-name item2) "item2")
-					     (string= (item-description item2) "description2"))))
-			       (unpost-menu m)
-			       (refresh win)
-			       ret))))
+                  (pass-if "item-description"
+                           (let* ((item1 (new-item "item1" "description1"))
+                                  (item2 (new-item "item2" "description2"))
+                                  (m (new-menu (list item1 item2))))
+                             (post-menu m)
+                             (refresh win)
+                             ;; (sleep 1)
+                             (let ((ret (and (string= (item-name item1) "item1")
+                                             (string= (item-description item1) "description1")
+                                             (string= (item-name item2) "item2")
+                                             (string= (item-description item2) "description2"))))
+                               (unpost-menu m)
+                               (refresh win)
+                               ret))))
 
 (endwin)
 
 (curses-test-end test "m003_mitem_name.out")
-		  

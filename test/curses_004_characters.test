@@ -3,22 +3,22 @@
 ;;;; constants
 
 (use-modules (test lib)
-	     (test lib2)
-	     (srfi srfi-1)
-	     (gucu curses))
+             (test lib2)
+             (srfi srfi-1)
+             (gucu curses))
 
 (define test (curses-test-start))
 
 (define win (initscr))
 
-(with-test-prefix 
+(with-test-prefix
  "ASCII"
  (pass-if "a"
-	  (begin
-	    (addch win (normal #\a) #:x 0 #:y 0)
-	    (refresh win)
-	    (let ((x2 (inch win #:y 0 #:x 0)))
-	      (xchar-equal? x2 (normal #\a))))))
+          (begin
+            (addch win (normal #\a) #:x 0 #:y 0)
+            (refresh win)
+            (let ((x2 (inch win #:y 0 #:x 0)))
+              (xchar-equal? x2 (normal #\a))))))
 
 (define (acs-test-pair pair)
   (acs-test (car pair) (cdr pair)))
@@ -27,44 +27,44 @@
 ;; ALTCHARSET.  If it can't it'll show up as a normal character
 (define (acs-test xname x)
   (pass-if xname
-	   (begin
-	     (clear win)
-	     (move win 0 0)
-	     (addch win (normal x))
-	     (refresh win)
-	     (usleep 10000)
-	     (move win 0 0)
-	     (let ((x2 (inch win)))
+           (begin
+             (clear win)
+             (move win 0 0)
+             (addch win (normal x))
+             (refresh win)
+             (usleep 10000)
+             (move win 0 0)
+             (let ((x2 (inch win)))
                (xchar-equal? (normal x) x2)))))
 
-(with-test-prefix 
+(with-test-prefix
  "ACS"
  (map acs-test-pair
       `(("acs-ulcorner" . ,(acs-ulcorner))
-	("acs-llcorner" . ,(acs-llcorner))
-	("acs-urcorner" . ,(acs-urcorner))
-	("acs-lrcorner" . ,(acs-lrcorner))
-	("acs-rtee" . ,(acs-rtee))
-	("acs-ltee" . ,(acs-ltee))
-	("acs-btee" . ,(acs-btee))
-	("acs-ttee" . ,(acs-ttee))
-	("acs-hline" . ,(acs-hline))
-	("acs-vline" . ,(acs-vline))
-	("acs-plus" . ,(acs-plus))
-	("acs-s1" . ,(acs-s1))
-	("acs-s9" . ,(acs-s9))
-	("acs-diamond" . ,(acs-diamond))
-	("acs-ckboard" . ,(acs-ckboard))
-	("acs-degree" . ,(acs-degree))
-	("acs-plminus" . ,(acs-plminus))
-	("acs-larrow" . ,(acs-larrow))
-	("acs-rarrow" . ,(acs-rarrow))
-	("acs-uarrow" . ,(acs-uarrow))
-	("acs-darrow" . ,(acs-darrow))
-	("acs-board" . ,(acs-board))
-	("acs-lantern" . ,(acs-lantern))
-	("acs-block" . ,(acs-block))
-	)))
+        ("acs-llcorner" . ,(acs-llcorner))
+        ("acs-urcorner" . ,(acs-urcorner))
+        ("acs-lrcorner" . ,(acs-lrcorner))
+        ("acs-rtee" . ,(acs-rtee))
+        ("acs-ltee" . ,(acs-ltee))
+        ("acs-btee" . ,(acs-btee))
+        ("acs-ttee" . ,(acs-ttee))
+        ("acs-hline" . ,(acs-hline))
+        ("acs-vline" . ,(acs-vline))
+        ("acs-plus" . ,(acs-plus))
+        ("acs-s1" . ,(acs-s1))
+        ("acs-s9" . ,(acs-s9))
+        ("acs-diamond" . ,(acs-diamond))
+        ("acs-ckboard" . ,(acs-ckboard))
+        ("acs-degree" . ,(acs-degree))
+        ("acs-plminus" . ,(acs-plminus))
+        ("acs-larrow" . ,(acs-larrow))
+        ("acs-rarrow" . ,(acs-rarrow))
+        ("acs-uarrow" . ,(acs-uarrow))
+        ("acs-darrow" . ,(acs-darrow))
+        ("acs-board" . ,(acs-board))
+        ("acs-lantern" . ,(acs-lantern))
+        ("acs-block" . ,(acs-block))
+        )))
 
 (endwin)
 

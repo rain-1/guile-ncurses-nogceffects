@@ -13,8 +13,8 @@
 
 (addstr stdscr "Blink Don't Blink")
 
-(chgat   stdscr		     ; window
-	 5                   ; num of chars 
+(chgat   stdscr              ; window
+         5                   ; num of chars
          A_BLINK             ; attributes
          1                   ; use color pair #1
          #:y 0               ; start y

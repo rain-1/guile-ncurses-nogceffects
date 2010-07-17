@@ -32,7 +32,7 @@ gucu_scale_menu (SCM menu)
 }
 
 
-/* returns a list of 3 elements: 
+/* returns a list of 3 elements:
 1. num spaces between item name and description
 2. num rows
 3. num cols
@@ -54,7 +54,7 @@ gucu_menu_spacing (SCM menu)
 
   if (ret_val == E_OK)
     return scm_list_3 (scm_from_int (spc_description),
-		       scm_from_int (spc_rows), scm_from_int (spc_columns));
+                       scm_from_int (spc_rows), scm_from_int (spc_columns));
   else
     return SCM_BOOL_F;
 }

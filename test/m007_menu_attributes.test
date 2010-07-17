@@ -4,76 +4,76 @@
 ;;;; set-menu-grey menu-fore menu-back menu-grey
 
 (use-modules (test lib)
-	     (test lib2)
-	     (ice-9 format)
-	     (srfi srfi-1)
-	     (gucu curses)
-	     (gucu menu))
+             (test lib2)
+             (ice-9 format)
+             (srfi srfi-1)
+             (gucu curses)
+             (gucu menu))
 
 (define test (curses-test-start))
 
 (define win (initscr))
 
 ;; Should be able to make a menu with special attributes
-(with-test-prefix 
+(with-test-prefix
  "menu-attributes"
 
  (pass-if "(defaults)"
-	  (let* ((item1 (new-item "item1" "unselected"))
-		 (item2 (new-item "item2" "unselectable"))
-		 (item3 (new-item "item3" "selected"))
-		 (item4 (new-item "item4" "unselected"))
-		 (menu (new-menu (list item1 item2 item3 item4))))
-	    (item-opts-off! item2 O_SELECTABLE)
-	    (menu-opts-off! menu O_ONEVALUE)
-	    (set-item-value! item1 #f)
-	    (set-item-value! item3 #t)
-	    (post-menu menu)
-	    (refresh win)
-	    ;;(sleep 3)
-	    (let ((ret (and (equal? (menu-fore menu) A_STANDOUT)
-			    (equal? (menu-back menu) A_NORMAL)
-			    (equal? (menu-grey menu) A_UNDERLINE))))
-	      (move win 10 0)
-	      (addstr win (format #f "~x ~x ~x ~x ~x ~x "
-				  (menu-fore menu)
-				  A_STANDOUT
-				  (menu-back menu)
-				  A_NORMAL
-				  (menu-grey menu)
-				  A_UNDERLINE))
-	      (refresh win)
-	      ;;(sleep 3)
-	      (unpost-menu menu)
-	      (refresh win)
-	      ;; There is a bug in older ncurses that sets
-	      ;; the default foreground to A_REVERSE,
-	      ;; not A_STANDOUT, so this test may fail
-	      ;; unnecessarily
-	      ;;*unspecified*
-	      )))
+          (let* ((item1 (new-item "item1" "unselected"))
+                 (item2 (new-item "item2" "unselectable"))
+                 (item3 (new-item "item3" "selected"))
+                 (item4 (new-item "item4" "unselected"))
+                 (menu (new-menu (list item1 item2 item3 item4))))
+            (item-opts-off! item2 O_SELECTABLE)
+            (menu-opts-off! menu O_ONEVALUE)
+            (set-item-value! item1 #f)
+            (set-item-value! item3 #t)
+            (post-menu menu)
+            (refresh win)
+            ;;(sleep 3)
+            (let ((ret (and (equal? (menu-fore menu) A_STANDOUT)
+                            (equal? (menu-back menu) A_NORMAL)
+                            (equal? (menu-grey menu) A_UNDERLINE))))
+              (move win 10 0)
+              (addstr win (format #f "~x ~x ~x ~x ~x ~x "
+                                  (menu-fore menu)
+                                  A_STANDOUT
+                                  (menu-back menu)
+                                  A_NORMAL
+                                  (menu-grey menu)
+                                  A_UNDERLINE))
+              (refresh win)
+              ;;(sleep 3)
+              (unpost-menu menu)
+              (refresh win)
+              ;; There is a bug in older ncurses that sets
+              ;; the default foreground to A_REVERSE,
+              ;; not A_STANDOUT, so this test may fail
+              ;; unnecessarily
+              ;;*unspecified*
+              )))
 
  (pass-if "set-menu-*"
-	  (let* ((item1 (new-item "item1" "unselected"))
-		 (item2 (new-item "item2" "unselectable"))
-		 (item3 (new-item "item3" "selected"))
-		 (item4 (new-item "item4" "unselected"))
-		 (menu (new-menu (list item1 item2 item3 item4))))
-	    (menu-opts-off! menu O_ONEVALUE)
-	    (item-opts-off! item2 O_SELECTABLE)
-	    (set-item-value! item3 #t)
-	    (set-menu-fore! menu A_BLINK)
-	    (set-menu-back! menu A_UNDERLINE)
-	    (set-menu-grey! menu A_DIM)
-	    (post-menu menu)
-	    (refresh win)
-	    ;;(sleep 3)
-	    (let ((ret (and (equal? (menu-fore menu) A_BLINK)
-			    (equal? (menu-back menu) A_UNDERLINE)
-			    (equal? (menu-grey menu) A_DIM))))
-	      (unpost-menu menu)
-	      (refresh win)
-	      ret))))
+          (let* ((item1 (new-item "item1" "unselected"))
+                 (item2 (new-item "item2" "unselectable"))
+                 (item3 (new-item "item3" "selected"))
+                 (item4 (new-item "item4" "unselected"))
+                 (menu (new-menu (list item1 item2 item3 item4))))
+            (menu-opts-off! menu O_ONEVALUE)
+            (item-opts-off! item2 O_SELECTABLE)
+            (set-item-value! item3 #t)
+            (set-menu-fore! menu A_BLINK)
+            (set-menu-back! menu A_UNDERLINE)
+            (set-menu-grey! menu A_DIM)
+            (post-menu menu)
+            (refresh win)
+            ;;(sleep 3)
+            (let ((ret (and (equal? (menu-fore menu) A_BLINK)
+                            (equal? (menu-back menu) A_UNDERLINE)
+                            (equal? (menu-grey menu) A_DIM))))
+              (unpost-menu menu)
+              (refresh win)
+              ret))))
 
 (endwin)
 

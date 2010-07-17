@@ -2,10 +2,10 @@
 ;;;; r040-term-attrs.test --- test suite for curses's term attrs
 
 (use-modules (test lib)
-	     (test lib2)
-	     (gucu curses)
-	     (ice-9 format)
-	     (srfi srfi-1))
+             (test lib2)
+             (gucu curses)
+             (ice-9 format)
+             (srfi srfi-1))
 
 (define test (curses-test-start))
 
@@ -13,78 +13,78 @@
 (set! *sleep* #f)
 
 ;; Should be able to get term attributes
-(with-test-prefix 
+(with-test-prefix
  "term-attrs"
- 
+
  ;; Not sure what the correct answer for
  ;; erasewchar should be.  Gnu/Linux xterm gives
  ;; #\del.
  (pass-if "erasechar"
-	  (begin
-	    (clear win)
-	    (refresh win)
-	    (let* ((c (erasechar))
+          (begin
+            (clear win)
+            (refresh win)
+            (let* ((c (erasechar))
                    (pass (eqv? #\del c)))
               (addstr win (format #f "erasechar for ~s: ~s\n" (termname) c))
               (addstr win (format #f "expecting #\\del\n"))
-	      (refresh win)
-	      (maybe-sleep 1)
+              (refresh win)
+              (maybe-sleep 1)
               pass)))
-		  
+
  ;; Not sure what the correct answer for killwchar
  ;; should be.  Gnu/Linux xterm give #\nak.
  (pass-if "killchar"
-	  (begin
-	    (clear win)
-	    (refresh win)
-	    (let* ((c (killchar))
+          (begin
+            (clear win)
+            (refresh win)
+            (let* ((c (killchar))
                    (pass (eqv? #\nak c)))
-	      (addstr win (format #f "killchar for ~s: ~s\n" (termname) c))
+              (addstr win (format #f "killchar for ~s: ~s\n" (termname) c))
               (addstr win "expecting #\\nak\n")
-	      (refresh win)
-	      (maybe-sleep 1)
+              (refresh win)
+              (maybe-sleep 1)
               pass)))
 
  (pass-if "term-attrs"
-	  (begin
-	    (clear win)
-	    (refresh win)
-	    (let ((ta (term-attrs))
-		  (ta2 (logior 
-			A_ALTCHARSET
-			A_BLINK
-			A_BOLD
-			;; A_DIM
-			A_INVIS
-			;; A_PROTECT
-			A_REVERSE
-			A_STANDOUT
-			A_UNDERLINE))) 
-	      (move win 0 0)
-	      (addstr win (format #f "~a ~32,'0b~%" (string-pad-right (termname) 5) ta))
-	      (addstr win (format #f " VERT ~32,'0b~%" A_VERTICAL))
-	      (addstr win (format #f "  TOP ~32,'0b~%" A_TOP))
-	      (addstr win (format #f "RIGHT ~32,'0b~%" A_RIGHT))
-	      (addstr win (format #f "  LOW ~32,'0b~%" A_LOW))
-	      (addstr win (format #f " LEFT ~32,'0b~%" A_LEFT))
-	      (addstr win (format #f "HORIZ ~32,'0b~%" A_HORIZONTAL))
+          (begin
+            (clear win)
+            (refresh win)
+            (let ((ta (term-attrs))
+                  (ta2 (logior
+                        A_ALTCHARSET
+                        A_BLINK
+                        A_BOLD
+                        ;; A_DIM
+                        A_INVIS
+                        ;; A_PROTECT
+                        A_REVERSE
+                        A_STANDOUT
+                        A_UNDERLINE)))
+              (move win 0 0)
+              (addstr win (format #f "~a ~32,'0b~%" (string-pad-right (termname) 5) ta))
+              (addstr win (format #f " VERT ~32,'0b~%" A_VERTICAL))
+              (addstr win (format #f "  TOP ~32,'0b~%" A_TOP))
+              (addstr win (format #f "RIGHT ~32,'0b~%" A_RIGHT))
+              (addstr win (format #f "  LOW ~32,'0b~%" A_LOW))
+              (addstr win (format #f " LEFT ~32,'0b~%" A_LEFT))
+              (addstr win (format #f "HORIZ ~32,'0b~%" A_HORIZONTAL))
 
-	      (addstr win (format #f "PRTCT ~32,'0b~%" A_PROTECT))
-	      (addstr win (format #f "INVIS ~32,'0b~%" A_INVIS))
-	      (addstr win (format #f "  ALT ~32,'0b~%" A_ALTCHARSET))
-	      (addstr win (format #f " BOLD ~32,'0b~%" A_BOLD))
-	      (addstr win (format #f "  DIM ~32,'0b~%" A_DIM))
-	      (addstr win (format #f "BLINK ~32,'0b~%" A_BLINK))
-	      (addstr win (format #f "RVRSE ~32,'0b~%" A_REVERSE))
-	      (addstr win (format #f "UNDRL ~32,'0b~%" A_UNDERLINE))
-	      (addstr win (format #f "STNDT ~32,'0b~%" A_STANDOUT))
-	      (addstr win (format #f "COLOR ~32,'0b~%" A_COLOR))
-	      (addstr win (format #f "      ~32,'0b~%" ta2))
-	      (refresh win)
-	      (maybe-sleep 4)
-	      (eqv? ta ta2))
+              (addstr win (format #f "PRTCT ~32,'0b~%" A_PROTECT))
+              (addstr win (format #f "INVIS ~32,'0b~%" A_INVIS))
+              (addstr win (format #f "  ALT ~32,'0b~%" A_ALTCHARSET))
+              (addstr win (format #f " BOLD ~32,'0b~%" A_BOLD))
+              (addstr win (format #f "  DIM ~32,'0b~%" A_DIM))
+              (addstr win (format #f "BLINK ~32,'0b~%" A_BLINK))
+              (addstr win (format #f "RVRSE ~32,'0b~%" A_REVERSE))
+              (addstr win (format #f "UNDRL ~32,'0b~%" A_UNDERLINE))
+              (addstr win (format #f "STNDT ~32,'0b~%" A_STANDOUT))
+              (addstr win (format #f "COLOR ~32,'0b~%" A_COLOR))
+              (addstr win (format #f "      ~32,'0b~%" ta2))
+              (refresh win)
+              (maybe-sleep 4)
+              (eqv? ta ta2))
             (endwin)
-	    *unspecified*))
+            *unspecified*))
 
  )
 

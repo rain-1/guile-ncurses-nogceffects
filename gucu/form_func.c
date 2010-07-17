@@ -746,7 +746,7 @@ gucu_set_form_opts_x (SCM form, SCM opts)
   return SCM_UNSPECIFIED;
 }
 
-/* The the page number of the form */
+/* The page number of the form */
 SCM
 gucu_set_form_page_x (SCM form, SCM n)
 {

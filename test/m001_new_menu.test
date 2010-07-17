@@ -2,33 +2,33 @@
 ;;;; f001_new_menu.test --- test suite for curses's menu functions
 
 (use-modules (test lib)
-	     (test lib2)
-	     (srfi srfi-1)
-	     (gucu curses)
-	     (gucu menu))
+             (test lib2)
+             (srfi srfi-1)
+             (gucu curses)
+             (gucu menu))
 
 (define test (curses-test-start))
 (set! *sleep* #f)
 (define win (initscr))
 
 ;; Should be able to make a menu
-(with-test-prefix 
+(with-test-prefix
  "new-menu"
-		  
+
  (pass-if-exception "no items" exception:wrong-type-arg
-		    (let ((f (new-menu '())))
-		      (menu? f)))
-	   
+                    (let ((f (new-menu '())))
+                      (menu? f)))
+
  (pass-if "one item"
-	  (let* ((item (new-item "item1" "description1"))
-		 (m (new-menu (list item))))
-	    (post-menu m)
-	    (refresh win)
-	    (maybe-sleep 1)
-	    (unpost-menu m)
-	    (refresh win)
-	    (menu? m))))
-	   
+          (let* ((item (new-item "item1" "description1"))
+                 (m (new-menu (list item))))
+            (post-menu m)
+            (refresh win)
+            (maybe-sleep 1)
+            (unpost-menu m)
+            (refresh win)
+            (menu? m))))
+
 (endwin)
 
 (curses-test-end test "m001_new_menu.out")

@@ -2,16 +2,16 @@
 ;;;; curses_037_mouse.test --- test suite for mouse functions
 
 (use-modules (test lib)
-	     (test lib2)
-	     (gucu curses)
-	     (srfi srfi-1))
+             (test lib2)
+             (gucu curses)
+             (srfi srfi-1))
 
 (define test (curses-test-start))
 (set! *sleep* #f)
 (setenv "TERM" "xterm")
 (define win (initscr))
 
-(with-test-prefix 
+(with-test-prefix
  "mouse"
 
  (pass-if "mouseinterval 1"
@@ -27,7 +27,7 @@
             (refresh win)
             (maybe-sleep 3)
             pass))
- 
+
  (pass-if "mouseinterval 1"
           (clear win)
           (refresh win)

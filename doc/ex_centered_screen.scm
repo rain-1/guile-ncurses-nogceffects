@@ -2,7 +2,7 @@
 !#
 
 (use-modules (gucu curses)
-	     (srfi srfi-1))
+             (srfi srfi-1))
 
 (define stdscr (initscr))
 
@@ -14,21 +14,21 @@
 
   ;; Print the message centered in the window
   (move stdscr
-	(round (/ row 2))		
-	(round (/ (- col len) 2)))
+        (round (/ row 2))
+        (round (/ (- col len) 2)))
   (addstr stdscr mesg)
 
   ;; Use "format" to generate a message, and then print it
-  (addstr stdscr 
-	  (format #f "This screen has ~a rows and ~a columns ~%" 
-		  row col)
-	  #:y (- row 2)
-	  #:x 0)
-            
+  (addstr stdscr
+          (format #f "This screen has ~a rows and ~a columns ~%"
+                  row col)
+          #:y (- row 2)
+          #:x 0)
+
   (addstr stdscr "Try resizing your window (if possible) ")
   (addstr stdscr "and then run this program again")
   (refresh stdscr)
-  
+
   ;; Wait for a keypress
   (getch stdscr)
   (endwin))
