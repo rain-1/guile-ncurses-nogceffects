@@ -15,7 +15,7 @@
 
 
 # Specification in the form of a command-line invocation:
-#   gnulib-tool --import --dir=. --lib=libgnu --source-base=lib --m4-base=m4 --doc-base=doc --tests-base=tests --aux-dir=build_aux --no-libtool --macro-prefix=gl gettext maintainer-makefile progname
+#   gnulib-tool --import --dir=. --lib=libgnu --source-base=lib --m4-base=m4 --doc-base=doc --tests-base=tests --aux-dir=build_aux --no-libtool --macro-prefix=gl gettext maintainer-makefile progname streq
 
 # Specification in the form of a few gnulib-tool.m4 macro invocations:
 gl_LOCAL_DIR([])
@@ -23,6 +23,7 @@ gl_MODULES([
   gettext
   maintainer-makefile
   progname
+  streq
 ])
 gl_AVOID([])
 gl_SOURCE_BASE([lib])
