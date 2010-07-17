@@ -1,0 +1,6 @@
+/Makefile.am
+/dummy.c
+/gettext.h
+/progname.c
+/progname.h
+/streq.h
