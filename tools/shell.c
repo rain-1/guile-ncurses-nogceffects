@@ -32,8 +32,6 @@
 #include <curses.h>    /* all: newterm; */
 #include <libguile.h>  /* all: scm_shell; */
 
-#include "streq.h"
-
 int open_terminal (char *, int, int);
 int is_unix98_pty (const char *);
 int is_bsd_pty (const char *);
@@ -240,8 +238,8 @@ inner_main (void *data, int argc, char **argv)
      but, we need to check here for --version and --help. */
   for (i=1; i<argc; i++)
     {
-      if (STREQ (argv[i], "--version", '-', '-', 'v', 'e', 'r', 's', 'i', 'o', 'n')
-	  || STREQ (argv[i], "-v", '-', 'v', 0, 0, 0, 0, 0, 0, 0))
+      if (strcmp (argv[i], "--version") == 0
+	  || strcmp (argv[i], "-v") == 0)
 	{
 	  printf ("Gucushell 0.3\n");
 	  printf ("Copyright (c) 2008,2009,2010 Michael L. Gran\n");
@@ -249,8 +247,8 @@ inner_main (void *data, int argc, char **argv)
 	  printf ("For details, see the file COPYING, included in the distribution\n");
 	  return;
 	}
-      if (STREQ (argv[i], "--help", '-', '-', 'h', 'e', 'l', 'p', 0, 0, 0)
-	  || STREQ (argv[i], "-h", '-', 'h', 0, 0, 0, 0, 0, 0, 0))
+      if (strcmp (argv[i], "--help") == 0
+	  || strcmp (argv[i], "-h") == 0)
 	{
 	  scm_shell (argc, argv);
 	}

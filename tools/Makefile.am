@@ -17,6 +17,6 @@ if WIDE
 AM_CPPFLAGS += -D_XOPEN_SOURCE_EXTENDED
 endif
 
-LDADD = $(CURSES_LIB) -lutil $(GUILE_LDFLAGS) $(top_builddir)/lib/libgnu.a
+LDADD = $(CURSES_LIB) -lutil $(GUILE_LDFLAGS)
 
 EXTRA_DIST = uninstalled-env.in gucu-keyboard-test
