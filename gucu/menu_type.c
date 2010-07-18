@@ -3,12 +3,12 @@
 #include <assert.h>
 #include <errno.h>
 #include <libguile.h>
+#include <libintl.h>
 #include <menu.h>
 #include <stdio.h>
 #include <string.h>
 
 #include "compat.h"
-#include "gettext.h"
 #include "menu_type.h"
 #include "type.h"
 
@@ -44,14 +44,14 @@ gucu_new_item (SCM name, SCM description)
 	{
 	  scm_error_scm (SCM_BOOL_F,
 			 scm_from_locale_string ("new-item"),
-			 scm_from_locale_string ("bad argument"),
+			 scm_from_locale_string ( gettext ("bad argument")),
 			 SCM_BOOL_F, SCM_BOOL_F);
 	}
       else if (errno == E_SYSTEM_ERROR)
 	{
 	  scm_error_scm (SCM_BOOL_F,
 			 scm_from_locale_string ("new-item"),
-			 scm_from_locale_string ("system error"),
+			 scm_from_locale_string ( gettext ("system error")),
 			 SCM_BOOL_F, SCM_BOOL_F);
 	}
       else
@@ -89,7 +89,7 @@ _scm_from_item (ITEM * x)
 
   if (0)
     {
-      fprintf (stderr, "Making <#item> smob from ITEM * %p\n", (void *) x);
+      fprintf (stderr, gettext ("Making <#item> smob from ITEM * %p\n"), (void *) x);
     }
 
   return (s_item);
@@ -245,22 +245,22 @@ gc_free_menu (SCM x)
   if (retval == E_BAD_ARGUMENT)
     {
       scm_error_scm (SCM_BOOL_F,
-		     scm_from_locale_string ("garbage collection of menu"),
-		     scm_from_locale_string ("bad argument"),
+		     scm_from_locale_string ( gettext ("garbage collection of menu")),
+		     scm_from_locale_string ( gettext ("bad argument")),
 		     SCM_BOOL_F, SCM_BOOL_F);
     }
   else if (retval == E_POSTED)
     {
       scm_error_scm (SCM_BOOL_F,
-		     scm_from_locale_string ("garbage collection of menu"),
-		     scm_from_locale_string ("posted"),
+		     scm_from_locale_string ( gettext ("garbage collection of menu")),
+		     scm_from_locale_string ( gettext ("posted")),
 		     SCM_BOOL_F, SCM_BOOL_F);
     }
   else if (retval == E_SYSTEM_ERROR)
     {
       scm_error_scm (SCM_BOOL_F,
-		     scm_from_locale_string ("garbage collection of menu"),
-		     scm_from_locale_string ("posted"),
+		     scm_from_locale_string ( gettext ("garbage collection of menu")),
+		     scm_from_locale_string ( gettext ("system error")),
 		     SCM_BOOL_F, SCM_BOOL_F);
     }
 
@@ -357,13 +357,13 @@ gucu_new_menu (SCM items)
       free (c_items);
       if (errno == E_NOT_CONNECTED)
 	{
-	  scm_misc_error ("new-menu", "menu has no items", SCM_BOOL_F);
+	  scm_misc_error ("new-menu", gettext ("menu has no items"), SCM_BOOL_F);
 	}
       else if (errno == E_SYSTEM_ERROR)
 	{
 	  scm_error_scm (SCM_BOOL_F,
 			 scm_from_locale_string ("new-menu"),
-			 scm_from_locale_string ("system error"),
+			 scm_from_locale_string ( gettext ("system error")),
 			 SCM_BOOL_F, SCM_BOOL_F);
 	}
       else

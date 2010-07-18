@@ -30,7 +30,7 @@ _nc_acs_map (void);
 
 static void curs_bad_state_error (const char *funcname)
 {
-  scm_misc_error (funcname, "bad curses internal state", SCM_BOOL_F);
+  scm_misc_error (funcname, gettext ("bad curses internal state"), SCM_BOOL_F);
 }
 
 /* Set the attributes and color pair for a given window */
@@ -75,7 +75,7 @@ gucu_color_content (SCM s_color)
 			   scm_from_short (c_green), scm_from_short (c_blue));
     }
   else
-    scm_misc_error ("color-content", "out of range error or not initialized",
+    scm_misc_error ("color-content", gettext ("out of range error or not initialized"),
 		    SCM_BOOL_F);
 
   return s_list;
@@ -165,7 +165,7 @@ gucu_pair_content (SCM s_pair)
       s_list = scm_list_2 (scm_from_short (c_fore), scm_from_short (c_back));
     }
   else
-    scm_misc_error ("pair-content", "out of range or not initialized",
+    scm_misc_error ("pair-content", gettext ("out of range or not initialized"),
 		    SCM_BOOL_F);
 
   return s_list;

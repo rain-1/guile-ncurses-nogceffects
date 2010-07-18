@@ -16,6 +16,8 @@ GUCU_API void gucu_init (void);
 void
 gucu_init ()
 {
+  bindtextdomain (PACKAGE, LOCALEDIR);
+
   gucu_init_function ();
   gucu_init_special ();
   gucu_init_constant ();

@@ -3,7 +3,6 @@
 #include <assert.h>
 #include <curses.h>
 #include <libguile.h>
-#include <libintl.h>
 #include <panel.h>
 
 #include "compat.h"

@@ -2,12 +2,10 @@
 
 #include "unicode.h"
 #include "gucuconfig.h"
-#include "gettext.h"
 
 #ifdef GUILE_CHARS_ARE_UCS4
 #include <assert.h>
 #include <langinfo.h>
-#include <libintl.h>
 #include <stddef.h>
 #include <stdint.h>
 #include <stdlib.h>
@@ -24,28 +22,16 @@ static const int stdc_iso_10646 = 1;
 static const int stdc_iso_10646 = 0;
 #endif
 
-#ifdef DEBUG_UNICODE
-static const int debug_unicode = 1;
-#else
-static const int debug_unicode = 0;
-#endif
-
 int
 locale_char_to_codepoint (char c, uint32_t * p_codepoint)
 {
   char locale_str[2];
   uint32_t *u32_str;
 
-  if (debug_unicode)
-    printf ("Entering locale_char_to_codepoint c = %c\n", c);
-
   assert (p_codepoint != (uint32_t *) NULL);
 
   if (c == '\0')
     {
-      if (debug_unicode)
-	printf ("Exit (success) codepoint = zero\n");
-
       *p_codepoint = 0;
       return 1;
     }
@@ -54,26 +40,16 @@ locale_char_to_codepoint (char c, uint32_t * p_codepoint)
   u32_str = u32_strconv_from_locale (locale_str);
   if (u32_str == NULL)
     {
-      if (debug_unicode)
-	printf ("Exit (failure, u32str is null)\n");
-
       return 0;
     }
   if (u32_strlen (u32_str) != 1)
     {
-      if (debug_unicode)
-	printf ("Exit (failure, u32str has %d chars)\n",
-		u32_strlen (u32_str));
-
       *p_codepoint = '\0';
       free (u32_str);
       return 0;
     }
   *p_codepoint = u32_str[0];
   free (u32_str);
-
-  if (debug_unicode)
-    printf ("Exit (success) codepoint is %d\n", *p_codepoint);
 
   return 1;
 }
@@ -125,14 +101,8 @@ codepoint_to_locale_char (uint32_t codepoint, char *p_c)
 
   assert (p_c != (char *) NULL);
 
-  if (debug_unicode)
-    printf ("Entering codepoint_to_locale_char: cp = %u\n", codepoint);
-
   if (codepoint == 0)
     {
-      if (debug_unicode)
-	printf ("Exit (success) c = zero\n");
-
       *p_c = '\0';
       return 1;
     }
@@ -144,25 +114,16 @@ codepoint_to_locale_char (uint32_t codepoint, char *p_c)
 			      u32_str, 1, NULL, NULL, &str_len);
   if (str == NULL)
     {
-      if (debug_unicode)
-	printf ("Exit (failure, str is null)\n");
-
       return 0;
     }
   if (str_len != 1)
     {
-      if (debug_unicode)
-	printf ("Exit (failure, str has %d chars)\n", str_len);
-
       *p_c = '\0';
       free (str);
       return 0;
     }
 
   *p_c = str[0];
-  if (debug_unicode)
-    printf ("Exit (success) char is %d\n", *p_c);
-
   free (str);
   return 1;
 }

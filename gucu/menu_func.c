@@ -13,13 +13,13 @@
 static void
 menu_posted_error (const char *funcname)
 {
-  scm_misc_error (funcname, "menu already posted", SCM_BOOL_F);
+  scm_misc_error (funcname, gettext ("menu already posted"), SCM_BOOL_F);
 }
 
 static void
 menu_not_connected_error (const char *funcname)
 {
-  scm_misc_error (funcname, "menu has no items", SCM_BOOL_F);
+  scm_misc_error (funcname, gettext ("menu has no items"), SCM_BOOL_F);
 }
 
 /* Set the foreground attribute of the menu */

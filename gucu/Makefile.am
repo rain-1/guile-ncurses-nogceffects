@@ -14,7 +14,8 @@ libguile_gucu_la_SOURCES = compat.c compat.h curs_const.c curs_const.h	\
 	panel_type.c panel_type.h slk_func.c slk_func.h type.c type.h	\
 	unicode.c unicode.h visibility.h
 
-libguile_gucu_la_CPPFLAGS = -I $(top_builddir)/lib $(GUILE_CFLAGS)
+libguile_gucu_la_CPPFLAGS = -I $(top_builddir)/lib $(GUILE_CFLAGS) \
+	-DLOCALEDIR=\"$(localedir)\"
 
 if WARN
 libguile_gucu_la_CPPFLAGS += -Wall -Wextra -Wstrict-prototypes		\

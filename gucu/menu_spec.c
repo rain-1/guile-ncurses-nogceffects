@@ -3,7 +3,6 @@
 #include <curses.h>
 #include <errno.h>
 #include <libguile.h>
-#include <libintl.h>
 #include <menu.h>
 
 #include "compat.h"

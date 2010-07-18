@@ -2,68 +2,67 @@
 #include <curses.h>
 #include <form.h>
 #include <libguile.h>
+#include <libintl.h>
 
 #include "compat.h"
 #include "form_func.h"
 #include "form_type.h"
-#include "gettext.h"
 #include "type.h"
 
 extern scm_t_bits form_tag;
 extern scm_t_bits field_tag;
-
 
 /* Errors */
 
 void
 form_bad_state_error (const char *funcname)
 {
-  scm_misc_error (funcname, "bad state", SCM_BOOL_F);
+  scm_misc_error (funcname, gettext ("bad state"), SCM_BOOL_F);
 }
 
 void
 form_connected_error (const char *funcname)
 {
-  scm_misc_error (funcname, "field is already connected to a form",
+  scm_misc_error (funcname, gettext ("field is already connected to a form"),
 		  SCM_BOOL_F);
 }
 
 void
 form_current_field_error (const char *funcname)
 {
-  scm_misc_error (funcname, "the field is the current field", SCM_BOOL_F);
+  scm_misc_error (funcname, gettext ("the field is the current field"), SCM_BOOL_F);
 }
 
 void
 form_invalid_field_error (const char *funcname)
 {
-  scm_misc_error (funcname, "the field is invalid", SCM_BOOL_F);
+  scm_misc_error (funcname, gettext ("the field is invalid"), SCM_BOOL_F);
 }
 
 void
 form_no_room_error (const char *funcname)
 {
-  scm_misc_error (funcname, "the form or field can not fit on this screen",
+  scm_misc_error (funcname, gettext ("the form or field can not fit on this screen"),
 		  SCM_BOOL_F);
 }
 
 void
 form_not_connected_error (const char *funcname)
 {
-  scm_misc_error (funcname, "the field is not connected to a form",
+  scm_misc_error (funcname, gettext ("the field is not connected to a form"),
 		  SCM_BOOL_F);
 }
 
 void
 form_not_posted_error (const char *funcname)
 {
-  scm_misc_error (funcname, "the form is not posted", SCM_BOOL_F);
+  scm_misc_error (funcname, gettext ("the form is not posted"), SCM_BOOL_F);
 }
 
 void
 form_posted_error (const char *funcname)
 {
-  scm_misc_error (funcname, "the form is posted", SCM_BOOL_F);
+  scm_misc_error (funcname, gettext ("the form is posted"), SCM_BOOL_F);
 }
 
 /* Tests for off-screen data ahead on the form */

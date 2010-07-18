@@ -5,13 +5,13 @@
 #include <errno.h>
 #include <form.h>
 #include <libguile.h>
+#include <libintl.h>
 #include <stdio.h>
 #include <string.h>
 
 #include "compat.h"
 #include "form_func.h"
 #include "form_type.h"
-#include "gettext.h"
 #include "gucuconfig.h"
 #include "type.h"
 
@@ -58,14 +58,14 @@ gucu_new_field (SCM height, SCM width, SCM top, SCM left, SCM offscreen,
 	{
 	  scm_error_scm (SCM_BOOL_F,
 			 scm_from_locale_string ("new-field"),
-			 scm_from_locale_string ("bad argument"),
+			 scm_from_locale_string ( gettext ("bad argument")),
 			 SCM_BOOL_F, SCM_BOOL_F);
 	}
       else if (errno == E_SYSTEM_ERROR)
 	{
 	  scm_error_scm (SCM_BOOL_F,
 			 scm_from_locale_string ("new-field"),
-			 scm_from_locale_string ("system error"),
+			 scm_from_locale_string ( gettext ("system error")),
 			 SCM_BOOL_F, SCM_BOOL_F);
 	}
       else
@@ -110,7 +110,7 @@ _scm_from_field (FIELD * x)
 
   if (0)
     {
-      fprintf (stderr, "Making <#field> smob from FIELD * %p\n", (void *) x);
+      fprintf (stderr, gettext ("Making <#field> smob from FIELD * %p\n"), (void *) x);
     }
 
   return (s_field);
@@ -170,7 +170,7 @@ print_field (SCM x, SCM port, scm_print_state * pstate UNUSED)
   scm_puts ("#<field ", port);
 
   if (fld == 0)
-    scm_puts ("(freed)", port);
+    scm_puts ( gettext ("(freed)"), port);
   else
     {
       if (asprintf (&str, "%p", (void *) fld) < 0)
@@ -229,7 +229,7 @@ _scm_from_form (FORM * x)
 
   if (0)
     {
-      fprintf (stderr, "Making smob from form based on WINDOW * %p\n",
+      fprintf (stderr, gettext ("Making smob from form based on WINDOW * %p\n"),
 	       x->win);
     }
 
@@ -281,15 +281,15 @@ gc_free_form (SCM x)
   if (retval == E_BAD_ARGUMENT)
     {
       scm_error_scm (SCM_BOOL_F,
-		     scm_from_locale_string ("garbage collection of form"),
-		     scm_from_locale_string ("bad argument"),
+		     scm_from_locale_string ( gettext ("garbage collection of form")),
+		     scm_from_locale_string ( gettext ("bad argument")),
 		     SCM_BOOL_F, SCM_BOOL_F);
     }
   else if (retval == E_POSTED)
     {
       scm_error_scm (SCM_BOOL_F,
-		     scm_from_locale_string ("garbage collection of form"),
-		     scm_from_locale_string ("posted"),
+		     scm_from_locale_string ( gettext ("garbage collection of form")),
+		     scm_from_locale_string ( gettext ("posted")),
 		     SCM_BOOL_F, SCM_BOOL_F);
     }
 
@@ -396,21 +396,21 @@ gucu_new_form (SCM fields)
 	{
 	  scm_error_scm (SCM_BOOL_F,
 			 scm_from_locale_string ("new-form"),
-			 scm_from_locale_string ("bad argument"),
+			 scm_from_locale_string ( gettext ("bad argument")),
 			 fields, SCM_BOOL_F);
 	}
       else if (errno == E_CONNECTED)
 	{
 	  scm_error_scm (SCM_BOOL_F,
 			 scm_from_locale_string ("new-form"),
-			 scm_from_locale_string ("connected"),
+			 scm_from_locale_string ( gettext ("connected")),
 			 SCM_BOOL_F, SCM_BOOL_F);
 	}
       else if (errno == E_SYSTEM_ERROR)
 	{
 	  scm_error_scm (SCM_BOOL_F,
 			 scm_from_locale_string ("new-form"),
-			 scm_from_locale_string ("system error"),
+			 scm_from_locale_string ( gettext ("system error")),
 			 SCM_BOOL_F, SCM_BOOL_F);
 	}
       else
