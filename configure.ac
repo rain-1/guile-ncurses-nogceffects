@@ -53,7 +53,7 @@ LT_INIT([dlopen disable-fast-install disable-static win32-dll])
 
 case $host_os in
 mingw* | cygwin* | os2* | pw32* | cegcc*)
-        [building_dll=yes] ;;
+	[building_dll=yes] ;;
 *)
 	[building_dll=no] ;;
 esac
@@ -63,8 +63,8 @@ AM_CONDITIONAL([BUILDING_DLL], [test "$building_dll" = yes])
 ##################
 # Check for libraries
 
-AM_GNU_GETTEXT([external])
 AM_GNU_GETTEXT_VERSION([0.18.1])
+AM_GNU_GETTEXT([external])
 
 # from guile.m4
 # sets: GUILE_CFLAGS and GUILE_LDFLAGS
