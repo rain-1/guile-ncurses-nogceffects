@@ -1,24 +1,20 @@
-The README file for Guile Curses
+The README file for guile-ncurses
 
-This is gucu v0.7, the ncurses library from the Gano project.  It
-provides functionality to allow programs written in Guile to interact
-with character screens in a terminal-independent manner.  It is a
-wrapper to the underlying ncurses library.
+This is guile-ncurses v0.8.  It provides functionality to allow
+programs written in Guile to interact with character screens in a
+terminal-independent manner.  It is a wrapper to the underlying
+ncurses library.
 
 This library can be found at http://gano.sourceforge.net
 
 It is known to work on the following systems
 
 CYGWIN_NT-6.1 1.7.5 on i686 with Guile 1.8.2 and NCurses 5.7.x
-Fedora 12 with Guile 1.8.7 and NCurses 5.7.20090207
-Fedora 21 with Guile 1.9.10 and NCurses 5.7.20090207
-
-Previous versions worked on OpenBSD 4.5 i386 with Guile 1.6.7 and its
-default libncurses, but make check fails unnecessarily.  This version
-hasn't been checked on OpenBSD.
+Fedora 13 with Guile 1.8.7 and NCurses 5.7.20090207
+Fedora 13 with Guile 1.9.11 and NCurses 5.7.20090207
 
 This distribution has the following subdirectories:
-- gucu: the source code for the library
+- ncurses: the source code for the library
 - test: test scripts to verify that the library functions correctly
 - doc: documentation for the library source to generate it
 - build_aux: files used by the configuration and building programs

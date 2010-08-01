@@ -17,10 +17,10 @@ There are some special things to watch out for when building on cygwin
 2. Lack of libunistring
 
   Even though Cygwin includes the wide versions of ncurses, the narrow
-  one must be used if the libunistring library is not available.  GuCu
-  uses libunistring to convert locale characters to Ncurses wide
-  characters.  Libunistring is not currently part of the Cygwin
-  distro.
+  one must be used if the libunistring library is not available.
+  guile-ncurses uses libunistring to convert locale characters to
+  Ncurses wide characters.  Libunistring is not currently part of the
+  Cygwin distro.
 
   Until Cygwin moves to Guile 2.0.x, the wide version of Unicode isn't
   going to be of any benefit anyway, since Guile 1.8.x uses only 8-bit
