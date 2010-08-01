@@ -1,3 +1,25 @@
+/*
+  type.c
+
+  Copyright 2009, 2010 Free Software Foundation, Inc.
+
+  This file is part of Guile-Ncurses.
+
+  Guile-Ncurses is free software: you can redistribute it and/or modify
+  it under the terms of the GNU Lesser General Public License as
+  published by the Free Software Foundation, either version 3 of the
+  License, or (at your option) any later version.
+
+  Guile-Ncurses is distributed in the hope that it will be useful, but
+  WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	See the GNU
+  Lesser General Public License for more details.
+
+  You should have received a copy of the GNU Lesser General Public
+  License along with Guile-Ncurses.  If not, see
+  <http://www.gnu.org/licenses/>.
+*/
+
 #include <config.h>
 
 #include <assert.h>
@@ -588,8 +610,8 @@ _scm_xstring_from_cstring (const cchar_t * x)
 	break;
       n = getcchar (&(x[i]), NULL, NULL, NULL, NULL);
       /* Starting from the patch on 2009/07/18, the length returned by
-         getcchar includes the trailing NULL.  Prior to that, it did not
-         include the trailing NULL. */
+	 getcchar includes the trailing NULL.  Prior to that, it did not
+	 include the trailing NULL. */
 
       if (NCURSES_VERSION_MAJOR > 5
 	  || (NCURSES_VERSION_MAJOR == 5 && NCURSES_VERSION_MINOR > 7)
@@ -798,7 +820,7 @@ _scm_from_mevent (MEVENT * me)
      scm_from_int (me->y), scm_from_int (me->z), scm_from_ulong (me->bstate));
 }
 
-// screen -- in C, a SCREEN *.  In Scheme, a smob that contains that pointer.
+// screen -- in C, a SCREEN *.	In Scheme, a smob that contains that pointer.
 
 int
 _scm_is_screen (SCM x)
@@ -870,7 +892,7 @@ gucu_is_screen_p (SCM x)
   return scm_from_bool (_scm_is_screen (x));
 }
 
-// window -- in C, a WINDOW *.  In Scheme, a smob that contains the pointer
+// window -- in C, a WINDOW *.	In Scheme, a smob that contains the pointer
 
 int
 _scm_is_window (SCM x)

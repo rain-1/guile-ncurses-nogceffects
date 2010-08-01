@@ -1,3 +1,25 @@
+/*
+  shell.c
+
+  Copyright 2009, 2010 Free Software Foundation, Inc.
+
+  This file is part of Guile-Ncurses.
+
+  Guile-Ncurses is free software: you can redistribute it and/or modify
+  it under the terms of the GNU Lesser General Public License as
+  published by the Free Software Foundation, either version 3 of the
+  License, or (at your option) any later version.
+
+  Guile-Ncurses is distributed in the hope that it will be useful, but
+  WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	See the GNU
+  Lesser General Public License for more details.
+
+  You should have received a copy of the GNU Lesser General Public
+  License along with Guile-Ncurses.  If not, see
+  <http://www.gnu.org/licenses/>.
+*/
+
 #define _XOPEN_SOURCE
 #include <config.h>
 
@@ -241,10 +263,10 @@ inner_main (void *data, int argc, char **argv)
       if (strcmp (argv[i], "--version") == 0
 	  || strcmp (argv[i], "-v") == 0)
 	{
-	  printf ("guile-ncurses-shell 0.3\n");
-	  printf ("Copyright (c) 2008,2009,2010 Michael L. Gran\n");
+	  printf ("guile-ncurses-shell 0.4\n");
+	  printf ("Copyright (c) 2008,2009,2010 Free Software Foundation, Inc.\n");
 	  printf ("This may be freely distributed\n");
-	  printf ("For details, see the file COPYING, included in the distribution\n");
+	  printf ("For details, see the file COPYING.LESSER, included in the distribution\n");
 	  return;
 	}
       if (strcmp (argv[i], "--help") == 0

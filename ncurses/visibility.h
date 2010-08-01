@@ -1,3 +1,25 @@
+/*
+  visibility.h
+
+  Copyright 2010 Free Software Foundation, Inc.
+
+  This file is part of Guile-Ncurses.
+
+  Guile-Ncurses is free software: you can redistribute it and/or modify
+  it under the terms of the GNU Lesser General Public License as
+  published by the Free Software Foundation, either version 3 of the
+  License, or (at your option) any later version.
+
+  Guile-Ncurses is distributed in the hope that it will be useful, but
+  WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	See the GNU
+  Lesser General Public License for more details.
+
+  You should have received a copy of the GNU Lesser General Public
+  License along with Guile-Ncurses.  If not, see
+  <http://www.gnu.org/licenses/>.
+*/
+
 #ifndef VISIBILITY_H
 #define VISIBILITY_H
 
@@ -17,8 +39,8 @@
 #endif
 #endif
 
-#ifdef GUCU_DLL			/* defined if GUCU is compiled as a DLL */
-#ifdef GUCU_DLL_EXPORTS		/* defined if we are building the GUCU DLL */
+#ifdef GUCU_DLL		 /* defined if GUCU is compiled as a DLL */
+#ifdef GUCU_DLL_EXPORTS	 /* defined if we are building the GUCU DLL */
 #define GUCU_API GUCU_HELPER_DLL_EXPORT
 #else
 #define GUCU_API GUCU_HELPER_DLL_IMPORT

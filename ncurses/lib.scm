@@ -1,22 +1,43 @@
 ;; -*- Mode: scheme; -*-
+
+;; lib.scm
+
+;; Copyright 2009, 2010 Free Software Foundation, Inc.
+
+;; This file is part of Guile-Ncurses.
+
+;; Guile-Ncurses is free software: you can redistribute it and/or
+;; modify it under the terms of the GNU Lesser General Public License
+;; as published by the Free Software Foundation, either version 3 of
+;; the License, or (at your option) any later version.
+
+;; Guile-Ncurses is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+;; Lesser General Public License for more details.
+
+;; You should have received a copy of the GNU Lesser General Public
+;; License along with Guile-Ncurses.  If not, see
+;; <http://www.gnu.org/licenses/>.
+
 (define-module (ncurses lib)
   #:use-module (srfi srfi-1)
   #:use-module (ncurses curses)
-  #:use-module (srfi srfi-13)  ; in Guile 1.8.x string-trim is always available.
-                               ; in Guile 1.6.x it isn't
+  #:use-module (srfi srfi-13) ; in Guile 1.8.x string-trim is always available.
+					; in Guile 1.6.x it isn't
   #:export (
-            make-xchar
-            xchar?
-            xchar-attr
-            xchar-color
-            xchar-chars
-            set-xchar-attr!
-            set-xchar-color!
-            set-xchar-chars!
-            xchar->list
-            list->xchar
-            xchar-equal?
-            ))
+	    make-xchar
+	    xchar?
+	    xchar-attr
+	    xchar-color
+	    xchar-chars
+	    set-xchar-attr!
+	    set-xchar-color!
+	    set-xchar-chars!
+	    xchar->list
+	    list->xchar
+	    xchar-equal?
+	    ))
 
 ;; The xchar type -- a Guile version of the NCurses cchar_t
 (define (color-name n)
@@ -31,9 +52,9 @@
    ((= n COLOR_WHITE) (gettext "white"))
    (else
     (let* ((cc (color-content n))
-           (r (list-ref cc 0))
-           (g (list-ref cc 1))
-           (b (list-ref cc 2)))
+	   (r (list-ref cc 0))
+	   (g (list-ref cc 1))
+	   (b (list-ref cc 2)))
       (format port (gettext "R~a G~a B~a") r g b)))))
 
 (define (attr-name attr)
@@ -125,19 +146,19 @@
 
 (define (xchar->list x)
   (append (list (xchar-attr x))
-          (list (xchar-color x))
-          (xchar-chars x)))
+	  (list (xchar-color x))
+	  (xchar-chars x)))
 
 (define (list->xchar x)
   (make-xchar (first x)
-              (second x)
-              (drop x 2)))
+	      (second x)
+	      (drop x 2)))
 
 
 ;; Guile 1.8.x's equal? is sufficient to compare two xchars, but,
 ;; Guile 1.6.x's equal? always returns false when comparing two xchars
 (define (xchar-equal? a b)
   (and
-    (equal? (xchar-attr a) (xchar-attr b))
-    (equal? (xchar-color a) (xchar-color b))
-    (equal? (xchar-chars a) (xchar-chars b))))
+   (equal? (xchar-attr a) (xchar-attr b))
+   (equal? (xchar-color a) (xchar-color b))
+   (equal? (xchar-chars a) (xchar-chars b))))

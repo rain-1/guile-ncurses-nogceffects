@@ -1,3 +1,25 @@
+/*
+  menu_spec.c
+
+  Copyright 2009, 2010 Free Software Foundation, Inc.
+
+  This file is part of Guile-Ncurses.
+
+  Guile-Ncurses is free software: you can redistribute it and/or modify
+  it under the terms of the GNU Lesser General Public License as
+  published by the Free Software Foundation, either version 3 of the
+  License, or (at your option) any later version.
+
+  Guile-Ncurses is distributed in the hope that it will be useful, but
+  WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	See the GNU
+  Lesser General Public License for more details.
+
+  You should have received a copy of the GNU Lesser General Public
+  License along with Guile-Ncurses.  If not, see
+  <http://www.gnu.org/licenses/>.
+*/
+
 #include <config.h>
 
 #include <curses.h>
@@ -32,10 +54,10 @@ gucu_scale_menu (SCM menu)
 
 
 /* returns a list of 3 elements:
-1. num spaces between item name and description
-2. num rows
-3. num cols
-or #f on failure.
+   1. num spaces between item name and description
+   2. num rows
+   3. num cols
+   or #f on failure.
 */
 SCM
 gucu_menu_spacing (SCM menu)
@@ -53,7 +75,7 @@ gucu_menu_spacing (SCM menu)
 
   if (ret_val == E_OK)
     return scm_list_3 (scm_from_int (spc_description),
-                       scm_from_int (spc_rows), scm_from_int (spc_columns));
+		       scm_from_int (spc_rows), scm_from_int (spc_columns));
   else
     return SCM_BOOL_F;
 }

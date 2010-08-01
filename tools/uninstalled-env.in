@@ -1,7 +1,6 @@
 #!/bin/sh
 
-#	Copyright (C) 2003, 2006, 2008, 2009 Free Software Foundation
-#       Copyright (C) 2009 Michael L. Gran
+#	Copyright (C) 2003, 2006, 2008, 2009, 2010 Free Software Foundation
 #
 #   This file is part of GUILE, that has been modified for the
 #   guile-ncurses project
