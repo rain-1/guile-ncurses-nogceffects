@@ -1,12 +1,5 @@
 TODO
 
-* Documentation is has not kept up with changes.
-
-* "make check" does not work on Guile 1.6.x because
-  of the lack of the -L flag.
-
-* The newterm function is flaky.
-
 * Documentation lacks subject index entries.
 
 * Terminfo and termcap functions have not been wrapped
