@@ -5,7 +5,8 @@
 (use-modules (test lib)
              (test lib2)
              (srfi srfi-1)
-             (gucu curses))
+             (ncurses curses)
+	     (ncurses lib))
 
 (define test (curses-test-start))
 

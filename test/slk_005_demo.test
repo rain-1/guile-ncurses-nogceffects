@@ -4,8 +4,8 @@
 
 (use-modules (test lib)
 	     (test lib2)
-	     (gucu curses)
-	     (gucu slk))
+	     (ncurses curses)
+	     (ncurses slk))
 
 (define test (curses-test-start))
 

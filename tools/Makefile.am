@@ -1,11 +1,11 @@
 if DEMO_INSTALL
-bin_SCRIPTS = gucu-keyboard-test
+bin_SCRIPTS = ncurses-keyboard-test
 else
-noinst_SCRIPTS = gucu-keyboard-test
+noinst_SCRIPTS = ncurses-keyboard-test
 endif
 
-bin_PROGRAMS = gucushell
-gucushell_SOURCES = shell.c
+bin_PROGRAMS = guile-ncurses-shell
+guile_ncurses_shell_SOURCES = shell.c
 AM_CPPFLAGS = $(GUILE_CFLAGS) -I $(top_builddir)/lib
 if WARN
 AM_CPPFLAGS +=  -Wall -Wextra -Wstrict-prototypes			\
@@ -19,4 +19,4 @@ endif
 
 LDADD = $(CURSES_LIB) -lutil $(GUILE_LDFLAGS)
 
-EXTRA_DIST = uninstalled-env.in gucu-keyboard-test
+EXTRA_DIST = uninstalled-env.in ncurses-keyboard-test

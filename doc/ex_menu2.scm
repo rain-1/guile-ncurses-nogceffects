@@ -3,8 +3,8 @@
 !#
 
 (use-modules (srfi srfi-1)
-             (gucu curses)
-             (gucu menu))
+             (ncurses curses)
+             (ncurses menu))
 
 (define stdscr (initscr))
 (cbreak!)

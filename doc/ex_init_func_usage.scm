@@ -1,6 +1,6 @@
 #!/usr/bin/guile
 !#
-(use-modules (gucu curses))
+(use-modules (ncurses curses))
 
 (define stdscr (initscr))          ; Start curses mode
 (raw!)                             ; Line buffering disabled

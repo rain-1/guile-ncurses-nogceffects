@@ -2,8 +2,8 @@
 !#
 
 (use-modules (srfi srfi-1)
-             (gucu curses)
-             (gucu form))
+             (ncurses curses)
+             (ncurses form))
 
 ;; Initialize curses
 (define stdscr (initscr))

@@ -1,7 +1,7 @@
 TESTLIB = lib.scm lib2.scm
 
 TESTS_ENVIRONMENT = GUILE_AUTO_COMPILE=0 ${top_builddir}/libtool	\
--dlopen ${top_builddir}/gucu/libguile-gucu.la --mode=execute guile -L	\
+-dlopen ${top_builddir}/ncurses/libguile-ncurses.la --mode=execute guile -L	\
 $(abs_top_srcdir) -s
 
 NARROWTESTS = curses_000_test_setup.test				\

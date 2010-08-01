@@ -1,13 +1,13 @@
 #!/bin/sh
 GUILE_AUTO_COMPILE=0 exec guile -e main -s $0 "$@"
 !#
-;;; gucu-keyboard-test -- examine the raw keycodes returned when keys
+;;; ncurses-keyboard-test -- examine the raw keycodes returned when keys
 ;;; are pressed
 
 (use-modules (ice-9 format)
              (ice-9 getopt-long)
-	     (srfi srfi-1))
-(use-modules (gucu curses))
+	     (srfi srfi-1)
+	     (ncurses curses))
 
 (define (main args)
   (setlocale LC_ALL "")
@@ -23,7 +23,8 @@ GUILE_AUTO_COMPILE=0 exec guile -e main -s $0 "$@"
         (if version-wanted
             (display
              (string-append
-              "gucu-keyboard-test (gucu) 0.5\n"
+              "ncurses-keyboard-test (guile-ncurses) 0.8\n"
+              "Copyright (C) 2010 Free Software Foundation\n"
               "Copyright (C) 2009 Michael Gran\n"
               "License X11:\n"
               "This is free software: you are free to change and redistribute it.\n"

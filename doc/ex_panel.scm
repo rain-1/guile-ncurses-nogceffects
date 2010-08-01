@@ -1,8 +1,8 @@
 #!/usr/bin/guile
 !#
 
-(use-modules (gucu curses)
-             (gucu panel))
+(use-modules (ncurses curses)
+             (ncurses panel))
 
 (define stdscr (initscr))
 

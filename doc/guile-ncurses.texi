@@ -1,9 +1,9 @@
 \input texinfo @c -*- Mode: texinfo; Fill-column: 70; coding: utf-8 -*-
 @c %**start of header
-@setfilename gucu.info
+@setfilename guile-ncurses.info
 @documentencoding UTF-8
 @include version.texi
-@settitle GuCu @value{VERSION}
+@settitle GUILE NCURSES @value{VERSION}
 
 @syncodeindex fn cp
 @syncodeindex vr cp
@@ -15,9 +15,9 @@
 
 
 @copying
-This manual is for Gucu, a Guile Curses library, (version
-@value{VERSION}, @value{UPDATED}).  Gucu provides bindings for the
-Curses library, which provides functionality for updating character
+This manual is for the Guile NCurses library, (version
+@value{VERSION}, @value{UPDATED}).  It provides bindings for the
+ncurses library, which provides functionality for updating character
 screens.
 
 Copyright @copyright{} 1998-2007,2010 Free Software Foundation, Inc. @*
@@ -54,7 +54,7 @@ authorization.
 @end copying
 
 @titlepage
-@title GuCu: a Guile Curses Library
+@title GUILE NCURSES
 @subtitle For version @value{VERSION}, @value{UPDATED}
 @author Michael L. Gran
 @author Pradeep Padala
@@ -72,7 +72,7 @@ authorization.
 
 @ifnottex
 @node Top, Introduction, (dir), (dir)
-@top GuCu: a Guile Curses Library
+@top GUILE NCURSES
 @insertcopying
 @end ifnottex
 
@@ -106,7 +106,7 @@ Types and encodings
 Curses Tutorial
 
 * Hello World!!!::
-* Interactive sessions and @code{gucushell}::
+* Interactive sessions and @code{guile-ncurses-shell}::
 * The Gory Details::
 * Initialization::
 * A word about windows::
@@ -214,7 +214,7 @@ Curses Reference
 * The curses menu library::
 * The curses form library::
 
-The basic curses library: @code{(gucu curses)}
+The basic curses library: @code{(ncurses curses)}
 
 * Overview::
 * Curses screen initialization and manipulation routines::
@@ -255,7 +255,7 @@ The basic curses library: @code{(gucu curses)}
 The Coordinate System
 
 
-The curses menu library: @code{(gucu menu)}
+The curses menu library: @code{(ncurses menu)}
 
 * Menus Overview::
 * Menu Item Procedures::
@@ -278,7 +278,7 @@ Menu options
 * Control spacing between menu items::
 * Associate menus with window::
 
-The curses form library: @code{(gucu form)}
+The curses form library: @code{(ncurses form)}
 
 * Forms Overview::
 * Form procedures::
@@ -315,8 +315,8 @@ Software Foundation holds the copyright.
 
 I've put his name on the title page, because it would seem rude not to
 do so; however, one should not get the impression that he approves of
-the GuCu project or that he is involved with the GuCu project, or,
-indeed, that he is even aware of it.
+the GUILE Ncurses project or that he is involved with the GUILE
+NCurses project, or, indeed, that he is even aware of it.
 
 The license for the original ncurses documentation is as follows.
 
@@ -354,8 +354,8 @@ it specific to the Guile binding.
 
 Again, I've put his name on the title page, because it would seem rude
 not to do so; however, one should not get the impression that he
-approves of the GuCu project or that he is involved with the GuCu
-project, or, again, that he is even aware of it.
+approves of the GUILE Ncurses project or that he is involved with the
+GUILE Ncurses project, or, again, that he is even aware of it.
 
 That document holds the following license.
 
@@ -575,8 +575,8 @@ characters.
 Rendered, complex characters usually are a standard character, zero to
 three combining characters, attribute information, and color
 information.  The @emph{attribute information} describes if the
-character is bold, dim, reverse video, etc.  The GuCu library defines
-a special record type for complex characters: the xchar.
+character is bold, dim, reverse video, etc.  The guile ncurses library
+defines a special record type for complex characters: the xchar.
 
 Each complex character may contain more than one simple character.
 The first character in the list should be a base character or a
@@ -711,7 +711,7 @@ elements of type @code{#<field>}.
 
 @menu
 * Hello World!!!::
-* Interactive sessions and @code{gucushell}::
+* Interactive sessions and @code{guile-ncurses-shell}::
 * The Gory Details::
 * Initialization::
 * A word about windows::
@@ -727,7 +727,7 @@ elements of type @code{#<field>}.
 * Forms Library::
 @end menu
 
-@node Hello World!!!, Interactive sessions and @code{gucushell}, Curses Tutorial, Curses Tutorial
+@node Hello World!!!, Interactive sessions and @code{guile-ncurses-shell}, Curses Tutorial, Curses Tutorial
 @section Hello World!!!
 
 Welcome to the world of curses.  Before we plunge into the library and
@@ -741,7 +741,7 @@ hello to the world.
 @node Using the Guile Curses module,  , Hello World!!!, Hello World!!!
 @subsection Using the Guile Curses module
 
-To use ncurses library functions, you have to load the @code{(gucu
+To use ncurses library functions, you have to load the @code{(ncurses
 curses)} module into the program.
 
 @cindex Hello, world
@@ -828,34 +828,35 @@ terminal might behave strangely after the program quits.
 data structures and puts the terminal in normal mode.  This function
 must be called after you are done with curses mode.
 
-@node  Interactive sessions and @code{gucushell}, The Gory Details, Hello World!!!, Curses Tutorial
-@section Interactive sessions and @code{gucushell}
+@node  Interactive sessions and @code{guile-ncurses-shell}, The Gory Details, Hello World!!!, Curses Tutorial
+@section Interactive sessions and @code{guile-ncurses-shell}
 
-@cindex gucushell
+@cindex guile-ncurses-shell
 
 If you would like to try out these functions interactively by typing
 them into the scheme schell, instead of typing them and running them
-as scripts, the program @code{gucushell} can be used.  The problem
-with interactive Guile sessions using @code{curses} is that you are
-typing into the same screen that curses is trying to manage, which
-leads to confusing results.  The program @code{gucushell}, which must
-be run under X, starts an interactive guile session and creates and
-@code{xterm} that will be managed by curses.  The results of the
-curses function calls will appear in the @code{xterm}, instead of in the
-screen where the interactive guile session occurs.
+as scripts, the program @code{guile-ncurses-shell} can be used.  The
+problem with interactive Guile sessions using @code{curses} is that
+you are typing into the same screen that curses is trying to manage,
+which leads to confusing results.  The program
+@code{guile-ncurses-shell}, which must be run under X, starts an
+interactive guile session and creates and @code{xterm} that will be
+managed by curses.  The results of the curses function calls will
+appear in the @code{xterm}, instead of in the screen where the
+interactive guile session occurs.
 
-Upon initialization @code{gucushell} automatically calls these functions.
+Upon initialization @code{guile-ncurses-shell} automatically calls these functions.
 @lisp
-(use-modules (gucu curses))
+(use-modules (ncurses curses))
 (define stdscr (initscr))
 @end lisp
 @noindent Thus, you must not call @code{(initscr)} in your
 interactive session.
 
 When exiting an interactive session, by @kbd{C-D} for example,
-@code{gucushell} automatically calls @code{(endwin)}.
+@code{guile-ncurses-shell} automatically calls @code{(endwin)}.
 
-@node The Gory Details, Initialization, Interactive sessions and @code{gucushell}, Curses Tutorial
+@node The Gory Details, Initialization, Interactive sessions and @code{guile-ncurses-shell}, Curses Tutorial
 @section The Gory Details
 
 Now that we've seen how to write a simple curses program, let's get
@@ -1076,21 +1077,22 @@ can be replaced by
 @cindex Outputting wide characters
 
 There are really two version of the NCurses library: a standard
-version and a @emph{wide} version.  When @code{gucu} was compiled, it
-was associated with either the standard version @file{libcurses} or
-the wide version @file{libncursesw}.  The wide version has greater
-capability to print non-Latin characters than the standard version.
+version and a @emph{wide} version.  When @code{guile ncurses} was
+compiled, it was associated with either the standard version
+@file{libcurses} or the wide version @file{libncursesw}.  The wide
+version has greater capability to print non-Latin characters than the
+standard version.
 
-For every C function that operates on characters, there is a
-parallel function that operates on wide characters.  The gucu library
+For every C function that operates on characters, there is a parallel
+function that operates on wide characters.  The guile ncurses library
 hides all of that complexity, and presents the same API regardless of
 whether it used @file{libncurses} or @file{libncursew}.
 
 At this point, a C programmer familiar with @code{ncurses} might be
 wondering how to call @code{add-wch} to print, for example, a Chinese
-character.  The gucu library abstracts both the C ncurses function
-@code{addch} and the C ncurses function @code{add-wch} as the Guile
-function @code{addch}.
+character.  The guile ncurses library abstracts both the C ncurses
+function @code{addch} and the C ncurses function @code{add-wch} as the
+Guile function @code{addch}.
 
 So, if you version of Guile is capable of Unicode characters (such as
 Guile version 2.0.x), and if you version of NCurses is the wide
@@ -1889,7 +1891,7 @@ program which creates 3 overlapping panels and shows them on the screen.
 @subsection Compiling With the Panels Library
 
 To use panels library functions, you have to use the module
-@code{(gucu panel)}.
+@code{(ncurses panel)}.
 
 @example
 @include ex_panel.scm
@@ -1986,7 +1988,7 @@ End curses.
 Let's see a program which prints a simple menu and updates the current
 selection with up, down arrows.
 
-To use menu library functions, you have to use the module @code{(gucu
+To use menu library functions, you have to use the module @code{(ncurses
 menu)}.
 
 @example
@@ -2243,7 +2245,7 @@ the journey with a simple example first.
 @node A Form Example, Making it useful, The Basics (Forms), Forms Library
 @subsection A Form Example
 
-To use form library functions, you have to include @code{(gucu
+To use form library functions, you have to include @code{(ncurses
 form)}.
 
 @example
@@ -2511,8 +2513,8 @@ password-like field where the characters are hidden from view.
 !#
 
 (use-modules (srfi srfi-1)
-             (gucu curses)
-             (gucu form))
+             (ncurses curses)
+             (ncurses form))
 
 ;; Constants
 (define STARTX 15)
@@ -2660,8 +2662,8 @@ similar example.
 !#
 
 (use-modules (srfi srfi-1)
-             (gucu curses)
-             (gucu form))
+             (ncurses curses)
+             (ncurses form))
 
 ;; Helper procedure to center a text
 (define (print-in-middle win starty startx width str color)
@@ -2928,22 +2930,22 @@ will return you to the top.
 @node Curses Reference, Index, Curses Tutorial, Top
 @chapter Curses Reference
 
-The gucu package provides the following modules:
+The guile-ncurses package provides the following modules:
 @enumerate
 @item
-@code{(gucu curses)}: Basic functionality and input/output.
+@code{(ncurses curses)}: Basic functionality and input/output.
 
 @item
-@code{(gucu panel)}: A library for managing overlapping windows.
+@code{(ncurses panel)}: A library for managing overlapping windows.
 
 @item
-@code{(gucu menu)}: A library for menu creation.
+@code{(ncurses menu)}: A library for menu creation.
 
 @item
-@code{(gucu form)}: A library for creating text-based form screens.
+@code{(ncurses form)}: A library for creating text-based form screens.
 
 @item
-@code{(gucu slk)}: The soft keys functions.
+@code{(ncurses slk)}: The soft keys functions.
 @end enumerate
 
 @menu
@@ -2989,9 +2991,9 @@ macros in the C Ncurses library, for example @code{lines} and
 
 
 @node The basic curses library, Function key labels library, The naming of routines, Curses Reference
-@section The basic curses library: @code{(gucu curses)}
+@section The basic curses library: @code{(ncurses curses)}
 
-These are the functions in the @code{(gucu curses)} module.
+These are the functions in the @code{(ncurses curses)} module.
 
 The procedures in the curses library closely follow the functions in
 the C-language API.  Most of the procedures in the library have
@@ -3039,8 +3041,9 @@ C-language API.
 @node Overview, Curses screen initialization and manipulation routines, The basic curses library, The basic curses library
 @subsection Overview
 
-The gucu library routines give the user a terminal-independent method
-of updating character screens with reasonable optimization.
+The guile-ncurses library routines give the user a
+terminal-independent method of updating character screens with
+reasonable optimization.
 
 The package supports overall screen, window and pad manipulation;
 output to windows and pads; reading terminal input; control over
@@ -3092,17 +3095,17 @@ details.]
 @findex stdscr
 @tindex #<window>
 
-The gucu library permits manipulation of data structures, the
+The guile-ncurses library permits manipulation of data structures, the
 @code{#<window>} type, which can be thought of as two-dimensional
 arrays of characters representing all or part of a CRT screen.  A
 default window, conventionally called @code{stdscr}, which is the size
 of the terminal screen, is supplied. The @code{#<window>} information
-for stdscr is returned by calling the procedure @code{initscr}.
-Other windows may be created with @code{newwin}.
+for stdscr is returned by calling the procedure @code{initscr}.  Other
+windows may be created with @code{newwin}.
 
-Note that @code{(gucu curses)} does not easily handle overlapping
+Note that @code{(ncurses curses)} does not easily handle overlapping
 windows.  Overlapping windows usually require the use of the
-@code{(gucu panel)} library.  Without the panel library, you can
+@code{(ncurses panel)} library.  Without the panel library, you can
 either position everything on screen by hand or divide the screen into
 tiled windows. Chose one of the two strategies and stick with it.
 Mixing the two will result in unpredictable, and undesired, effects.
@@ -3161,13 +3164,13 @@ This is useful for developing experimental definitions or when write
 permission in @file{/usr/share/terminfo} is not available.
 
 The getter procedures @code{(lines)} and @code{(cols)} are defined in
-@code{(gucu curses)} and will be return the size of the screen at the
+@code{(ncurses curses)} and will be return the size of the screen at the
 time @code{initscr} was called.
 
-@c The gucu routines also define the @code{#<window>} getter procedure
-@c @code{(curscr)} which is used for certain low-level operations like
-@c clearing and redrawing a screen containing garbage.  The @code{(curscr)}
-@c can be used in only a few routines.
+@c The guile-ncurses routines also define the @code{#<window>} getter
+@c procedure @code{(curscr)} which is used for certain low-level
+@c operations like clearing and redrawing a screen containing garbage.
+@c The @code{(curscr)} can be used in only a few routines.
 
 
 @subsubsection The Coordinate System
@@ -3360,10 +3363,10 @@ a rendered character is either a @code{chtype}, which is a 32-bit
 integer containing an 8-bit @code{char} and 24-bits of color and
 rendering information, or is a @code{cchar_t}, which is one or more
 @code{wchar_t} characters plus associated color and rendering
-information.  GuCu abstracts away the difference between these two
-types and presents a consistent API for both.  The GuCu complex
-rendered character will get converted automatically to @code{chtype}
-or @code{cchar_t} when necessary.
+information.  guile-ncurses abstracts away the difference between
+these two types and presents a consistent API for both.  The
+guile-ncurses complex rendered character will get converted
+automatically to @code{chtype} or @code{cchar_t} when necessary.
 
 There is a family of functions to convert unrendered, simple
 characters or strings to rendered complex characters and strings.
@@ -4798,7 +4801,7 @@ state'' error.
 @cindex 7-bit characters
 @cindex 8-bit characters
 
-If GuCu was compiled with the standard version of the ncurses library,
+If guile-ncurses was compiled with the standard version of the ncurses library,
 and not the wide version, it operates on 8-bit characters.
 
 Initially, whether the terminal returns 7 or 8 significant bits on
@@ -6004,9 +6007,9 @@ The return value is unspecified.
 @end deffn
 
 @node Function key labels library, The curses panel library, The basic curses library, Curses Reference
-@section The Function Key Label Library: @code{(gucu slk)}
+@section The Function Key Label Library: @code{(ncurses slk)}
 
-The @code{slk} functions in the @code{(gucu slk)} library manipulate
+The @code{slk} functions in the @code{(ncurses slk)} library manipulate
 the set of soft function-key labels that exist on many terminals.  For
 those terminals that do not have soft labels, curses takes over the
 bottom line of @code{stdscr}, reducing the size of @code{stdscr} (and
@@ -6105,9 +6108,9 @@ element is a color pair number.
 
 
 @node The curses panel library, The curses menu library, Function key labels library, Curses Reference
-@section The curses panel library: @code{(gucu panel)}
+@section The curses panel library: @code{(ncurses panel)}
 
-These are the functions in the @code{(gucu panel)} module.
+These are the functions in the @code{(ncurses panel)} module.
 
 Panels are curses windows with the added feature of depth.  Panel
 functions allow the use of stacked windows and ensure the proper
@@ -6199,9 +6202,9 @@ Returns the window of a given panel
 @end deffn
 
 @node The curses menu library, The curses form library, The curses panel library, Curses Reference
-@section The curses menu library: @code{(gucu menu)}
+@section The curses menu library: @code{(ncurses menu)}
 
-These are the functions in the @code{(gucu menu)} module.
+These are the functions in the @code{(ncurses menu)} module.
 
 @menu
 * Menus Overview::
@@ -6715,9 +6718,9 @@ or @code{E_POSTED} if the menu has already been posted.
 @end deffn
 
 @node The curses form library,  , The curses menu library, Curses Reference
-@section The curses form library: @code{(gucu form)}
+@section The curses form library: @code{(ncurses form)}
 
-These are the functions in the @code{(gucu form)} module.
+These are the functions in the @code{(ncurses form)} module.
 
 @menu
 * Forms Overview::

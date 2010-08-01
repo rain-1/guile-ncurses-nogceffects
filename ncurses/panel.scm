@@ -1,5 +1,5 @@
 ;; -*- Mode: scheme; -*-
-(define-module (gucu panel)
+(define-module (ncurses panel)
   #:export (
             new-panel
             bottom-panel
@@ -19,4 +19,4 @@
             ;;panel-userdata
 ))
 
-(load-extension "libguile-gucu" "gucu_panel_init")
+(load-extension "libguile-ncurses" "gucu_panel_init")

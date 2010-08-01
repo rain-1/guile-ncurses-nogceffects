@@ -1,7 +1,7 @@
 
 ;; -*- Mode: scheme; -*-
-(define-module (gucu menu)
-        #:use-module (gucu eti)
+(define-module (ncurses menu)
+        #:use-module (ncurses eti)
 	#:export (
 		set-menu-fore!
 		menu-fore
@@ -102,4 +102,4 @@
 		E_CURRENT
 
         ))
-(load-extension "libguile-gucu" "gucu_menu_init")
+(load-extension "libguile-ncurses" "gucu_menu_init")

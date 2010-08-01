@@ -1,8 +1,8 @@
 ;; -*- Mode: scheme; -*-
-(define-module (gucu curses)
+(define-module (ncurses curses)
   #:use-module (ice-9 optargs)
   #:use-module (srfi srfi-1)
-  #:use-module (gucu lib)
+  #:use-module (ncurses lib)
   #:export (
 	    %filter
 	    %gucu-wide-ncurses
@@ -865,7 +865,7 @@
            #t)
        (%wvline win (xchar->list ch) n)))
 
-(load-extension "libguile-gucu" "gucu_init")
+(load-extension "libguile-ncurses" "gucu_init")
 
 ;; These functions may not exist depending on the
 ;; compile time options

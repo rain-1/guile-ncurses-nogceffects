@@ -2,7 +2,7 @@
 ;;;; c001_char_conversion.test
 (use-modules (test lib)
 	     (test lib2)
-	     (gucu curses))
+	     (ncurses curses))
 
 (define test (curses-test-start))
 

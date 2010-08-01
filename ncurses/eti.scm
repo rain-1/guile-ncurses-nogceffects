@@ -1,5 +1,5 @@
 ;; -*- Mode: scheme; -*-
-(define-module (gucu eti)
+(define-module (ncurses eti)
         #:export (
                 E_OK
                 E_SYSTEM_ERROR
@@ -18,4 +18,4 @@
                 E_CURRENT
 ))
 
-(load-extension "libguile-gucu" "gucu_eti_init")
+(load-extension "libguile-ncurses" "gucu_eti_init")

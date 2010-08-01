@@ -3,7 +3,7 @@
 
 (use-modules (test lib)
              (test lib2)
-             (gucu curses)
+             (ncurses curses)
              (srfi srfi-1))
 
 (define *fail* #f)

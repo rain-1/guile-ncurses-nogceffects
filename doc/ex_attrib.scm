@@ -1,7 +1,7 @@
 #!/usr/bin/guile
 !#
 
-(use-modules (gucu curses)
+(use-modules (ncurses curses)
              (ice-9 format))
 
 ;; A helper function that return the cursor's current row

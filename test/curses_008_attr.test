@@ -5,7 +5,7 @@
              (test lib2)
              (srfi srfi-1)
              (ice-9 format)
-             (gucu curses))
+             (ncurses curses))
 
 
 (define test (curses-test-start))

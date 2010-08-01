@@ -3,7 +3,7 @@
 ;;;; curses_000_test_setup.test -- print some diagnostic info
 ;;;;   for this test
 
-(use-modules (gucu curses))
+(use-modules (ncurses curses))
 
 (newline)
 (display "Load path: ") (newline)

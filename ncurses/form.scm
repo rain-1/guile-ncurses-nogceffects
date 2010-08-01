@@ -1,7 +1,7 @@
 
 ;; -*- Mode: scheme; -*-
-(define-module (gucu form)
-        #:use-module (gucu eti)
+(define-module (ncurses form)
+        #:use-module (ncurses eti)
 	#:export (
 		data-ahead?
 		data-behind?
@@ -157,5 +157,5 @@
 
         ))
 
-(load-extension "libguile-gucu" "gucu_form_init")
+(load-extension "libguile-ncurses" "gucu_form_init")
 (define set-field-type set-field-type!)

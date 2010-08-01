@@ -241,7 +241,7 @@ inner_main (void *data, int argc, char **argv)
       if (strcmp (argv[i], "--version") == 0
 	  || strcmp (argv[i], "-v") == 0)
 	{
-	  printf ("Gucushell 0.3\n");
+	  printf ("guile-ncurses-shell 0.3\n");
 	  printf ("Copyright (c) 2008,2009,2010 Michael L. Gran\n");
 	  printf ("This may be freely distributed\n");
 	  printf ("For details, see the file COPYING, included in the distribution\n");
@@ -283,7 +283,7 @@ inner_main (void *data, int argc, char **argv)
 	    }
 	  if (screen == NULL)
 	    {
-	      fprintf (stderr, "gucushell: couldn't initialize ncurses on the xterm\n");
+	      fprintf (stderr, "guile-ncurses-shell: couldn't initialize ncurses on the xterm\n");
 	      exit (EXIT_FAILURE);
 	    }
 	  else
@@ -293,8 +293,8 @@ inner_main (void *data, int argc, char **argv)
 
 	  scm_c_eval_string ("(set! %load-path (append %load-path (list \".\")))");
 	  /* Call the curses libraries */
-          printf ("Loading (gucu curses)\n");
-          scm_c_eval_string ("(use-modules (gucu curses))");
+          printf ("Loading (ncurses curses)\n");
+          scm_c_eval_string ("(use-modules (ncurses curses))");
 	  /* scm_c_eval_string ("(define stdscr (stdscr))"); */
 
 	  scm_shell (argc, argv);

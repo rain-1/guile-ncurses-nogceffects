@@ -2,7 +2,7 @@
 ;;;; r000_initscr.test -- test suite for curses initialization functions
 (use-modules (test lib)
              (test lib2)
-             (gucu curses))
+             (ncurses curses))
 
 (define test (curses-test-start))
 

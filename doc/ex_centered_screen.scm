@@ -1,7 +1,7 @@
 #!/usr/bin/guile
 !#
 
-(use-modules (gucu curses)
+(use-modules (ncurses curses)
              (srfi srfi-1))
 
 (define stdscr (initscr))

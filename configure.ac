@@ -3,7 +3,7 @@
 ##################
 # Package info
 AC_PREREQ(2.59)
-AC_INIT([gucu],[0.8],[spk121@yahoo.com])
+AC_INIT([guile-ncurses],[0.8],[spk121@yahoo.com])
 AC_CONFIG_AUX_DIR([build_aux])
 AM_INIT_AUTOMAKE([gnu std-options -Wall])
 AC_CONFIG_SRCDIR([config.h.in])
@@ -12,14 +12,13 @@ AC_CONFIG_MACRO_DIR([m4])
 
 ##################
 # Set the library libtool version constant
-LIBGUILE_GUCU_CURSES_INTERFACE="5:0:0"
-AC_SUBST(LIBGUILE_GUCU_CURSES_INTERFACE)
+LIBGUILE_NCURSES_INTERFACE="5:0:0"
+AC_SUBST(LIBGUILE_NCURSES_INTERFACE)
 
 ##################
 # Check for Programs
 
 AC_PROG_CC
-gl_EARLY
 AC_CANONICAL_HOST
 AC_PROG_INSTALL
 AC_PROG_MKDIR_P
@@ -29,10 +28,6 @@ AC_PROG_MKDIR_P
 
 # New method for when Libtool 2.x is default
 LT_INIT([dlopen disable-fast-install disable-static win32-dll])
-
-##################
-# Gnulib
-gl_INIT
 
 ##################
 # Initial guess of platform specific options
@@ -48,6 +43,9 @@ AM_CONDITIONAL([BUILDING_DLL], [test "$building_dll" = yes])
 
 ##################
 # Check for libraries
+
+AM_GNU_GETTEXT([external])
+AM_GNU_GETTEXT_VERSION([0.18.1])
 
 # from guile.m4
 # sets: GUILE_CFLAGS and GUILE_LDFLAGS
@@ -160,8 +158,7 @@ LIBS="$ax_save_LIBS"
 
 ##################
 #  Output
-AC_CONFIG_FILES([Makefile gucu/Makefile doc/Makefile m4/Makefile])
+AC_CONFIG_FILES([Makefile ncurses/Makefile doc/Makefile m4/Makefile po/Makefile.in])
 AC_CONFIG_FILES([build_aux/Makefile tools/Makefile test/Makefile])
-AC_CONFIG_FILES([lib/Makefile])
 AC_CONFIG_FILES([tools/uninstalled-env], [chmod +x tools/uninstalled-env])
 AC_OUTPUT

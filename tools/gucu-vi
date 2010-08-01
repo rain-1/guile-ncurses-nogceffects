@@ -4,7 +4,7 @@
 
 (use-modules (ice-9 getopt-long)
              (srfi srfi-1)
-             (gucu curses))
+             (ncurses curses))
 
 
 (define (set-readonly-file! x) (set! x (logior x 0x01)))

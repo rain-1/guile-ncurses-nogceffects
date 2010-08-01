@@ -7,7 +7,7 @@
              (srfi srfi-13) ; string-take is included by default in
                             ; guile 1.8.x but only appears in srfi-13
                             ; in guile 1.6.x
-             (gucu curses))
+             (ncurses curses))
 
 (define test (curses-test-start))
 

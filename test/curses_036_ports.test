@@ -3,7 +3,7 @@
 
 (use-modules (test lib)
              (test lib2)
-             (gucu curses)
+             (ncurses curses)
              (ice-9 format)
              (srfi srfi-1))
 

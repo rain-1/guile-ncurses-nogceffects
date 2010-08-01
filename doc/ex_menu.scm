@@ -1,7 +1,7 @@
 #!/usr/bin/guile
 !#
 
-(use-modules (gucu curses))
+(use-modules (ncurses curses))
 
 ;; Draw the menu on to the window WIN, using the list of CHOICES,
 ;; highlighting the currently selected entry.

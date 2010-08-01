@@ -2,7 +2,7 @@
 
 ;; A module containing curses soft label routines
 
-(define-module (gucu slk)
+(define-module (ncurses slk)
   #:use-module (ice-9 optargs)
   #:export (
             slk-attr
@@ -20,4 +20,4 @@
             slk-touch
 ))
 
-(load-extension "libguile-gucu" "gucu_slk_init_function")
+(load-extension "libguile-ncurses" "gucu_slk_init_function")

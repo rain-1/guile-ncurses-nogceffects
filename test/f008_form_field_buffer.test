@@ -6,8 +6,8 @@
              (test lib2)
              (srfi srfi-1)
              (srfi srfi-13)
-             (gucu curses)
-             (gucu form))
+             (ncurses curses)
+             (ncurses form))
 
 (define test (curses-test-start))
 
