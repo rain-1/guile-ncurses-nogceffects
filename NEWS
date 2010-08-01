@@ -6,6 +6,10 @@ The NEWS file for Guile-NCurses
   are permitted in any medium without royalty provided the copyright
   notice and this notice are preserved.
 
+Release 0.8
+- Rename to Guile-Ncurses
+- Move to LGPL3
+- Add some support for Gettext translations of error messages
 
 Release 0.7
 - rename set-field-type to set-field-type!
