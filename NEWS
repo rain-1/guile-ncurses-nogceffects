@@ -1,4 +1,11 @@
-The NEWS file for Guile Curses
+The NEWS file for Guile-NCurses
+
+  Copyright 2009, 2010 Free Software Foundation, Inc.
+
+  Copying and distribution of this file, with or without modification,
+  are permitted in any medium without royalty provided the copyright
+  notice and this notice are preserved.
+
 
 Release 0.7
 - rename set-field-type to set-field-type!

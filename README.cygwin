@@ -1,7 +1,13 @@
-This build has been tested on
-CYGWIN_NT-6.1 1.7.5 on i686 with Guile 1.8.2 and NCurses 5.7.x
+A README file Cygwin for guile-ncurses
 
-There are some special things to watch out for when building on cygwin
+  Copyright (C) 2010 Free Software Foundation, Inc.
+
+  Copying and distribution of this file, with or without modification,
+  are permitted in any medium without royalty provided the copyright
+  notice and this notice are preserved.
+
+There are some special things to watch out for when building on
+Cygwin.
 
 1. The location of ncurses header files
 

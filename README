@@ -1,5 +1,11 @@
 The README file for guile-ncurses
 
+  Copyright (C) 2009, 2010 Free Software Foundation, Inc.
+
+  Copying and distribution of this file, with or without modification,
+  are permitted in any medium without royalty provided the copyright
+  notice and this notice are preserved.
+
 This is guile-ncurses v0.8.  It provides functionality to allow
 programs written in Guile to interact with character screens in a
 terminal-independent manner.  It is a wrapper to the underlying
@@ -24,4 +30,4 @@ For an explanation of the installation of the package, see the INSTALL
 file.
 
 For an explanation of the copying restrictions for this package, see
-COPYING.
+COPYING.LESSER.

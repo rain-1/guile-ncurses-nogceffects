@@ -1,18 +1,37 @@
 # Process this file with autoconf to produce a configure script
 
+# Copyright (C) 2009, 2010 Free Software Foundation, Inc.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU Lesser General Public License as
+# published by the Free Software Foundation; either version 3, or (at
+# your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public
+# License along with this program.  If not, see
+# <http://www.gnu.org/licenses/>.
+
+
 ##################
 # Package info
-AC_PREREQ(2.59)
 AC_INIT([guile-ncurses],[0.8],[spk121@yahoo.com])
+
 AC_CONFIG_AUX_DIR([build_aux])
 AM_INIT_AUTOMAKE([gnu std-options -Wall])
-AC_CONFIG_SRCDIR([config.h.in])
+
+AC_PREREQ(2.59)
 AC_CONFIG_HEADERS([config.h])
+AC_CONFIG_SRCDIR([config.h.in])
 AC_CONFIG_MACRO_DIR([m4])
 
 ##################
 # Set the library libtool version constant
-LIBGUILE_NCURSES_INTERFACE="5:0:0"
+LIBGUILE_NCURSES_INTERFACE="6:0:0"
 AC_SUBST(LIBGUILE_NCURSES_INTERFACE)
 
 ##################
