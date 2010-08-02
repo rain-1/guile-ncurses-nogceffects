@@ -21,6 +21,7 @@
 */
 #include <config.h>
 
+#define _GNU_SOURCE
 #include <assert.h>
 #include <curses.h>
 #include <errno.h>
