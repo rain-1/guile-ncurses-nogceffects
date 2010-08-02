@@ -614,18 +614,18 @@ gucu_init_constant ()
 
 #ifdef HAVE_NCURSESW
   gucu_wide_ncurses =
-    scm_permanent_object (scm_c_define ("%gucu-wide-ncurses", SCM_BOOL_T));
+    scm_permanent_object (scm_c_define ("%wide-ncurses", SCM_BOOL_T));
 #else
   gucu_wide_ncurses =
-    scm_permanent_object (scm_c_define ("%gucu-wide-ncurses", SCM_BOOL_F));
+    scm_permanent_object (scm_c_define ("%wide-ncurses", SCM_BOOL_F));
 #endif
 
 #ifdef GUILE_CHARS_ARE_UCS4
   gucu_ucs4_chars =
-    scm_permanent_object (scm_c_define ("%gucu-ucs4-chars", SCM_BOOL_T));
+    scm_permanent_object (scm_c_define ("%ucs4-chars", SCM_BOOL_T));
 #else
   gucu_ucs4_chars =
-    scm_permanent_object (scm_c_define ("%gucu-ucs4-chars", SCM_BOOL_F));
+    scm_permanent_object (scm_c_define ("%ucs4-chars", SCM_BOOL_F));
 #endif
 
 }

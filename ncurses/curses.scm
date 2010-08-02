@@ -26,8 +26,8 @@
   #:use-module (ncurses lib)
   #:export (
 	    %filter
-	    %gucu-wide-ncurses
-	    %gucu-ucs4-chars
+	    %wide-ncurses
+	    %ucs4-chars
 	    %scheme-char-to-c-char
 	    %scheme-char-from-c-char
 	    %scheme-char-to-c-wchar
