@@ -1,5 +1,5 @@
 ;;;; -*- Mode: scheme; -*-
-;;;; r040-term-attrs.test --- test suite for curses's term attrs
+;;;; r040_term_attrs.test --- test suite for curses's term attrs
 
 ;; Copyright 2009, 2010 Free Software Foundation, Inc.
 
