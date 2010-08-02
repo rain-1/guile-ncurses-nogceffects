@@ -216,6 +216,7 @@ Curses Reference
 The basic curses library: @code{(ncurses curses)}
 
 * Overview::
+* Features determined at compile time::
 * Curses screen initialization and manipulation routines::
 * Making rendered characters::
 * Adding characters::
@@ -3001,6 +3002,7 @@ C-language API.
 
 @menu
 * Overview::
+* Features determined at compile time::
 * Curses screen initialization and manipulation routines::
 * Making rendered characters::
 * Adding characters::
@@ -3037,7 +3039,7 @@ C-language API.
 * Window creation::
 @end menu
 
-@node Overview, Curses screen initialization and manipulation routines, The basic curses library, The basic curses library
+@node Overview, Features determined at compile time, The basic curses library, The basic curses library
 @subsection Overview
 
 The guile-ncurses library routines give the user a
@@ -3185,7 +3187,28 @@ always (0,0).  @code{y} increases as one moves down the window, and
 @menu
 @end menu
 
-@node Curses screen initialization and manipulation routines, Making rendered characters, Overview, The basic curses library
+@node Features determined at compile time, Curses screen initialization and manipulation routines, Overview, The basic curses library
+@subsection Features determined at compile time
+
+When the Guile-Ncurses library was compiled, tests were run
+to see which features could be enabled.  There are two
+variables that describe the capabilities of this build
+of Guile-Ncurses.
+
+@defvr Constant %wide-ncurses
+This is set to @code{#t} if Guile-Ncurses is using the features
+of the wide ncurses library @code{libncursesw}.  Otherwise, it
+is @code{#f}.
+@end defvr
+
+@defvr Constant %ucs4-chars
+This is set to @code{#t} if Guile-Ncurses expects that characters are
+stored as UCS4 codepoints, such as in Guile 2.0.x.  It is @code{#f} if
+Guile-Ncurses expects that characters are 8-bit only and stored
+according to the current 8-bit locale.
+@end defvr
+
+@node Curses screen initialization and manipulation routines, Making rendered characters, Features determined at compile time, The basic curses library
 @subsection Curses screen initialization and manipulation routines
 
 @cindex Initialization
