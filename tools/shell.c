@@ -248,6 +248,7 @@ inner_main (void *data, int argc, char **argv)
   int master, slave;
   pid_t pid;
   char name[512];
+  char *termtype;
   int slave_read, slave_write;
   FILE *fp_slave_read, *fp_slave_write;
   SCREEN *screen;
@@ -291,11 +292,13 @@ inner_main (void *data, int argc, char **argv)
 	  fp_slave_write = fdopen (slave_write, "w");
 
 
-	  /* Need to wait for xterm to be ready before trying to initalize curses */
+	  /* Need to wait for xterm to be ready before trying to
+	     initalize curses */
 	  for (i = 0; i < 5; i++)
 	    {
 	      /* Connect curses to xterm */
-	      screen = newterm ("xterm", fp_slave_write, fp_slave_read);
+	      termtype = strdup("xterm");
+	      screen = newterm (termtype, fp_slave_write, fp_slave_read);
 	      if (screen == NULL)
 		{
 		  printf ("Waiting for xterm...\n");
