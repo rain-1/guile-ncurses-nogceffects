@@ -52,7 +52,9 @@ r040_term_attrs.test
 
 TESTS = $(NARROWTESTS)
 if WIDE
+if UCS4
 TESTS += $(WIDETESTS)
+endif
 endif
 
 EXTRA_DIST = $(TESTLIB) $(TESTS)

@@ -72,12 +72,24 @@ GUILE_FLAGS
 
 # GUILE_LDFLAGS is actually a mashup of GUILE_LIBS and GUILE_LDFLAGS
 
+AC_MSG_CHECKING([if guile can handle UCS4 characters])
+GUILE_CHECK([ac_cv_guile_ucs4],
+            [(= 32764 (false-if-exception (char->integer (integer->char 32764))))])
+if test "$ac_cv_guile_ucs4" = 0
+then
+  ac_cv_guile_ucs4=yes
+else
+  ac_cv_guile_ucs4=no
+fi
+AC_MSG_RESULT([$ac_cv_guile_ucs4])
+AM_CONDITIONAL([UCS4],[test "$ac_cv_guile_ucs4" = yes])
+
 # from the autoconf archive
 # sets: ax_cv_curses, ax_cv_ncurses, ax_cv_ncursesw and CURSES_LIB
 # ac_defines: HAVE_CURSES_H, HAVE_NCURSES_H, HAVE_NCURSES_W
 AX_WITH_CURSES
 
-if test "$ax_cv_ncurses" = no -a "$ax_cv_ncursesw" = no
+if test "$ax_cv_ncurses" = no && "$ax_cv_ncursesw" = no
 then
   AC_MSG_ERROR([ncurses is required])
 fi
