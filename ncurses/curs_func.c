@@ -2246,7 +2246,6 @@ gucu_wgetch (SCM win)
 #ifdef HAVE_NCURSESW
   {
     wint_t wch = 0;
-    uint32_t cp;
     ret = wget_wch (_scm_to_window (win), &wch);
 
     if (ret == OK)
