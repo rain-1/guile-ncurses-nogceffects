@@ -612,7 +612,7 @@ gucu_init_constant ()
 			  ("REPORT_MOUSE_POSITION",
 			   scm_from_uint (REPORT_MOUSE_POSITION)));
 
-#ifdef HAVE_LIBNCURSESW
+#ifdef HAVE_NCURSESW
   gucu_wide_ncurses =
     scm_permanent_object (scm_c_define ("%gucu-wide-ncurses", SCM_BOOL_T));
 #else
