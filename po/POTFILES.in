@@ -1,0 +1,17 @@
+# List of source files which contain translatable strings.
+
+# Library files
+ncurses/curs_func.c
+ncurses/curs_port.c
+ncurses/curs_spec.c
+ncurses/form_func.c
+ncurses/form_type.c
+ncurses/menu_func.c
+ncurses/menu_type.c
+ncurses/panel_type.c
+ncurses/type.c
+ncurses/curses.scm
+ncurses/lib.scm
+
+# Tools files
+tools/shell.c

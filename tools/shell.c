@@ -55,6 +55,8 @@
 #include <curses.h>    /* all: newterm; */
 #include <libguile.h>  /* all: scm_shell; */
 
+#define _(s) gettext (s)
+
 int open_terminal (char *, int, int);
 int is_unix98_pty (const char *);
 int is_bsd_pty (const char *);
@@ -206,14 +208,14 @@ open_terminal (char *pseudo_terminal_slave_name,
 	}
       else
 	{
-	  fprintf (stderr, "Unrecognized pseudo-terminal name: %s\n",
+	  fprintf (stderr, _("Unrecognized pseudo-terminal name: %s\n"),
 		   pseudo_terminal_slave_name);
 	  _exit (EXIT_FAILURE);
 	}
 
-      printf ("Attemping to connect an xterm to %s\n",
+      printf (_("Attemping to connect an xterm to %s\n"),
 	      pseudo_terminal_slave_name);
-      printf ("Calling 'xterm %s'\n", s_flag);
+      printf (_("Calling 'xterm %s'\n"), s_flag);
       execlp ("xterm", "xterm", s_flag, NULL);
       /* Should not return */
       return 0;
@@ -257,6 +259,8 @@ inner_main (void *data, int argc, char **argv)
   int i;
 
   setlocale (LC_ALL, "");
+  bindtextdomain (PACKAGE, LOCALEDIR);
+  textdomain (PACKAGE);
 
   /* The command line arguments are going to be passed down to Guile,
      but, we need to check here for --version and --help. */
@@ -265,16 +269,24 @@ inner_main (void *data, int argc, char **argv)
       if (strcmp (argv[i], "--version") == 0
 	  || strcmp (argv[i], "-v") == 0)
 	{
-	  printf ("guile-ncurses-shell 0.4\n");
-	  printf ("Copyright (c) 2008,2009,2010 Free Software Foundation, Inc.\n");
-	  printf ("This may be freely distributed\n");
-	  printf ("For details, see the file COPYING.LESSER, included in the distribution\n");
+	  printf (_("guile-ncurses-shell 0.4\n"
+		    "Copyright (C) 2010 Free Software Foundation, Inc.\n"
+		    "License LGPLv3+: GNU LGPL version 3 or later <http://www.gnu.org/licenses/lgpl.html>"
+		    "This is free software: you are free to change and redistribute it.\n"
+		    "There is NO WARRANTY, to the extent permitted by law.\n"));
 	  return;
 	}
       if (strcmp (argv[i], "--help") == 0
 	  || strcmp (argv[i], "-h") == 0)
 	{
-	  scm_shell (argc, argv);
+	  printf (_("Usage: guile-ncurses-shell OPTION...\n"));
+	  printf (_("This program starts a Guile-Ncurses session and redirects its output into\n"
+		    "a terminal window.  Any options on the command line are passed on the to\n"
+		    "Guile interpreter.  Type 'guile --help' to see its command line interface.\n"));
+	  printf ("\n");
+	  printf (_("Report bugs to <%s>.\n"), PACKAGE_BUGREPORT);
+	  printf ("\n");
+	  return;
 	}
     }
 
@@ -301,7 +313,7 @@ inner_main (void *data, int argc, char **argv)
 	      screen = newterm (termtype, fp_slave_write, fp_slave_read);
 	      if (screen == NULL)
 		{
-		  printf ("Waiting for xterm...\n");
+		  printf (_("Waiting for xterm...\n"));
 		  sleep (1);
 		}
 	      else
@@ -309,19 +321,20 @@ inner_main (void *data, int argc, char **argv)
 	    }
 	  if (screen == NULL)
 	    {
-	      fprintf (stderr, "guile-ncurses-shell: couldn't initialize ncurses on the xterm\n");
+	      fprintf (stderr, _("guile-ncurses-shell: couldn't initialize ncurses on the xterm\n"));
 	      exit (EXIT_FAILURE);
 	    }
 	  else
-	    printf ("Initialized curses on xterm\n");
+	    printf (_("Initialized curses on xterm\n"));
 	  erase ();
 	  refresh ();
 
 	  scm_c_eval_string ("(set! %load-path (append %load-path (list \".\")))");
 	  /* Call the curses libraries */
-          printf ("Loading (ncurses curses)\n");
+          printf (_("Loading (ncurses curses)\n"));
           scm_c_eval_string ("(use-modules (ncurses curses))");
-	  /* scm_c_eval_string ("(define stdscr (stdscr))"); */
+          printf (_("Setting 'scr' to the standard window\n"));
+	  scm_c_eval_string ("(define scr (stdscr))");
 
 	  scm_shell (argc, argv);
 
