@@ -41,5 +41,5 @@ endif
 
 LDADD = $(CURSES_LIB) -lutil $(GUILE_LDFLAGS)
 
-EXTRA_DIST = uninstalled-env.in xgettext.sh.in ncurses-keyboard-test
+EXTRA_DIST = uninstalled-env.in ncurses-keyboard-test
 ETAGS_ARGS = shell.[ch] --language=scheme ncurses-keyboard-test
