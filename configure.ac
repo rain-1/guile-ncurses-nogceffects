@@ -19,7 +19,7 @@
 
 ##################
 # Package info
-AC_INIT([guile-ncurses],[0.8],[spk121@yahoo.com])
+AC_INIT([GNU Guile-Ncurses],[0.9],[spk121@yahoo.com])
 
 AC_CONFIG_AUX_DIR([build_aux])
 AM_INIT_AUTOMAKE([gnu std-options -Wall])
@@ -31,7 +31,7 @@ AC_CONFIG_MACRO_DIR([m4])
 
 ##################
 # Set the library libtool version constant
-LIBGUILE_NCURSES_INTERFACE="6:0:0"
+LIBGUILE_NCURSES_INTERFACE="6:1:0"
 AC_SUBST(LIBGUILE_NCURSES_INTERFACE)
 
 ##################

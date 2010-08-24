@@ -1,6 +1,6 @@
 ## Process this file with automake to produce Makefile.in
 
-# Makefile.am for Guile-Ncurses.
+# Makefile.am for GNU Guile-Ncurses.
 #
 # Copyright 2009, 2010 Free Software Foundation, Inc.
 #

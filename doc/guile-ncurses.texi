@@ -15,7 +15,7 @@
 
 
 @copying
-This manual is for the Guile NCurses library, (version
+This manual is for the GNU Guile-NCurses library, (version
 @value{VERSION}, @value{UPDATED}).  It provides bindings for the
 ncurses library, which provides functionality for updating character
 screens.
@@ -3042,7 +3042,7 @@ C-language API.
 @node Overview, Features determined at compile time, The basic curses library, The basic curses library
 @subsection Overview
 
-The guile-ncurses library routines give the user a
+The GNU Guile-Ncurses library routines give the user a
 terminal-independent method of updating character screens with
 reasonable optimization.
 
@@ -3096,7 +3096,7 @@ details.]
 @findex stdscr
 @tindex #<window>
 
-The guile-ncurses library permits manipulation of data structures, the
+The Guile-Ncurses library permits manipulation of data structures, the
 @code{#<window>} type, which can be thought of as two-dimensional
 arrays of characters representing all or part of a CRT screen.  A
 default window, conventionally called @code{stdscr}, which is the size
@@ -3385,9 +3385,9 @@ a rendered character is either a @code{chtype}, which is a 32-bit
 integer containing an 8-bit @code{char} and 24-bits of color and
 rendering information, or is a @code{cchar_t}, which is one or more
 @code{wchar_t} characters plus associated color and rendering
-information.  guile-ncurses abstracts away the difference between
+information.  Guile-Ncurses abstracts away the difference between
 these two types and presents a consistent API for both.  The
-guile-ncurses complex rendered character will get converted
+Guile-Ncurses complex rendered character will get converted
 automatically to @code{chtype} or @code{cchar_t} when necessary.
 
 There is a family of functions to convert unrendered, simple
@@ -4823,8 +4823,8 @@ state'' error.
 @cindex 7-bit characters
 @cindex 8-bit characters
 
-If guile-ncurses was compiled with the standard version of the ncurses library,
-and not the wide version, it operates on 8-bit characters.
+If Guile-Ncurses was compiled with the standard version of the ncurses
+library, and not the wide version, it operates on 8-bit characters.
 
 Initially, whether the terminal returns 7 or 8 significant bits on
 input depends on the control mode of the tty driver.  To force 8 bits

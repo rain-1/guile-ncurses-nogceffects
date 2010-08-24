@@ -1,10 +1,14 @@
-The NEWS file for Guile-NCurses
+The NEWS file for GNU Guile-NCurses
 
   Copyright 2009, 2010 Free Software Foundation, Inc.
 
   Copying and distribution of this file, with or without modification,
   are permitted in any medium without royalty provided the copyright
   notice and this notice are preserved.
+
+Release 0.9
+- Rename to GNU Guile-Ncurses
+- fix some test bugs
 
 Release 0.8
 - Rename to Guile-Ncurses

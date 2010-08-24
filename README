@@ -1,4 +1,4 @@
-The README file for guile-ncurses
+The README file for GNU Guile-Ncurses
 
   Copyright (C) 2009, 2010 Free Software Foundation, Inc.
 
@@ -6,18 +6,16 @@ The README file for guile-ncurses
   are permitted in any medium without royalty provided the copyright
   notice and this notice are preserved.
 
-This is guile-ncurses v0.8.  It provides functionality to allow
-programs written in Guile to interact with character screens in a
-terminal-independent manner.  It is a wrapper to the underlying
-ncurses library.
+This is GNU Guile-Ncurses v0.9.  It provides functionality to allow
+programs written in the Guile interpreter to interact with character
+screens in a terminal-independent manner.  It is a wrapper to the
+underlying ncurses library.
 
-This library can be found at http://gano.sourceforge.net
+This library can be found at http://www.gnu.org/software/guile-ncurses/
 
-It is known to work on the following systems
+It is known to work on the following system
 
-CYGWIN_NT-6.1 1.7.5 on i686 with Guile 1.8.2 and NCurses 5.7.x
-Fedora 13 with Guile 1.8.7 and NCurses 5.7.20090207
-Fedora 13 with Guile 1.9.11 and NCurses 5.7.20090207
+Fedora 13 on i686-pc-linux-gnuwith Guile 1.9.11 and NCurses 5.7.20100130
 
 This distribution has the following subdirectories:
 - ncurses: the source code for the library

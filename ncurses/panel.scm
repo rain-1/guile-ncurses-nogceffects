@@ -4,7 +4,7 @@
 
 ;; Copyright 2009, 2010 Free Software Foundation, Inc.
 
-;; This file is part of Guile-Ncurses.
+;; This file is part of GNU Guile-Ncurses.
 
 ;; Guile-Ncurses is free software: you can redistribute it and/or
 ;; modify it under the terms of the GNU Lesser General Public License
@@ -13,7 +13,7 @@
 
 ;; Guile-Ncurses is distributed in the hope that it will be useful,
 ;; but WITHOUT ANY WARRANTY; without even the implied warranty of
-;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 ;; Lesser General Public License for more details.
 
 ;; You should have received a copy of the GNU Lesser General Public

@@ -3,7 +3,7 @@
 
   Copyright 2009, 2010 Free Software Foundation, Inc.
 
-  This file is part of Guile-Ncurses.
+  This file is part of GNU Guile-Ncurses.
 
   Guile-Ncurses is free software: you can redistribute it and/or modify
   it under the terms of the GNU Lesser General Public License as
@@ -32,10 +32,10 @@
 #include "type.h"
 #include "unicode.h"
 
-#define RETURNTF(x) \
-  if(x==ERR) \
-    return SCM_BOOL_F; \
-  else \
+#define RETURNTF(x)                             \
+  if(x==ERR)                                    \
+    return SCM_BOOL_F;                          \
+  else                                          \
     return SCM_BOOL_T
 
 static void
