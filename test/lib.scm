@@ -293,9 +293,6 @@
 (define exception:string-contains-nul
   (cons 'misc-error "^string contains #\\\\nul character"))
 
-(if (not (defined? '%default-port-encoding))
-    (define %default-port-encoding (make-fluid)))
-
 ;;; Display all parameters to the default output port, followed by a newline.
 (define (display-line . objs)
   (for-each display objs)
@@ -402,16 +399,27 @@
 (define (format-test-name name)
   ;; Choose a Unicode-capable encoding so that the string port can contain any
   ;; valid Unicode character.
-  (with-fluids ((%default-port-encoding "UTF-8"))
-    (call-with-output-string
-     (lambda (port)
-       (let loop ((name name)
-                  (separator ""))
-         (if (pair? name)
-             (begin
-               (display separator port)
-               (display (car name) port)
-               (loop (cdr name) ": "))))))))
+  (if (defined? '%default-port-encoding)
+      (with-fluids ((%default-port-encoding "UTF-8"))
+                   (call-with-output-string
+                    (lambda (port)
+                      (let loop ((name name)
+                                 (separator ""))
+                        (if (pair? name)
+                            (begin
+                              (display separator port)
+                              (display (car name) port)
+                              (loop (cdr name) ": ")))))))
+      ;; else
+      (call-with-output-string
+       (lambda (port)
+         (let loop ((name name)
+                    (separator ""))
+           (if (pair? name)
+               (begin
+                 (display separator port)
+                 (display (car name) port)
+                 (loop (cdr name) ": "))))))))
 
 ;;;; For a given test-name, deliver the full name including all prefixes.
 (define (full-name name)
@@ -607,6 +615,8 @@
   (let ((port (if (output-port? file) file
 		  (open-output-file file))))
     (lambda args
+      (if (defined? 'set-port-conversion-strategy!)
+          (set-port-conversion-strategy! port 'escape))
       (apply print-result port args)
       (force-output port))))
 
