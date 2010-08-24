@@ -1,2 +1,1127 @@
-The GNU Coding Standards say that I have to have a 
-ChangeLog.
+Michael Gran <spk121@yahoo.com>	2010-08-24
+
+    Update ChangeLog
+    
+    * gitlog2changelog.sh: new file
+    * ChangeLog: update for release
+
+Michael Gran <spk121@yahoo.com>	2010-08-24
+
+    Update pot for release
+    
+    * po/guile-ncurses.pot: bump to rev 0.9
+
+Michael Gran <spk121@yahoo.com>	2010-08-24
+
+    Bump rev and correct package name for release
+    
+    * configure.ac: bump rev
+    * doc/README: new file
+    
+    * AUTHORS: correct package name
+    * NEWS
+    * README
+    * README.cygwin
+    * THANKS
+    * doc/guile-ncurses.texi
+    * ncurses/Makefile.am
+    * ncurses/compat.c
+    * ncurses/compat.h
+    * ncurses/curs_const.c
+    * ncurses/curs_const.h
+    * ncurses/curs_func.h
+    * ncurses/curs_func.c
+    * ncurses/curs_main.c
+    * ncurses/curs_port.c
+    * ncurses/curs_port.h
+    * ncurses/curs_spec.c
+    * ncurses/curs_spec.h
+    * ncurses/curses.scm
+    * ncurses/eti.scm
+    * ncurses/eti_const.c
+    * ncurses/eti_const.h
+    * ncurses/eti_main.c
+    * ncurses/form.scm
+    * ncurses/form_const.c
+    * ncurses/form_const.h
+    * ncurses/form_func.c
+    * ncurses/form_func.h
+    * ncurses/form_main.c
+    * ncurses/form_spec.c
+    * ncurses/form_spec.h
+    * ncurses/form_type.c
+    * ncurses/form_type.h
+    * ncurses/gucuconfig.h
+    * ncurses/lib.scm
+    * ncurses/menu.scm
+    * ncurses/menu_const.c
+    * ncurses/menu_const.h
+    * ncurses/menu_func.c
+    * ncurses/menu_func.h
+    * ncurses/menu_main.c
+    * ncurses/menu_spec.c
+    * ncurses/menu_spec.h
+    * ncurses/menu_type.c
+    * ncurses/menu_type.h
+    * ncurses/panel.scm
+    * ncurses/panel_func.c
+    * ncurses/panel_func.h
+    * ncurses/panel_main.c
+    * ncurses/panel_spec.c
+    * ncurses/panel_spec.h
+    * ncurses/panel_type.c
+    * ncurses/panel_type.h
+    * ncurses/slk.scm
+    * ncurses/slk_func.c
+    * ncurses/slk_func.h
+    * ncurses/type.c
+    * ncurses/type.h
+    * ncurses/unicode.c
+    * ncurses/unicode.h
+    * ncurses/visbility.h
+    * tools/ncurses-keyboard-test
+    * tools/shell.c
+
+Michael Gran <spk121@yahoo.com>	2010-08-24
+
+    can't use define in if
+    
+    * test/lib.scm (format-test-name): set port encoding, if possible
+      (make-log-reporter): set port-conversion-strategy, if possible
+
+Michael Gran <spk121@yahoo.com>	2010-08-23
+
+    Remove missing script from tools Makefile.am
+    
+    xgettext.sh.in is no longer included in the distro
+    
+    * tools/Makefile (EXTRA_DIST): modified
+
+Michael Gran <spk121@yahoo.com>	2010-08-23
+
+    Include guile.m4 explicitly
+    
+    * m4/guile.m4: new file
+    * m4/Makefile.am: add guile.m4 as EXTRA_DIST
+
+Michael Gran <spk121@yahoo.com>	2010-08-23
+
+    Add COPYING to distro, since COPYING.LESSER refers to it
+    
+    * COPYING: new file
+
+Michael Gran <spk121@yahoo.com>	2010-08-23
+
+    Don't import gnulib streq
+    
+    License conflict with LGPL
+    
+    * m4/gnulib-cache.m4: remove streq
+
+Michael Gran <spk121@yahoo.com>	2010-08-02
+
+    More .gitignore
+
+Michael Gran <spk121@yahoo.com>	2010-08-02
+
+    Delete unneeded gnulib files
+
+Michael Gran <spk121@yahoo.com>	2010-08-02
+
+    More gettext support
+
+Michael Gran <spk121@yahoo.com>	2010-08-02
+
+    Better gettext support
+
+Merge: 514b3dc d9a305c
+Michael Gran <spk121@yahoo.com>	2010-08-01
+
+    Merge branch 'master' of ssh://gano.git.sourceforge.net/gitroot/gano/gucu
+
+Michael Gran <spk121@yahoo.com>	2010-08-01
+
+    Document %wide-ncurses and %ucs4-chars
+
+Michael Gran <spk121@yahoo.com>	2010-08-01
+
+    Document %wide-ncurses and %ucs4-chars
+
+Michael Gran <spk121@yahoo.com>	2010-08-01
+
+    Rename %gucu-wide-ncurses and %gucu-ucs4-chars
+
+Michael Gran <spk121@yahoo.com>	2010-08-01
+
+    %gucu-wide-ncurses was not being set correctly
+
+Michael Gran <spk121@yahoo.com>	2010-08-01
+
+    Don't run wide tests when using Guile 1.8 with libunistring and ncursesw
+
+Michael Gran <spk121@yahoo.com>	2010-08-01
+
+    Quiet warning in shell.c
+
+Michael Gran <spk121@yahoo.com>	2010-08-01
+
+    Bad path for test r040 in Makefile.am
+
+Michael Gran <spk121@yahoo.com>	2010-08-01
+
+    Need _GNU_SOURCE for asprintf
+
+Michael Gran <spk121@yahoo.com>	2010-08-01
+
+    Unused variable
+
+Michael Gran <spk121@yahoo.com>	2010-08-01
+
+    LGPL3 copyright statements
+
+Michael Gran <spk121@yahoo.com>	2010-08-01
+
+    Minor tweaks of configure.ac
+
+Michael Gran <spk121@yahoo.com>	2010-08-01
+
+    Add THANKS file
+
+Michael Gran <spk121@yahoo.com>	2010-08-01
+
+    Update TODO
+
+Michael Gran <spk121@yahoo.com>	2010-08-01
+
+    Update NEWS
+
+Michael Gran <spk121@yahoo.com>	2010-08-01
+
+    Update Copyright
+
+Michael Gran <spk121@yahoo.com>	2010-08-01
+
+    Include LGPL3
+
+Michael Gran <spk121@yahoo.com>	2010-08-01
+
+    Change copyright of manual to FSF
+
+Michael Gran <spk121@yahoo.com>	2010-08-01
+
+    Update AUTHORS
+
+Michael Gran <spk121@yahoo.com>	2010-08-01
+
+    Add gettext and remove gnulib to aclocal and config.h.in
+
+Michael Gran <spk121@yahoo.com>	2010-08-01
+
+    Update READMEs
+
+Michael Gran <spk121@yahoo.com>	2010-08-01
+
+    Change gucu to ncurses
+
+Michael Gran <spk121@yahoo.com>	2010-08-01
+
+    rename gucu->ncurses
+
+Michael Gran <spk121@yahoo.com>	2010-07-18
+
+    Remove call to gnulib STREQ
+
+Michael Gran <spk121@yahoo.com>	2010-07-18
+
+    Call gettext
+
+Michael Gran <spk121@yahoo.com>	2010-07-17
+
+    define-syntax not available in Guile 1.8.x
+    
+    * test/lib.scm: revert to defmacros
+
+Michael Gran <spk121@yahoo.com>	2010-07-17
+
+    Remove progname since it isn't lgpl
+    
+    * tools/shell.c (inner_main): remove call to progname
+    * config.h.in (HAVE_DECL_PROGRAM_INVOCATION_NAME): removed
+      (HAVE_DECL_PROGRAM_INVOCATION_SHORT_NAME): removed
+
+Michael Gran <spk121@yahoo.com>	2010-07-17
+
+    Gitignore
+
+Michael Gran <spk121@yahoo.com>	2010-07-17
+
+    Whitespace and comments
+
+Michael Gran <spk121@yahoo.com>	2010-07-17
+
+    Use STREQ for short string comparison
+    
+    * tools/shell.c (inner_main): modified
+    * m4/gnulib-cache.m4: modified
+
+Michael Gran <spk121@yahoo.com>	2010-07-17
+
+    Whitespace
+
+Michael Gran <spk121@yahoo.com>	2010-07-17
+
+    Whitespace
+
+Michael Gran <spk121@yahoo.com>	2010-07-17
+
+    Avoid ampersand quoting in makefile
+    
+    * gucu/Makefile.am: modified
+
+Michael Gran <spk121@yahoo.com>	2010-07-17
+
+    Gnulib cache file
+    
+    * m4/gnulib-cache.m4: new file
+
+Michael Gran <spk121@yahoo.com>	2010-07-17
+
+    Use set_program_name
+    
+    * config.h.in (HAVE_DECL_PROGRAM_INVOCATION_NAME): new define
+      (HAVE_DECL_PROGRAM_INVOCATION_SHORT_NAME): new define
+    * tools/Makefile.am: modify paths
+    * tools/shell.c (inner_main): modified
+
+Michael Gran <spk121@yahoo.com>	2010-07-17
+
+    Use gnulib's gettext.h
+    
+    * gucu/gettext.h: removed
+
+Michael Gran <spk121@yahoo.com>	2010-07-17
+
+    Capitalization
+    
+    * gucu/curs_func.c: modified
+    * gucu/curs_spec.c: modified
+    * gucu/form_func.c: modified
+    * gucu/menu_func.c: modified
+    * gucu/menu_type.c: modified
+    * gucu/panel_func.c: modified
+    * gucu/panel_type.c: modified
+    * gucu/type.c: modified
+
+Michael Gran <spk121@yahoo.com>	2010-07-17
+
+    Update copyright
+    
+    * doc/gucu.texi: modified
+
+Michael Gran <spk121@yahoo.com>	2010-07-17
+
+    Bump version to 0.8
+    
+    * configure.ac: modified
+
+Michael Gran <spk121@yahoo.com>	2010-07-17
+
+    Check for cookie_io_function_t
+    
+    * config.h.in (HAVE_COOKIE_IO_FUNCTIONS_T): new define
+    * configure.ac: check for cookie_io_functions_t
+    * gucu/curs_port.c: use new define
+
+Michael Gran <spk121@yahoo.com>	2010-07-17
+
+    Update test.lib from Guile distro
+    
+    * test/lib.scm: use Guile 1.9.11 version
+
+Michael Gran <spk121@yahoo.com>	2010-07-17
+
+    Gnulib infrastructure
+    
+    * .gitignore: modified
+    * Makefile.am: modified
+    * aclocal.m4: modified
+    * config.h.in: modified
+    * configure.ac: modified
+    * gucu/Makefile.am: modified
+    * m4/.gitignore: modified
+    * m4/Makefile.am: modified
+
+Michael Gran <spk121@yahoo.com>	2010-06-20
+
+    TABSIZE may not be lvalue
+    
+    Don't try to set TABSIZE when the underlying ncurses library
+    doesn't support it.
+    
+    * gucu/curs_spec.c (gucu_init_special) [HAVE_SET_TABSIZE]: new conditional
+      compilation
+      (gucu_set_TABSIZE)[HAVE_SET_TABSIZE]: now only availabe when HAVE_SET_TABSIZE
+      is true
+
+U-Cain\Mike <Mike@Cain.(none)>	2010-05-16
+
+    #ifdef cleanup in gettext.h
+    
+    * gucu/gettext.h: modified
+
+U-Cain\Mike <Mike@Cain.(none)>	2010-05-16
+
+    Remove obsolete curses-wide.scm
+    
+    * gucu/curses-wide.scm: removed
+
+U-Cain\Mike <Mike@Cain.(none)>	2010-05-16
+
+    #include declaration cleanup
+    
+    Put config.h first.  Order the rest. Add gettext.h.  Put gettext.h
+    declarations where they are likely to be used.
+    
+    * gucu/gettext.h: new file
+    
+    * gucu/compat.c: modified
+    * gucu/curs_const.c:
+    * gucu/curs_func.c:
+    * gucu/curs_main.c:
+    * gucu/curs_port.h:
+    * gucu/curs_spec.c:
+    * gucu/eti_const.c:
+    * gucu/eti_main.c:
+    * gucu/form_const.c:
+    * gucu/form_func.c:
+    * gucu/form_main.c:
+    * gucu/form_spec.c:
+    * gucu/form_type.c:
+    * gucu/gucuconfig.h:
+    * gucu/menu_const.c:
+    * gucu/menu_func.c:
+    * gucu/menu_spec.c:
+    * gucu/menu_type.c:
+    * gucu/panel_func.c:
+    * gucu/panel_main.c:
+    * gucu/panel_spec.c:
+    * gucu/panel_type.c:
+    * gucu/slk_func.c:
+    * gucu/type.c:
+    * gucu/type.h:
+    * gucu/unicode.c:
+    * gucu/shell.c:
+
+U-Cain\Mike <Mike@Cain.(none)>	2010-05-16
+
+    Use no parenthesis style of #if defined
+    
+    * gucu/curs_port.c: modified
+
+U-Cain\Mike <Mike@Cain.(none)>	2010-05-14
+
+    #include cleanup, remove _GNU_SOURCE and add libintl.h
+    
+    The #include preprocessor calls were alphabetized; unnecessary calls
+    to _GNU_SOURCE were removed; and libintl.h was added for source files
+    that contain text strings.
+    
+    * gucu/curs_const.c:
+    * gucu/curs_func.c:
+    * gucu/curs_port.c:
+    * gucu/curs_spec.c:
+    * gucu/eti_const.c:
+    * gucu/form_const.c:
+    * gucu/form_func.c:
+    * gucu/form_type.c:
+    * gucu/menu_const.c:
+    * gucu/menu_func.c:
+    * gucu/menu_spec.c:
+    * gucu/menu_type.c:
+    * gucu/panel_func.c:
+    * gucu/panel_type.c:
+    * gucu/slk_func.c:
+    * gucu/type.c:
+    * gucu/unicode.c:
+    * tools/shell.c:
+
+Michael Gran <spk121@yahoo.com>	2010-05-09
+
+    Remove FORCE_TEX_TO_TEX configure flag
+    
+    This never plays well with the autotools warnings
+    
+    * configure.ac: remove FORCE_TEX_TO_TEX logic
+    * doc/Makefile.am: remove FORCE_TEX_TO_TEX
+
+Michael Gran <spk121@yahoo.com>	2010-05-09
+
+    Distribute README.cygwin
+    
+    * Makefile.am: add README.cygwin to distro
+
+Michael Gran <spk121@yahoo.com>	2010-05-09
+
+    More info in README.cygwin
+    
+    Mention "texinfo.tex is broken" problem
+    
+    * README.cygwin: updated
+
+Michael Gran <spk121@yahoo.com>	2010-05-09
+
+    Missing C header
+    
+    Need stdlib.h for EXIT_FAILURE
+    
+    * tools/shell.c: add stdlib.h
+
+Michael Gran <spk121@yahoo.com>	2010-05-09
+
+    Remove gucu-vi from distro
+    
+    * tools/Makefile.am: remove gucu-vi from EXTRA_DIST
+
+Michael Gran <spk121@yahoo.com>	2010-05-09
+
+    Use configure variables in tools makefile
+    
+    use GUILE_CFLAGS, WARN, WIDE, and GUILE_LDFLAGS
+    
+    * tools/Makefile.am: build for gucushell modified
+
+Michael Gran <spk121@yahoo.com>	2010-05-09
+
+    Unused configure constant LIBGUILE_GUCU_CURSES_MAJOR
+    
+    * configure.ac (LIBGUILE_GUCU_CURSES_MAJOR): removed
+
+Michael Gran <spk121@yahoo.com>	2010-05-09
+
+    Unused m4 file pkg.m4
+    
+    * m4/pkg.m4: removed
+
+Michael Gran <spk121@yahoo.com>	2010-05-09
+
+    Fix doc for meta!
+    
+    Meta does not take a window parameter
+    
+    * doc/gucu.text: fix doc for meta!
+
+Michael Gran <spk121@yahoo.com>	2010-05-09
+
+    Missing documentation for 'cols' and 'lines'
+    
+    * doc/gucu.texi: document 'cols' and 'lines'
+
+Michael Gran <spk121@yahoo.com>	2010-05-09
+
+    Wrong number of parameters to intrflush!
+    
+    * gucu/curs_func.c (gucu_intrflush): fix arg number in assertion
+      (gucu_init_function): fix number of parameters for gucu_intrflush
+
+U-Cain\Mike <Mike@Cain.(none)>	2010-05-06
+
+    Make tests verbose if *sleep* is true
+    
+    * test/lib2.scm (*sleep*): new global var
+      (maybe-sleep): check *sleep*
+    * test/slk_001_init.test (*sleep*): defaults to #f
+    * test/slk_002_init.test (*sleep*): defaults to #f
+    * test/slk_003_init.test (*sleep*): defaults to #f
+    * test/slk_004_init.test (*sleep*): defaults to #f
+    * test/slk_005_demo.test (*sleep*): defaults to #f
+    * test/slk_006_attributes.test (*sleep*): defaults to #f
+
+U-Cain\Mike <Mike@Cain.(none)>	2010-05-06
+
+    Don't run any port tests if 'newterm' undefined
+    
+    * test/curses_036_ports.test: modified
+
+U-Cain\Mike <Mike@Cain.(none)>	2010-05-06
+
+    Prepare release notes for version 0.7
+    
+    * NEWS: add news
+    * README: update supported version list
+    * README.cygwin: new file
+
+U-Cain\Mike <Mike@Cain.(none)>	2010-05-06
+
+    longname test can error if longname returns string lt 5 chars length
+    
+    * test/curses_032_termattrs.test: modified
+
+U-Cain\Mike <Mike@Cain.(none)>	2010-05-06
+
+    Have longname return termname if longname is empty
+    
+    * gucu/curs_func.c (gucu_longname): modified
+
+U-Cain\Mike <Mike@Cain.(none)>	2010-05-06
+
+    Missing slk declarations
+    
+    * gucu/slk_func.h: add decl for gucu_slk_color_x
+
+U-Cain\Mike <Mike@Cain.(none)>	2010-05-06
+
+    TABSIZE may not be a good lvalue
+    
+    * configure.ac: check for set_tabsize
+    * config.h.in: add HAVE_SET_TABSIZE
+    * gucu/curs_spec.c: use set_tabsize if available
+
+U-Cain\Mike <Mike@Cain.(none)>	2010-05-06
+
+    Disable some range checs when curses structures are opaque
+    
+    * gucu/curs_func.c (gucu_derwin, gucu_mvderwin, gucu_pechochar, gucu_wtouchln)
+    * gucu/type.c (_scm_from_window): use NCURSES_OPAQUE flag check
+
+U-Cain\Mike <Mike@Cain.(none)>	2010-05-06
+
+    Bad dllspec on slk initialization function
+    
+    * gucu/slk_func.h: make gucu_slk_init_function GUCU_API
+
+Michael Gran <spk121@yahoo.com>	2010-05-06
+
+    Bump version number
+    
+    *configure.ac: bump
+
+Michael Gran <spk121@yahoo.com>	2010-05-06
+
+    Release guarded scheme objects when forms are gc'd
+    
+    * gucu/form_type.c (gc_free_form): release guarded objects
+
+Michael Gran <spk121@yahoo.com>	2010-05-06
+
+    Spelling
+    
+    * gucu/form_type.c: typo
+
+Michael Gran <spk121@yahoo.com>	2010-05-06
+
+    Configure erroneously uses narrow curses with wide forms
+    
+    * configure.ac: more robust test that we are using non-wide curses
+
+Michael Gran <spk121@yahoo.com>	2010-05-05
+
+    Missing declarations
+    
+    * gucu/curs_spec.h: add decl for gucu_grantpt, gucu_ptsname, gucu_ptsmakeraw
+and gucu_unlockpt           
+
+Michael Gran <spk121@yahoo.com>	2010-05-05
+
+    Unused variables
+    
+    * gucu/curs_port.c: fix unused
+    * gucu/curs_spec.c: fix unused
+
+Michael Gran <spk121@yahoo.com>	2010-05-05
+
+    Missing header include in curs_main.c
+    
+    * gucu/curs_main.c: include curs_func.h
+
+Michael Gran <spk121@yahoo.com>	2010-05-05
+
+    Stub out Cygwin Tex workaround, for now
+    
+    * configure.ac (force_tex_to_tex): removed
+    * doc/Makefile.am (FORCE_TEX_TO_TEX): removed
+
+Michael Gran <spk121@yahoo.com>	2010-05-05
+
+    Update ax_c__attribute__.m4 to current
+    
+    * m4/ax_c__attribute__.m4: updated
+
+Michael Gran <spk121@yahoo.com>	2010-05-05
+
+    Update ax_with_curses.m4 to current
+    
+    * m4/ax_with_curses.m4: use current version
+
+Michael Gran <spk121@yahoo.com>	2010-05-04
+
+    Make set-field-type! an alias to set-field-type
+    
+    * gucu/form_spec.c (gucu_set_field_type_x): renamed from gucu_set_field_type
+    * gucu/form_spec.c (gucu_set_field_type_x): renamed from gucu_set_field_type
+    * gucu/form.scm (set-field-type!): new function
+      (set-field-type): now alias for set-field-type!
+
+Michael Gran <spk121@yahoo.com>	2010-05-04
+
+    whitespace and doc typo
+    
+    * doc/gucu.texi: whitespace and "set-field-type1" typo
+
+Michael Gran <spk121@yahoo.com>	2010-05-04
+
+    Don't crash if getch fails
+    
+    * tools/gucu-keyboard-test (main): check return value of getch
+
+Michael Gran <spk121@yahoo.com>	2010-05-04
+
+    whitespace and indentation
+
+Michael Gran <spk121@yahoo.com>	2010-05-04
+
+    more ports tests
+    
+    * test/curses_036_ports.test: new tests
+
+Michael Gran <spk121@yahoo.com>	2010-05-04
+
+    return "(unknown)" on failure of keyname
+    
+    * gucu/curs_func (gucu_keyame): return "(unknown)" key can't be identified
+
+Michael Gran <spk121@yahoo.com>	2010-05-04
+
+    export conditionally-compiled functions
+    
+    * gucu/curses.scm (grantpt, ptsname, ptsraw, ptsmakeraw, unlockpt): export
+if available           
+
+Michael Gran <spk121@yahoo.com>	2010-05-04
+
+    Improve wide character support of curses ports
+    
+    * gucu/curs_port.c (port_read): read bytes and build wide characters
+
+Michael Gran <spk121@yahoo.com>	2010-05-04
+
+    use exec-style guile script for gucu-keyboard-test
+    
+    * tools/gucu-keyboard-test: #! header modified
+
+Michael Gran <spk121@yahoo.com>	2010-05-04
+
+    Wrap ptsname grantpt ptsmakeraw and unlockpt
+    
+    * configure.ac: add function tests
+    * gucu/curs_spec.c: new functions gucu_grantpt, gucu_ptsname,
+gucu_ptsmakeraw, gucu_unlockpt           
+
+Michael Gran <spk121@yahoo.com>	2010-05-04
+
+    typo HAVE_CFMAKERAQ -> HAVE_CFMAKERAW
+    
+    * tools/shell.c: modified
+
+Michael Gran <spk121@yahoo.com>	2010-05-04
+
+    Rename #define HAVE_LIBNCURSESW to HAVE_NCURSESW
+    
+    * gucu/curs_func.c: modified
+    * gucu/curs_func.h: modified
+    * gucu/type.c: modified
+    * gucu/type.h: modified
+    * tools/shell.c: modified
+
+Michael Gran <spk121@yahoo.com>	2010-05-04
+
+    gitignore libtool.m4
+    
+    .gitignore: modified
+
+Michael Gran <spk121@yahoo.com>	2010-05-04
+
+    Don't check in INSTALL
+    
+    * .gitignore: modified
+    * INSTALL: removed
+
+Michael Gran <spk121@yahoo.com>	2010-05-04
+
+    more .gitignore
+    
+    .gitignore: modified
+
+Michael Gran <spk121@yahoo.com>	2010-05-04
+
+    Don't check in generated *.info files
+    
+    doc/gucu.info: removed
+    doc/gucu.info-1: removed
+    doc/gucu.info-2: removed
+
+Michael Gran <spk121@yahoo.com>	2010-05-04
+
+    makefile -> Makefile
+    
+    * build_aux/makefile.am: renamed to Makefile.am
+    * doc/makefile.am: renamed to Makefile.am
+    * gucu/makefile.am: renamed to Makefile.am
+    * m4/makefile.am: renamed to Makefile.am
+    * test/makefile.am: renamed to Makefile.am
+    * tools/makefile.am: renamed to Makefile.am
+    * configure.ac: use new makefile names
+
+Michael Gran <spk121@yahoo.com>	2010-01-29
+
+    Make UNUSED macro for __attribute__ ((unused)) when available
+    
+    * m4/ax_c___attribute__.m4: new autoconf macro
+    * aclocal.m4: regenerated
+    * config.h.in: new define HAVE___ATTRIBUTE__
+    * configure.ac: call new autoconf macro
+    * gucu/gucuconfig.h: new "UNUSED" macro conditional on HAVE___ATTRIBUTE__
+    * gucu/form_type.c: use new macro
+    * gucu/menu_type.c: use new macro
+    * gucu/type.c: use new macro
+    * gucu/panel_type.c: use new macro
+    
+    * gucu/
+
+Michael Gran <spk121@yahoo.com>	2010-01-28
+
+    more .gitignore
+
+Michael Gran <spk121@yahoo.com>	2010-01-28
+
+    Make newterm always require off64_t type
+
+Michael Gran <spk121@yahoo.com>	2010-01-28
+
+    Use visibility macros in eti_main.c
+
+Michael Gran <spk121@yahoo.com>	2010-01-28
+
+    Rename features.h as gucuconfig.h
+
+Michael Gran <spk121@yahoo.com>	2010-01-28
+
+    Remove geda-guile.m4 because we'll use Guile's guile.m4
+
+Michael Gran <spk121@yahoo.com>	2010-01-27
+
+    Remove regeneratable build files
+    
+    ...since I have a machine with a modern build system now.
+
+Michael Gran <spk121@yahoo.com>	2010-01-27
+
+    A return to orthodoxy in the autotools build
+
+Michael Gran <spk121@yahoo.com>	2010-01-25
+
+    New scheme for declaring visibility and dllexport
+    
+    Creates the new macros GUCU_API and GUCU_LOCAL use to decorate the
+    declarations.
+    
+    * gucu/visibility.h: new file
+    * gucu/*.h: use new decorators
+    * gucu/*_main.c: use new decorators
+
+Mike <mike@cain.my.domain>	2009-12-25
+
+    Test fixes for SLK
+
+Mike <mike@cain.my.domain>	2009-12-25
+
+    SLK bug fixes, remove some of the attr functions
+
+Mike <mike@cain.my.domain>	2009-12-25
+
+    Corrections to slk function documentation
+
+Mike <mike@cain.my.domain>	2009-12-25
+
+    Updates to prep for release 0.6
+
+Mike <mike@cain.my.domain>	2009-12-23
+
+    Update Makefile.in
+
+Mike <mike@cain.my.domain>	2009-12-23
+
+    Doc updates
+
+Mike <mike@cain.my.domain>	2009-12-22
+
+    New demos for slk library
+    
+    * test/slk_001_init.test: new file
+    * test/slk_002_init.test: new file
+    * test/slk_003_init.test: new file
+    * test/slk_004_init.test: new file
+    * test/slk_005_demo.test: new file
+    * Makefile.am: add new files
+
+Mike <mike@cain.my.domain>	2009-12-22
+
+    Documentation fixes
+    
+    * doc/gucu.texi: correct documentation
+
+Mike <mike@cain.my.domain>	2009-12-22
+
+    Remove documentation of wide curses library
+    
+    * doc/gucu.texi: remove documentation of wide curses
+
+Mike <mike@cain.my.domain>	2009-12-22
+
+    Initialization error in slk module
+    
+    * gucu/slk.scm: correct module definition, correct load-extenstion call
+
+Mike <mike@cain.my.domain>	2009-12-22
+
+    Have nocbreak! returns curses retval
+    
+    * gucu/curs_func.c (gucu_nocbreak): return true/false instead of
+    throwing error
+
+Mike <mike@cain.my.domain>	2009-12-22
+
+    Doc updates
+
+Mike <mike@cain.my.domain>	2009-12-22
+
+    set-tabsize -> set-tabsize!
+
+Mike <mike@cain.my.domain>	2009-12-22
+
+    Add code to deal with resizing during getstr
+
+Mike <mike@cain.my.domain>	2009-12-20
+
+    Test cleanup
+
+Mike <mike@cain.my.domain>	2009-12-20
+
+    Test cleanup
+
+Mike <mike@cain.my.domain>	2009-12-20
+
+    Test cleanup
+
+Merge: d0c771f 9dc5b86
+Mike <mike@cain.my.domain>	2009-12-19
+
+    Merge branch 'master' of ssh://gano.git.sourceforge.net/gitroot/gano/gucu
+
+Mike <mike@cain.my.domain>	2009-12-19
+
+    missing decl and shadowed var
+
+Merge: 2b9b1d3 8acf1fe
+Mike <mike@cain.my.domain>	2009-12-19
+
+    Merge branch 'master' of ssh://gano.git.sourceforge.net/gitroot/gano/gucu
+
+U-Eve\Mike <Mike@Eve.(none)>	2009-12-18
+
+    missing declarations and unused variable
+
+U-Eve\Mike <Mike@Eve.(none)>	2009-12-18
+
+    scm_is_char should be SCM_CHARP
+
+U-Eve\Mike <Mike@Eve.(none)>	2009-12-18
+
+    really export newterm and key-defined
+
+U-Eve\Mike <Mike@Eve.(none)>	2009-12-18
+
+    make curs_port.c closer to ANSI C
+
+U-Eve\Mike <Mike@Eve.(none)>	2009-12-18
+
+    Incorrect comment
+
+Mike <mike@cain.my.domain>	2009-12-17
+
+    Bump to 0.5
+
+Mike <mike@cain.my.domain>	2009-12-16
+
+    Remove unused DISTCHECK_CONFIGURE_FLAGS
+
+Mike <mike@cain.my.domain>	2009-12-16
+
+    Flush input queues before runnin inopts tests
+
+Mike <mike@cain.my.domain>	2009-12-16
+
+    Add .gitignore
+
+Mike <mike@cain.my.domain>	2009-12-16
+
+    Don't throw error on cbreak failure
+
+Mike <mike@cain.my.domain>	2009-12-16
+
+    Incorrect test logic
+
+Mike <mike@cain.my.domain>	2009-12-16
+
+    Wrong func name in error string
+
+Mike <mike@cain.my.domain>	2009-12-16
+
+    Off by one: writing off the end of a string
+
+Mike <mike@cain.my.domain>	2009-12-16
+
+    Missing "features.h" header
+
+Mike <mike@cain.my.domain>	2009-12-15
+
+    Bad xchar to chtype conversion logic
+
+Mike <mike@cain.my.domain>	2009-12-15
+
+    Add brute force debug by printf funcs in unicode.c
+
+Mike <mike@cain.my.domain>	2009-12-15
+
+    New debug func %xchar-to-chtype
+
+Mike <mike@cain.my.domain>	2009-12-14
+
+    New debug func %xchar-from-chtype
+
+Mike <mike@cain.my.domain>	2009-12-14
+
+    Automake 1.11 to 1.11.1
+
+Mike <mike@cain.my.domain>	2009-12-14
+
+    Add c to scheme char conversion debugging functions
+    
+    * gucu/type.c (gucu_schar_from_char, gucu_schar_to_char)
+     (gucu_schar_from_wchar, gucu_schar_to_wchar): new
+    * test/c001_char_conversion.test: new
+
+Mike <mike@cain.my.domain>	2009-12-13
+
+    Work around bug in libunistring 0.9.1.1 by defining
+    _UNUSED_PARAMETER_
+
+Mike <mike@cain.my.domain>	2009-12-13
+
+    bad constant name SCM_REPLACEMENT_CODEPOINT -> GUCU_REPLACEMENT_CODEPOINT
+
+Mike <mike@cain.my.domain>	2009-12-09
+
+    Remove erroneous unquotes in color procedure
+
+Mike <mike@cain.my.domain>	2009-12-08
+
+    Bump revision number, change name for gucu-keyboard-test
+    was gucutest
+
+Mike <mike@cain.my.domain>	2009-12-08
+
+    Allow color procedure to work on strings, xstrings
+
+Mike <mike@cain.my.domain>	2009-12-08
+
+    Add test for char attribute procedures
+    a	tools/uninstalled-env.in~
+
+Merge: bdf0a66 6481459
+Mike <mike@cain.my.domain>	2009-12-08
+
+    Merge branch 'master' of ssh://gano.git.sourceforge.net/gitroot/gano/gucu
+
+Mike <mike@cain.my.domain>	2009-12-08
+
+    Tools directory cleanup
+    Change --enable-gucukey to --enable-demo-install
+    Nick Guile's uninstalled-env script
+    rename gucukey to gucu-keyboard-test
+    Delete the pre-inst scripts
+
+Mike <mike@cain.my.domain>	2009-12-08
+
+    Tools directory cleanup
+    Change --enable-gucukey to --enable-demo-install
+    Nick Guile's uninstalled-env script
+    rename gucukey to gucu-keyboard-test
+    Delete the pre-inst scripts
+
+Mike <mike@cain.my.domain>	2009-12-08
+
+    Remove testbed and its traces
+
+Mike <mike@cain.my.domain>	2009-12-08
+
+    Bump library interface
+
+Mike <mike@cain.my.domain>	2009-12-02
+
+    pre-release cleanup
+
+Mike <mike@cain.my.domain>	2009-12-02
+
+    cleanup and push rev to 0.4;
+
+Mike <mike@cain.my.domain>	2009-11-30
+
+    add work around for cygwin tex/etex/confusion
+
+Mike <mike@cain.my.domain>	2009-11-30
+
+    tests for off64_t
+
+Mike <mike@cain.my.domain>	2009-11-30
+
+    add missing build_aux/compile
+
+Mike <mike@cain.my.domain>	2009-11-30
+
+    fedora autotools and missing feature.h
+
+Mike <mike@seth.spikycactus.com>	2009-11-30
+
+    acs funcs return xchars, xchar-equal?, and openbsd and guile1.6 fixes
+
+Mike <mike@cain.my.domain>	2009-11-29
+
+    features.h
+
+Mike <mike@cain.my.domain>	2009-11-29
+
+    more codepoint/wchar/char conversion stuff, plus slk cleanup
+
+Mike <mike@seth.spikycactus.com>	2007-01-01
+
+    Build system changes for 1.6.x and openbsd
+
+Mike <mike@seth.spikycactus.com>	2007-01-01
+
+    Build system changes and 1.6.x compat for OpenBSD
+
+Mike Gran <spike_gran@users.sourceforge.net>	2009-10-28
+
+    asserts, paranoia, and remove dead code
+
+Mike Gran <spike_gran@users.sourceforge.net>	2009-10-20
+
+    Merge wide and narrow functions
+
+Mike Gran <spike_gran@users.sourceforge.net>	2009-10-18
+
+    Initialized from haxored version of old gucu 0.3
+
+Michael Gran <spk121@yahoo.com>	2009-10-17
+
+    test
