@@ -55,6 +55,10 @@
 
  (pass-if "ĤĨ"
           (begin
+            (if (not (fluid-ref %default-port-encoding))
+                (throw 'unresolved))
+            (if (not (string-contains-ci (fluid-ref %default-port-encoding) "utf"))
+                (throw 'unresolved))
             (erase win)
             (refresh win)
             (noecho!)
@@ -68,28 +72,38 @@
                 (addstr win (format #f "getnstr: ~s\n" str2))
                 (if pass (addstr win "PASS") (addstr win "FAIL"))
                 (refresh win)
-                (maybe-sleep 3)
+                (sleep 3)
                 ;; This functionality is broken in ncurses prior to
                 ;; 20091010.
                 pass))))
 
  (pass-if "getnstr #:y #:x (wide)"
           (begin
+            (if (not (fluid-ref %default-port-encoding))
+                (throw 'unresolved))
+            (if (not (string-contains-ci (fluid-ref %default-port-encoding) "utf"))
+                (throw 'unresolved))
             (erase win)
             (refresh win)
             (ungetch #\nl)
+            (addstr win (format #f "ungetch: ~s\n" #\nl))
             (ungetch #\P)
+            (addstr win (format #f "ungetch: ~s\n" #\P))
             (ungetch #\Ĩ)
+            (addstr win (format #f "ungetch: ~s\n" #\Ĩ))
             (ungetch #\Ĥ)
-            (let ((s1 (getnstr win 2 #:y 1 #:x 1)))
+            (addstr win (format #f "ungetch: ~s\n" #\Ĥ))
+            (let* ((s1 (getnstr win 2 #:y 6 #:x 1))
+                   (pass (string=? s1 "ĤĨ")))
               (begin
+                (addstr win (format #f "getnstr: ~s\n" s1))
+                (if pass (addstr win "PASS") (addstr win "FAIL"))
                 (refresh win)
                 (maybe-sleep 5)
                 ;; This functionality was broken in ncurses.  Tested
                 ;; bad with ncurses-5.7-20090808.  Tested OK with
                 ;; 5.7.20100130.
                 pass)))))
-                (string=? s1 "ĤĨ")
 
 
 (endwin)
