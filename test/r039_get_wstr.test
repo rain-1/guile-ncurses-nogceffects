@@ -84,10 +84,12 @@
             (let ((s1 (getnstr win 2 #:y 1 #:x 1)))
               (begin
                 (refresh win)
+                (maybe-sleep 5)
+                ;; This functionality was broken in ncurses.  Tested
+                ;; bad with ncurses-5.7-20090808.  Tested OK with
+                ;; 5.7.20100130.
+                pass)))))
                 (string=? s1 "ĤĨ")
-                ;; This functionality is broken in ncurses.  Tested
-                ;; with ncurses-5.7-20090808
-                *unspecified*)))))
 
 
 (endwin)

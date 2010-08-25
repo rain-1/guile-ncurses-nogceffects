@@ -47,7 +47,7 @@
             (equal? #\ż (getch win))
             ;; This should work, but as of 20090808, the underlying
             ;; ncurses library can't ungetch non-ASCII chars
-            *unspecified*))
+            ))
 
  (pass-if "getch #:y #:x (wide)"
           (begin
@@ -60,7 +60,7 @@
                (lset= equal? pos '(2 2))))
               ;; This should work, but as of 20090808, the underlying
               ;; ncurses library can't ungetch non-ASCII chars
-              *unspecified*)))
+              )))
 
 (refresh win)
 (scrollok! win #t)
