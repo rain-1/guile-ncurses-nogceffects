@@ -23,13 +23,21 @@
 
 #define _GNU_SOURCE
 #include <assert.h>
-#include <curses.h>
 #include <errno.h>
-#include <form.h>
 #include <libguile.h>
 #include <libintl.h>
 #include <stdio.h>
 #include <string.h>
+
+#if HAVE_CURSES_H
+#include <curses.h>
+#include <form.h>
+#endif
+
+#if HAVE_NCURSES_CURSES_H
+#include <ncurses/curses.h>
+#include <ncurses/form.h>
+#endif
 
 #include "compat.h"
 #include "form_func.h"

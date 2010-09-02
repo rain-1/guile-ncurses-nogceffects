@@ -23,12 +23,20 @@
 
 #define _GNU_SOURCE
 #include <assert.h>
-#include <curses.h>
 #include <libguile.h>
 #include <libintl.h>
-#include <panel.h>
 #include <stdio.h>
 #include <string.h>
+
+#if HAVE_CURSES_H
+#include <curses.h>
+#include <panel.h>
+#endif
+
+#if HAVE_NCURSES_CURSES_H
+#include <ncurses/curses.h>
+#include <ncurses/panel.h>
+#endif
 
 #include "compat.h"
 #include "panel_type.h"

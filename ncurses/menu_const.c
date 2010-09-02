@@ -23,7 +23,14 @@
 #include <config.h>
 
 #include <libguile.h>
+
+#if HAVE_CURSES_H
 #include <menu.h>
+#endif
+
+#if HAVE_NCURSES_CURSES_H
+#include <ncurses/menu.h>
+#endif
 
 #include "compat.h"
 #include "menu_const.h"

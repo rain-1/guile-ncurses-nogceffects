@@ -24,8 +24,15 @@
 #define MENU_TYPE_H
 
 #include <libguile.h>
-#include <menu.h>
 #include "visibility.h"
+
+#if HAVE_CURSES_H
+#include <menu.h>
+#endif
+
+#if HAVE_NCURSES_CURSES_H
+#include <ncurses/menu.h>
+#endif
 
 GUCU_LOCAL int _scm_is_item (SCM x);
 GUCU_LOCAL ITEM *_scm_to_item (SCM x);

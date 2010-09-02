@@ -21,10 +21,18 @@
 */
 
 #include <config.h>
-#include <curses.h>
-#include <form.h>
 #include <libguile.h>
 #include <libintl.h>
+
+#if HAVE_CURSES_H
+#include <curses.h>
+#include <form.h>
+#endif
+
+#if HAVE_NCURSES_CURSES_H
+#include <ncurses/curses.h>
+#include <ncurses/form.h>
+#endif
 
 #include "compat.h"
 #include "form_func.h"

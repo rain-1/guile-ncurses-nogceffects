@@ -22,10 +22,19 @@ License along with Guile-Ncurses.  If not, see
 
 #include <config.h>
 
+#include <libguile.h>
+
+#if HAVE_CURSES_H
 #include <curses.h>
 #include <form.h>
-#include <libguile.h>
 #include <menu.h>
+#endif
+
+#if HAVE_NCURSES_CURSES_H
+#include <ncurses/curses.h>
+#include <ncurses/form.h>
+#include <ncurses/menu.h>
+#endif
 
 #include "compat.h"
 #include "eti_const.h"

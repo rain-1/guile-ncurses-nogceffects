@@ -24,13 +24,20 @@
 #include <config.h>
 
 #include <assert.h>
-#include <curses.h>
 #include <errno.h>
 #include <libguile.h>
 #include <libintl.h>
 #include <limits.h>
 #include <stdio.h>
 #include <string.h>
+
+#if HAVE_CURSES_H
+#include <curses.h>
+#endif
+
+#if HAVE_NCURSES_CURSES_H
+#include <ncurses/curses.h>
+#endif
 
 #include "compat.h"
 #include "gucuconfig.h"

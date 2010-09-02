@@ -23,11 +23,18 @@ License along with Guile-Ncurses.  If not, see
 #include <config.h>
 
 #define _XOPEN_SOURCE
-#include <curses.h>
 #include <libguile.h>
 #include <libintl.h>
 #include <stdlib.h>
 #include <termios.h>
+
+#if HAVE_CURSES_H
+#include <curses.h>
+#endif
+
+#if HAVE_NCURSES_CURSES_H
+#include <ncurses/curses.h>
+#endif
 
 /* Work around unistring bug */
 #ifndef _UNUSED_PARAMETER_

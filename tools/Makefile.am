@@ -39,7 +39,7 @@ if WIDE
 AM_CPPFLAGS += -D_XOPEN_SOURCE_EXTENDED
 endif
 
-LDADD = $(CURSES_LIB) -lutil $(GUILE_LDFLAGS)
+LDADD = $(NCURSES_LIB) -lutil $(GUILE_LDFLAGS)
 
 EXTRA_DIST = uninstalled-env.in ncurses-keyboard-test
 ETAGS_ARGS = shell.[ch] --language=scheme ncurses-keyboard-test

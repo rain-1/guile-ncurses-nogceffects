@@ -42,6 +42,90 @@ AC_CANONICAL_HOST
 AC_PROG_INSTALL
 AC_PROG_MKDIR_P
 
+
+
+# The curses man page lists the following possibilities for curses
+# headers
+
+AC_MSG_NOTICE([checking for ncurses])
+
+AC_CHECK_HEADER([curses.h],
+                [AC_DEFINE([HAVE_CURSES_H],
+                           [1],
+                           [Define if you have curses.h])
+                 have_curses_h=yes],
+                [have_curses_h=no])
+
+if test "$have_curses_h" = no
+then
+  AC_CHECK_HEADER([ncurses/curses.h],
+                  [AC_DEFINE([HAVE_NCURSES_CURSES_H],
+                             [1],
+                             [Define if you have ncurses/curses.h])],
+                  [AC_MSG_FAILURE([curses.h could not be found])])
+fi
+
+AC_ARG_WITH(ncursesw,
+            [AS_HELP_STRING([--with-ncursesw],
+                            [Use ncursesw (wide character support)])],
+            [with_ncursesw=check],
+            [with_ncursesw=no])
+
+AS_IF([test "$with_ncursesw" = check],
+      [AC_CHECK_LIB([ncursesw], 
+                    [initscr],
+                    [AC_SUBST([NCURSES_LIB], ["-lncursesw"])
+                     AC_DEFINE([HAVE_NCURSESW], 
+                               [1],
+                               [Define if you have libncursesw])
+                     with_ncursesw=yes],
+                    [AC_MSG_FAILURE([--with-ncursesw was given, but, test for ncursesw failed])])])
+
+AS_IF([test "$with_ncursesw" = no],
+      [AC_CHECK_LIB([ncurses], 
+                    [initscr],
+                    [AC_SUBST([NCURSES_LIB], ["-lncurses"])
+                     AC_DEFINE([HAVE_NCURSES], 
+                               [1],
+                               [Define if you have libncurses])],
+                    [AC_MSG_FAILURE([the ncurses library was not found])])])
+
+AM_CONDITIONAL([WIDE], [test "$with_ncursesw" = yes])
+
+
+# Check for the menu, panel, and form libraries
+if test "$with_ncursesw" = no
+then
+  AC_CHECK_LIB([menu], [new_menu],
+               [MENU_LIB="-lmenu"],
+               [AC_MSG_ERROR([the ncurses menu library is required])])
+  AC_CHECK_LIB([form], [new_form],
+               [FORM_LIB="-lform"],
+               [AC_MSG_ERROR([the ncurses form library is required])])
+  AC_CHECK_LIB([panel], [new_panel],
+               [PANEL_LIB="-lpanel"],
+               [AC_MSG_ERROR([the ncurses panel library is required])])
+else
+  AC_CHECK_LIB([unistring], [u32_strconv_from_locale],
+               [UNISTRING_LIB="-lunistring"],
+               [AC_MSG_ERROR([the unistring library is required when wide curses is used])])
+  AC_CHECK_LIB([menuw], [new_menu],
+               [MENU_LIB="-lmenuw"],
+               [AC_MSG_ERROR([the ncurses menuw library is required])])
+  AC_CHECK_LIB([formw], [new_form],
+               [FORM_LIB="-lformw"],
+               [AC_MSG_ERROR([the ncurses formw library is required])])
+  AC_CHECK_LIB([panelw], [new_panel],
+               [PANEL_LIB="-lpanelw"],
+               [AC_MSG_ERROR([the ncurses panelw library is required])])
+fi
+
+AC_SUBST([NCURSES_LIB])
+AC_SUBST([MENU_LIB])
+AC_SUBST([PANEL_LIB])
+AC_SUBST([FORM_LIB])
+AC_SUBST([UNISTRING_LIB])
+
 ##################
 # Check for Libtool
 
@@ -84,51 +168,6 @@ fi
 AC_MSG_RESULT([$ac_cv_guile_ucs4])
 AM_CONDITIONAL([UCS4],[test "$ac_cv_guile_ucs4" = yes])
 
-# from the autoconf archive
-# sets: ax_cv_curses, ax_cv_ncurses, ax_cv_ncursesw and CURSES_LIB
-# ac_defines: HAVE_CURSES_H, HAVE_NCURSES_H, HAVE_NCURSES_W
-AX_WITH_CURSES
-
-if test "$ax_cv_ncurses" = no && "$ax_cv_ncursesw" = no
-then
-  AC_MSG_ERROR([ncurses is required])
-fi
-
-AM_CONDITIONAL([WIDE], [test "$ax_cv_ncursesw" = yes])
-
-
-# Check for the menu, panel, and form libraries
-if test "$ax_cv_ncursesw" != "yes"
-then
-  AC_CHECK_LIB([menu], [new_menu],
-               [MENU_LIB="-lmenu"],
-               [AC_MSG_ERROR([the ncurses menu library is required])])
-  AC_CHECK_LIB([form], [new_form],
-               [FORM_LIB="-lform"],
-               [AC_MSG_ERROR([the ncurses form library is required])])
-  AC_CHECK_LIB([panel], [new_panel],
-               [PANEL_LIB="-lpanel"],
-               [AC_MSG_ERROR([the ncurses panel library is required])])
-else
-  AC_CHECK_LIB([menuw], [new_menu],
-               [MENU_LIB="-lmenuw"],
-               [AC_MSG_ERROR([the ncurses menuw library is required])])
-  AC_CHECK_LIB([formw], [new_form],
-               [FORM_LIB="-lformw"],
-               [AC_MSG_ERROR([the ncurses formw library is required])])
-  AC_CHECK_LIB([panelw], [new_panel],
-               [PANEL_LIB="-lpanelw"],
-               [AC_MSG_ERROR([the ncurses panelw library is required])])
-  AC_CHECK_LIB([unistring], [u32_strconv_from_locale],
-               [UNISTRING_LIB="-lunistring"],
-               [AC_MSG_ERROR([the unistring library is required when wide curses is used])])
-fi
-
-AC_SUBST([CURSES_LIB])
-AC_SUBST([MENU_LIB])
-AC_SUBST([PANEL_LIB])
-AC_SUBST([FORM_LIB])
-AC_SUBST([UNISTRING_LIB])
 
 AC_ARG_ENABLE([warnings],
               [AS_HELP_STRING([--enable-warnings],
@@ -166,8 +205,14 @@ AC_CHECK_TYPE([cookie_io_functions_t],
                ])
 AC_CHECK_SIZEOF([int])
 AC_CHECK_SIZEOF([long])
-AC_CHECK_SIZEOF([chtype], ,[#include <curses.h>])
-AC_CHECK_SIZEOF([attr_t], ,[#include <curses.h>])
+if test "$have_curses_h" = yes
+then
+  AC_CHECK_SIZEOF([chtype], ,[#include <curses.h>])
+  AC_CHECK_SIZEOF([attr_t], ,[#include <curses.h>])
+else
+  AC_CHECK_SIZEOF([chtype], ,[#include <ncurses/curses.h>])
+  AC_CHECK_SIZEOF([attr_t], ,[#include <ncurses/curses.h>])
+fi  
 AC_CHECK_SIZEOF([wchar_t], ,[#include <stddef.h>])
 AC_CHECK_SIZEOF([wint_t], ,[#include <wchar.h>])
 
@@ -177,7 +222,7 @@ AC_CHECK_FUNCS([cfmakeraw fopencookie ptsname grantpt unlockpt])
 
 # Check for ncurses library functions
 ax_save_LIBS="$LIBS"
-LIBS="$ax_save_LIBS $CURSES_LIB"
+LIBS="$ax_save_LIBS $NCURSES_LIB"
 AC_CHECK_FUNCS([key_defined term_attrs set_tabsize])
 LIBS="$ax_save_LIBS"
 

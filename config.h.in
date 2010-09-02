@@ -49,14 +49,14 @@
 /* Define to 1 if you have the <memory.h> header file. */
 #undef HAVE_MEMORY_H
 
+/* Define if you have libncurses */
+#undef HAVE_NCURSES
+
 /* Define if you have libncursesw */
 #undef HAVE_NCURSESW
 
-/* Define if you have ncursesw.h */
-#undef HAVE_NCURSESW_H
-
-/* Define if you have ncurses.h */
-#undef HAVE_NCURSES_H
+/* Define if you have ncurses/curses.h */
+#undef HAVE_NCURSES_CURSES_H
 
 /* Define if you are have the off64_t type */
 #undef HAVE_OFF64_T

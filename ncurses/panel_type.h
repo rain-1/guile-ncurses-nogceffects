@@ -23,8 +23,15 @@
 #define PANEL_TYPE_H
 
 #include <libguile.h>
-#include <panel.h>
 #include "visibility.h"
+
+#if HAVE_CURSES_H
+#include <panel.h>
+#endif
+
+#if HAVE_NCURSES_CURSES_H
+#include <ncurses/panel.h>
+#endif
 
 struct gucu_panel
 {

@@ -21,9 +21,17 @@
 */
 #include <config.h>
 
-#include <curses.h>
 #include <libguile.h>
+
+#if HAVE_CURSES_H
+#include <curses.h>
 #include <panel.h>
+#endif
+
+#if HAVE_NCURSES_CURSES_H
+#include <ncurses/curses.h>
+#include <ncurses/panel.h>
+#endif
 
 #include "panel_spec.h"
 #include "panel_type.h"

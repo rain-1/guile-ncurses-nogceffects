@@ -51,7 +51,7 @@ endif
 libguile_ncurses_la_LDFLAGS = -module -no-undefined -version-info	\
 $(LIBGUILE_NCURSES_INTERFACE) $(GUILE_LDFLAGS)
 
-libguile_ncurses_la_LIBADD = $(CURSES_LIB) $(PANEL_LIB) $(MENU_LIB)	\
+libguile_ncurses_la_LIBADD = $(NCURSES_LIB) $(PANEL_LIB) $(MENU_LIB)	\
 $(FORM_LIB)
 
 if WIDE

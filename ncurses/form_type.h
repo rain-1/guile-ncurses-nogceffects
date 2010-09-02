@@ -23,8 +23,15 @@
 #define FORM_TYPE_H
 
 #include <libguile.h>
-#include <form.h>
 #include "visibility.h"
+
+#if HAVE_CURSES_H
+#include <form.h>
+#endif
+
+#if HAVE_NCURSES_CURSES_H
+#include <ncurses/form.h>
+#endif
 
 struct gucu_form
 {

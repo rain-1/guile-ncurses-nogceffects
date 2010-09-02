@@ -52,8 +52,15 @@
 #endif
 
 /* curses and guile */
-#include <curses.h>    /* all: newterm; */
 #include <libguile.h>  /* all: scm_shell; */
+
+#if HAVE_CURSES_H
+#include <curses.h>    /* all: newterm; */
+#endif
+
+#if HAVE_NCURSES_CURSES_H
+#include <ncurses/curses.h>
+#endif
 
 #define _(s) gettext (s)
 

@@ -22,9 +22,16 @@ License along with Guile-Ncurses.  If not, see
 
 #include <config.h>
 
-#include <curses.h>
 #include <libguile.h>
 #include <wchar.h>
+
+#if HAVE_CURSES_H
+#include <curses.h>
+#endif
+
+#if HAVE_NCURSES_CURSES_H
+#include <ncurses/curses.h>
+#endif
 
 #include "compat.h"
 #include "curs_const.h"

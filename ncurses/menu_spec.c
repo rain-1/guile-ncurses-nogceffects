@@ -22,10 +22,18 @@
 
 #include <config.h>
 
-#include <curses.h>
 #include <errno.h>
 #include <libguile.h>
+
+#if HAVE_NCURSES_H
+#include <curses.h>
 #include <menu.h>
+#endif
+
+#if HAVE_NCURSES_CURSES_H
+#include <ncurses/curses.h>
+#include <ncurses/menu.h>
+#endif
 
 #include "compat.h"
 #include "menu_spec.h"

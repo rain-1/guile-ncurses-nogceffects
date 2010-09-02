@@ -27,9 +27,16 @@
 #include <errno.h>
 #include <libguile.h>
 #include <libintl.h>
-#include <menu.h>
 #include <stdio.h>
 #include <string.h>
+
+#if HAVE_CURSES_H
+#include <menu.h>
+#endif
+
+#if HAVE_NCURSES_CURSES_H
+#include <ncurses/menu.h>
+#endif
 
 #include "compat.h"
 #include "menu_type.h"
