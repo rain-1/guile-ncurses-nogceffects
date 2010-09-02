@@ -34,19 +34,24 @@
 (start-color!)
 (set! *sleep* #f)
 
+(define expected-baudrate 38400)
+(define expected-erasechar #\del)
+(define expected-killchar #\nak)
+(define expected-has-ic #t)
+(define expected-has-il #t)
+
 ;; Should be able to get term attributes
 (with-test-prefix
  "termattrs"
-
+ 
  (pass-if "baudrate"
           (begin
             (clear win)
             (let ((b (baudrate)))
-              (addstr win (format #f "Baudrate: ~a" b))
-              (refresh win)
-              (maybe-sleep 1)
               (endwin)
-              (eqv? b 38400))))
+              (format #t "Baudrate: ~a (expected ~a)~%" b expected-baudrate)
+              (maybe-sleep 1)
+              (eqv? b expected-baudrate))))
 
  ;; Not sure what the correct answer for
  ;; erasechar should be.  Gnu/Linux xterm gives
@@ -54,53 +59,49 @@
  (pass-if "erasechar"
           (begin
             (clear win)
-            (move win 0 0)
             (let ((c (erasechar)))
-              (addstr win (format #f "Erasechar: ~s" c))
-              (refresh win)
+              (endwin)
+              (format #t "Erasechar: ~s (expected ~s)~%" c expected-erasechar)
               (maybe-sleep 1)
-              (eqv? c #\del))))
-
+              (eqv? c expected-erasechar))))
+ 
  ;; Not sure what the correct answer for killchar
  ;; should be.  Gnu/Linux xterm give #\nak. Cygwin
  ;; gives ERR
  (pass-if "killchar"
           (begin
             (clear win)
-            (move win 0 0)
             (let ((c (killchar)))
-              (addstr win (format #f "Killchar: ~s" c))
-              (refresh win)
+              (endwin)
+              (format #t "Killchar: ~s (expected ~s)~%" c expected-killchar)
               (maybe-sleep 1)
-              (eqv? c #\nak))))
+              (eqv? c expected-killchar))))
 
  (pass-if "has-ic?"
           (begin
             (clear win)
-            (move win 0 0)
             (let ((h (has-ic?)))
-              (addstr win (format #f "Has IC: ~a" h))
-              (refresh win)
+              (endwin)
+              (format #t "Has IC: ~a (expected ~a)~%" h expected-has-ic)
               (maybe-sleep 1)
-              (eqv? h #t))))
+              (eqv? h expected-has-ic))))
 
  (pass-if "has-il?"
           (begin
             (clear win)
             (move win 0 0)
             (let ((h (has-il?)))
-              (addstr win (format #f "Has IL: ~a" h))
-              (refresh win)
+              (endwin)
+              (format #t "Has IL: ~a (expected ~a)~%" h expected-has-il)
               (maybe-sleep 1)
-              (eqv? h #t))))
+              (eqv? h expected-has-il))))
 
  (pass-if "longname"
           (begin
             (clear win)
-            (move win 0 0)
             (let ((c (longname)))
-              (addstr win (format #f "Long Terminal Name: ~a" c))
-              (refresh win)
+              (endwin)
+              (format #t "Long Terminal Name: ~a~%" c)
               (maybe-sleep 1)
               (not (not (string= c "xterm"
                                  0
@@ -112,13 +113,12 @@
  (pass-if "termname"
           (begin
             (clear win)
-            (move win 0 0)
             (let ((c (termname)))
-              (addstr win (format #f "Terminal Name: ~a" c))
-              (refresh win)
+              (endwin)
+              (format #t "Terminal Name: ~a~%" c)
               (maybe-sleep 1)
               (not (not (string= c "xterm" 0 4 0 4))))))
-
+ 
  (pass-if "term-attrs"
           (begin
             (clear win)
@@ -134,24 +134,23 @@
                         A_REVERSE
                         A_STANDOUT
                         A_UNDERLINE)))
-              (move win 0 0)
-              (addchstr win (underline-on (bold-on "Terminal Capabilities")))
-              (move win 1 0)
-              (addstr win (format #f "this term ~32,'0b~%" ta))
-              (addstr win (format #f "  PROTECT ~32,'0b~%" A_PROTECT))
-              (addstr win (format #f "INVISIBLE ~32,'0b~%" A_INVIS))
-              (addstr win (format #f "      ALT ~32,'0b~%" A_ALTCHARSET))
-              (addstr win (format #f "     BOLD ~32,'0b~%" A_BOLD))
-              (addstr win (format #f "      DIM ~32,'0b~%" A_DIM))
-              (addstr win (format #f "    BLINK ~32,'0b~%" A_BLINK))
-              (addstr win (format #f "  REVERSE ~32,'0b~%" A_REVERSE))
-              (addstr win (format #f "UNDERLINE ~32,'0b~%" A_UNDERLINE))
-              (addstr win (format #f " STANDOUT ~32,'0b~%" A_STANDOUT))
-              (addstr win (format #f "    COLOR ~32,'0b~%" A_COLOR))
-              (addstr win (format #f "std xterm ~32,'0b~%" ta2))
-              (refresh win)
+              (endwin)
+              (format #t "~%")
+              (format #t "Terminal Capabilities Bit Mask~%")
+              (format #t "------------------------------~%")
+              (format #t "this term ~32,'0b~%" ta)
+              (format #t "  PROTECT ~32,'0b~%" A_PROTECT)
+              (format #t "INVISIBLE ~32,'0b~%" A_INVIS)
+              (format #t "      ALT ~32,'0b~%" A_ALTCHARSET)
+              (format #t "     BOLD ~32,'0b~%" A_BOLD)
+              (format #t "      DIM ~32,'0b~%" A_DIM)
+              (format #t "    BLINK ~32,'0b~%" A_BLINK)
+              (format #t "  REVERSE ~32,'0b~%" A_REVERSE)
+              (format #t "UNDERLINE ~32,'0b~%" A_UNDERLINE)
+              (format #t " STANDOUT ~32,'0b~%" A_STANDOUT)
+              (format #t "    COLOR ~32,'0b~%" A_COLOR)
+              (format #t "std xterm ~32,'0b~%" ta2)
               (maybe-sleep 10)
               (eqv? ta ta2)))))
-(endwin)
 
 (curses-test-end test "curses_032_termattrs.out")
