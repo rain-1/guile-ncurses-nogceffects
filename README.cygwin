@@ -11,14 +11,12 @@ Cygwin.
 
 1. The location of ncurses header files
 
-   My Cygwin box has the ncurses.h header files installed in an
-   unusual location: /usr/include/ncurses/ncurses.h
+   The upstream ncurses package has the option of installing its
+   header either as curses.h or ncurses/curses.h.  In practice though,
+   few systems install the headers in ncurses/curses.h.  Cygwin 1.7.x
+   is one of the systems that install header files as ncurses/curses.h
 
-   To get it to build, I had to put that path in my CPPFLAGS
-
-   One can do that by invoking configure like this...
-
-   > CPPFLAGS="-I/usr/include/ncurses" ./configure
+   The configure script should correctly detect it.
 
 2. Lack of libunistring
 
@@ -31,10 +29,6 @@ Cygwin.
   Until Cygwin moves to Guile 2.0.x, the wide version of Unicode isn't
   going to be of any benefit anyway, since Guile 1.8.x uses only 8-bit
   characters.
-
-  To avoid using wide ncurses, invoke configure like this...
-
-  > ./configure --without-ncursesw
 
 3. The mysterious error "texinfo.tex appears to be broken, quitting"
 

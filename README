@@ -13,9 +13,10 @@ underlying ncurses library.
 
 This library can be found at http://www.gnu.org/software/guile-ncurses/
 
-It is known to work on the following system
+It is known to work on the following systems
 
-Fedora 13 on i686-pc-linux-gnuwith Guile 1.9.11 and NCurses 5.7.20100130
+Fedora 13 on i686-pc-linux-gnu with Guile 1.9.11 and NCurses 5.7.20100130
+cygwin 1.7.7 on i686-pc-cygwin with Guile 1.9.11 and NCurses 5.7.20091227
 
 This distribution has the following subdirectories:
 - ncurses: the source code for the library
@@ -24,8 +25,14 @@ This distribution has the following subdirectories:
 - build_aux: files used by the configuration and building programs
 - tools: some executable programs that might be useful
 
-For an explanation of the installation of the package, see the INSTALL
-file.
+INSTALLATION
+
+For a basic explanation of the installation of the package, see the
+INSTALL file.
+
+*important* If you want to use the wide ncurses library with Unicode
+support, you need to run configure using the "--with-ncursesw" option.
+
 
 For an explanation of the copying restrictions for this package, see
 COPYING.LESSER.
