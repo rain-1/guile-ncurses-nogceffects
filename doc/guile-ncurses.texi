@@ -5686,7 +5686,9 @@ integer.  It could return @code{#f} if this screen is no longer valid.
 
 @deffn Procedure erasechar
 
-The erasechar routine returns the user's current erase character.
+The erasechar routine returns the user's current erase character.  If
+the terminal is a dumb terminal and has no erase character, it will
+return @code{#f}.
 
 @end deffn
 
@@ -5715,6 +5717,7 @@ to turn on physical scrolling using @code{scrollok!}.
 @deffn Procedure killchar
 
 The killchar routine returns the user's current line kill character.
+If the terminal has no killchar, it will return @code{#f}.
 
 @end deffn
 

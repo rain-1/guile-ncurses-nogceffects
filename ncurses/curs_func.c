@@ -660,16 +660,19 @@ SCM
 gucu_erasechar ()
 {
 #ifdef HAVE_NCURSESW
-  {
-    wchar_t ch;
-    int ret = erasewchar (&ch);
-    if (ret == ERR)
-      return SCM_BOOL_F;
-    else
-      return _scm_schar_from_wchar (ch);
-  }
+  wchar_t ch;
+  int ret = erasewchar (&ch);
+  if (ret == ERR)
+    return SCM_BOOL_F;
+  else
+    return _scm_schar_from_wchar (ch);
 #else
-  return _scm_schar_from_char (erasechar ());
+  char ch;
+  ch = erasechar ();
+  if (ch == -1)
+    return SCM_BOOL_F;
+  else
+    return _scm_schar_from_char (ch);
 #endif
 }
 
@@ -1071,7 +1074,12 @@ gucu_killchar ()
   else
     return _scm_schar_from_wchar (ch);
 #else
-  return _scm_schar_from_char (killchar ());
+  char ch;
+  ch = killchar ();
+  if (ch == -1)
+    return SCM_BOOL_F;
+  else
+    return _scm_schar_from_char (ch);
 #endif
 }
 
