@@ -60,8 +60,7 @@ endif
 
 
 ### scheme files ###
-guilesitedir = ${datadir}/guile/site
-pkgguilesitedir = $(guilesitedir)/$(PACKAGE)
+pkgguilesitedir = $(GUILE_SITE)/ncurses
 dist_pkgguilesite_DATA = curses.scm menu.scm panel.scm form.scm	\
 	eti.scm slk.scm lib.scm
 ETAGS_ARGS = curses.scm menu.scm panel.scm form.scm eti.scm slk.scm	\

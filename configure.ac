@@ -167,7 +167,7 @@ else
 fi
 AC_MSG_RESULT([$ac_cv_guile_ucs4])
 AM_CONDITIONAL([UCS4],[test "$ac_cv_guile_ucs4" = yes])
-
+GUILE_SITE_DIR
 
 AC_ARG_ENABLE([warnings],
               [AS_HELP_STRING([--enable-warnings],
