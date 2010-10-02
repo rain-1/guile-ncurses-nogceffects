@@ -4404,7 +4404,7 @@ screen.
 @findex keypad!
 
 If @code{keypad!} is @code{#t}, and a function key is pressed, the
-token for that function key is returned instead of the raw
+integer keycode for that function key is returned instead of the raw
 characters. There is a list of possible function keys.
 @xref{tab:key}.
 
