@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: guile-ncurses 0.9\n"
 "Report-Msgid-Bugs-To: \"Mike Gran\" <spk121@yahoo.com>\n"
-"POT-Creation-Date: 2010-08-24 09:20-0700\n"
+"POT-Creation-Date: 2010-09-02 21:54-0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,152 +17,152 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ncurses/curs_func.c:44 ncurses/curs_spec.c:55
+#: ncurses/curs_func.c:51 ncurses/curs_spec.c:62
 msgid "bad curses internal state"
 msgstr ""
 
-#: ncurses/curs_func.c:50
+#: ncurses/curs_func.c:57
 msgid "invalid parameters or bad curses internal state"
 msgstr ""
 
-#: ncurses/curs_func.c:535
+#: ncurses/curs_func.c:542
 msgid "the terminal was freed while still in curses mode: ~A"
 msgstr ""
 
-#: ncurses/curs_func.c:1036
+#: ncurses/curs_func.c:1046
 msgid "(unknown)"
 msgstr ""
 
-#: ncurses/curs_func.c:1478
+#: ncurses/curs_func.c:1493
 msgid "not a pad"
 msgstr ""
 
-#: ncurses/curs_port.c:179
+#: ncurses/curs_port.c:187
 msgid "could not create a terminal"
 msgstr ""
 
-#: ncurses/curs_spec.c:100
+#: ncurses/curs_spec.c:107
 msgid "out of range error or not initialized"
 msgstr ""
 
-#: ncurses/curs_spec.c:190
+#: ncurses/curs_spec.c:197
 msgid "out of range or not initialized"
 msgstr ""
 
-#: ncurses/form_func.c:42
+#: ncurses/form_func.c:50
 msgid "bad state"
 msgstr ""
 
-#: ncurses/form_func.c:48
+#: ncurses/form_func.c:56
 msgid "field is already connected to a form"
 msgstr ""
 
-#: ncurses/form_func.c:55
+#: ncurses/form_func.c:63
 msgid "the field is the current field"
 msgstr ""
 
-#: ncurses/form_func.c:61
+#: ncurses/form_func.c:69
 msgid "the field is invalid"
 msgstr ""
 
-#: ncurses/form_func.c:67
+#: ncurses/form_func.c:75
 msgid "the form or field can not fit on this screen"
 msgstr ""
 
-#: ncurses/form_func.c:74
+#: ncurses/form_func.c:82
 msgid "the field is not connected to a form"
 msgstr ""
 
-#: ncurses/form_func.c:81
+#: ncurses/form_func.c:89
 msgid "the form is not posted"
 msgstr ""
 
-#: ncurses/form_func.c:87
+#: ncurses/form_func.c:95
 msgid "the form is posted"
 msgstr ""
 
-#: ncurses/form_type.c:83 ncurses/form_type.c:307 ncurses/form_type.c:421
-#: ncurses/menu_type.c:70 ncurses/menu_type.c:272 ncurses/panel_type.c:146
+#: ncurses/form_type.c:91 ncurses/form_type.c:315 ncurses/form_type.c:429
+#: ncurses/menu_type.c:77 ncurses/menu_type.c:279 ncurses/panel_type.c:154
 msgid "bad argument"
 msgstr ""
 
-#: ncurses/form_type.c:90 ncurses/form_type.c:435 ncurses/menu_type.c:77
-#: ncurses/menu_type.c:286 ncurses/menu_type.c:389
+#: ncurses/form_type.c:98 ncurses/form_type.c:443 ncurses/menu_type.c:84
+#: ncurses/menu_type.c:293 ncurses/menu_type.c:396
 msgid "system error"
 msgstr ""
 
-#: ncurses/form_type.c:135
+#: ncurses/form_type.c:143
 #, c-format
 msgid "Making <#field> smob from FIELD * %p\n"
 msgstr ""
 
-#: ncurses/form_type.c:195 ncurses/panel_type.c:177 ncurses/type.c:874
-#: ncurses/type.c:1015
+#: ncurses/form_type.c:203 ncurses/panel_type.c:185 ncurses/type.c:881
+#: ncurses/type.c:1022
 msgid "(freed)"
 msgstr ""
 
-#: ncurses/form_type.c:254
+#: ncurses/form_type.c:262
 #, c-format
 msgid "Making smob from form based on WINDOW * %p\n"
 msgstr ""
 
-#: ncurses/form_type.c:306 ncurses/form_type.c:313
+#: ncurses/form_type.c:314 ncurses/form_type.c:321
 msgid "garbage collection of form"
 msgstr ""
 
-#: ncurses/form_type.c:314 ncurses/menu_type.c:279
+#: ncurses/form_type.c:322 ncurses/menu_type.c:286
 msgid "posted"
 msgstr ""
 
-#: ncurses/form_type.c:428
+#: ncurses/form_type.c:436
 msgid "connected"
 msgstr ""
 
-#: ncurses/menu_func.c:38
+#: ncurses/menu_func.c:46
 msgid "menu already posted"
 msgstr ""
 
-#: ncurses/menu_func.c:44 ncurses/menu_type.c:383
+#: ncurses/menu_func.c:52 ncurses/menu_type.c:390
 msgid "menu has no items"
 msgstr ""
 
-#: ncurses/menu_type.c:115
+#: ncurses/menu_type.c:122
 #, c-format
 msgid "Making <#item> smob from ITEM * %p\n"
 msgstr ""
 
-#: ncurses/menu_type.c:271 ncurses/menu_type.c:278 ncurses/menu_type.c:285
+#: ncurses/menu_type.c:278 ncurses/menu_type.c:285 ncurses/menu_type.c:292
 msgid "garbage collection of menu"
 msgstr ""
 
-#: ncurses/panel_type.c:90
+#: ncurses/panel_type.c:98
 #, c-format
 msgid "Making smob from panel based on WINDOW * %p\n"
 msgstr ""
 
-#: ncurses/panel_type.c:145
+#: ncurses/panel_type.c:153
 msgid "garbage collection of panel"
 msgstr ""
 
-#: ncurses/panel_type.c:220
+#: ncurses/panel_type.c:228
 msgid "bad window"
 msgstr ""
 
-#: ncurses/type.c:154
+#: ncurses/type.c:161
 msgid "error unpacking complex char"
 msgstr ""
 
-#: ncurses/type.c:935
+#: ncurses/type.c:942
 #, c-format
 msgid "Making smob from window\n"
 msgstr ""
 
-#: ncurses/type.c:937
+#: ncurses/type.c:944
 #, c-format
 msgid "Making smob from window at %d, %d\n"
 msgstr ""
 
-#: ncurses/type.c:989
+#: ncurses/type.c:996
 #, c-format
 msgid "Freeing stdscr #<window %p>"
 msgstr ""
@@ -408,22 +408,22 @@ msgstr ""
 msgid "UNKNOWN SURROGATE"
 msgstr ""
 
-#: tools/shell.c:211
+#: tools/shell.c:218
 #, c-format
 msgid "Unrecognized pseudo-terminal name: %s\n"
 msgstr ""
 
-#: tools/shell.c:216
+#: tools/shell.c:223
 #, c-format
 msgid "Attemping to connect an xterm to %s\n"
 msgstr ""
 
-#: tools/shell.c:218
+#: tools/shell.c:225
 #, c-format
 msgid "Calling 'xterm %s'\n"
 msgstr ""
 
-#: tools/shell.c:272
+#: tools/shell.c:279
 #, c-format
 msgid ""
 "guile-ncurses-shell 0.4\n"
@@ -434,12 +434,12 @@ msgid ""
 "There is NO WARRANTY, to the extent permitted by law.\n"
 msgstr ""
 
-#: tools/shell.c:282
+#: tools/shell.c:289
 #, c-format
 msgid "Usage: guile-ncurses-shell OPTION...\n"
 msgstr ""
 
-#: tools/shell.c:283
+#: tools/shell.c:290
 #, c-format
 msgid ""
 "This program starts a Guile-Ncurses session and redirects its output into\n"
@@ -447,32 +447,32 @@ msgid ""
 "Guile interpreter.  Type 'guile --help' to see its command line interface.\n"
 msgstr ""
 
-#: tools/shell.c:287
+#: tools/shell.c:294
 #, c-format
 msgid "Report bugs to <%s>.\n"
 msgstr ""
 
-#: tools/shell.c:316
+#: tools/shell.c:323
 #, c-format
 msgid "Waiting for xterm...\n"
 msgstr ""
 
-#: tools/shell.c:324
+#: tools/shell.c:331
 #, c-format
 msgid "guile-ncurses-shell: couldn't initialize ncurses on the xterm\n"
 msgstr ""
 
-#: tools/shell.c:328
+#: tools/shell.c:335
 #, c-format
 msgid "Initialized curses on xterm\n"
 msgstr ""
 
-#: tools/shell.c:334
+#: tools/shell.c:341
 #, c-format
 msgid "Loading (ncurses curses)\n"
 msgstr ""
 
-#: tools/shell.c:336
+#: tools/shell.c:343
 #, c-format
 msgid "Setting 'scr' to the standard window\n"
 msgstr ""
