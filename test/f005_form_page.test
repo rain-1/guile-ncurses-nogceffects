@@ -64,7 +64,7 @@
               (refresh stdscr)
               ;; Get the page number
               (set! test1 (form-page form1))
-              ;;(sleep 1)
+              (maybe-sleep 1)
 
               ;; Post the second page
               (set-form-page! form1 1)
@@ -74,7 +74,7 @@
               (set! test2 (form-page form1))
 
               (addstr stdscr (format #f "~a" (list test1 test2)) #:x 0 #:y 5)
-              ;;(sleep 1)
+              (maybe-sleep 1)
               (and (eq? test1 0)
                    (eq? test2 1))))))
 
