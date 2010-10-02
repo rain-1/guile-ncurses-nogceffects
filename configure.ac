@@ -160,9 +160,9 @@ AM_GNU_GETTEXT([external])
 
 # from guile.m4
 # sets: GUILE_CFLAGS and GUILE_LDFLAGS
+GUILE_PROGS
 GUILE_FLAGS
-
-# GUILE_LDFLAGS is actually a mashup of GUILE_LIBS and GUILE_LDFLAGS
+GUILE_SITE_DIR
 
 AC_MSG_CHECKING([if guile can handle UCS4 characters])
 GUILE_CHECK([ac_cv_guile_ucs4],
@@ -175,7 +175,7 @@ else
 fi
 AC_MSG_RESULT([$ac_cv_guile_ucs4])
 AM_CONDITIONAL([UCS4],[test "$ac_cv_guile_ucs4" = yes])
-GUILE_SITE_DIR
+
 
 AC_ARG_ENABLE([warnings],
               [AS_HELP_STRING([--enable-warnings],
