@@ -42,6 +42,14 @@ AC_CANONICAL_HOST
 AC_PROG_INSTALL
 AC_PROG_MKDIR_P
 
+AC_ARG_WITH([guilesitedir],
+            [AS_HELP_STRING([--with-guilesitedir],
+                            [use the specified installation path for Guile modules])],
+            [case "x$withval" in
+             xyes|xno) guilesitedir="";;
+             *)        guilesitedir="$withval";;
+             esac],
+             [guilesitedir=""])
 
 
 # The curses man page lists the following possibilities for curses
@@ -234,7 +242,25 @@ LIBS="$ax_save_LIBS"
 
 ##################
 #  Output
-AC_CONFIG_FILES([Makefile ncurses/Makefile doc/Makefile m4/Makefile po/Makefile.in])
-AC_CONFIG_FILES([build_aux/Makefile tools/Makefile test/Makefile])
+
+pkgdatadir="$datadir/$PACKAGE"
+if test "x$guilesitedir" = "x"; then
+   guilesitedir="$pkgdatadir"
+fi
+AC_SUBST([guilesitedir])
+
+AC_CONFIG_FILES([Makefile ncurses/Makefile doc/Makefile m4/Makefile])
+AC_CONFIG_FILES([po/Makefile.in build_aux/Makefile tools/Makefile])
+AC_CONFIG_FILES([test/Makefile])
 AC_CONFIG_FILES([tools/uninstalled-env], [chmod +x tools/uninstalled-env])
 AC_OUTPUT
+
+if test "$guilesitedir" != "$GUILE_SITE"; then
+   # Guile has a different prefix than this module
+   AC_MSG_WARN([]
+   [The Guile modules will be installed in ${guilesitedir}.]
+   [You should probably re-run `configure' with]
+   [`--with-guilesitedir=$GUILE_SITE']
+   [Otherwise, you will have to adjust the `GUILE_LOAD_PATH' environment]
+   [variable.])
+fi
