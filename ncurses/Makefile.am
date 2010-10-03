@@ -28,7 +28,9 @@ libguile_ncurses_la_SOURCES = compat.c compat.h curs_const.c		\
 	menu_main.c menu_spec.c menu_spec.h menu_type.c menu_type.h	\
 	panel_func.c panel_func.h panel_main.c panel_spec.c		\
 	panel_spec.h panel_type.c panel_type.h slk_func.c slk_func.h	\
-	type.c type.h unicode.c unicode.h visibility.h
+	termios_const.h termios_const.c termios_func.h termios_func.c   \
+	termios_main.c termios_type.h termios_type.c type.c type.h      \
+	unicode.c unicode.h visibility.h
 
 libguile_ncurses_la_CPPFLAGS = -I $(top_builddir)/lib $(GUILE_CFLAGS) \
 	-DLOCALEDIR=\"$(localedir)\"
@@ -62,6 +64,6 @@ endif
 ### scheme files ###
 pkgguilesitedir = $(guilesitedir)/ncurses
 dist_pkgguilesite_DATA = curses.scm menu.scm panel.scm form.scm	\
-	eti.scm slk.scm lib.scm
+	eti.scm slk.scm termios.scm lib.scm
 ETAGS_ARGS = curses.scm menu.scm panel.scm form.scm eti.scm slk.scm	\
-	lib.scm
+	termios.scm lib.scm
