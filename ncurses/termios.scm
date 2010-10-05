@@ -21,6 +21,8 @@
 ;; <http://www.gnu.org/licenses/>.
 
 (define-module (ncurses termios)
+  #:use-module (ncurses lib)
+  #:use-module (srfi srfi-1)
   #:export (
             BS0
             BS1
@@ -158,6 +160,7 @@
             tcgetsid
             tcsendbreak
             tcsetattr!
+            wcwidth
 
             termios-iflag
             termios-oflag
@@ -171,5 +174,21 @@
             termios-lflag-set!
             termios-cc-set!
             ))
+
+;; Return the number of character cells that C takes
+(define (wcwidth x)
+  (cond
+   ((char? x)
+    (%strwidth (string x)))
+   ((and (integer? x) (logtest x A_ALTCHARSET))
+    1)
+   ((xchar? x)
+    (%strwidth (xchar-chars x)))
+   ((string? x)
+    (%strwidth x))
+   ((and (list? x) (every xchar? x))
+    (%strwidth (apply string (apply append (map xchar-chars x)))))
+   (else
+    (error (gettext "Invalid input ~s") x))))
 
 (load-extension "libguile-ncurses" "gucu_termios_init")

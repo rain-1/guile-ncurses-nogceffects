@@ -39,6 +39,7 @@ GUCU_API SCM gucu_tcgetattr (SCM fd);
 GUCU_API SCM gucu_tcgetsid (SCM fd);
 GUCU_API SCM gucu_tcsendbreak (SCM fd, SCM duration);
 GUCU_API SCM gucu_tcsetattr_x (SCM fd, SCM opt, SCM termios);
+GUCU_API SCM gucu_strwidth (SCM x);
 GUCU_API SCM gucu_termios_iflag (SCM termios);
 GUCU_API SCM gucu_termios_oflag (SCM termios);
 GUCU_API SCM gucu_termios_cflag (SCM termios);

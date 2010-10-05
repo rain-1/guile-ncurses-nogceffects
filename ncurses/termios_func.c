@@ -27,7 +27,9 @@
 #include <libguile.h>
 #include <sys/types.h>
 #include <termios.h>
-#include <unistr.h>
+#ifdef GUILE_CHARS_ARE_UCS4
+#include <uniwidth.h>
+#endif
 
 #include "compat.h"
 #include "termios_func.h"
@@ -439,6 +441,26 @@ gucu_termios_cc_set_x (SCM s_termios, SCM s_pos, SCM s_char)
   return SCM_UNSPECIFIED;
 }
 
+#ifdef GUILE_CHARS_ARE_UCS4
+/* Return the number of character cells that string requires */
+SCM
+gucu_strwidth (SCM str)
+{
+  size_t i, len, siz;
+  uint32_t *s;
+
+  SCM_ASSERT (scm_is_string (str), str, SCM_ARG1, "%strwidth");
+  len = scm_c_string_length (str);
+  s = (uint32_t *) malloc ((len + 1) * sizeof (uint32_t));
+  for (i = 0; i < len; i ++)
+    s[i] = SCM_CHAR (scm_c_string_ref (str, i));
+  s[len] = 0;
+  siz = scm_from_int (u32_strwidth (s, "UTF-8"));
+  free (s);
+  return siz;
+}
+#endif
+
 void
 gucu_termios_init_function ()
 {
@@ -455,6 +477,7 @@ gucu_termios_init_function ()
   scm_c_define_gsubr ("tcgetsid", 1, 0, 0, gucu_tcgetsid);
   scm_c_define_gsubr ("tcsendbreak", 2, 0, 0, gucu_tcsendbreak);
   scm_c_define_gsubr ("tcsetattr!", 3, 0, 0, gucu_tcsetattr_x);
+  scm_c_define_gsubr ("%strwidth", 1, 0, 0, gucu_strwidth);
 
   scm_c_define_gsubr ("termios-iflag", 1, 0, 0, gucu_termios_iflag);
   scm_c_define_gsubr ("termios-oflag", 1, 0, 0, gucu_termios_oflag);
