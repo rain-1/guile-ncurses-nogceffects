@@ -111,7 +111,7 @@ SCM gucu_cfsetospeed_x (SCM s_termios, SCM s_speed)
   SCM_ASSERT (_scm_is_termios (s_termios), s_termios, SCM_ARG1, "cfsetospeed!");
   SCM_ASSERT (scm_is_integer (s_speed), s_speed, SCM_ARG2, "cfsetospeed!");
   c_termios = _scm_to_termios (s_termios);
-  c_speed = scm_to_unsigned_int (s_speed);
+  c_speed = scm_to_uint (s_speed);
   c_ret = cfsetospeed (c_termios, c_speed);
   if (c_ret != 0)
     scm_syserror ("cfsetospeed!");
