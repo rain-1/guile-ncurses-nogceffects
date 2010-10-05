@@ -1,5 +1,5 @@
 /*
-  termios_func.h
+  extra_func.h
 
   Copyright 2010 Free Software Foundation, Inc.
 
@@ -20,8 +20,8 @@
   <http://www.gnu.org/licenses/>.
 */
 
-#ifndef TERMIOS_FUNC_H
-#define TERMIOS_FUNC_H
+#ifndef EXTRA_FUNC_H
+#define EXTRA_FUNC_H
 
 #include <libguile.h>
 #include "visibility.h"
@@ -52,7 +52,5 @@ GUCU_API SCM gucu_termios_cflag_set_x (SCM termios, SCM val);
 GUCU_API SCM gucu_termios_lflag_set_x (SCM termios, SCM val);
 GUCU_API SCM gucu_termios_cc_set_x (SCM termios, SCM pos, SCM cc);
 
-
-
-GUCU_LOCAL void gucu_termios_init_function (void);
+GUCU_LOCAL void gucu_extra_init_function (void);
 #endif

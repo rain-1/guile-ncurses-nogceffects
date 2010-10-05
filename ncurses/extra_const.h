@@ -1,5 +1,5 @@
 /*
-termios_const.h
+extra_const.h
 
 Copyright 2010 Free Software Foundation, Inc.
 
@@ -20,11 +20,11 @@ License along with Guile-Ncurses.  If not, see
 <http://www.gnu.org/licenses/>.
 */
 
-#ifndef CURS_TERMIOS_H
-#define CURS_TERMIOS_H
+#ifndef EXTRA_CONST_H
+#define EXTRA_CONST_H
 
 #include "visibility.h"
 
-GUCU_LOCAL void gucu_termios_init_const (void);
+GUCU_LOCAL void gucu_extra_init_const (void);
 
-#endif /* not CURS_TERMIOS_H */
+#endif /* not EXTRA_CONST_H */

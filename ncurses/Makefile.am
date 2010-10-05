@@ -24,12 +24,13 @@ libguile_ncurses_la_SOURCES = compat.c compat.h curs_const.c		\
 	curs_spec.c curs_spec.h curs_main.c eti_const.c eti_const.h	\
 	eti_main.c form_const.c form_const.h form_func.c form_func.h	\
 	form_spec.c form_spec.h form_type.c form_type.h form_main.c	\
+	extra_const.h extra_const.c extra_func.h extra_func.c           \
+	extra_main.c extra_type.h extra_type.c                          \
 	gucuconfig.h menu_const.c menu_const.h menu_func.c menu_func.h	\
 	menu_main.c menu_spec.c menu_spec.h menu_type.c menu_type.h	\
 	panel_func.c panel_func.h panel_main.c panel_spec.c		\
 	panel_spec.h panel_type.c panel_type.h slk_func.c slk_func.h	\
-	termios_const.h termios_const.c termios_func.h termios_func.c   \
-	termios_main.c termios_type.h termios_type.c type.c type.h      \
+	type.c type.h                                                   \
 	unicode.c unicode.h visibility.h
 
 libguile_ncurses_la_CPPFLAGS = -I $(top_builddir)/lib $(GUILE_CFLAGS) \
@@ -64,6 +65,6 @@ endif
 ### scheme files ###
 pkgguilesitedir = $(guilesitedir)/ncurses
 dist_pkgguilesite_DATA = curses.scm menu.scm panel.scm form.scm	\
-	eti.scm slk.scm termios.scm lib.scm
+	eti.scm slk.scm extra.scm lib.scm
 ETAGS_ARGS = curses.scm menu.scm panel.scm form.scm eti.scm slk.scm	\
-	termios.scm lib.scm
+	extra.scm lib.scm

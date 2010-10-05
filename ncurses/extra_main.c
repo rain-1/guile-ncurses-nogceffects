@@ -1,5 +1,5 @@
 /*
-  termios_type.h
+  extra_main.c
 
   Copyright 2010 Free Software Foundation, Inc.
 
@@ -19,23 +19,20 @@
   License along with Guile-Ncurses.  If not, see
   <http://www.gnu.org/licenses/>.
 */
-#ifndef TERMIOS_TYPE_H
-#define TERMIOS_TYPE_H
 
-#include <libguile.h>
+#include <config.h>
+
+#include "extra_func.h"
+#include "extra_type.h"
+#include "extra_const.h"
 #include "visibility.h"
-#include <termios.h>
 
-GUCU_LOCAL extern scm_t_bits termios_tag;
+GUCU_API void gucu_extra_init (void);
 
-GUCU_LOCAL int _scm_is_termios (SCM x);
-GUCU_LOCAL struct termios *_scm_to_termios (SCM x);
-GUCU_LOCAL SCM _scm_from_termios (struct termios *x);
-
-GUCU_API SCM gucu_is_termios_p (SCM x);
-GUCU_API SCM gucu_new_termios (void);
-GUCU_API SCM gucu_del_termios (SCM arg1);
-
-GUCU_LOCAL void gucu_termios_init_type (void);
-
-#endif
+void
+gucu_extra_init ()
+{
+  gucu_extra_init_type ();
+  gucu_extra_init_const ();
+  gucu_extra_init_function ();
+}

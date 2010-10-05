@@ -1,5 +1,5 @@
 /*
-  termios_const.c
+  extra_const.c
 
   Copyright 2010 Free Software Foundation, Inc.
 
@@ -36,7 +36,7 @@
 #endif
 
 #include "compat.h"
-#include "termios_const.h"
+#include "extra_const.h"
 
 SCM gucu_BS0;
 SCM gucu_BS1;
@@ -161,7 +161,7 @@ SCM gucu_B9600;
 #define D(x) gucu_ ## x = scm_permanent_object(scm_c_define(#x, scm_from_int(x)))
 
 void
-gucu_termios_init_const ()
+gucu_extra_init_const ()
 {
   D(BS0);
   D(BS1);

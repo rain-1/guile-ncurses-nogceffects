@@ -1,5 +1,5 @@
 /*
-  termios_func.c
+  extra_func.c
 
   Copyright 2010 Free Software Foundation, Inc.
 
@@ -32,8 +32,8 @@
 #endif
 
 #include "compat.h"
-#include "termios_func.h"
-#include "termios_type.h"
+#include "extra_func.h"
+#include "extra_type.h"
 #include "type.h"
 
 SCM
@@ -462,7 +462,7 @@ gucu_strwidth (SCM str)
 #endif
 
 void
-gucu_termios_init_function ()
+gucu_extra_init_function ()
 {
   scm_c_define_gsubr ("cfgetispeed", 1, 0, 0, gucu_cfgetispeed);
   scm_c_define_gsubr ("cfgetospeed", 1, 0, 0, gucu_cfgetospeed);

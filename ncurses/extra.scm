@@ -1,6 +1,6 @@
 ;; -*- Mode: scheme; -*-
 
-;; termios.scm
+;; extra.scm
 
 ;; Copyright 2010 Free Software Foundation, Inc.
 
@@ -20,7 +20,7 @@
 ;; License along with Guile-Ncurses.  If not, see
 ;; <http://www.gnu.org/licenses/>.
 
-(define-module (ncurses termios)
+(define-module (ncurses extra)
   #:use-module (ncurses lib)
   #:use-module (srfi srfi-1)
   #:export (
@@ -191,4 +191,4 @@
    (else
     (error (gettext "Invalid input ~s") x))))
 
-(load-extension "libguile-ncurses" "gucu_termios_init")
+(load-extension "libguile-ncurses" "gucu_extra_init")

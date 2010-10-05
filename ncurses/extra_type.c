@@ -1,5 +1,5 @@
 /*
-  termios_type.c
+  extra_type.c
 
   Copyright 2009, 2010 Free Software Foundation, Inc.
 
@@ -28,7 +28,7 @@
 #include <libintl.h>
 
 #include "compat.h"
-#include "termios_type.h"
+#include "extra_type.h"
 
 scm_t_bits termios_tag;
 
@@ -190,7 +190,7 @@ gucu_new_termios (void)
 
 
 void
-gucu_termios_init_type ()
+gucu_extra_init_type ()
 {
   termios_tag = scm_make_smob_type ("termios", sizeof (struct termios *));
   scm_set_smob_mark (termios_tag, mark_termios);
