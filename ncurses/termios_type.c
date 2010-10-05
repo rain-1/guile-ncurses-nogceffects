@@ -113,14 +113,23 @@ mark_termios (SCM x)
 size_t
 gc_free_termios (SCM x)
 {
-  struct gucu_termios *gp;
+  struct termios *gp;
   int retval;
 
   scm_assert_smob_type (termios_tag, x);
 
-  gp = (struct gucu_termios *) SCM_SMOB_DATA (x);
+  gp = (struct termios *) SCM_SMOB_DATA (x);
 
   assert (gp != NULL);
+  if (0)
+    {
+      fprintf (stderr, "Freeing termios at %p\n", gp);
+      fprintf (stderr, "Flags: I %u O %u C %u L %u\n", gp->c_iflag,
+               gp->c_oflag, gp->c_cflag, gp->c_lflag);
+      fprintf (stderr, "Speed: O %u I %u\n", cfgetospeed(gp),
+               cfgetispeed(gp));
+      fflush (stderr);
+    }
 
   free (gp);
 
@@ -170,6 +179,7 @@ gucu_new_termios (void)
   gp = scm_gc_malloc (sizeof (struct termios), "termios");
 
   /* Step 2: initialize it with C code */
+  memset (gp, 0, sizeof(struct termios));
 
   /* Step 3: create the smob */
   SCM_NEWSMOB (smob, termios_tag, gp);
