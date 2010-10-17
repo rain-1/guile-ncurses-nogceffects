@@ -131,7 +131,7 @@ gc_free_termios (SCM x)
       fflush (stderr);
     }
 
-  free (gp);
+  scm_gc_free (gp, sizeof (struct termios), "termios");
 
   SCM_SET_SMOB_DATA (x, NULL);
 
