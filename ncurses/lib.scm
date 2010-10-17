@@ -22,7 +22,6 @@
 
 (define-module (ncurses lib)
   #:use-module (srfi srfi-1)
-  #:use-module (ncurses curses)
   #:use-module (srfi srfi-13) ; in Guile 1.8.x string-trim is always available.
 					; in Guile 1.6.x it isn't
   #:export (

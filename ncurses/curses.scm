@@ -20,7 +20,7 @@
 ;; License along with Guile-Ncurses.  If not, see
 ;; <http://www.gnu.org/licenses/>.
 
-   (define-module (ncurses curses)
+(define-module (ncurses curses)
   #:use-module (ice-9 optargs)
   #:use-module (srfi srfi-1)
   #:use-module (ncurses lib)
