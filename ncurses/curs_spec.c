@@ -41,7 +41,9 @@ License along with Guile-Ncurses.  If not, see
 #define _UNUSED_PARAMETER_
 #endif
 
+#ifdef GUILE_CHARS_ARE_UCS4
 #include <unistr.h>
+#endif
 
 #include "compat.h"
 #include "curs_spec.h"
