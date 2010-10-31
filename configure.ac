@@ -22,7 +22,7 @@
 AC_INIT([GNU Guile-Ncurses],[1.0],[spk121@yahoo.com])
 
 AC_CONFIG_AUX_DIR([build_aux])
-AM_INIT_AUTOMAKE([gnu std-options -Wall])
+AM_INIT_AUTOMAKE([gnu std-options -Wall no-dependencies])
 
 AC_PREREQ(2.59)
 AC_CONFIG_HEADERS([config.h])
@@ -233,6 +233,9 @@ LIBS="$ax_save_LIBS"
 
 # Later something should be done with this
 # AC_FUNC_MALLOC
+
+# Check for rarer termios constants
+AC_CHECK_DECLS([XCASE, ECHOPRT, PENDIN], [], [],[[#include <termios.h>]])
 
 ##################
 # Check for system services
