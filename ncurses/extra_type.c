@@ -80,8 +80,7 @@ _scm_from_termios (struct termios *x)
 #if 0
   if (0)
     {
-      fprintf (stderr, gettext ("Making smob from termios based on *%p\n"),
-	       x);
+      fprintf (stderr, "Making smob from termios based on *%p\n", x);
     }
 #endif
 
@@ -121,7 +120,7 @@ gc_free_termios (SCM x)
   gp = (struct termios *) SCM_SMOB_DATA (x);
 
   assert (gp != NULL);
-  if (0)
+  if (1)
     {
       fprintf (stderr, "Freeing termios at %p\n", gp);
       fprintf (stderr, "Flags: I %u O %u C %u L %u\n", gp->c_iflag,
@@ -129,6 +128,7 @@ gc_free_termios (SCM x)
       fprintf (stderr, "Speed: O %u I %u\n", cfgetospeed(gp),
                cfgetispeed(gp));
       fflush (stderr);
+      sleep (1);
     }
 
   scm_gc_free (gp, sizeof (struct termios), "termios");
@@ -147,7 +147,7 @@ print_termios (SCM x, SCM port, scm_print_state * pstate UNUSED)
   scm_puts ("#<termios ", port);
 
   if (pnl == NULL)
-    scm_puts ( gettext ("(freed)"), port);
+    scm_puts ("(freed)",  port);
   else
     {
       if (asprintf (&str, "%p", (void *) pnl) < 0)

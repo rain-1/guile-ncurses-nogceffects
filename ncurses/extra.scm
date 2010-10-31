@@ -191,7 +191,7 @@
    ((and (list? x) (every xchar? x))
     (%strwidth (apply string (apply append (map xchar-chars x)))))
    (else
-    (error (gettext "Invalid input ~s") x))))
+    (error "Invalid input ~s" x))))
 
 (define (%termios-debug t)
   (let ((cflag (termios-cflag t))

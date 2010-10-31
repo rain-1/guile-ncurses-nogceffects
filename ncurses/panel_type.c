@@ -95,7 +95,7 @@ _scm_from_panel (PANEL * x)
 
   if (0)
     {
-      fprintf (stderr, gettext ("Making smob from panel based on WINDOW * %p\n"),
+      fprintf (stderr, "Making smob from panel based on WINDOW * %p\n",
 	       x->win);
     }
 
@@ -150,8 +150,8 @@ gc_free_panel (SCM x)
   if (retval != OK)
     {
       scm_error_scm (SCM_BOOL_F,
-		     scm_from_locale_string ( gettext ("garbage collection of panel")),
-		     scm_from_locale_string ( gettext ("bad argument")),
+		     scm_from_locale_string ("garbage collection of panel"),
+		     scm_from_locale_string ("bad argument"),
 		     SCM_BOOL_F, SCM_BOOL_F);
     }
 
@@ -182,7 +182,7 @@ print_panel (SCM x, SCM port, scm_print_state * pstate UNUSED)
   scm_puts ("#<panel ", port);
 
   if (pnl == NULL)
-    scm_puts ( gettext ("(freed)"), port);
+    scm_puts ("(freed)", port);
   else
     {
       if (asprintf (&str, "%p", (void *) pnl) < 0)
@@ -225,7 +225,7 @@ gucu_new_panel (SCM win)
   gp->panel = new_panel (_scm_to_window (win));
   if (gp->panel == NULL)
     {
-      scm_misc_error ("new-panel", gettext ("bad window"), SCM_BOOL_F);
+      scm_misc_error ("new-panel", "bad window", SCM_BOOL_F);
     }
   gp->window = win;
 

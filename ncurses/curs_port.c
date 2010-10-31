@@ -184,7 +184,7 @@ gucu_newterm (SCM type, SCM outp, SCM inp)
     {
       scm_error_scm (SCM_BOOL_F,
 		     scm_from_locale_string ("newterm"),
-		     scm_from_locale_string ( gettext ("could not create a terminal")),
+		     scm_from_locale_string ("could not create a terminal"),
 		     SCM_BOOL_F, SCM_BOOL_F);
     }
 

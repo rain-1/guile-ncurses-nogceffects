@@ -48,13 +48,13 @@
 static void
 curs_bad_state_error (const char *funcname)
 {
-  scm_misc_error (funcname, gettext ("bad curses internal state"), SCM_BOOL_F);
+  scm_misc_error (funcname, "bad curses internal state", SCM_BOOL_F);
 }
 
 static void
 curs_param_or_bad_state_error (const char *funcname)
 {
-  scm_misc_error (funcname,  gettext ("invalid parameters or bad curses internal state"),
+  scm_misc_error (funcname,  "invalid parameters or bad curses internal state",
 		  SCM_BOOL_F);
 }
 
@@ -539,7 +539,7 @@ gucu_delscreen (SCM scr)
 
   if (!isendwin ())
     scm_misc_error ("delscreen",
-		    gettext ("the terminal was freed while still in curses mode: ~A"),
+		    "the terminal was freed while still in curses mode: ~A",
 		    scr);
 
   delscreen (c_scr);
@@ -1043,7 +1043,7 @@ gucu_keyname (SCM ch)
     }
 #endif
   if (ret == NULL)
-    return scm_from_locale_string ( gettext ("(unknown)"));
+    return scm_from_locale_string ("(unknown)");
 
   return scm_from_locale_string (ret);
 }
@@ -1490,7 +1490,7 @@ gucu_pechochar (SCM pad, SCM ch)
 
 #ifndef NCURSES_OPAQUE
   if (!(c_pad->_flags & _ISPAD))
-    scm_misc_error ("%pechochar", gettext ("not a pad"), scm_list_1 (pad));
+    scm_misc_error ("%pechochar", "not a pad", scm_list_1 (pad));
 #endif
 
 #ifdef HAVE_NCURSESW

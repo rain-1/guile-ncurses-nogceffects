@@ -469,7 +469,7 @@
                         (xchar-chars c)))
           ,x))
     (else
-     (error (gettext "Invalid input ~s") ,x))))
+     (error "Invalid input ~s" ,x))))
 
 (defmacro a-attribute-on (x A_ATTRIBUTE)
   `(cond
@@ -494,7 +494,7 @@
                         (xchar-chars c)))
           ,x))
     (else
-     (error (gettext "Invalid input ~s") ,x))))
+     (error "Invalid input ~s" ,x))))
 
 (defmacro a-attribute-off (x A_ATTRIBUTE)
   `(cond
@@ -519,7 +519,7 @@
                         (xchar-chars c)))
           ,x))
     (else
-     (error (gettext "Invalid input ~s") ,x))))
+     (error "Invalid input ~s" ,x))))
 
 (define (blink x) (a-attribute x A_BLINK))
 (define (blink-off x) (a-attribute-off x A_BLINK))
@@ -589,7 +589,7 @@
 			(xchar-chars c)))
           x))
     (else
-     (error (gettext "Invalid input ~s") x))))
+     (error "Invalid input ~s" x))))
 
 
 (define (acs-block)    (list->xchar (%acs-block)))
@@ -631,7 +631,7 @@
 (define* (addch win ch #:key y x)
   (if (not (xchar? ch))
       (scm-error 'wrong-type-arg "addch"
-                 (gettext "Wrong type argument in position 2 (expecting complex-char): ~s")
+                 "Wrong type argument in position 2 (expecting complex-char): ~s"
                  (list ch) ch))
   (and (if (and y x)
            (%wmove win y x)
@@ -641,11 +641,11 @@
 (define* (addchstr win str #:key y x (n -1))
   (if (not (list? str))
       (scm-error 'wrong-type-arg "addchstr"
-		 (gettext "Wrong type argument in position 2 (expecting list of complex-chars): ~s")
+		 "Wrong type argument in position 2 (expecting list of complex-chars): ~s"
                  (list str) str))
   (if (not (every xchar? str))
       (scm-error 'wrong-type-arg "addchstr"
-                 (gettext "Wrong type argument in position 2 (expecting list of complex-chars): ~s")
+                 "Wrong type argument in position 2 (expecting list of complex-chars): ~s"
                  (list str) str))
   (and (if (and y x)
            (%wmove win y x)

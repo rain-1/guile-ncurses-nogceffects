@@ -158,7 +158,7 @@ _scm_xchar_from_cchar (cchar_t * x)
   ret = getcchar (x, wch, &attr, &color_pair, NULL);
 
   if (ret == ERR)
-    scm_misc_error (NULL, gettext ("error unpacking complex char"), SCM_EOL);
+    scm_misc_error (NULL, "error unpacking complex char", SCM_EOL);
 
   /* Strip the color info from attr */
   attr &= A_ATTRIBUTES ^ A_COLOR;
@@ -878,7 +878,7 @@ print_screen (SCM x, SCM port, scm_print_state * pstate UNUSED)
 
   if (screen == NULL)
     {
-      scm_puts ( gettext ("(freed)"), port);
+      scm_puts ("(freed)", port);
     }
   else
     {
@@ -939,10 +939,9 @@ _scm_from_window (WINDOW * x)
   if (0)
     {
 #ifdef NCURSES_OPAQUE
-      fprintf (stderr, gettext ("Making smob from window\n") );
+      fprintf (stderr, "Making smob from window\n");
 #else
-      fprintf (stderr, gettext ("Making smob from window at %d, %d\n"),
-	       x->_begx, x->_begy);
+      fprintf (stderr, "Making smob from window at %d, %d\n", x->_begx, x->_begy);
 #endif
     }
 
@@ -993,7 +992,7 @@ free_window (SCM x)
       if (win == stdscr)
 	{
 	  endwin ();
-	  fprintf (stderr, gettext ("Freeing stdscr #<window %p>"), (void *) stdscr);
+	  fprintf (stderr, "Freeing stdscr #<window %p>", (void *) stdscr);
 	  delwin (stdscr);
 	  SCM_SET_SMOB_DATA (x, 0);
 	}
@@ -1019,7 +1018,7 @@ print_window (SCM x, SCM port, scm_print_state * pstate UNUSED)
   scm_puts ("#<window ", port);
 
   if (win == 0)
-    scm_puts ( gettext ("(freed)"), port);
+    scm_puts ("(freed)", port);
   else
     {
       if (asprintf (&str, "%p", (void *) win) < 0)
