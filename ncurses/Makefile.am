@@ -33,8 +33,7 @@ libguile_ncurses_la_SOURCES = compat.c compat.h curs_const.c		\
 	type.c type.h                                                   \
 	unicode.c unicode.h visibility.h
 
-libguile_ncurses_la_CPPFLAGS = -I $(top_builddir)/lib $(GUILE_CFLAGS) \
-	-DLOCALEDIR=\"$(localedir)\"
+libguile_ncurses_la_CPPFLAGS = -I $(top_builddir)/lib $(GUILE_CFLAGS)
 
 if WARN
 libguile_ncurses_la_CPPFLAGS += -Wall -Wextra -Wstrict-prototypes	\

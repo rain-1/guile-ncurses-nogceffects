@@ -3,6 +3,9 @@
 /* Define to 1 if you have the `cfmakeraw' function. */
 #undef HAVE_CFMAKERAW
 
+/* Define to 1 if you have the `cfsetspeed' function. */
+#undef HAVE_CFSETSPEED
+
 /* Define if you are have the cookie_io_functions_t type */
 #undef HAVE_COOKIE_IO_FUNCTIONS_T
 
@@ -80,6 +83,9 @@
 
 /* Define to 1 if you have the <sys/types.h> header file. */
 #undef HAVE_SYS_TYPES_H
+
+/* Define to 1 if you have the `tcgetsid' function. */
+#undef HAVE_TCGETSID
 
 /* Define to 1 if you have the `term_attrs' function. */
 #undef HAVE_TERM_ATTRS
