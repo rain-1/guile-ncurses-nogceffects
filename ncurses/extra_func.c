@@ -29,6 +29,8 @@
 #include <termios.h>
 #ifdef GUILE_CHARS_ARE_UCS4
 #include <uniwidth.h>
+#else
+#include <wchar.h>
 #endif
 
 #include "compat.h"
@@ -86,6 +88,7 @@ SCM gucu_cfsetispeed_x (SCM s_termios, SCM s_speed)
   return SCM_UNSPECIFIED;
 }
 
+#ifdef HAVE_CFSETSPEED
 SCM gucu_cfsetspeed_x (SCM s_termios, SCM s_speed)
 {
   struct termios *c_termios;
@@ -101,6 +104,7 @@ SCM gucu_cfsetspeed_x (SCM s_termios, SCM s_speed)
     scm_syserror ("cfsetspeed!");
   return SCM_UNSPECIFIED;
 }
+#endif
 
 SCM gucu_cfsetospeed_x (SCM s_termios, SCM s_speed)
 {
@@ -209,6 +213,7 @@ SCM gucu_tcgetattr (SCM s_fd_or_port)
   return s_termios;
 }
 
+#ifdef HAVE_CFSETSPEED
 SCM gucu_tcgetsid (SCM s_fd_or_port)
 {
   SCM s_fd;
@@ -230,6 +235,7 @@ SCM gucu_tcgetsid (SCM s_fd_or_port)
     scm_syserror ("tcgetsid");
   return scm_from_int (c_pid);
 }
+#endif
 
 
 SCM gucu_tcsendbreak (SCM s_fd_or_port, SCM s_duration)
@@ -441,11 +447,11 @@ gucu_termios_cc_set_x (SCM s_termios, SCM s_pos, SCM s_char)
   return SCM_UNSPECIFIED;
 }
 
-#ifdef GUILE_CHARS_ARE_UCS4
 /* Return the number of character cells that string requires */
 SCM
 gucu_strwidth (SCM str)
 {
+#ifdef GUILE_CHARS_ARE_UCS4
   size_t i, len, siz;
   uint32_t *s;
 
@@ -458,8 +464,21 @@ gucu_strwidth (SCM str)
   siz = scm_from_int (u32_strwidth (s, "UTF-8"));
   free (s);
   return siz;
-}
+#else
+  size_t i, len, s, siz;
+
+  SCM_ASSERT (scm_is_string (str), str, SCM_ARG1, "%strwidth");
+  len = scm_c_string_length (str);
+  siz = 0;
+  for (i = 0; i < len; i ++)
+    {
+      s = wcwidth (btowc (SCM_CHAR (scm_c_string_ref (str, i))));
+      if (s >= 0 && s <= 2)
+	siz += s;
+    }
+  return scm_from_int (siz);
 #endif
+}
 
 void
 gucu_extra_init_function ()
@@ -468,13 +487,17 @@ gucu_extra_init_function ()
   scm_c_define_gsubr ("cfgetospeed", 1, 0, 0, gucu_cfgetospeed);
   scm_c_define_gsubr ("cfmakeraw!", 1, 0, 0, gucu_cfmakeraw_x);
   scm_c_define_gsubr ("cfsetispeed!", 2, 0, 0, gucu_cfsetispeed_x);
+#ifdef HAVE_CFSETSPEED
   scm_c_define_gsubr ("cfsetspeed!", 2, 0, 0, gucu_cfsetspeed_x);
+#endif
   scm_c_define_gsubr ("cfsetospeed!", 2, 0, 0, gucu_cfsetospeed_x);
   scm_c_define_gsubr ("tcdrain", 1, 0, 0, gucu_tcdrain);
   scm_c_define_gsubr ("tcflow", 2, 0, 0, gucu_tcflow);
   scm_c_define_gsubr ("tcflush", 2, 0, 0, gucu_tcflush);
   scm_c_define_gsubr ("tcgetattr", 1, 0, 0, gucu_tcgetattr);
+#ifdef HAVE_TCGETSID
   scm_c_define_gsubr ("tcgetsid", 1, 0, 0, gucu_tcgetsid);
+#endif
   scm_c_define_gsubr ("tcsendbreak", 2, 0, 0, gucu_tcsendbreak);
   scm_c_define_gsubr ("tcsetattr!", 3, 0, 0, gucu_tcsetattr_x);
   scm_c_define_gsubr ("%strwidth", 1, 0, 0, gucu_strwidth);

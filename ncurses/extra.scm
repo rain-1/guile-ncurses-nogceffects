@@ -22,6 +22,7 @@
 
 (define-module (ncurses extra)
   #:use-module (ncurses curses)
+  #:use-module (ncurses lib)
   #:use-module (srfi srfi-1)
   #:export (
             BS0
@@ -64,7 +65,6 @@
             VT0
             VT1
             VTDLY
-            XCASE
 
             NCCS
 
@@ -118,13 +118,11 @@
             ECHOK
             ECHOKE
             ECHONL
-            ECHOPRT
             FLUSHO
             ICANON
             IEXTEN
             ISIG
             NOFLSH
-            PENDIN
             TOSTOP
 
             B0
@@ -151,13 +149,11 @@
             cfgetospeed
             cfmakeraw!
             cfsetispeed!
-            cfsetspeed!
             cfsetospeed!
             tcdrain
             tcflow
             tcflush
             tcgetattr
-            tcgetsid
             tcsendbreak
             tcsetattr!
 
@@ -272,3 +268,11 @@
     
                   
 (load-extension "libguile-ncurses" "gucu_extra_init")
+
+;; These function may not exist depending of the 
+;; capabilities of the underlying system
+(if (defined? 'cfsetspeed!)     (export cfsetspeed!))
+(if (defined? 'tcgetsid)        (export tcgetsid))
+(if (defined? 'XCASE)           (export XCASE))
+(if (defined? 'ECHOPRT)         (export ECHOPRT))
+(if (defined? 'PENDIN)          (export PENDIN))

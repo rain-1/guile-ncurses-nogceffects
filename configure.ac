@@ -22,7 +22,7 @@
 AC_INIT([GNU Guile-Ncurses],[1.0],[spk121@yahoo.com])
 
 AC_CONFIG_AUX_DIR([build_aux])
-AM_INIT_AUTOMAKE([gnu std-options -Wall no-dependencies])
+AM_INIT_AUTOMAKE([gnu std-options -Wall])
 
 AC_PREREQ(2.59)
 AC_CONFIG_HEADERS([config.h])
@@ -223,7 +223,7 @@ AC_CHECK_SIZEOF([wint_t], ,[#include <wchar.h>])
 
 ##################
 # Check for C library functions
-AC_CHECK_FUNCS([cfmakeraw fopencookie ptsname grantpt unlockpt])
+AC_CHECK_FUNCS([cfmakeraw fopencookie ptsname grantpt unlockpt tcgetsid cfsetspeed])
 
 # Check for ncurses library functions
 ax_save_LIBS="$LIBS"

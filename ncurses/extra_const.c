@@ -78,7 +78,9 @@ SCM gucu_TCSANOW;
 SCM gucu_VT0;
 SCM gucu_VT1;
 SCM gucu_VTDLY;
+#if HAVE_DECL_XCASE
 SCM gucu_XCASE;
+#endif
 
 SCM gucu_NCCS;
 
@@ -132,13 +134,17 @@ SCM gucu_ECHOE;
 SCM gucu_ECHOK;
 SCM gucu_ECHOKE;
 SCM gucu_ECHONL;
+#if HAVE_DECL_ECHOPRT
 SCM gucu_ECHOPRT;
+#endif
 SCM gucu_FLUSHO;
 SCM gucu_ICANON;
 SCM gucu_IEXTEN;
 SCM gucu_ISIG;
 SCM gucu_NOFLSH;
+#if HAVE_DECL_PENDIN
 SCM gucu_PENDIN;
+#endif
 SCM gucu_TOSTOP;
 
 SCM gucu_B0;
@@ -203,7 +209,9 @@ gucu_extra_init_const ()
   D(VT0);
   D(VT1);
   D(VTDLY);
+#if HAVE_DECL_XCASE
   D(XCASE);
+#endif
 
   D(NCCS);
 
@@ -257,13 +265,17 @@ gucu_extra_init_const ()
   D(ECHOK);
   D(ECHOKE);
   D(ECHONL);
+#if HAVE_DECL_ECHOPRT
   D(ECHOPRT);
+#endif
   D(FLUSHO);
   D(ICANON);
   D(IEXTEN);
   D(ISIG);
   D(NOFLSH);
+#if HAVE_DECL_PENDIN
   D(PENDIN);
+#endif
   D(TOSTOP);
 
   D(B0);
