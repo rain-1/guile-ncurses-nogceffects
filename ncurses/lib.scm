@@ -73,7 +73,7 @@
     (if (logtest attr A_LOW) " low") "")
     (if (logtest attr A_RIGHT) " right" "")
     (if (logtest attr A_TOP) " top" "")
-    (if (logtest attr A_VERTICAL) " vertical" ""))))
+    (if (logtest attr A_VERTICAL) " vertical" "")))
 
 (define (acs-char-name c)
   (let ((n (normal c)))
