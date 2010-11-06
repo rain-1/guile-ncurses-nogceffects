@@ -24,7 +24,6 @@
 
 #include <libguile.h>
 #include <string.h>
-#include <libintl.h>
 
 #if HAVE_CURSES_H
 #include <curses.h>

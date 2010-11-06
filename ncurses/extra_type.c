@@ -24,7 +24,6 @@
 #define _GNU_SOURCE
 #include <assert.h>
 #include <libguile.h>
-#include <libintl.h>
 #include <stdio.h>
 #include <string.h>
 #include <termios.h>

@@ -32,7 +32,6 @@ License along with Guile-Ncurses.  If not, see
 #include <config.h>
 
 #include <libguile.h>
-#include <libintl.h>
 #include <stdio.h>
 #include <unistd.h>
 

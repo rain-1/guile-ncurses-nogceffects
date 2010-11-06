@@ -23,7 +23,6 @@ License along with Guile-Ncurses.  If not, see
 #include <config.h>
 
 #include <libguile.h>
-#include <libintl.h>
 
 #if HAVE_CURSES_H
 #include <curses.h>
@@ -45,8 +44,6 @@ GUCU_API void gucu_init (void);
 void
 gucu_init ()
 {
-  bindtextdomain (PACKAGE, LOCALEDIR);
-
   gucu_init_function ();
   gucu_init_special ();
   gucu_init_constant ();

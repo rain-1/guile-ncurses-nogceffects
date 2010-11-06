@@ -25,7 +25,6 @@
 #include <assert.h>
 #include <errno.h>
 #include <libguile.h>
-#include <libintl.h>
 #include <stdio.h>
 #include <string.h>
 

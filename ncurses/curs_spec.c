@@ -24,7 +24,6 @@ License along with Guile-Ncurses.  If not, see
 
 #define _XOPEN_SOURCE
 #include <libguile.h>
-#include <libintl.h>
 #include <stdlib.h>
 #include <termios.h>
 
