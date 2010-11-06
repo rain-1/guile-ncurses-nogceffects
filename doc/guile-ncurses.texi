@@ -839,22 +839,56 @@ as scripts, the program @code{guile-ncurses-shell} can be used.  The
 problem with interactive Guile sessions using @code{curses} is that
 you are typing into the same screen that curses is trying to manage,
 which leads to confusing results.  The program
-@code{guile-ncurses-shell}, which must be run under X, starts an
+@code{guile-ncurses-shell}, which must be run on X, starts an
 interactive guile session and creates and @code{xterm} that will be
 managed by curses.  The results of the curses function calls will
 appear in the @code{xterm}, instead of in the screen where the
 interactive guile session occurs.
 
+Here we'll try four functions: @code{initscr} sets up the screen,
+@code{addstr} writes a string to the screen, @code{refresh} redraws
+the screen, and @code{endwin} frees the screen.
+
 Upon initialization @code{guile-ncurses-shell} automatically calls these functions.
 @lisp
 (use-modules (ncurses curses))
-(define stdscr (initscr))
+(define %guile-ncurses-shell-stdscr (initscr))
 @end lisp
-@noindent Thus, you must not call @code{(initscr)} in your
-interactive session.
+@noindent It loads the ncurses module; initializes the screen; and
+saves the returned ncurses screen structure in the variable
+@code{%guile-ncurses-shell-stdscr}. Thus, you do not need to call
+@code{(initscr)} in your interactive session when you use
+@code{guile-ncurses-shell}.
+
+@findex %guile-ncurses-shell-stdscr
+
+The first thing you want to do is to redefine the name of the standard
+window to something more reasonable.
+
+@lisp
+(define win %guile-ncurses-shell-stdscr)
+@end lisp
+
+To check and see if the guile-ncurses-shell is working, you can write
+a string onto the created xterm.
+
+@lisp
+(addstr win "hello, world!")
+(refresh win)
+@end lisp
+
+The guile-ncurses-shell communicates with the xterm using a read port
+and a write port.  If, for some obscure reason, you need to access the
+read or write port directly, they are stored in the variables
+@code{%guile-ncurses-shell-read-port} and
+@code{%guile-ncurses-shell-write-port}.
+
+@findex %guile-ncurses-shell-read-port
+@findex %guile-ncurses-shell-write-port
 
 When exiting an interactive session, by @kbd{C-D} for example,
-@code{guile-ncurses-shell} automatically calls @code{(endwin)}.
+@code{guile-ncurses-shell} automatically calls @code{(endwin)}, so you
+do not need to call that yourself.
 
 @node The Gory Details, Initialization, Interactive sessions and @code{guile-ncurses-shell}, Curses Tutorial
 @section The Gory Details
