@@ -36,12 +36,12 @@ License along with Guile-Ncurses.  If not, see
 #include <ncurses/curses.h>
 #endif
 
+#ifdef GUILE_CHARS_ARE_UCS4
 /* Work around unistring bug */
 #ifndef _UNUSED_PARAMETER_
 #define _UNUSED_PARAMETER_
 #endif
 
-#ifdef GUILE_CHARS_ARE_UCS4
 #include <unistr.h>
 #endif
 
