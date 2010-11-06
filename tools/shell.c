@@ -182,6 +182,33 @@ open_terminal (char *pseudo_terminal_slave_name,
 
   name_length = strlen(pseudo_terminal_slave_name);
 
+  if (is_unix98_pty (pseudo_terminal_slave_name))
+    {
+      asprintf (&s_flag, "-S%s/%d",
+		pseudo_terminal_slave_name + unix98_offset,
+		master_file_descriptor);
+    }
+  else if (is_bsd_pty (pseudo_terminal_slave_name))
+    {
+      asprintf(&s_flag, "-S%c%c%d",
+	       pseudo_terminal_slave_name[bsd_offset],
+	       pseudo_terminal_slave_name[bsd_offset+1],
+	       master_file_descriptor);
+    }
+  else if (is_cygwin_pty (pseudo_terminal_slave_name))
+    {
+      asprintf (&s_flag, "-S%s/%d",
+		pseudo_terminal_slave_name + cygwin_offset,
+		master_file_descriptor);
+    }
+  else
+    {
+      fprintf (stderr, _("Unrecognized pseudo-terminal name: %s\n"),
+	       pseudo_terminal_slave_name);
+      _exit (EXIT_FAILURE);
+    }
+
+
   process_id = fork ();
 
   if (process_id == -1)
@@ -191,40 +218,25 @@ open_terminal (char *pseudo_terminal_slave_name,
     }
   else if (process_id == 0)
     {
+      int ret;
+
       /* This is the child process */
       close (slave_file_descriptor);
-
-      if (is_unix98_pty (pseudo_terminal_slave_name))
-        {
-          asprintf (&s_flag, "-S%s/%d",
-                    pseudo_terminal_slave_name + unix98_offset,
-                    master_file_descriptor);
-        }
-      else if (is_bsd_pty (pseudo_terminal_slave_name))
-        {
-          asprintf(&s_flag, "-S%c%c%d",
-                   pseudo_terminal_slave_name[bsd_offset],
-                   pseudo_terminal_slave_name[bsd_offset+1],
-                   master_file_descriptor);
-        }
-      else if (is_cygwin_pty (pseudo_terminal_slave_name))
-        {
-          asprintf (&s_flag, "-S%s/%d",
-                    pseudo_terminal_slave_name + cygwin_offset,
-                    master_file_descriptor);
-        }
-      else
-        {
-          fprintf (stderr, _("Unrecognized pseudo-terminal name: %s\n"),
-                   pseudo_terminal_slave_name);
-          _exit (EXIT_FAILURE);
-        }
 
       printf (_("Attemping to connect an xterm to %s\n"),
               pseudo_terminal_slave_name);
       printf (_("Calling 'xterm %s'\n"), s_flag);
-      execlp ("xterm", "xterm", s_flag, NULL);
+      ret = execlp ("xterm", "xterm", s_flag, NULL);
       /* Should not return */
+      if (ret == -1)
+	{
+	  fprintf (stderr, "+---------------------------------------------------\n");
+	  fprintf (stderr, "The xterm program failed to start!\n");
+	  perror ("Error");
+	  fprintf (stderr, "Thus, this program won't display any ncurses output.\n");
+	  fprintf (stderr, "+---------------------------------------------------\n");
+	  close (master_file_descriptor);
+	}
       return 0;
     }
   else
@@ -246,6 +258,10 @@ open_terminal (char *pseudo_terminal_slave_name,
 #endif
 
       tcsetattr (slave_file_descriptor, TCSANOW, &terminal_attributes);
+      /* Have to wait for xterm to be created */
+      sleep (1);
+      /* FIXME: this is a classic race condition.  Need to rewrite
+	 this with proper threads and a mutex. */
       return process_id;
     }
   return 0;
