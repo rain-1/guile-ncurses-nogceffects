@@ -23,6 +23,8 @@
 (define-module (ncurses curses)
   #:use-module (ice-9 optargs)
   #:use-module (srfi srfi-1)
+  #:use-module (srfi srfi-34)
+  #:use-module (srfi srfi-35)
   #:export (
 	    %filter
 	    %wide-ncurses
@@ -386,6 +388,12 @@
 	    screen?
 	    open-curses-port
 
+	    ;; error codes
+	    &curses-error
+	    &curses-wrong-type-arg-error
+	    curses-error?
+	    curses-wrong-type-arg-error?
+
 	    ;; xchar type library
 	    xchar-attr
 	    xchar-color
@@ -436,6 +444,16 @@
             vertical-off
             vertical-on
             ))
+
+;;; Exceptions
+
+(define-condition-type &curses-error &error
+  curses-error?)
+
+(define-condition-type &curses-wrong-type-arg-error &curses-error
+  curses-wrong-type-arg-error?
+  (arg           curses-wrong-type-arg-error:arg)
+  (expected-type curses-wrong-type-arg-error:expected-type))
 
 ;;; The xchar type library
 
@@ -1050,28 +1068,45 @@ not modified, but the color pair, if any, is modified."
 ;; Scheme calling wrappers for C functions
 
 (define* (addch win ch #:key y x)
+  "Puts the character CH into the given window at its current window
+position.  If Y and X are set, moves to (X,Y) first.  Returns #t on
+success."
+  (if (not (window? win))
+      (raise (condition (&curses-wrong-type-arg-error
+			 (arg win)
+			 (expected-type 'window)))))
   (if (not (xchar? ch))
-      (scm-error 'wrong-type-arg "addch"
-                 "Wrong type argument in position 2 (expecting complex-char): ~s"
-                 (list ch) ch))
+      (raise (condition (&curses-wrong-type-arg-error
+			 (arg ch)
+			 (expected-type 'xchar)))))
+  (if (and y x)
+      (begin
+	(if (not (and (integer? y) (exact? y)))
+	    (raise (condition (&curses-wrong-type-arg-error
+			       (arg y)
+			       (expected-type 'integer)))))
+	(if (not (and (integer? x) (exact? x)))
+	    (raise (condition (&curses-wrong-type-arg-error
+			       (arg x)
+			       (expected-type 'integer)))))))
   (and (if (and y x)
-           (%wmove win y x)
+	   (%wmove win y x)
            #t)
        (%waddch win (xchar->list ch))))
-
+  
 (define* (addchstr win str #:key y x (n -1))
   (if (not (list? str))
       (scm-error 'wrong-type-arg "addchstr"
 		 "Wrong type argument in position 2 (expecting list of complex-chars): ~s"
-                 (list str) str))
-  (if (not (every xchar? str))
-      (scm-error 'wrong-type-arg "addchstr"
-                 "Wrong type argument in position 2 (expecting list of complex-chars): ~s"
-                 (list str) str))
-  (and (if (and y x)
-           (%wmove win y x)
-           #t)
-       (%waddchnstr win (map xchar->list str) n)))
+		   (list str) str))
+    (if (not (every xchar? str))
+	(scm-error 'wrong-type-arg "addchstr"
+		   "Wrong type argument in position 2 (expecting list of complex-chars): ~s"
+		   (list str) str))
+    (and (if (and y x)
+	     (%wmove win y x)
+	     #t)
+	 (%waddchnstr win (map xchar->list str) n)))
 
 (define* (addstr win str #:key y x (n -1))
   (and (if (and y x)
@@ -1186,6 +1221,27 @@ not modified, but the color pair, if any, is modified."
    (%winsdelln win -1)))
 
 (define* (echochar win ch #:key y x)
+  "Puts the character CH into the given window at its current window
+position and then refreshes the window.  If Y and X are set, moves
+to (X,Y) first.  Returns #t on success."
+  (if (not (window? win))
+      (raise (condition (&curses-wrong-type-arg-error
+			 (arg win)
+			 (expected-type 'window)))))
+  (if (not (xchar? ch))
+      (raise (condition (&curses-wrong-type-arg-error
+			 (arg ch)
+			 (expected-type 'xchar)))))
+  (if (and y x)
+      (begin
+	(if (not (and (integer? y) (exact? y)))
+	    (raise (condition (&curses-wrong-type-arg-error
+			       (arg y)
+			       (expected-type 'integer)))))
+	(if (not (and (integer? x) (exact? x)))
+	    (raise (condition (&curses-wrong-type-arg-error
+			       (arg x)
+			       (expected-type 'integer)))))))
   (and
    (if (and y x)
        (%wmove win y x)

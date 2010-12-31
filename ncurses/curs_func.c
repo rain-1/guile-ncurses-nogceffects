@@ -2047,9 +2047,6 @@ gucu_waddch (SCM win, SCM ch)
   WINDOW *c_win;
   int ret;
 
-  SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "%waddch");
-  SCM_ASSERT (_scm_is_xchar (ch), ch, SCM_ARG2, "%waddch");
-
   c_win = _scm_to_window (win);
 #ifdef HAVE_NCURSESW
   {
@@ -2201,9 +2198,6 @@ gucu_wechochar (SCM win, SCM ch)
 {
   WINDOW *c_win;
   int ret;
-
-  SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "%echochar");
-  SCM_ASSERT (_scm_is_xchar (ch), ch, SCM_ARG2, "%echochar");
 
   c_win = _scm_to_window (win);
 #ifdef HAVE_NCURSESW
