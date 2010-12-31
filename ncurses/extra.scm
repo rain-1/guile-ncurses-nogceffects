@@ -22,7 +22,6 @@
 
 (define-module (ncurses extra)
   #:use-module (ncurses curses)
-  #:use-module (ncurses lib)
   #:use-module (srfi srfi-1)
   #:export (
             BS0
