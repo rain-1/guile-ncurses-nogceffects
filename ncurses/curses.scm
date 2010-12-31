@@ -521,50 +521,336 @@
     (else
      (error "Invalid input ~s" ,x))))
 
-(define (blink x) (a-attribute x A_BLINK))
-(define (blink-off x) (a-attribute-off x A_BLINK))
-(define (blink-on x) (a-attribute-on x A_BLINK))
-(define (bold x) (a-attribute x A_BOLD))
-(define (bold-off x) (a-attribute-off x A_BOLD))
-(define (bold-on x) (a-attribute-on x A_BOLD))
-(define (dim x) (a-attribute x A_DIM))
-(define (dim-off x) (a-attribute-off x A_DIM))
-(define (dim-on x) (a-attribute-on x A_DIM))
-(define (horizontal x) (a-attribute x A_HORIZONTAL))
-(define (horizontal-off x) (a-attribute-off x A_HORIZONTAL))
-(define (horizontal-on x) (a-attribute-on x A_HORIZONTAL))
-(define (invis x) (a-attribute x A_INVIS))
-(define (invis-off x) (a-attribute-off x A_INVIS))
-(define (invis-on x) (a-attribute-on x A_INVIS))
-(define (left x) (a-attribute x A_LEFT))
-(define (left-off x) (a-attribute-off x A_LEFT))
-(define (left-on x) (a-attribute-on x A_LEFT))
-(define (low x) (a-attribute x A_LOW))
-(define (low-off x) (a-attribute-off x A_LOW))
-(define (low-on x) (a-attribute-on x A_LOW))
-(define (normal x) (a-attribute x A_NORMAL))
+(define (blink x) 
+  "These procedure takes X, which can be either a simple character,
+a complex character, a simple string, or a complex string, and returns
+a rendered character or string with the attribute BLINK.  If the input
+X was a rendered character or a rendered string, the old attributes
+are replaced, but the color pair, if any, is not modified."
+  (a-attribute x A_BLINK))
+
+(define (blink-off x) 
+  "If the input X is a simple character or string, it returns a
+complex character or string has the normal rendering. If the input X
+is a rendered character or a rendered string, it returns a rendered
+character or string with the BLINK attribute disabled, but, other
+attributes are not modified."
+  (a-attribute-off x A_BLINK))
+
+(define (blink-on x)
+  "If the input X is a simple character or string, it returns a
+complex character or string has the normal rendering. If the input X
+is a rendered character or a rendered string, it returns a rendered
+character or string with the BLINK attribute enabled, but, other
+attributes are not modified."
+  (a-attribute-on x A_BLINK))
+
+(define (bold x) 
+  "These procedure takes X, which can be either a simple character,
+a complex character, a simple string, or a complex string, and returns
+a rendered character or string with the attribute BOLD.  If the input
+X was a rendered character or a rendered string, the old attributes
+are replaced, but the color pair, if any, is not modified."
+  (a-attribute x A_BOLD))
+
+(define (bold-off x)
+  "If the input X is a simple character or string, it returns a
+complex character or string has the normal rendering. If the input X
+is a rendered character or a rendered string, it returns a rendered
+character or string with the BOLD attribute disabled, but, other
+attributes are not modified."
+  (a-attribute-off x A_BOLD))
+
+(define (bold-on x)
+  "If the input X is a simple character or string, it returns a
+complex character or string has the normal rendering. If the input X
+is a rendered character or a rendered string, it returns a rendered
+character or string with the BOLD attribute enabled, but, other
+attributes are not modified."
+  (a-attribute-on x A_BOLD))
+
+(define (dim x) 
+  "These procedure takes X, which can be either a simple character,
+a complex character, a simple string, or a complex string, and returns
+a rendered character or string with the attribute DIM.  If the input
+X was a rendered character or a rendered string, the old attributes
+are replaced, but the color pair, if any, is not modified."
+  (a-attribute x A_DIM))
+
+(define (dim-off x) 
+  "If the input X is a simple character or string, it returns a
+complex character or string has the normal rendering. If the input X
+is a rendered character or a rendered string, it returns a rendered
+character or string with the DIM attribute disabled, but, other
+attributes are not modified."
+  (a-attribute-off x A_DIM))
+
+(define (dim-on x)
+  "If the input X is a simple character or string, it returns a
+complex character or string has the normal rendering. If the input X
+is a rendered character or a rendered string, it returns a rendered
+character or string with the DIM attribute enabled, but, other
+attributes are not modified."
+  (a-attribute-on x A_DIM))
+
+(define (horizontal x) 
+  "These procedure takes X, which can be either a simple character,
+a complex character, a simple string, or a complex string, and returns
+a rendered character or string with the attribute HORIZONTAL.  If the
+input X was a rendered character or a rendered string, the old
+attributes are replaced, but the color pair, if any, is not modified."
+  (a-attribute x A_HORIZONTAL))
+
+(define (horizontal-off x)
+  "If the input X is a simple character or string, it returns a
+complex character or string has the normal rendering. If the input X
+is a rendered character or a rendered string, it returns a rendered
+character or string with the HORIZONTAL attribute disabled, but, other
+attributes are not modified."
+  (a-attribute-off x A_HORIZONTAL))
+
+(define (horizontal-on x)
+  "If the input X is a simple character or string, it returns a
+complex character or string has the normal rendering. If the input X
+is a rendered character or a rendered string, it returns a rendered
+character or string with the HORIZONTAL attribute enabled, but, other
+attributes are not modified."
+  (a-attribute-on x A_HORIZONTAL))
+
+(define (invis x) 
+  "These procedure takes X, which can be either a simple character,
+a complex character, a simple string, or a complex string, and returns
+a rendered character or string with the attribute INVIS.  If the
+input X was a rendered character or a rendered string, the old
+attributes are replaced, but the color pair, if any, is not modified."
+  (a-attribute x A_INVIS))
+
+(define (invis-off x)
+  "If the input X is a simple character or string, it returns a
+complex character or string has the normal rendering. If the input X
+is a rendered character or a rendered string, it returns a rendered
+character or string with the INVIS attribute disabled, but, other
+attributes are not modified."
+  (a-attribute-off x A_INVIS))
+
+(define (invis-on x)
+  "If the input X is a simple character or string, it returns a
+complex character or string has the normal rendering. If the input X
+is a rendered character or a rendered string, it returns a rendered
+character or string with the INVIS attribute enabled, but, other
+attributes are not modified."
+  (a-attribute-on x A_INVIS))
+
+(define (left x) 
+  "These procedure takes X, which can be either a simple character,
+a complex character, a simple string, or a complex string, and returns
+a rendered character or string with the attribute LEFT.  If the
+input X was a rendered character or a rendered string, the old
+attributes are replaced, but the color pair, if any, is not modified."
+  (a-attribute x A_LEFT))
+
+(define (left-off x)
+  "If the input X is a simple character or string, it returns a
+complex character or string has the normal rendering. If the input X
+is a rendered character or a rendered string, it returns a rendered
+character or string with the LEFT attribute disabled, but, other
+attributes are not modified."
+  (a-attribute-off x A_LEFT))
+
+(define (left-on x)
+  "If the input X is a simple character or string, it returns a
+complex character or string has the normal rendering. If the input X
+is a rendered character or a rendered string, it returns a rendered
+character or string with the LEFT attribute enabled, but, other
+attributes are not modified."
+  (a-attribute-on x A_LEFT))
+
+(define (low x) 
+    "These procedure takes X, which can be either a simple character,
+a complex character, a simple string, or a complex string, and returns
+a rendered character or string with the attribute LOW.  If the
+input X was a rendered character or a rendered string, the old
+attributes are replaced, but the color pair, if any, is not modified."
+  (a-attribute x A_LOW))
+
+(define (low-off x)
+  "If the input X is a simple character or string, it returns a
+complex character or string has the normal rendering. If the input X
+is a rendered character or a rendered string, it returns a rendered
+character or string with the LOW attribute disabled, but, other
+attributes are not modified."
+  (a-attribute-off x A_LOW))
+
+(define (low-on x)
+  "If the input X is a simple character or string, it returns a
+complex character or string has the normal rendering. If the input X
+is a rendered character or a rendered string, it returns a rendered
+character or string with the LEFT attribute enabled, but, other
+attributes are not modified."
+  (a-attribute-on x A_LOW))
+
+(define (normal x) 
+    "These procedure takes X, which can be either a simple character,
+a complex character, a simple string, or a complex string, and returns
+a rendered character or string with the normal, default, rendering.
+If the input X was a rendered character or a rendered string, the old
+attributes are cleared, but the color pair, if any, is not modified."
+  (a-attribute x A_NORMAL))
+
 (define (normal-off x) (a-attribute-off x A_NORMAL))
 (define (normal-on x) (a-attribute-on x A_NORMAL))
-(define (protect x) (a-attribute x A_PROTECT))
-(define (protect-off x) (a-attribute-off x A_PROTECT))
-(define (protect-on x) (a-attribute-on x A_PROTECT))
-(define (inverse x) (a-attribute x A_REVERSE))
-(define (inverse-off x) (a-attribute-off x A_REVERSE))
-(define (inverse-on x) (a-attribute-on x A_REVERSE))
-(define (right x) (a-attribute x A_RIGHT))
-(define (right-off x) (a-attribute-off x A_RIGHT))
-(define (right-on x) (a-attribute-on x A_RIGHT))
-(define (top x) (a-attribute x A_TOP))
-(define (top-off x) (a-attribute-off x A_TOP))
-(define (top-on x) (a-attribute-on x A_TOP))
-(define (underline x) (a-attribute x A_UNDERLINE))
-(define (underline-off x) (a-attribute-off x A_UNDERLINE))
-(define (underline-on x) (a-attribute-on x A_UNDERLINE))
-(define (vertical x) (a-attribute x A_VERTICAL))
-(define (vertical-off x) (a-attribute-off x A_VERTICAL))
-(define (vertical-on x) (a-attribute-on x A_VERTICAL))
+
+(define (protect x) 
+  "These procedure takes X, which can be either a simple character,
+a complex character, a simple string, or a complex string, and returns
+a rendered character or string with the attribute PROTECT.  If the
+input X was a rendered character or a rendered string, the old
+attributes are replaced, but the color pair, if any, is not modified."
+  (a-attribute x A_PROTECT))
+
+(define (protect-off x)
+  "If the input X is a simple character or string, it returns a
+complex character or string has the normal rendering. If the input X
+is a rendered character or a rendered string, it returns a rendered
+character or string with the PROTECT attribute disabled, but, other
+attributes are not modified."
+  (a-attribute-off x A_PROTECT))
+
+(define (protect-on x)
+  "If the input X is a simple character or string, it returns a
+complex character or string has the normal rendering. If the input X
+is a rendered character or a rendered string, it returns a rendered
+character or string with the PROTECT attribute enabled, but, other
+attributes are not modified."
+  (a-attribute-on x A_PROTECT))
+
+(define (inverse x) 
+  "These procedure takes X, which can be either a simple character,
+a complex character, a simple string, or a complex string, and returns
+a rendered character or string with the INVERSE (aka REVERSE)
+attribute.  If the input X was a rendered character or a rendered
+string, the old attributes are replaced, but the color pair, if any,
+is not modified."
+  (a-attribute x A_REVERSE))
+
+(define (inverse-off x)
+  "If the input X is a simple character or string, it returns a
+complex character or string has the normal rendering. If the input X
+is a rendered character or a rendered string, it returns a rendered
+character or string with the INVERSE (aka REVERSE) attribute disabled,
+but, other attributes are not modified."
+  (a-attribute-off x A_REVERSE))
+
+(define (inverse-on x)
+  "If the input X is a simple character or string, it returns a
+complex character or string has the normal rendering. If the input X
+is a rendered character or a rendered string, it returns a rendered
+character or string with the INVERSE (aka REVERSE) attribute enabled,
+but, other attributes are not modified."
+  (a-attribute-on x A_REVERSE))
+
+(define (right x) 
+  "These procedure takes X, which can be either a simple character,
+a complex character, a simple string, or a complex string, and returns
+a rendered character or string with the attribute RIGHT.  If the
+input X was a rendered character or a rendered string, the old
+attributes are replaced, but the color pair, if any, is not modified."
+  (a-attribute x A_RIGHT))
+
+(define (right-off x)
+  "If the input X is a simple character or string, it returns a
+complex character or string has the normal rendering. If the input X
+is a rendered character or a rendered string, it returns a rendered
+character or string with the RIGHT attribute disabled,
+but, other attributes are not modified."
+  (a-attribute-off x A_RIGHT))
+
+(define (right-on x)
+  "If the input X is a simple character or string, it returns a
+complex character or string has the normal rendering. If the input X
+is a rendered character or a rendered string, it returns a rendered
+character or string with the RIGHT attribute enabled, but, other
+attributes are not modified."
+  (a-attribute-on x A_RIGHT))
+
+(define (top x) 
+  "These procedure takes X, which can be either a simple character,
+a complex character, a simple string, or a complex string, and returns
+a rendered character or string with the attribute TOP.  If the
+input X was a rendered character or a rendered string, the old
+attributes are replaced, but the color pair, if any, is not modified."
+  (a-attribute x A_TOP))
+
+(define (top-off x)
+  "If the input X is a simple character or string, it returns a
+complex character or string has the normal rendering. If the input X
+is a rendered character or a rendered string, it returns a rendered
+character or string with the TOP attribute disabled, but, other
+attributes are not modified."
+  (a-attribute-off x A_TOP))
+
+(define (top-on x)
+  "If the input X is a simple character or string, it returns a
+complex character or string has the normal rendering. If the input X
+is a rendered character or a rendered string, it returns a rendered
+character or string with the TOP attribute enabled, but, other
+attributes are not modified."
+  (a-attribute-on x A_TOP))
+
+(define (underline x) 
+  "These procedure takes X, which can be either a simple character,
+a complex character, a simple string, or a complex string, and returns
+a rendered character or string with the attribute UNDERLINE.  If the
+input X was a rendered character or a rendered string, the old
+attributes are replaced, but the color pair, if any, is not modified."
+  (a-attribute x A_UNDERLINE))
+
+(define (underline-off x)
+  "If the input X is a simple character or string, it returns a
+complex character or string has the normal rendering. If the input X
+is a rendered character or a rendered string, it returns a rendered
+character or string with the UNDERLINE attribute disabled, but, other
+attributes are not modified."
+  (a-attribute-off x A_UNDERLINE))
+
+(define (underline-on x)
+  "If the input X is a simple character or string, it returns a
+complex character or string has the normal rendering. If the input X
+is a rendered character or a rendered string, it returns a rendered
+character or string with the UNDERLINE attribute enabled, but, other
+attributes are not modified."
+  (a-attribute-on x A_UNDERLINE))
+
+(define (vertical x) 
+  "These procedure takes X, which can be either a simple character,
+a complex character, a simple string, or a complex string, and returns
+a rendered character or string with the attribute VERTICAL.  If the
+input X was a rendered character or a rendered string, the old
+attributes are replaced, but the color pair, if any, is not modified."
+  (a-attribute x A_VERTICAL))
+
+(define (vertical-off x)
+  "If the input X is a simple character or string, it returns a
+complex character or string has the normal rendering. If the input X
+is a rendered character or a rendered string, it returns a rendered
+character or string with the VERTICAL attribute disabled, but, other
+attributes are not modified."
+  (a-attribute-off x A_VERTICAL))
+
+(define (vertical-on x)
+  "If the input X is a simple character or string, it returns a
+complex character or string has the normal rendering. If the input X
+is a rendered character or a rendered string, it returns a rendered
+character or string with the VERTICAL attribute enabled, but, other
+attributes are not modified."
+  (a-attribute-on x A_VERTICAL))
 
 (define (color n x)
+  "These procedure takes X, which can be either a simple character,
+a complex character, a simple string, or a complex string, and returns
+a rendered character or string with the color pair N.  If the input X
+was a rendered character or a rendered string, the old attributes are
+not modified, but the color pair, if any, is modified."
   (cond
    ((char? x)
     (make-xchar A_NORMAL
