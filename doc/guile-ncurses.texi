@@ -3426,6 +3426,7 @@ characters or strings to rendered complex characters and strings.
 @deffnx Procedure protect x
 @deffnx Procedure inverse x
 @deffnx Procedure right x
+@deffnx Procedure standout x
 @deffnx Procedure top x
 @deffnx Procedure underline x
 @deffnx Procedure vertical x
@@ -3458,6 +3459,7 @@ rest should probably not be used.
 @deffnx Procedure protect-on x
 @deffnx Procedure inverse-on x
 @deffnx Procedure right-on x
+@deffnx Procedure standout-on x
 @deffnx Procedure top-on x
 @deffnx Procecure underline-on x
 @deffnx Procedure vertical-on x
@@ -3487,6 +3489,7 @@ and bold, bold and underline, or inverse and bold.
 @deffnx Procedure protect-off x
 @deffnx Procedure inverse-off x
 @deffnx Procedure right-off x
+@deffnx Procedure standout-off x
 @deffnx Procedure top-off x
 @deffnx Procedure underline-off
 @deffnx Procedure vertical-off x

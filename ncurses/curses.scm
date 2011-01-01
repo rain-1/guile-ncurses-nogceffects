@@ -434,6 +434,9 @@
             right
             right-off
             right-on
+	    standout
+	    standout-off
+	    standout-on
             top
             top-off
             top-on
@@ -925,6 +928,30 @@ is a rendered character or a rendered string, it returns a rendered
 character or string with the RIGHT attribute enabled, but, other
 attributes are not modified."
   (a-attribute-on x A_RIGHT))
+
+(define (standout x) 
+  "These procedure takes X, which can be either a simple character,
+a complex character, a simple string, or a complex string, and returns
+a rendered character or string with the attribute STANDOUT.  If the
+input X was a rendered character or a rendered string, the old
+attributes are replaced, but the color pair, if any, is not modified."
+  (a-attribute x A_STANDOUT))
+
+(define (standout-off x)
+  "If the input X is a simple character or string, it returns a
+complex character or string has the normal rendering. If the input X
+is a rendered character or a rendered string, it returns a rendered
+character or string with the STANDOUT attribute disabled,
+but, other attributes are not modified."
+  (a-attribute-off x A_STANDOUT))
+
+(define (standout-on x)
+  "If the input X is a simple character or string, it returns a
+complex character or string has the normal rendering. If the input X
+is a rendered character or a rendered string, it returns a rendered
+character or string with the STANDOUT attribute enabled, but, other
+attributes are not modified."
+  (a-attribute-on x A_STANDOUT))
 
 (define (top x) 
   "These procedure takes X, which can be either a simple character,
