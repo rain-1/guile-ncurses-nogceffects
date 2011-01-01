@@ -1128,6 +1128,32 @@ failure."
        (%waddchnstr win (map xchar->list str) n)))
 
 (define* (addstr win str #:key y x (n -1))
+  "Adds the string STR to the window WIN at and after the current
+cursor position.  If X and Y are set, the cursor will be moved to that
+position first.  If N is set, and maximum of N characters will be
+added.  Returns #t on success or #f on failure."
+  (if (not (window? win))
+      (raise (condition (&curses-wrong-type-arg-error
+			 (arg win)
+			 (expected-type 'window)))))
+  (if (not (string? str))
+      (raise (condition (&curses-wrong-type-arg-error
+			 (arg str)
+			 (expected-type 'string)))))
+  (if (and y x)
+      (begin
+	(if (not (and (integer? y) (exact? y)))
+	    (raise (condition (&curses-wrong-type-arg-error
+			       (arg y)
+			       (expected-type 'integer)))))
+	(if (not (and (integer? x) (exact? x)))
+	    (raise (condition (&curses-wrong-type-arg-error
+			       (arg x)
+			       (expected-type 'integer)))))))
+  (if (not (and (integer? n) (exact? n)))
+      (raise (condition (&curses-wrong-type-arg-error
+			 (arg n)
+			 (expected-type 'integer)))))
   (and (if (and y x)
            (%wmove win y x)
            #t)

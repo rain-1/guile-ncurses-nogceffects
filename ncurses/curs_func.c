@@ -2100,10 +2100,6 @@ gucu_waddnstr (SCM win, SCM str, SCM n)
   WINDOW *c_win;
   int c_n, ret;
 
-  SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "%waddnstr");
-  SCM_ASSERT (scm_is_string (str), str, SCM_ARG2, "%waddnstr");
-  SCM_ASSERT (scm_is_integer (n), n, SCM_ARG3, "%waddnstr");
-
   c_win = _scm_to_window (win);
   c_n = scm_to_int (n);
 #ifdef HAVE_NCURSESW
