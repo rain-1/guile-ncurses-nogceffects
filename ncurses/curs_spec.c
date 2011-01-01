@@ -312,8 +312,6 @@ gucu_wattr_get (SCM win)
   SCM s_list;
   int ret;
 
-  SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "%wattr-get");
-
   c_win = _scm_to_window (win);
 
   /* wattr_get appears to be a macro that always returns OK */

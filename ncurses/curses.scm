@@ -391,8 +391,12 @@
 	    ;; error codes
 	    &curses-error
 	    &curses-wrong-type-arg-error
+	    &curses-out-of-range-error
+	    &curses-bad-state-error
 	    curses-error?
 	    curses-wrong-type-arg-error?
+	    curses-out-of-range-error?
+	    curses-bad-state-error?
 
 	    ;; xchar type library
 	    xchar-attr
@@ -457,6 +461,14 @@
   curses-wrong-type-arg-error?
   (arg           curses-wrong-type-arg-error:arg)
   (expected-type curses-wrong-type-arg-error:expected-type))
+
+(define-condition-type &curses-out-of-range-error &curses-error
+  curses-out-of-range-error?
+  (arg           curses-wrong-type-arg-error:arg))
+
+;; Usually this indicates and attempt to use an already freed object
+(define-condition-type &curses-bad-state-error &curses-error
+  curses-bad-state-error?)
 
 ;;; The xchar type library
 
@@ -1187,6 +1199,13 @@ added.  Returns #t on success or #f on failure."
        (%waddnstr win str n)))
 
 (define (attr-get win)
+  "Returns the rendtion of the current window as a two-element list.
+The first element is the integer representation of the attributes, and
+the second element is the color pair number."
+  (if (not (window? win))
+      (raise (condition (&curses-wrong-type-arg-error
+			 (arg win)
+			 (expected-type 'window)))))
   (let* ((ac (%wattr-get win))
          (attr (car ac))
          (color (cadr ac)))
@@ -1209,6 +1228,8 @@ added.  Returns #t on success or #f on failure."
      color)))
 
 (define (attr->list attr)
+  "Unpacks the integer representation of an attribute into a list of
+attributes."
   (append
    (if (logtest attr A_ALTCHARSET) '(altcharset) '())
    (if (logtest attr A_BLINK) '(blink) '())
@@ -1226,7 +1247,39 @@ added.  Returns #t on success or #f on failure."
    (if (logtest attr A_TOP)  '(top) '())
    (if (logtest attr A_VERTICAL) '(vertical) '())))
 
+(define (attr-off! win attrs)
+  "Turns off the attributes ATTRS of the given window without turning
+any other attributes on or off."
+  (if (not (window? win))
+      (raise (condition (&curses-wrong-type-arg-error
+			 (arg win)
+			 (expected-type 'window)))))
+  (if (not (and (integer? attrs) (exact? attrs)))
+      (raise (condition (&curses-wrong-type-arg-error
+			 (arg attrs)
+			 (expected-type 'integer)))))
+  (let ((ret (%attr-off! win attrs)))
+    (if (not ret)
+	(raise (condition (&ncurses-bad-state-error))))))
+
+(define (attr-on! win attrs)
+  "Turns on the attributes ATTRS of the given window without turning
+any other attributes on or off."
+  (if (not (window? win))
+      (raise (condition (&curses-wrong-type-arg-error
+			 (arg win)
+			 (expected-type 'window)))))
+  (if (not (and (integer? attrs) (exact? attrs)))
+      (raise (condition (&curses-wrong-type-arg-error
+			 (arg attrs)
+			 (expected-type 'integer)))))
+  (let ((ret (%attr-on! win attrs)))
+    (if (not ret)
+	(raise (condition (&ncurses-bad-state-error))))))
+
 (define* (attr-set! win attr #:optional color)
+  "Sets the given window to have the attributes ATTRS and optionally
+the color pair given by COLOR."
   (if color
       (begin
         (%wattr-set! win attr color))
@@ -1273,10 +1326,52 @@ added.  Returns #t on success or #f on failure."
              (xchar->list (normal-on (acs-llcorner))) (xchar->list (normal-on (acs-lrcorner))))))
 
 (define* (chgat win n attr color #:key y x)
-  (and (if (and y x)
-           (%wmove win y x)
-           #t)
-       (%wchgat win n attr color)))
+  "Changes that attributes and color pair of of a given number of
+characters starting at the current cursor location in the window WIN.
+If X and Y are defined, first move to that position."
+  (if (not (window? win))
+      (raise (condition (&curses-wrong-type-arg-error
+			 (arg win)
+			 (expected-type 'window)))))
+  (if (not (and (integer? n) (exact? n)))
+      (raise (condition (&curses-wrong-type-arg-error
+			 (arg n)
+			 (expected-type 'integer)))))
+  (if (not (and (integer? attr) (exact? attr)))
+      (raise (condition (&curses-wrong-type-arg-error
+			 (arg attr)
+			 (expected-type 'integer)))))
+  (if (not (and (integer? color) (exact? color)))
+      (raise (condition (&curses-wrong-type-arg-error
+			 (arg n)
+			 (expected-type 'integer)))))
+  (if (and y x)
+      (begin
+	(if (not (and (integer? y) (exact? y)))
+	    (raise (condition (&curses-wrong-type-arg-error
+			       (arg y)
+			       (expected-type 'integer)))))
+	(if (not (and (integer? x) (exact? x)))
+	    (raise (condition (&curses-wrong-type-arg-error
+			       (arg x)
+			       (expected-type 'integer)))))))
+  (let ((ret (and (if (and y x)
+		      (%wmove win y x)
+		      #t)
+		  (%wchgat win n attr color))))
+    (if (not ret)
+	(raise (condition (&ncurses-error))))))
+  
+(define (color-set! win pair)
+  "Sets the window's color pair to the color pair number PAIR."
+  (if (not (window? win))
+      (raise (condition (&curses-wrong-type-arg-error
+			 (arg win)
+			 (expected-type 'window)))))
+  (let ((ret (%color-set! win pair)))
+    (if (not ret)
+	(raise (condition (&curses-out-of-range-error
+			   (arg win)))))))
 
 (define* (delch win #:key y x)
   (and
@@ -1407,9 +1502,11 @@ to (X,Y) first.  Returns #t on success."
   (scrl win 1))
 
 (define (standend! win)
+  "Turns off all attributes of the given window."
   (%wattr-set! win A_NORMAL (second (%wattr-get win))))
 
 (define (standout! win)
+  "Sets the attributes for in the given window to STANDOUT."
   (%wattr-set! win A_STANDOUT (second (%wattr-get win))))
 
 (define (touchwin win)

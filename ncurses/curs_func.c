@@ -82,18 +82,12 @@ gucu_attr_off_x (SCM win, SCM attrs)
   attr_t c_attrs;
   int ret;
 
-  SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "attr-off!");
-  SCM_ASSERT (_scm_is_attr (attrs), attrs, SCM_ARG2, "attr-off!");
-
   c_win = _scm_to_window (win);
   c_attrs = _scm_to_attr (attrs);
 
   ret = wattr_off (c_win, c_attrs, (void *) 0);
   /* wattr_off only fails if win is null  */
-  if (ret == ERR)
-    curs_bad_state_error ("attr-off!");
-
-  return SCM_UNSPECIFIED;
+  RETURNTF (ret);
 }
 
 /* Turn on window attributes */
@@ -104,18 +98,12 @@ gucu_attr_on_x (SCM win, SCM attrs)
   attr_t c_attrs;
   int ret;
 
-  SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "attr-on!");
-  SCM_ASSERT (_scm_is_attr (attrs), attrs, SCM_ARG2, "attr-on!");
-
   c_win = _scm_to_window (win);
   c_attrs = _scm_to_attr (attrs);
 
   ret = wattr_on (c_win, c_attrs, (void *) 0);
   /* wattr_on apparently only fails if c_win is null  */
-  if (ret == ERR)
-    curs_bad_state_error ("attr-on!");
-
-  return SCM_UNSPECIFIED;
+  RETURNTF (ret);
 }
 
 /* Return the output speed of the terminal as an integer */
@@ -386,18 +374,12 @@ gucu_color_set (SCM win, SCM pair)
   short c_pair;
   int ret;
 
-  SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "color-set!");
-  SCM_ASSERT (scm_is_integer (pair), pair, SCM_ARG2, "color-set!");
-
   c_win = _scm_to_window (win);
   c_pair = scm_to_short (pair);
 
   ret = wcolor_set (c_win, c_pair, 0);
   /* wcolor_set returns an error if pair is not 0 to COLOR_PAIRS -1 */
-  if (ret == ERR)
-    scm_out_of_range ("color-set!", pair);
-
-  return SCM_UNSPECIFIED;
+  RETURNTF (ret);
 }
 
 /* Copy part of srcwin onto part of destwin */
@@ -2130,21 +2112,14 @@ gucu_wchgat (SCM win, SCM n, SCM attr, SCM color)
   short c_color;
   int ret;
 
-  SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "%wchgat");
-  SCM_ASSERT (scm_is_integer (n), n, SCM_ARG2, "%wchgat");
-  SCM_ASSERT (_scm_is_attr (attr), attr, SCM_ARG3, "%wchgat");
-  SCM_ASSERT (scm_is_integer (color), color, SCM_ARG4, "%wchgat");
-
   c_win = _scm_to_window (win);
   c_n = scm_to_int (n);
   c_attr = _scm_to_attr (attr);
   c_color = scm_to_short (color);
 
   ret = wchgat (c_win, c_n, c_attr, c_color, 0);
-  if (ret == ERR)
-    curs_param_or_bad_state_error ("%wchgat");
-
-  return SCM_UNSPECIFIED;
+  /* param or bad state error */
+  RETURNTF (ret);
 }
 
 
@@ -2565,8 +2540,8 @@ gucu_init_function ()
 {
   scm_c_define_gsubr ("assume-default-colors", 2, 0, 0,
 		      gucu_assume_default_colors);
-  scm_c_define_gsubr ("attr-off!", 2, 0, 0, gucu_attr_off_x);
-  scm_c_define_gsubr ("attr-on!", 2, 0, 0, gucu_attr_on_x);
+  scm_c_define_gsubr ("%attr-off!", 2, 0, 0, gucu_attr_off_x);
+  scm_c_define_gsubr ("%attr-on!", 2, 0, 0, gucu_attr_on_x);
   scm_c_define_gsubr ("baudrate", 0, 0, 0, gucu_baudrate);
   scm_c_define_gsubr ("beep", 0, 0, 0, gucu_beep);
   scm_c_define_gsubr ("%bkgd", 2, 0, 0, gucu_bkgd);
@@ -2579,7 +2554,7 @@ gucu_init_function ()
   scm_c_define_gsubr ("clrtobot", 1, 0, 0, gucu_clrtobot);
   scm_c_define_gsubr ("clrtoeol", 1, 0, 0, gucu_clrtoeol);
   scm_c_define_gsubr ("color-pair", 1, 0, 0, gucu_COLOR_PAIR);
-  scm_c_define_gsubr ("color-set!", 2, 0, 0, gucu_color_set);
+  scm_c_define_gsubr ("%color-set!", 2, 0, 0, gucu_color_set);
   scm_c_define_gsubr ("copywin", 9, 0, 0, gucu_copywin);
   scm_c_define_gsubr ("curs-set", 1, 0, 0, gucu_curs_set);
   scm_c_define_gsubr ("curses-version", 0, 0, 0, gucu_curses_version);
