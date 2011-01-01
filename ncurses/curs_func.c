@@ -2543,7 +2543,7 @@ gucu_init_function ()
   scm_c_define_gsubr ("%attr-off!", 2, 0, 0, gucu_attr_off_x);
   scm_c_define_gsubr ("%attr-on!", 2, 0, 0, gucu_attr_on_x);
   scm_c_define_gsubr ("baudrate", 0, 0, 0, gucu_baudrate);
-  scm_c_define_gsubr ("beep", 0, 0, 0, gucu_beep);
+  scm_c_define_gsubr ("%beep", 0, 0, 0, gucu_beep);
   scm_c_define_gsubr ("%bkgd", 2, 0, 0, gucu_bkgd);
   scm_c_define_gsubr ("%bkgdset!", 2, 0, 0, gucu_bkgdset_x);
   scm_c_define_gsubr ("%border", 9, 0, 0, gucu_border);
@@ -2571,7 +2571,7 @@ gucu_init_function ()
   scm_c_define_gsubr ("erase", 1, 0, 0, gucu_erase);
   scm_c_define_gsubr ("erasechar", 0, 0, 0, gucu_erasechar);
   scm_c_define_gsubr ("%filter", 0, 0, 0, gucu_filter);
-  scm_c_define_gsubr ("flash", 0, 0, 0, gucu_flash);
+  scm_c_define_gsubr ("%flash", 0, 0, 0, gucu_flash);
   scm_c_define_gsubr ("flushinp", 0, 0, 0, gucu_flushinp);
   scm_c_define_gsubr ("getbkgd", 1, 0, 0, gucu_getbkgd);
   scm_c_define_gsubr ("halfdelay!", 1, 0, 0, gucu_halfdelay);

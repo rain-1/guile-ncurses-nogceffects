@@ -1285,6 +1285,11 @@ the color pair given by COLOR."
         (%wattr-set! win attr color))
       (%wattr-set! win attr (pair-number attr))))
 
+(define (beep)
+  "Sounds an audible alarm on the terminal.  Returns #t on success or
+#f on failure."
+  (%beep))
+
 (define (bkgd win ch)
   (%bkgd win (xchar->list ch)))
 
@@ -1414,6 +1419,10 @@ to (X,Y) first.  Returns #t on success."
        (%wmove win y x)
        #t)
    (%wechochar win (xchar->list ch))))
+
+(define (flash)
+  "Flashes the screen.  Returns #t on success or #f on failure."
+  (%flash))
 
 (define* (getch win #:key y x)
   (and (if (and y x)
