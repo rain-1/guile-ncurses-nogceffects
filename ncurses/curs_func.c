@@ -2073,10 +2073,6 @@ gucu_waddchnstr (SCM win, SCM chstr, SCM n)
   WINDOW *c_win;
   int c_n, ret;
 
-  SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "%waddchnstr");
-  SCM_ASSERT (_scm_is_xstring (chstr), chstr, SCM_ARG2, "%waddchnstr");
-  SCM_ASSERT (scm_is_integer (n), n, SCM_ARG3, "%waddchnstr");
-
   c_win = _scm_to_window (win);
   c_n = scm_to_int (n);
 

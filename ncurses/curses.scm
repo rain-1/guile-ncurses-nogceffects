@@ -1095,18 +1095,37 @@ success."
        (%waddch win (xchar->list ch))))
   
 (define* (addchstr win str #:key y x (n -1))
-  (if (not (list? str))
-      (scm-error 'wrong-type-arg "addchstr"
-		 "Wrong type argument in position 2 (expecting list of complex-chars): ~s"
-		   (list str) str))
-    (if (not (every xchar? str))
-	(scm-error 'wrong-type-arg "addchstr"
-		   "Wrong type argument in position 2 (expecting list of complex-chars): ~s"
-		   (list str) str))
-    (and (if (and y x)
-	     (%wmove win y x)
-	     #t)
-	 (%waddchnstr win (map xchar->list str) n)))
+  "Adds the list of complex characters STR to the window WIN at and
+after the current cursor position.  If X and Y are set, the cursor
+will be moved to that position first.  If N is set, and maximum of N
+complex characters will be added.  Returns #t on success or #f on
+failure."
+  (if (not (window? win))
+      (raise (condition (&curses-wrong-type-arg-error
+			 (arg win)
+			 (expected-type 'window)))))
+  (if (or (not (list? str)) (not (every xchar? str)))
+      (raise (condition (&curses-wrong-type-arg-error
+			 (arg str)
+			 (expected-type 'xstring)))))
+  (if (and y x)
+      (begin
+	(if (not (and (integer? y) (exact? y)))
+	    (raise (condition (&curses-wrong-type-arg-error
+			       (arg y)
+			       (expected-type 'integer)))))
+	(if (not (and (integer? x) (exact? x)))
+	    (raise (condition (&curses-wrong-type-arg-error
+			       (arg x)
+			       (expected-type 'integer)))))))
+  (if (not (and (integer? n) (exact? n)))
+      (raise (condition (&curses-wrong-type-arg-error
+			 (arg n)
+			 (expected-type 'integer)))))
+  (and (if (and y x)
+	   (%wmove win y x)
+	   #t)
+       (%waddchnstr win (map xchar->list str) n)))
 
 (define* (addstr win str #:key y x (n -1))
   (and (if (and y x)
