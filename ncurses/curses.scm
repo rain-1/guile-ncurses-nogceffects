@@ -1408,6 +1408,35 @@ If X and Y are defined, first move to that position."
 		  (%wchgat win n attr color))))
     (if (not ret)
 	(raise (condition (&ncurses-error))))))
+
+(define (clear win)
+  "Copy blanks to every position in the window, and set it to
+be cleared completely and repainted at the next window refresh."
+  (if (not (window? win))
+      (raise (condition (&curses-wrong-type-arg-error
+			 (arg win)
+			 (expected-type 'window)))))
+  (let ((ret (%clear win)))
+    (or ret
+	(raise (condition (&curses-bad-state-error))))))
+
+(define (clrtobot win)
+  "Erases from the cursor location to the end of screen."
+  (if (not (window? win))
+      (raise (condition (&curses-wrong-type-arg-error
+			 (arg win)
+			 (expected-type 'window)))))
+  (let ((ret (%clrtobot win)))
+    (or ret
+	(raise (condition (&curses-bad-state-error))))))
+
+(define (clrtoeol win)
+  "Erases from the cursor location to the end of the current line."
+  (if (not (window? win))
+      (raise (condition (&curses-wrong-type-arg-error
+			 (arg win)
+			 (expected-type 'window)))))
+  (%clrtoeol win))
   
 (define (color-set! win pair)
   "Sets the window's color pair to the color pair number PAIR."
@@ -1461,6 +1490,14 @@ to (X,Y) first.  Returns #t on success."
        (%wmove win y x)
        #t)
    (%wechochar win (xchar->list ch))))
+
+(define (erase win)
+  "Copy blanks to every position in the window."
+  (if (not (window? win))
+      (raise (condition (&curses-wrong-type-arg-error
+			 (arg win)
+			 (expected-type 'window)))))
+  (%erase win))
 
 (define (flash)
   "Flashes the screen.  Returns #t on success or #f on failure."

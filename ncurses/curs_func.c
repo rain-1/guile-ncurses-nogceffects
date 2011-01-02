@@ -263,18 +263,11 @@ gucu_clear (SCM win)
   WINDOW *c_win;
   int ret;
 
-  SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "clear");
-
   c_win = _scm_to_window (win);
 
   ret = wclear (c_win);
-  if (ret == ERR)
-    {
-      /* window is NULL */
-      curs_bad_state_error ("clear");
-    }
-
-  return SCM_UNSPECIFIED;
+  /* Returns ERR if window is NULL */
+  RETURNTF (ret);
 }
 
 /* Enable or disable if the next call to wrefresh will completely
@@ -303,18 +296,11 @@ gucu_clrtobot (SCM win)
   WINDOW *c_win;
   int ret;
 
-  SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "clrtobot");
-
   c_win = _scm_to_window (win);
 
   ret = wclrtobot (c_win);
-  if (ret == ERR)
-    {
-      /* wclrtobot only returns ERR when the window is null */
-      curs_bad_state_error ("clrtobot");
-    }
-
-  return SCM_UNSPECIFIED;
+  /* wclrtobot only returns ERR when the window is null */
+  RETURNTF (ret);
 }
 
 /* Clear to end of line */
@@ -323,8 +309,6 @@ gucu_clrtoeol (SCM win)
 {
   WINDOW *c_win;
   int ret;
-
-  SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "clrtoeol");
 
   c_win = _scm_to_window (win);
 
@@ -619,8 +603,6 @@ gucu_erase (SCM win)
 {
   WINDOW *c_win;
   int ret;
-
-  SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "erase");
 
   c_win = _scm_to_window (win);
 
@@ -2523,10 +2505,10 @@ gucu_init_function ()
   scm_c_define_gsubr ("%border", 9, 0, 0, gucu_border);
   scm_c_define_gsubr ("can-change-color?", 0, 0, 0, gucu_can_change_color_p);
   scm_c_define_gsubr ("cbreak!", 0, 0, 0, gucu_cbreak);
-  scm_c_define_gsubr ("clear", 1, 0, 0, gucu_clear);
+  scm_c_define_gsubr ("%clear", 1, 0, 0, gucu_clear);
   scm_c_define_gsubr ("clearok!", 2, 0, 0, gucu_clearok);
-  scm_c_define_gsubr ("clrtobot", 1, 0, 0, gucu_clrtobot);
-  scm_c_define_gsubr ("clrtoeol", 1, 0, 0, gucu_clrtoeol);
+  scm_c_define_gsubr ("%clrtobot", 1, 0, 0, gucu_clrtobot);
+  scm_c_define_gsubr ("%clrtoeol", 1, 0, 0, gucu_clrtoeol);
   scm_c_define_gsubr ("color-pair", 1, 0, 0, gucu_COLOR_PAIR);
   scm_c_define_gsubr ("%color-set!", 2, 0, 0, gucu_color_set);
   scm_c_define_gsubr ("copywin", 9, 0, 0, gucu_copywin);
@@ -2542,7 +2524,7 @@ gucu_init_function ()
   scm_c_define_gsubr ("dupwin", 1, 0, 0, gucu_dupwin);
   scm_c_define_gsubr ("echo!", 0, 0, 0, gucu_echo);
   scm_c_define_gsubr ("endwin", 0, 0, 0, gucu_endwin);
-  scm_c_define_gsubr ("erase", 1, 0, 0, gucu_erase);
+  scm_c_define_gsubr ("%erase", 1, 0, 0, gucu_erase);
   scm_c_define_gsubr ("erasechar", 0, 0, 0, gucu_erasechar);
   scm_c_define_gsubr ("%filter", 0, 0, 0, gucu_filter);
   scm_c_define_gsubr ("%flash", 0, 0, 0, gucu_flash);
