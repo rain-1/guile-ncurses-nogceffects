@@ -95,21 +95,15 @@ gucu_color_content (SCM s_color)
 {
   int ret;
   short c_red, c_green, c_blue;
-  SCM s_list;
-
-  SCM_ASSERT (scm_is_integer (s_color), s_color, SCM_ARG1, "color-content");
 
   ret = color_content (scm_to_short (s_color), &c_red, &c_green, &c_blue);
   if (ret == OK)
     {
-      s_list = scm_list_3 (scm_from_short (c_red),
-			   scm_from_short (c_green), scm_from_short (c_blue));
+      return scm_list_3 (scm_from_short (c_red),
+			 scm_from_short (c_green), scm_from_short (c_blue));
     }
   else
-    scm_misc_error ("color-content", "out of range error or not initialized",
-		    SCM_BOOL_F);
-
-  return s_list;
+    return SCM_BOOL_F;
 }
 
 /* Free the C memory of a window */
@@ -186,20 +180,14 @@ gucu_pair_content (SCM s_pair)
 {
   int ret;
   short c_fore, c_back;
-  SCM s_list;
-
-  SCM_ASSERT (scm_is_integer (s_pair), s_pair, SCM_ARG1, "pair-content");
 
   ret = pair_content (scm_to_short (s_pair), &c_fore, &c_back);
   if (ret == OK)
     {
-      s_list = scm_list_2 (scm_from_short (c_fore), scm_from_short (c_back));
+      return scm_list_2 (scm_from_short (c_fore), scm_from_short (c_back));
     }
   else
-    scm_misc_error ("pair-content", "out of range or not initialized",
-		    SCM_BOOL_F);
-
-  return s_list;
+    return SCM_BOOL_F;
 }
 
 #ifdef HAVE_PTSNAME
@@ -938,7 +926,7 @@ void
 gucu_init_special ()
 {
   scm_c_define_gsubr ("%wattr-set!", 3, 0, 0, gucu_wattr_set_x);
-  scm_c_define_gsubr ("color-content", 1, 0, 0, gucu_color_content);
+  scm_c_define_gsubr ("%color-content", 1, 0, 0, gucu_color_content);
   scm_c_define_gsubr ("delwin", 1, 0, 0, gucu_delwin);
   scm_c_define_gsubr ("getmouse", 0, 0, 0, gucu_getmouse);
 #ifdef HAVE_GRANTPT
@@ -949,7 +937,7 @@ gucu_init_special ()
   scm_c_define_gsubr ("ptsname", 1, 0, 0, gucu_ptsname);
 #endif
   scm_c_define_gsubr ("ptsmakeraw", 1, 0, 0, gucu_ptsmakeraw);
-  scm_c_define_gsubr ("pair-content", 1, 0, 0, gucu_pair_content);
+  scm_c_define_gsubr ("%pair-content", 1, 0, 0, gucu_pair_content);
   scm_c_define_gsubr ("ungetmouse", 1, 0, 0, gucu_ungetmouse);
 #ifdef HAVE_UNLOCKPT
   scm_c_define_gsubr ("unlockpt", 1, 0, 0, gucu_unlockpt);

@@ -816,11 +816,6 @@ gucu_init_color (SCM color, SCM r, SCM g, SCM b)
   short c_color, c_r, c_g, c_b;
   int ret;
 
-  SCM_ASSERT (scm_is_integer (color), color, SCM_ARG1, "init-color!");
-  SCM_ASSERT (scm_is_integer (r), r, SCM_ARG2, "init-color!");
-  SCM_ASSERT (scm_is_integer (g), g, SCM_ARG3, "init-color!");
-  SCM_ASSERT (scm_is_integer (b), b, SCM_ARG4, "init-color!");
-
   c_color = scm_to_short (color);
   c_r = scm_to_short (r);
   c_g = scm_to_short (g);
@@ -845,10 +840,6 @@ gucu_init_pair (SCM pair, SCM fore, SCM back)
 {
   int ret;
   short c_pair, c_fore, c_back;
-
-  SCM_ASSERT (scm_is_integer (pair), pair, SCM_ARG1, "init-pair!");
-  SCM_ASSERT (scm_is_integer (fore), fore, SCM_ARG2, "init-pair!");
-  SCM_ASSERT (scm_is_integer (back), back, SCM_ARG3, "init-pair!");
 
   c_pair = scm_to_short (pair);
   c_fore = scm_to_short (fore);
@@ -1754,11 +1745,7 @@ SCM
 gucu_start_color ()
 {
   int ret = start_color ();
-
-  if (ret == ERR)
-    curs_bad_state_error ("start-color!");
-
-  return SCM_UNSPECIFIED;
+  RETURNTF (ret);
 }
 
 SCM
@@ -2503,7 +2490,7 @@ gucu_init_function ()
   scm_c_define_gsubr ("%bkgd", 2, 0, 0, gucu_bkgd);
   scm_c_define_gsubr ("%bkgdset!", 2, 0, 0, gucu_bkgdset_x);
   scm_c_define_gsubr ("%border", 9, 0, 0, gucu_border);
-  scm_c_define_gsubr ("can-change-color?", 0, 0, 0, gucu_can_change_color_p);
+  scm_c_define_gsubr ("%can-change-color?", 0, 0, 0, gucu_can_change_color_p);
   scm_c_define_gsubr ("cbreak!", 0, 0, 0, gucu_cbreak);
   scm_c_define_gsubr ("%clear", 1, 0, 0, gucu_clear);
   scm_c_define_gsubr ("clearok!", 2, 0, 0, gucu_clearok);
@@ -2531,7 +2518,7 @@ gucu_init_function ()
   scm_c_define_gsubr ("flushinp", 0, 0, 0, gucu_flushinp);
   scm_c_define_gsubr ("%getbkgd", 1, 0, 0, gucu_getbkgd);
   scm_c_define_gsubr ("halfdelay!", 1, 0, 0, gucu_halfdelay);
-  scm_c_define_gsubr ("has-colors?", 0, 0, 0, gucu_has_colors_p);
+  scm_c_define_gsubr ("%has-colors?", 0, 0, 0, gucu_has_colors_p);
   scm_c_define_gsubr ("has-ic?", 0, 0, 0, gucu_has_ic_p);
   scm_c_define_gsubr ("has-il?", 0, 0, 0, gucu_has_il_p);
   scm_c_define_gsubr ("has-key?", 1, 0, 0, gucu_has_key_p);
@@ -2540,7 +2527,7 @@ gucu_init_function ()
   scm_c_define_gsubr ("immedok!", 2, 0, 0, gucu_immedok_x);
   scm_c_define_gsubr ("initscr", 0, 0, 0, gucu_initscr);
   scm_c_define_gsubr ("init-color!", 4, 0, 0, gucu_init_color);
-  scm_c_define_gsubr ("init-pair!", 3, 0, 0, gucu_init_pair);
+  scm_c_define_gsubr ("%init-pair!", 3, 0, 0, gucu_init_pair);
   scm_c_define_gsubr ("intrflush!", 1, 0, 0, gucu_intrflush);
   scm_c_define_gsubr ("isendwin?", 0, 0, 0, gucu_isendwin_p);
   scm_c_define_gsubr ("is-linetouched?", 2, 0, 0, gucu_is_linetouched_p);
@@ -2594,7 +2581,7 @@ gucu_init_function ()
   scm_c_define_gsubr ("set-term", 1, 0, 0, gucu_set_term);
   scm_c_define_gsubr ("setscrreg!", 3, 0, 0, gucu_setscrreg_x);
   scm_c_define_gsubr ("setsyx", 2, 0, 0, gucu_setsyx);
-  scm_c_define_gsubr ("start-color!", 0, 0, 0, gucu_start_color);
+  scm_c_define_gsubr ("%start-color!", 0, 0, 0, gucu_start_color);
   scm_c_define_gsubr ("subpad", 5, 0, 0, gucu_subpad);
   scm_c_define_gsubr ("subwin", 5, 0, 0, gucu_subwin);
   scm_c_define_gsubr ("syncok!", 2, 0, 0, gucu_syncok_x);

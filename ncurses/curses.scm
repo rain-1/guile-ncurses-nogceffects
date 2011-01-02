@@ -1372,6 +1372,11 @@ character, the default lines will be used."
              (xchar->list (normal-on (acs-ulcorner))) (xchar->list (normal-on (acs-urcorner)))
              (xchar->list (normal-on (acs-llcorner))) (xchar->list (normal-on (acs-lrcorner))))))
 
+(define (can-change-color?)
+  "Returns #t if the terminal can change the RGB of a color number, or #f if
+the terminal has preassigned, unmodifiable colors."
+  (%can-change-color?))
+
 (define* (chgat win n attr color #:key y x)
   "Changes that attributes and color pair of of a given number of
 characters starting at the current cursor location in the window WIN.
@@ -1437,7 +1442,17 @@ be cleared completely and repainted at the next window refresh."
 			 (arg win)
 			 (expected-type 'window)))))
   (%clrtoeol win))
-  
+
+(define (color-content c)
+  "Given a color number, this procedure returns a three-element list
+containing the red, green, and blue values of the color on a 0 to 1000 scale.
+It can return #f if the color is out of range or colors aren't initialized."
+  (if (or (not (exact? c)) (not (integer? c)))
+      (raise (condition (&curses-wrong-type-arg-error
+			 (arg c)
+			 (expected-type 'integer)))))
+  (%color-content c))  
+
 (define (color-set! win pair)
   "Sets the window's color pair to the color pair number PAIR."
   (if (not (window? win))
@@ -1529,6 +1544,10 @@ char."
            #t)
        (%wgetnstr win n)))
 
+(define (has-colors?)
+  "Returns #t if the current terminal has color capability."
+  (%has-colors?))
+
 (define* (hline win ch n #:key y x)
   "Draws a horizontal line of length N using the complex character CH.
 If X and Y are given, the cursor is first moved to that location."
@@ -1573,6 +1592,41 @@ If X and Y are given, the cursor is first moved to that location."
            #t)
        (map list->xchar (%winchnstr win n))))
 
+(define (init-color! color r g b)
+  "Initializes the color number COLOR to have the red-green-blue value
+R G B.  R G and B are integers between 0 and 1000.  Returns #t on
+success or #f on failure."
+  (map (lambda (x)
+	 (if (not (and (integer? x) (exact? x)))
+	     (raise (condition (&curses-wrong-type-arg-error
+				(arg x)
+				(expected-type 'integer))))))
+       (list color r g b))
+  (map (lambda (x)
+	 (if (or (< color 0) (> color 1000))
+	     (raise (condition (&curses-out-of-range-error
+				(arg x))))))
+       (list r g b))
+  (%init-color color r g b))
+
+(define (init-pair! pair fore back)
+  "Initializes the color pair PAIR to have color number FORE as its
+foreground color and color number BACK as its background color.  Returns
+#t on success or #f on failure."
+  (if (not (and (integer? pair) (exact? pair)))
+      (raise (condition (&curses-wrong-type-arg-error
+			 (arg pair)
+			 (expected-type 'integer)))))
+  (if (not (and (integer? fore) (exact? fore)))
+      (raise (condition (&curses-wrong-type-arg-error
+			 (arg fore)
+			 (expected-type 'integer)))))
+  (if (not (and (integer? back) (exact? back)))
+      (raise (condition (&curses-wrong-type-arg-error
+			 (arg back)
+			 (expected-type 'integer)))))
+  (%init-pair! pair fore back))
+
 (define* (insch win ch #:key y x)
   (and (if (and y x)
            (%wmove win y x)
@@ -1613,6 +1667,17 @@ If X and Y are given, the cursor is first moved to that location."
 (define (nooutrefresh win)
   (noutrefresh win))
 
+(define (pair-content pair)
+  "Given a color pair number, this procedure returns a two-element
+list containing the foreground color number and the background color
+number.  It can return #f if the color pair number is out of range or
+colors aren't initialized."
+  (if (or (not (exact? pair)) (not (integer? pair)))
+      (raise (condition (&curses-wrong-type-arg-error
+			 (arg pair)
+			 (expected-type 'integer)))))
+  (%pair-content pair))  
+
 (define* (pechochar win ch #:key y x)
   (and
    (if (and y x)
@@ -1633,6 +1698,12 @@ If X and Y are given, the cursor is first moved to that location."
 (define (standout! win)
   "Sets the attributes for in the given window to STANDOUT."
   (%wattr-set! win A_STANDOUT (second (%wattr-get win))))
+
+(define (start-color!)
+  "Enables color support for curses.  Usually called directly after 'initscr.'"
+  (let ((ret (%start-color!)))
+    (if (not ret)
+	(raise (condition (&curses-bad-state-error))))))
 
 (define (touchwin win)
   (%wtouchln win 0 (getmaxy win) #t))
