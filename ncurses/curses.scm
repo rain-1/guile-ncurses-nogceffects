@@ -1596,6 +1596,24 @@ location X, Y, if given."
            #t)
        (%wgetch win)))
 
+(define (getbegyx win)
+  "Returns as a two-element list (y x) the beginning coordinates of
+the specified window."
+    (if (not (window? win))
+      (raise (condition (&curses-wrong-type-arg-error
+			 (arg win)
+			 (expected-type 'window)))))
+    (%getbegyx win))
+
+(define (getmaxyx win)
+  "Returns as a two-element list (y x) the size of the specified
+window."
+    (if (not (window? win))
+      (raise (condition (&curses-wrong-type-arg-error
+			 (arg win)
+			 (expected-type 'window)))))
+    (%getmaxyx win))
+
 (define (getmaxy win)
   (car (getmaxyx win)))
 
@@ -1628,6 +1646,24 @@ position before receiving characters."
            (%wmove win y x)
            #t)
        (%wgetnstr win n)))
+
+(define (getparyx win)
+  "If WIN is a subwindow, this returns as a two-element list (y x) the
+beginning coordinates of the subwindow relative to the parent window.
+If this is not a subwindow, (-1 -1) is returned."
+    (if (not (window? win))
+      (raise (condition (&curses-wrong-type-arg-error
+			 (arg win)
+			 (expected-type 'window)))))
+    (%getparyx win))
+
+(define (getyx win)
+  "Returns the cursor position of the given window as a two-element list."
+    (if (not (window? win))
+      (raise (condition (&curses-wrong-type-arg-error
+			 (arg win)
+			 (expected-type 'window)))))
+    (%getyx win))
 
 (define (has-colors?)
   "Returns #t if the current terminal has color capability."

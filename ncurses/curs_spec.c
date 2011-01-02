@@ -490,8 +490,6 @@ gucu_wmouse_trafo (SCM win, SCM sy, SCM sx, SCM to_screen)
 SCM
 gucu_getbegyx (SCM win)
 {
-  SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "getbegyx");
-
   int y, x;
 
   getbegyx (_scm_to_window (win), y, x);
@@ -505,8 +503,6 @@ gucu_getmaxyx (SCM win)
 {
   int y, x;
 
-  SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "getmaxyx");
-
   getmaxyx (_scm_to_window (win), y, x);
 
   return (scm_list_2 (scm_from_int (y), scm_from_int (x)));
@@ -515,8 +511,6 @@ gucu_getmaxyx (SCM win)
 SCM
 gucu_getparyx (SCM win)
 {
-  SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "getparyx");
-
   int y, x;
 
   getparyx (_scm_to_window (win), y, x);
@@ -538,8 +532,6 @@ gucu_getsyx ()
 SCM
 gucu_getyx (SCM win)
 {
-  SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "getyx");
-
   int y, x;
 
   getyx (_scm_to_window (win), y, x);
@@ -944,11 +936,11 @@ gucu_init_special ()
   scm_c_define_gsubr ("%winchnstr", 2, 0, 0, gucu_winchnstr);
   scm_c_define_gsubr ("%winnstr", 2, 0, 0, gucu_winnstr);
   scm_c_define_gsubr ("mouse-trafo", 4, 0, 0, gucu_wmouse_trafo);
-  scm_c_define_gsubr ("getbegyx", 1, 0, 0, gucu_getbegyx);
-  scm_c_define_gsubr ("getmaxyx", 1, 0, 0, gucu_getmaxyx);
-  scm_c_define_gsubr ("getparyx", 1, 0, 0, gucu_getparyx);
+  scm_c_define_gsubr ("%getbegyx", 1, 0, 0, gucu_getbegyx);
+  scm_c_define_gsubr ("%getmaxyx", 1, 0, 0, gucu_getmaxyx);
+  scm_c_define_gsubr ("%getparyx", 1, 0, 0, gucu_getparyx);
   scm_c_define_gsubr ("getsyx", 0, 0, 0, gucu_getsyx);
-  scm_c_define_gsubr ("getyx", 1, 0, 0, gucu_getyx);
+  scm_c_define_gsubr ("%getyx", 1, 0, 0, gucu_getyx);
   scm_c_define_gsubr ("%acs-block", 0, 0, 0, gucu_ACS_BLOCK);
   scm_c_define_gsubr ("%acs-board", 0, 0, 0, gucu_ACS_BOARD);
   scm_c_define_gsubr ("%acs-btee", 0, 0, 0, gucu_ACS_BTEE);
