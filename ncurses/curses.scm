@@ -1465,18 +1465,52 @@ It can return #f if the color is out of range or colors aren't initialized."
 			   (arg win)))))))
 
 (define* (delch win #:key y x)
+  "Deletes the character under the cursor in the given window,
+optionally first moving to the location X, Y."
+  (if (not (window? win))
+      (raise (condition (&curses-wrong-type-arg-error
+			 (arg win)
+			 (expected-type 'window)))))
+  (if (and y x)
+      (begin
+	(if (not (and (integer? y) (exact? y)))
+	    (raise (condition (&curses-wrong-type-arg-error
+			       (arg y)
+			       (expected-type 'integer)))))
+	(if (not (and (integer? x) (exact? x)))
+	    (raise (condition (&curses-wrong-type-arg-error
+			       (arg x)
+			       (expected-type 'integer)))))))
   (and
    (if (and y x)
        (%wmove win y x)
        #t)
-   (%wdelch win)))
+   (or (%wdelch win)
+       (raise (condition (&curses-bad-state-error))))))
 
 (define* (deleteln win #:key y x)
+  "Deletes the line under the cursor in the given window, optionally first
+moving to the position X, Y"
+  (if (not (window? win))
+      (raise (condition (&curses-wrong-type-arg-error
+			 (arg win)
+			 (expected-type 'window)))))
+  (if (and y x)
+      (begin
+	(if (not (and (integer? y) (exact? y)))
+	    (raise (condition (&curses-wrong-type-arg-error
+			       (arg y)
+			       (expected-type 'integer)))))
+	(if (not (and (integer? x) (exact? x)))
+	    (raise (condition (&curses-wrong-type-arg-error
+			       (arg x)
+			       (expected-type 'integer)))))))
   (and
    (if (and y x)
        (%wmove win y x)
        #t)
-   (%winsdelln win -1)))
+   (or (%winsdelln win -1)
+       (raise (condition (&curses-bad-state-error))))))
 
 (define* (echochar win ch #:key y x)
   "Puts the character CH into the given window at its current window
@@ -1640,18 +1674,57 @@ foreground color and color number BACK as its background color.  Returns
        (%winnstr win n)))
 
 (define* (insdelln win n #:key y x)
+  "For positive N, inserts N lines into the specified window above the
+current line.  For negative N, deletes N lines starting with the one
+under the cursor.  Optionally, move to position X, Y first."
+  (if (not (window? win))
+      (raise (condition (&curses-wrong-type-arg-error
+			 (arg win)
+			 (expected-type 'window)))))
+  (if (not (and (integer? n) (exact? n)))
+      (raise (condition (&curses-wrong-type-arg-error
+			 (arg n)
+			 (expected-type 'integer)))))
+  (if (and y x)
+      (begin
+	(if (not (and (integer? y) (exact? y)))
+	    (raise (condition (&curses-wrong-type-arg-error
+			       (arg y)
+			       (expected-type 'integer)))))
+	(if (not (and (integer? x) (exact? x)))
+	    (raise (condition (&curses-wrong-type-arg-error
+			       (arg x)
+			       (expected-type 'integer)))))))
   (and
    (if (and y x)
        (%wmove win y x)
        #t)
-   (%winsdelln win n)))
+   (or (%winsdelln win n)
+       (raise (condition (&curses-bad-state-error))))))
 
 (define* (insertln win #:key y x)
+  "Inserts a line in the current window above the current line,
+optionally first moving to the location X, Y. "
+  (if (not (window? win))
+      (raise (condition (&curses-wrong-type-arg-error
+			 (arg win)
+			 (expected-type 'window)))))
+  (if (and y x)
+      (begin
+	(if (not (and (integer? y) (exact? y)))
+	    (raise (condition (&curses-wrong-type-arg-error
+			       (arg y)
+			       (expected-type 'integer)))))
+	(if (not (and (integer? x) (exact? x)))
+	    (raise (condition (&curses-wrong-type-arg-error
+			       (arg x)
+			       (expected-type 'integer)))))))
   (and
    (if (and y x)
        (%wmove win y x)
        #t)
-   (%winsdelln win 1)))
+   (or (%winsdelln win 1)
+       (raise (condition (&curses-bad-state-error))))))
 
 (define* (insstr win str #:key y x (n -1))
   (and

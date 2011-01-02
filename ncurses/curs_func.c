@@ -2098,15 +2098,10 @@ gucu_wdelch (SCM win)
   WINDOW *c_win;
   int ret;
 
-  SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "%wdelch");
-
   c_win = _scm_to_window (win);
 
   ret = wdelch (c_win);
-  if (ret == ERR)
-    curs_bad_state_error ("%wdelch");
-
-  return SCM_UNSPECIFIED;
+  RETURNTF (ret);
 }
 
 /* Write ch to the given window without advancing the curses.  Refresh
@@ -2296,18 +2291,12 @@ gucu_winsdelln (SCM win, SCM n)
   WINDOW *c_win;
   int c_n, ret;
 
-  SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "winsdelln");
-  SCM_ASSERT (scm_is_integer (n), n, SCM_ARG2, "winsdelln");
-
   c_win = _scm_to_window (win);
   c_n = scm_to_int (n);
 
   ret = winsdelln (c_win, c_n);
   /* winsdelln returns ERR when window == NULL */
-  if (ret == ERR)
-    curs_bad_state_error ("winsdelln");
-
-  return SCM_UNSPECIFIED;
+  RETURNTF (ret);
 }
 
 SCM
