@@ -1965,8 +1965,6 @@ gucu_use_extended_names (SCM bf)
 {
   bool c_bf;
 
-  SCM_ASSERT (scm_is_bool (bf), bf, SCM_ARG1, "use-extended-names");
-
   c_bf = scm_to_bool (bf);
 
   RETURNTF (use_extended_names (c_bf));
@@ -2489,7 +2487,7 @@ gucu_init_function ()
   scm_c_define_gsubr ("%color-set!", 2, 0, 0, gucu_color_set);
   scm_c_define_gsubr ("copywin", 9, 0, 0, gucu_copywin);
   scm_c_define_gsubr ("curs-set", 1, 0, 0, gucu_curs_set);
-  scm_c_define_gsubr ("curses-version", 0, 0, 0, gucu_curses_version);
+  scm_c_define_gsubr ("%curses-version", 0, 0, 0, gucu_curses_version);
   scm_c_define_gsubr ("def-prog-mode", 0, 0, 0, gucu_def_prog_mode);
   scm_c_define_gsubr ("def-shell-mode", 0, 0, 0, gucu_def_shell_mode);
   scm_c_define_gsubr ("define-key", 2, 0, 0, gucu_define_key);
@@ -2581,7 +2579,7 @@ gucu_init_function ()
   scm_c_define_gsubr ("ungetch", 1, 0, 0, gucu_ungetch);
   scm_c_define_gsubr ("use-default-colors", 0, 0, 0, gucu_use_default_colors);
   scm_c_define_gsubr ("use-env", 1, 0, 0, gucu_use_env);
-  scm_c_define_gsubr ("use-extended-names", 1, 0, 0, gucu_use_extended_names);
+  scm_c_define_gsubr ("%use-extended-names", 1, 0, 0, gucu_use_extended_names);
   scm_c_define_gsubr ("%waddch", 2, 0, 0, gucu_waddch);
   scm_c_define_gsubr ("%waddchnstr", 3, 0, 0, gucu_waddchnstr);
   scm_c_define_gsubr ("%waddnstr", 3, 0, 0, gucu_waddnstr);

@@ -1464,6 +1464,11 @@ It can return #f if the color is out of range or colors aren't initialized."
 	(raise (condition (&curses-out-of-range-error
 			   (arg win)))))))
 
+(define (curses-version)
+  "Returns, as a string, the version number and patch level of the 
+underlying ncurses library."
+  (%curses-version))
+
 (define* (delch win #:key y x)
   "Deletes the character under the cursor in the given window,
 optionally first moving to the location X, Y."
@@ -1794,6 +1799,16 @@ colors aren't initialized."
   (cond
    ((port? port-or-fd) (%typeahead (fileno port-or-fd)))
    (else (%typeahead port-or-fd))))
+
+(define (use-extended-names enable)
+  "If ENABLE is #t, this enables whether to allow user-defined,
+nonstandard names in the terminfo interface.  If ENABLE is #f, this is
+disabled"
+  (if (not (boolean? enable))
+      (raise (condition (&curses-wrong-type-arg
+			 (arg enable)
+			 (expected-type 'boolean)))))
+  (%use-extended-names enable))
 
 (define* (vline win ch n #:key y x)
   "Draws a vertical line of length N using the complex character CH.
