@@ -393,10 +393,12 @@
 	    &curses-wrong-type-arg-error
 	    &curses-out-of-range-error
 	    &curses-bad-state-error
+	    &curses-missing-function-error
 	    curses-error?
 	    curses-wrong-type-arg-error?
 	    curses-out-of-range-error?
 	    curses-bad-state-error?
+	    curses-missing-function-error?
 
 	    ;; xchar type library
 	    xchar-attr
@@ -469,6 +471,11 @@
 ;; Usually this indicates and attempt to use an already freed object
 (define-condition-type &curses-bad-state-error &curses-error
   curses-bad-state-error?)
+
+;; Indicates that a function isn't available because
+(define-condition-type &curses-missing-function-error &curses-error
+  curses-missing-function-error?
+  (function           curses-missing-function-error:arg))
 
 ;;; The xchar type library
 
@@ -1517,6 +1524,15 @@ moving to the position X, Y"
    (or (%winsdelln win -1)
        (raise (condition (&curses-bad-state-error))))))
 
+(define (delscreen scr)
+  "Frees a screen created by 'newterm'.  Can't be called before 'endwin'."
+  (if (not (screen? scr))
+      (raise (condition (&curses-wrong-type-arg-error
+			 (arg scr)
+			 (expected-type 'screen)))))
+  (or (%delscreen scr)
+      (raise (condition (&curses-bad-state-error)))))
+
 (define* (echochar win ch #:key y x)
   "Puts the character CH into the given window at its current window
 position and then refreshes the window.  If Y and X are set, moves
@@ -1544,6 +1560,10 @@ to (X,Y) first.  Returns #t on success."
        (%wmove win y x)
        #t)
    (%wechochar win (xchar->list ch))))
+
+(define (endwin)
+  "Exit or escape from curses mode."
+  (%endwin))
 
 (define (erase win)
   "Copy blanks to every position in the window."
@@ -1800,6 +1820,13 @@ foreground color and color number BACK as its background color.  Returns
 			 (expected-type 'integer)))))
   (%init-pair! pair fore back))
 
+(define (initscr)
+  "Initialize curses and return the window object that is the base window."
+  (let ((ret (%initscr)))
+    (if (not ret)
+	(raise (condition (&curses-bad-state-error)))
+	ret)))
+
 (define* (insch win ch #:key y x)
   (and (if (and y x)
            (%wmove win y x)
@@ -1872,8 +1899,45 @@ optionally first moving to the location X, Y. "
        #t))
   (%winsnstr win str n))
 
+(define (isendwin?)
+  "Returns #t if the program has escaped from curses mode by calling 'endwin'"
+  (%isendwin?))
+
 (define (move win y x)
   (%wmove win y x))
+
+(define (newterm type outport inport)
+  "Create a new terminal whose input and output are Guile ports."
+  (if (not (defined? '%newterm))
+      (raise (condition (&curses-missing-function-error
+			 (function '%newterm)))))
+  (if (not (string? type))
+      (raise (condition (&curses-wrong-type-arg-error
+			 (arg type)
+			 (expected-type 'string)))))
+  (if (not (output-port? outport))
+      (raise (condition (&curses-wrong-type-arg-error
+			 (arg outport)
+			 (expected-type 'output-port)))))
+  (if (not (input-port? inport))
+      (raise (condition (&curses-wrong-type-arg-error
+			 (arg inport)
+			 (expected-type 'input-port)))))
+  (let ((ret (%newterm type outport inport)))
+    (cond
+     ((integer? ret)
+      (if (= ret 1)
+	  (raise (condition (&curses-wrong-type-arg-error
+			     (arg inport)
+			     (expected-type 'input-port)))))
+      (if (= ret 2)
+	  (raise (condition (&curses-wrong-type-arg-error
+			     (arg outport)
+			     (expected-type 'output-port)))))
+      (if (= ret 3)
+	  (raise (condition (&curses-bad-state-error)))))
+     (else
+      ret))))
 
 ;; I hate it when people are 'clever' with dropping letters
 (define (nooutrefresh win)
@@ -1902,6 +1966,15 @@ colors aren't initialized."
 
 (define (scroll win)
   (scrl win 1))
+
+(define (set-term term)
+  "Switch to a new terminal indicated by the parameter TERM.  TERM has
+the <#screen> type and is created by 'newterm'."
+  (if (not (screen? term))
+      (raise (condition (&curses-wrong-type-arg-error
+			 (arg term)
+			 (expected-type 'screen)))))
+  (%set-term term))
 
 (define (standend! win)
   "Turns off all attributes of the given window."
@@ -1994,7 +2067,6 @@ If X and Y are given, the cursor is first moved to that location."
 (if (defined? 'KEY_EVENT)    (export KEY_EVENT))
 (if (defined? 'grantpt)      (export grantpt))
 (if (defined? 'key-defined)  (export key-defined))
-(if (defined? 'newterm)      (export newterm))
 (if (defined? 'ptsname)      (export ptsname))
 (if (defined? 'ptsraw)       (export ptsraw))
 (if (defined? 'ptsmakeraw)   (export ptsmakeraw))

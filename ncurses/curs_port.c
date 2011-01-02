@@ -162,31 +162,21 @@ gucu_newterm (SCM type, SCM outp, SCM inp)
   FILE *c_inp, *c_outp;
   SCREEN *ret;
 
-  SCM_ASSERT (scm_is_string (type), type, SCM_ARG1, "newterm");
-  SCM_ASSERT (scm_is_true (scm_output_port_p (outp)), outp, SCM_ARG2,
-	      "newterm");
-  SCM_ASSERT (scm_is_true (scm_input_port_p (inp)), inp, SCM_ARG3, "newterm");
-
   /* Convert the input port to a special stream */
   c_inp = fopencookie (SCM2PTR (inp), "rb", port_funcs);
   if (c_inp == NULL)
-    scm_syserror ("newterm");
+    return scm_from_int (1);
 
   /* Convert the output port to a special stream */
   c_outp = fopencookie (SCM2PTR (outp), "w", port_funcs);
   if (c_outp == NULL)
-    scm_out_of_range ("newterm", outp);
+    return scm_from_int (2);
 
   c_type = scm_to_locale_string (type);
   ret = newterm (c_type, c_outp, c_inp);
   free (c_type);
   if (ret == NULL)
-    {
-      scm_error_scm (SCM_BOOL_F,
-		     scm_from_locale_string ("newterm"),
-		     scm_from_locale_string ("could not create a terminal"),
-		     SCM_BOOL_F, SCM_BOOL_F);
-    }
+    return scm_from_int (3);
 
   SCM s_ret = _scm_from_screen (ret);
 
@@ -317,7 +307,7 @@ gucu_init_port ()
       port_funcs.seek = port_seek;
       port_funcs.close = port_close;
 
-      scm_c_define_gsubr ("newterm", 3, 0, 0, gucu_newterm);
+      scm_c_define_gsubr ("%newterm", 3, 0, 0, gucu_newterm);
 #endif
       scm_c_define_gsubr ("getwin", 1, 0, 0, gucu_getwin);
       scm_c_define_gsubr ("putwin", 2, 0, 0, gucu_putwin);

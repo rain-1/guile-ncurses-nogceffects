@@ -483,20 +483,17 @@ gucu_delscreen (SCM scr)
 {
   SCREEN *c_scr;
 
-  SCM_ASSERT (_scm_is_screen (scr), scr, SCM_ARG1, "delscreen");
-
   c_scr = _scm_to_screen (scr);
 
   if (!isendwin ())
-    scm_misc_error ("delscreen",
-		    "the terminal was freed while still in curses mode: ~A",
-		    scr);
+    /* terminal was freed while still in curses mode */
+    return SCM_BOOL_F;
 
   delscreen (c_scr);
   /* delscreen returns void */
   SCM_SET_SMOB_DATA (scr, 0);
 
-  return SCM_UNSPECIFIED;
+  return SCM_BOOL_T;
 }
 
 /* Create a pointer to a window enclosed by and sharing memory with
@@ -801,8 +798,9 @@ gucu_initscr ()
   WINDOW *ret;
 
   ret = initscr ();
+  /* Initscr only fails when something really bad happens. */
   if (ret == NULL)
-    curs_bad_state_error ("initscr");
+    return SCM_BOOL_F;
 
   return _scm_from_window (ret);
 }
@@ -1728,9 +1726,6 @@ gucu_set_term (SCM newterminal)
 {
   SCREEN *c_newterminal;
 
-  SCM_ASSERT (_scm_is_screen (newterminal), newterminal, SCM_ARG1,
-	      "set-term");
-
   c_newterminal = _scm_to_screen (newterminal);
 
   set_term (c_newterminal);
@@ -2483,12 +2478,12 @@ gucu_init_function ()
   scm_c_define_gsubr ("def-shell-mode", 0, 0, 0, gucu_def_shell_mode);
   scm_c_define_gsubr ("define-key", 2, 0, 0, gucu_define_key);
   scm_c_define_gsubr ("delay-output", 1, 0, 0, gucu_delay_output);
-  scm_c_define_gsubr ("delscreen", 1, 0, 0, gucu_delscreen);
+  scm_c_define_gsubr ("%delscreen", 1, 0, 0, gucu_delscreen);
   scm_c_define_gsubr ("derwin", 5, 0, 0, gucu_derwin);
   scm_c_define_gsubr ("doupdate", 0, 0, 0, gucu_doupdate);
   scm_c_define_gsubr ("dupwin", 1, 0, 0, gucu_dupwin);
   scm_c_define_gsubr ("echo!", 0, 0, 0, gucu_echo);
-  scm_c_define_gsubr ("endwin", 0, 0, 0, gucu_endwin);
+  scm_c_define_gsubr ("%endwin", 0, 0, 0, gucu_endwin);
   scm_c_define_gsubr ("%erase", 1, 0, 0, gucu_erase);
   scm_c_define_gsubr ("erasechar", 0, 0, 0, gucu_erasechar);
   scm_c_define_gsubr ("%filter", 0, 0, 0, gucu_filter);
@@ -2503,11 +2498,11 @@ gucu_init_function ()
   scm_c_define_gsubr ("idcok!", 2, 0, 0, gucu_idcok_x);
   scm_c_define_gsubr ("idlok!", 2, 0, 0, gucu_idlok_x);
   scm_c_define_gsubr ("immedok!", 2, 0, 0, gucu_immedok_x);
-  scm_c_define_gsubr ("initscr", 0, 0, 0, gucu_initscr);
+  scm_c_define_gsubr ("%initscr", 0, 0, 0, gucu_initscr);
   scm_c_define_gsubr ("init-color!", 4, 0, 0, gucu_init_color);
   scm_c_define_gsubr ("%init-pair!", 3, 0, 0, gucu_init_pair);
   scm_c_define_gsubr ("intrflush!", 1, 0, 0, gucu_intrflush);
-  scm_c_define_gsubr ("isendwin?", 0, 0, 0, gucu_isendwin_p);
+  scm_c_define_gsubr ("%isendwin?", 0, 0, 0, gucu_isendwin_p);
   scm_c_define_gsubr ("is-linetouched?", 2, 0, 0, gucu_is_linetouched_p);
   scm_c_define_gsubr ("is-wintouched?", 1, 0, 0, gucu_is_wintouched_p);
   scm_c_define_gsubr ("key-f", 1, 0, 0, gucu_KEY_F);
@@ -2556,7 +2551,7 @@ gucu_init_function ()
   scm_c_define_gsubr ("scr-restore", 1, 0, 0, gucu_scr_restore);
   scm_c_define_gsubr ("scr-set", 1, 0, 0, gucu_scr_set);
   scm_c_define_gsubr ("scrl", 2, 0, 0, gucu_scrl);
-  scm_c_define_gsubr ("set-term", 1, 0, 0, gucu_set_term);
+  scm_c_define_gsubr ("&set-term", 1, 0, 0, gucu_set_term);
   scm_c_define_gsubr ("setscrreg!", 3, 0, 0, gucu_setscrreg_x);
   scm_c_define_gsubr ("setsyx", 2, 0, 0, gucu_setsyx);
   scm_c_define_gsubr ("%start-color!", 0, 0, 0, gucu_start_color);
