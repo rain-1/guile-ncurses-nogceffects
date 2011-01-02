@@ -1291,9 +1291,30 @@ the color pair given by COLOR."
   (%beep))
 
 (define (bkgd win ch)
+  "Sets the background of the named window WIN to the given complex
+char CH and applies it to all characters in the window."
+  (if (not (window? win))
+      (raise (condition (&curses-wrong-type-arg-error
+			 (arg win)
+			 (expected-type 'window)))))
+  (if (not (xchar? ch))
+      (raise (condition (&curses-wrong-type-arg-error
+			 (arg ch)
+			 (expected-type 'xchar)))))
   (%bkgd win (xchar->list ch)))
 
 (define (bkgdset! win ch)
+  "Sets the background for the window to the given complex character
+CH.  This will be combined with all new characters added to the
+window."
+  (if (not (window? win))
+      (raise (condition (&curses-wrong-type-arg-error
+			 (arg win)
+			 (expected-type 'window)))))
+  (if (not (xchar? ch))
+      (raise (condition (&curses-wrong-type-arg-error
+			 (arg ch)
+			 (expected-type 'xchar)))))
   (%bkgdset! win (xchar->list ch)))
 
 (define (border win left right top bottom topleft topright bottomleft bottomright)
@@ -1423,6 +1444,17 @@ to (X,Y) first.  Returns #t on success."
 (define (flash)
   "Flashes the screen.  Returns #t on success or #f on failure."
   (%flash))
+
+(define (getbkgd win)
+  "Returns the default background of the given window as a complex
+char."
+  (if (not (window? win))
+      (raise (condition (&curses-wrong-type-arg-error
+			 (arg win)
+			 (expected-type 'window)))))
+  (let ((ret (%getbkgd win)))
+    (or ret
+	(raise (condition (&curses-bad-state-error))))))
 
 (define* (getch win #:key y x)
   (and (if (and y x)

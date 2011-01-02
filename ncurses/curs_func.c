@@ -132,9 +132,6 @@ gucu_bkgd (SCM win, SCM ch)
   WINDOW *c_win;
   int ret;
 
-  SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "%bkgd");
-  SCM_ASSERT (_scm_is_xchar (ch), ch, SCM_ARG2, "%bkgd");
-
   c_win = _scm_to_window (win);
 
 #ifdef HAVE_NCURSESW
@@ -160,9 +157,6 @@ SCM
 gucu_bkgdset_x (SCM win, SCM ch)
 {
   WINDOW *c_win;
-
-  SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "%bkgdset!");
-  SCM_ASSERT (_scm_is_xchar (ch), ch, SCM_ARG2, "%bkgdset!");
 
   c_win = _scm_to_window (win);
 
@@ -699,15 +693,13 @@ gucu_getbkgd (SCM win)
 {
   WINDOW *c_win;
 
-  SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "getbkgd");
-
   c_win = _scm_to_window (win);
 #ifdef HAVE_NCURSESW
   {
     cchar_t ch;
     int ret = wgetbkgrnd (c_win, &ch);
     if (ret == ERR)
-      curs_bad_state_error ("getbkgd");
+      return SCM_BOOL_F;
     return _scm_xchar_from_cchar (&ch);
   }
 #else
@@ -2573,7 +2565,7 @@ gucu_init_function ()
   scm_c_define_gsubr ("%filter", 0, 0, 0, gucu_filter);
   scm_c_define_gsubr ("%flash", 0, 0, 0, gucu_flash);
   scm_c_define_gsubr ("flushinp", 0, 0, 0, gucu_flushinp);
-  scm_c_define_gsubr ("getbkgd", 1, 0, 0, gucu_getbkgd);
+  scm_c_define_gsubr ("%getbkgd", 1, 0, 0, gucu_getbkgd);
   scm_c_define_gsubr ("halfdelay!", 1, 0, 0, gucu_halfdelay);
   scm_c_define_gsubr ("has-colors?", 0, 0, 0, gucu_has_colors_p);
   scm_c_define_gsubr ("has-ic?", 0, 0, 0, gucu_has_ic_p);
