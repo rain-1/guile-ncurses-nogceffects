@@ -1569,6 +1569,28 @@ char."
 	(raise (condition (&curses-bad-state-error))))))
 
 (define* (getch win #:key y x)
+  "Read a character from the keyboard for the given window.  If
+no-delay mode, if no input is waiting, #f is returned.  If the
+keypress maps to a letter, a character is returned.  If the keypress
+maps to a control character, and keypad! has been called, then an
+integer curses constant, like KEY_ENTER.  The character may appear on
+the screen based on the setting of noecho!.  Optionally, first move to
+location X, Y, if given."
+  (if (not (window? win))
+      (raise (condition (&curses-wrong-type-arg-error
+			 (arg win)
+			 (expected-type 'window)))))
+  (if (and y x)
+      (begin
+	(if (not (and (integer? y) (exact? y)))
+	    (raise (condition (&curses-wrong-type-arg-error
+			       (arg y)
+			       (expected-type 'integer)))))
+	(if (not (and (integer? x) (exact? x)))
+	    (raise (condition (&curses-wrong-type-arg-error
+			       (arg x)
+			       (expected-type 'integer)))))))
+
   (and (if (and y x)
            (%wmove win y x)
            #t)
@@ -1586,6 +1608,15 @@ char."
 (define (has-colors?)
   "Returns #t if the current terminal has color capability."
   (%has-colors?))
+
+(define (has-key? key)
+  "Given a curses integer key constant like KEY_ENTER, returns #t if the
+current terminal type recognizes a key of that value."
+  (if (and (not (integer? key)) (not (exact? key)))
+      (raise (condition (&curses-wrong-type-arg
+			 (arg key)
+			 (expected-type 'integer)))))
+  (%has-key? key))
 
 (define* (hline win ch n #:key y x)
   "Draws a horizontal line of length N using the complex character CH.
@@ -1799,6 +1830,16 @@ colors aren't initialized."
   (cond
    ((port? port-or-fd) (%typeahead (fileno port-or-fd)))
    (else (%typeahead port-or-fd))))
+
+(define (ungetch ch)
+  "Pushes back a character onto the input queue so that it can later
+be retrieved with getch.  CH must either be a character or a curses
+key constant like KEY_ENTER."
+  (if (and (not (integer? ch)) (not (char? ch)))
+      (raise (condition (&curses-wrong-type-arg
+			 (arg ch)
+			 (expected-type 'integer/char)))))
+  (%ungetch ch))
 
 (define (use-extended-names enable)
   "If ENABLE is #t, this enables whether to allow user-defined,

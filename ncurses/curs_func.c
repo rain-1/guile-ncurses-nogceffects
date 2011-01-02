@@ -735,8 +735,6 @@ gucu_has_key_p (SCM key)
 {
   int c_key;
 
-  SCM_ASSERT (scm_is_integer (key), key, SCM_ARG1, "has-key");
-
   c_key = scm_to_int (key);
 
   RETURNTF (has_key (c_key));
@@ -1909,12 +1907,9 @@ gucu_ungetch (SCM ch)
       }
     else if (scm_is_integer (ch))
       {
-	ret = unget_wch (scm_to_uint (ch));
+	ret = 0;
       }
-    else
-      {
-	scm_wrong_type_arg ("ungetch", SCM_ARG1, ch);
-      }
+
   }
 #else
   {
@@ -1929,7 +1924,7 @@ gucu_ungetch (SCM ch)
       }
     else
       {
-	scm_wrong_type_arg ("ungetch", SCM_ARG1, ch);
+	ret = 0;
       }
   }
 #endif
@@ -2158,8 +2153,6 @@ gucu_wgetch (SCM win)
 {
   WINDOW *c_win;
   int ret;
-
-  SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "%wgetch");
 
   c_win = _scm_to_window (win);
 
@@ -2508,7 +2501,7 @@ gucu_init_function ()
   scm_c_define_gsubr ("%has-colors?", 0, 0, 0, gucu_has_colors_p);
   scm_c_define_gsubr ("has-ic?", 0, 0, 0, gucu_has_ic_p);
   scm_c_define_gsubr ("has-il?", 0, 0, 0, gucu_has_il_p);
-  scm_c_define_gsubr ("has-key?", 1, 0, 0, gucu_has_key_p);
+  scm_c_define_gsubr ("%has-key?", 1, 0, 0, gucu_has_key_p);
   scm_c_define_gsubr ("idcok!", 2, 0, 0, gucu_idcok_x);
   scm_c_define_gsubr ("idlok!", 2, 0, 0, gucu_idlok_x);
   scm_c_define_gsubr ("immedok!", 2, 0, 0, gucu_immedok_x);
@@ -2576,7 +2569,7 @@ gucu_init_function ()
   scm_c_define_gsubr ("termname", 0, 0, 0, gucu_termname);
   scm_c_define_gsubr ("timeout!", 2, 0, 0, gucu_timeout_x);
   scm_c_define_gsubr ("%typeahead", 1, 0, 0, gucu_typeahead);
-  scm_c_define_gsubr ("ungetch", 1, 0, 0, gucu_ungetch);
+  scm_c_define_gsubr ("%ungetch", 1, 0, 0, gucu_ungetch);
   scm_c_define_gsubr ("use-default-colors", 0, 0, 0, gucu_use_default_colors);
   scm_c_define_gsubr ("use-env", 1, 0, 0, gucu_use_env);
   scm_c_define_gsubr ("%use-extended-names", 1, 0, 0, gucu_use_extended_names);
