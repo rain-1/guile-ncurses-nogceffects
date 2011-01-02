@@ -186,16 +186,6 @@ gucu_border (SCM win, SCM left, SCM right, SCM top, SCM bottom,
   WINDOW *c_win;
   int ret;
 
-  SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "%border");
-  SCM_ASSERT (_scm_is_xchar (left), left, SCM_ARG2, "%border");
-  SCM_ASSERT (_scm_is_xchar (right), right, SCM_ARG3, "%border");
-  SCM_ASSERT (_scm_is_xchar (top), top, SCM_ARG4, "%border");
-  SCM_ASSERT (_scm_is_xchar (bottom), bottom, SCM_ARG5, "%border");
-  SCM_ASSERT (_scm_is_xchar (topleft), topleft, SCM_ARG6, "%border");
-  SCM_ASSERT (_scm_is_xchar (topright), topright, SCM_ARG7, "%border");
-  SCM_ASSERT (_scm_is_xchar (bottomleft), bottomleft, 8, "%border");
-  SCM_ASSERT (_scm_is_xchar (bottomright), bottomright, 9, "%border");
-
   c_win = _scm_to_window (win);
 
 #ifdef HAVE_NCURSESW
@@ -2249,10 +2239,6 @@ gucu_whline (SCM win, SCM ch, SCM n)
   WINDOW *c_win;
   int c_n, ret;
 
-  SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "%whline");
-  SCM_ASSERT (_scm_is_xchar (ch), ch, SCM_ARG2, "%whline");
-  SCM_ASSERT (scm_is_integer (n), n, SCM_ARG3, "%whline");
-
   c_win = _scm_to_window (win);
   c_n = scm_to_int (n);
 
@@ -2271,7 +2257,7 @@ gucu_whline (SCM win, SCM ch, SCM n)
   }
 #endif
   if (ret == ERR)
-    curs_bad_state_error ("%whline");
+    return SCM_BOOL_F;
 
   return SCM_UNSPECIFIED;
 }
@@ -2499,10 +2485,6 @@ gucu_wvline (SCM win, SCM ch, SCM n)
   WINDOW *c_win;
   int c_n, ret;
 
-  SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "%wvline");
-  SCM_ASSERT (_scm_is_xchar (ch), ch, SCM_ARG2, "%wvline");
-  SCM_ASSERT (scm_is_integer (n), n, SCM_ARG3, "%wvline");
-
   c_win = _scm_to_window (win);
   c_n = scm_to_int (n);
 
@@ -2522,7 +2504,7 @@ gucu_wvline (SCM win, SCM ch, SCM n)
   }
 #endif
   if (ret == ERR)
-    curs_bad_state_error ("%wvline");
+    return SCM_BOOL_F;
 
   return SCM_UNSPECIFIED;
 }

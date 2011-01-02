@@ -1317,7 +1317,24 @@ window."
 			 (expected-type 'xchar)))))
   (%bkgdset! win (xchar->list ch)))
 
-(define (border win left right top bottom topleft topright bottomleft bottomright)
+(define (border win left right top bottom topleft topright bottomleft 
+		bottomright)
+  "Draws a border on a given window using the given complex characters
+TOP, LEFT, RIGHT, etc.  If the number 0 is used instead of a complex
+character, then the default character will be used for that border
+element."
+  (if (not (window? win))
+      (raise (condition (&curses-wrong-type-arg-error
+			 (arg win)
+			 (expected-type 'window)))))
+  (for-each 
+   (lambda (ch) 
+     (if (and (not (xchar? ch)) (not (eq? ch 0)))
+	 (raise (condition (&curses-wrong-type-arg-error
+			    (arg ch)
+			    (expected-type 'xchar))))))
+   (list left right top bottom topleft topright bottomleft bottomright))
+  
   (let ((l (if (equal? left 0)
                (xchar->list (normal (acs-vline)))
                (xchar->list left)))
@@ -1342,9 +1359,13 @@ window."
         (br (if (equal? bottomright 0)
                 (xchar->list (normal (acs-lrcorner)))
                 (xchar->list bottomright))))
-  (%border win l r t b tl tr bl br)))
+    (%border win l r t b tl tr bl br)))
 
 (define (box win v h)
+  "Draws a box on the given window using the complex character V for
+the verical lines and the complex character H for the horizontal
+lines.  If the number 0 is used for H or V instead of a complex
+character, the default lines will be used."
   (let ((v2 (if (equal? v 0) (xchar->list (normal (acs-vline))) (xchar->list v)))
         (h2 (if (equal? h 0) (xchar->list (normal (acs-hline))) (xchar->list h))))
     (%border win v2 v2 h2 h2
@@ -1472,10 +1493,36 @@ char."
        (%wgetnstr win n)))
 
 (define* (hline win ch n #:key y x)
+  "Draws a horizontal line of length N using the complex character CH.
+If X and Y are given, the cursor is first moved to that location."
+  (if (not (window? win))
+      (raise (condition (&curses-wrong-type-arg
+			 (arg win)
+			 (expected-type 'window)))))
+  (if (not (xchar? ch))
+      (raise (condition (&curses-wrong-type-arg
+			 (arg win)
+			 (expected-type 'xchar)))))
+  (if (and y x)
+      (begin
+	(if (not (and (integer? y) (exact? y)))
+	    (raise (condition (&curses-wrong-type-arg-error
+			       (arg y)
+			       (expected-type 'integer)))))
+	(if (not (and (integer? x) (exact? x)))
+	    (raise (condition (&curses-wrong-type-arg-error
+			       (arg x)
+			       (expected-type 'integer)))))))
+  (if (not (and (integer? n) (exact? n)))
+      (raise (condition (&curses-wrong-type-arg-error
+			 (arg n)
+			 (expected-type 'integer)))))
   (and (if (and y x)
            (%wmove win y x)
            #t)
-       (%whline win (xchar->list ch) n)))
+       (or
+	(%whline win (xchar->list ch) n)
+	(raise (condition (&curses-bad-state-error))))))
 
 (define* (inch win #:key y x)
   (and (if (and y x)
@@ -1568,10 +1615,37 @@ char."
    (else (%typeahead port-or-fd))))
 
 (define* (vline win ch n #:key y x)
+  "Draws a vertical line of length N using the complex character CH.
+If X and Y are given, the cursor is first moved to that location."
+  (if (not (window? win))
+      (raise (condition (&curses-wrong-type-arg
+			 (arg win)
+			 (expected-type 'window)))))
+  (if (not (xchar? ch))
+      (raise (condition (&curses-wrong-type-arg
+			 (arg win)
+			 (expected-type 'xchar)))))
+  (if (and y x)
+      (begin
+	(if (not (and (integer? y) (exact? y)))
+	    (raise (condition (&curses-wrong-type-arg-error
+			       (arg y)
+			       (expected-type 'integer)))))
+	(if (not (and (integer? x) (exact? x)))
+	    (raise (condition (&curses-wrong-type-arg-error
+			       (arg x)
+			       (expected-type 'integer)))))))
+  (if (not (and (integer? n) (exact? n)))
+      (raise (condition (&curses-wrong-type-arg-error
+			 (arg n)
+			 (expected-type 'integer)))))
+
   (and (if (and y x)
            (%wmove win y x)
            #t)
-       (%wvline win (xchar->list ch) n)))
+       (or 
+	(%wvline win (xchar->list ch) n)
+	(raise (condition (&curses-bad-state-error))))))
 
 (load-extension "libguile-ncurses" "gucu_init")
 
