@@ -320,9 +320,6 @@ gucu_wgetnstr (SCM win, SCM n)
   int ret;
   int c_n;
 
-  SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "%wgetnstr");
-  SCM_ASSERT (scm_is_integer (n), n, SCM_ARG2, "%wgetnstr");
-
   c_n = scm_to_int (n);
   if (c_n <= 0)
     scm_out_of_range ("%wgetnstr", n);

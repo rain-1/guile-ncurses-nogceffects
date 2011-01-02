@@ -1600,6 +1600,30 @@ location X, Y, if given."
   (car (getmaxyx win)))
 
 (define* (getnstr win n #:key y x)
+  "Receives a series of keypresses, up to N, from the given window
+until a newline or carriage return is received.  The terminating
+character is not included in the return string.  If a SIGWINCH (window
+resize) interrupts the function, it instead returns the KEY_RESIZE
+integer code. Optionally, it will move the cursort to the X, Y,
+position before receiving characters."
+  (if (not (window? win))
+      (raise (condition (&curses-wrong-type-arg-error
+			 (arg win)
+			 (expected-type 'window)))))
+  (if (not (and (integer? n) (exact? n)))
+      (raise (condition (&curses-wrong-type-arg-error
+			 (arg n)
+			 (expected-type 'integer)))))
+  (if (and y x)
+      (begin
+	(if (not (and (integer? y) (exact? y)))
+	    (raise (condition (&curses-wrong-type-arg-error
+			       (arg y)
+			       (expected-type 'integer)))))
+	(if (not (and (integer? x) (exact? x)))
+	    (raise (condition (&curses-wrong-type-arg-error
+			       (arg x)
+			       (expected-type 'integer)))))))
   (and (if (and y x)
            (%wmove win y x)
            #t)
