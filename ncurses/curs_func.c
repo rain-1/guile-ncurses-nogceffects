@@ -2224,8 +2224,6 @@ gucu_winch (SCM win)
   WINDOW *c_win;
   SCM ch;
 
-  SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "%winch");
-
   c_win = _scm_to_window (win);
 #ifdef HAVE_NCURSESW
   {
@@ -2233,7 +2231,7 @@ gucu_winch (SCM win)
     cchar_t c_ch;
     ret = win_wch (c_win, &c_ch);
     if (ret == ERR)
-      curs_bad_state_error ("%winch");
+      return SCM_BOOL_F;
     ch = _scm_xchar_from_cchar (&c_ch);
   }
 #else

@@ -374,9 +374,6 @@ gucu_winchnstr (SCM win, SCM n)
   SCM s_str;
   int c_n;
 
-  SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "%winchnstr");
-  SCM_ASSERT (scm_is_integer (n), n, SCM_ARG2, "%winchnstr");
-
   c_win = _scm_to_window (win);
   c_n = scm_to_int (n);
   if (c_n == -1)
@@ -389,7 +386,7 @@ gucu_winchnstr (SCM win, SCM n)
 
     ret = win_wchnstr (c_win, c_cstr, c_n);
     if (ret == ERR)
-      curs_bad_state_error ("%winchnstr");
+      return SCM_BOOL_F;
     s_str = _scm_xstring_from_cstring (c_cstr);
     free (c_cstr);
   }

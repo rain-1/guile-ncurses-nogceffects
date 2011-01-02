@@ -1711,16 +1711,59 @@ If X and Y are given, the cursor is first moved to that location."
 	(raise (condition (&curses-bad-state-error))))))
 
 (define* (inch win #:key y x)
+  "Returns a complex character containg the character at the current
+position in the given window, optionally first moving to Y, X."
+  (if (not (window? win))
+      (raise (condition (&curses-wrong-type-arg
+			 (arg win)
+			 (expected-type 'window)))))
+  (if (and y x)
+      (begin
+	(if (not (and (integer? y) (exact? y)))
+	    (raise (condition (&curses-wrong-type-arg-error
+			       (arg y)
+			       (expected-type 'integer)))))
+	(if (not (and (integer? x) (exact? x)))
+	    (raise (condition (&curses-wrong-type-arg-error
+			       (arg x)
+			       (expected-type 'integer)))))))
   (and (if (and y x)
            (%wmove win y x)
            #t)
-       (list->xchar (%winch win))))
+       (or
+	(list->xchar (%winch win))
+	(raise (condition (&curses-bad-state-error))))))
 
 (define* (inchstr win #:key y x (n -1))
+  "Returns a the list of complex characters that are in the window
+starting at the cursor location and ending at the right margin of the
+window.  If N is given it returns a maximum of N characters.  If Y and
+X are given, it first moves the cursor to that location."
+  (if (not (window? win))
+      (raise (condition (&curses-wrong-type-arg
+			 (arg win)
+			 (expected-type 'window)))))
+  (if (and y x)
+      (begin
+	(if (not (and (integer? y) (exact? y)))
+	    (raise (condition (&curses-wrong-type-arg-error
+			       (arg y)
+			       (expected-type 'integer)))))
+	(if (not (and (integer? x) (exact? x)))
+	    (raise (condition (&curses-wrong-type-arg-error
+			       (arg x)
+			       (expected-type 'integer)))))))
+  (if (not (and (integer? n) (exact? n)))
+      (raise (condition (&curses-wrong-type-arg-error
+			 (arg n)
+			 (expected-type 'integer)))))
   (and (if (and y x)
            (%wmove win y x)
            #t)
-       (map list->xchar (%winchnstr win n))))
+       (let ((ret (%winchnstr win n)))
+	 (if (not ret)
+	     (raise (conditions (&curses-bad-state-error)))
+	     (map list->xchar ret)))))
 
 (define (init-color! color r g b)
   "Initializes the color number COLOR to have the red-green-blue value
