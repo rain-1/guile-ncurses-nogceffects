@@ -416,9 +416,6 @@ gucu_winnstr (SCM win, SCM n)
   int c_n;
   int ret;
 
-  SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "%winnstr");
-  SCM_ASSERT (scm_is_integer (n), n, SCM_ARG2, "%winnstr");
-
   /* -1 indicates that up to an entire line is requested */
   c_n = scm_to_int (n);
   if (c_n == -1)

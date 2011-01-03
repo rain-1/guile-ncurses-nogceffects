@@ -1875,6 +1875,27 @@ in the given window.  Optionally move to X, Y before doing the insertion."
 	(raise (condition (&curses-bad-state-error))))))
 
 (define* (instr win #:key y x (n -1))
+  "Returns, as a simple string, the characters starting at the current
+position in the given window.  If N is given, the string will contain
+no more than N characters.  If Y and X are given, move to X, Y first."
+  (if (not (window? win))
+      (raise (condition (&curses-wrong-type-arg-error
+			 (arg win)
+			 (expected-type 'window)))))
+  (if (and y x)
+      (begin
+	(if (not (and (integer? y) (exact? y)))
+	    (raise (condition (&curses-wrong-type-arg-error
+			       (arg y)
+			       (expected-type 'integer)))))
+	(if (not (and (integer? x) (exact? x)))
+	    (raise (condition (&curses-wrong-type-arg-error
+			       (arg x)
+			       (expected-type 'integer)))))))
+  (if (and (not (integer? n)) (not (exact? n)))
+      (raise (condition (&curses-wrong-type-arg-error
+			 (arg n)
+			 (expected-type 'integer)))))
   (and (if (and y x)
            (%wmove win y x)
            #t)
