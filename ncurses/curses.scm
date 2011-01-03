@@ -1848,10 +1848,31 @@ foreground color and color number BACK as its background color.  Returns
 	ret)))
 
 (define* (insch win ch #:key y x)
-  (and (if (and y x)
-           (%wmove win y x)
-           #t)
-       (%winsch win (xchar->list ch))))
+  "Insert the complex character CH before the character under the cursor
+in the given window.  Optionally move to X, Y before doing the insertion."
+  (if (not (window? win))
+      (raise (condition (&curses-wrong-type-arg
+			 (arg win)
+			 (expected-type 'window)))))
+  (if (not (xchar? ch))
+      (raise (condition (&curses-wrong-type-arg-error
+			 (arg ch)
+			 (expected-type 'xchar)))))
+  (if (and y x)
+      (begin
+	(if (not (and (integer? y) (exact? y)))
+	    (raise (condition (&curses-wrong-type-arg-error
+			       (arg y)
+			       (expected-type 'integer)))))
+	(if (not (and (integer? x) (exact? x)))
+	    (raise (condition (&curses-wrong-type-arg-error
+			       (arg x)
+			       (expected-type 'integer)))))))
+  (if (and y x)
+           (%wmove win y x))
+  (let ((ret (%winsch win (xchar->list ch))))
+    (if (not ret)
+	(raise (condition (&curses-bad-state-error))))))
 
 (define* (instr win #:key y x (n -1))
   (and (if (and y x)

@@ -2209,9 +2209,6 @@ gucu_winsch (SCM win, SCM ch)
   WINDOW *c_win;
   int ret;
 
-  SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "%winsch");
-  SCM_ASSERT (_scm_is_xchar (ch), ch, SCM_ARG2, "%winsch");
-
   c_win = _scm_to_window (win);
 #ifdef HAVE_NCURSESW
   {
@@ -2226,7 +2223,7 @@ gucu_winsch (SCM win, SCM ch)
   }
 #endif
   if (ret == ERR)
-    curs_bad_state_error ("%winsch");
+    return SCM_BOOL_F;
 
   return SCM_UNSPECIFIED;
 }
