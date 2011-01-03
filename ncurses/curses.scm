@@ -1384,6 +1384,10 @@ character, the default lines will be used."
 the terminal has preassigned, unmodifiable colors."
   (%can-change-color?))
 
+(define (cbreak!)
+  "Disables line buffering and erase/kill character processing."
+  (%cbreak!))
+
 (define* (chgat win n attr color #:key y x)
   "Changes that attributes and color pair of of a given number of
 characters starting at the current cursor location in the window WIN.
@@ -1532,6 +1536,10 @@ moving to the position X, Y"
 			 (expected-type 'screen)))))
   (or (%delscreen scr)
       (raise (condition (&curses-bad-state-error)))))
+
+(define (echo!)
+  "Enable echoing of typed characters"
+  (%echo!))
 
 (define* (echochar win ch #:key y x)
   "Puts the character CH into the given window at its current window
@@ -1684,6 +1692,18 @@ If this is not a subwindow, (-1 -1) is returned."
 			 (arg win)
 			 (expected-type 'window)))))
     (%getyx win))
+
+(define (halfdelay! tenths)
+  "Disable line buffering and erase/kill character processing, but, 
+only wait TENTHS tenths of seconds for a keypress"
+  (if (or (not (integer? tenths)) (not (exact? tenths)))
+      (raise (condition (&curses-wrong-type-arg
+			 (arg tenths)
+			 (expected-type 'integer)))))
+  (if (or (< tenths 1) (> tenths 255))
+      (raise (condition (&curses-out-of-range-error
+			 (arg tenths)))))
+  (%halfdelay! tenths))
 
 (define (has-colors?)
   "Returns #t if the current terminal has color capability."
@@ -1899,9 +1919,44 @@ optionally first moving to the location X, Y. "
        #t))
   (%winsnstr win str n))
 
+(define (intrflush! bf)
+  "If BF is #t, this enables the intrflush option.  When an interrupt key
+is pressed on the keyboard (interrupt, break, or quit) all output to the
+tty driver queue will be flushed. #f disables this."
+  (if (not (boolean? bf))
+      (raise (condition (&curses-wrong-type-arg-error
+			 (arg bf)
+			 (expected-type 'boolean)))))
+  (%intrflush! bf))
+
 (define (isendwin?)
   "Returns #t if the program has escaped from curses mode by calling 'endwin'"
   (%isendwin?))
+
+(define (keypad! win bf)
+  "If BF is true, functions keys will create integer key constants in routines
+like 'getch'.  If it is #f, function keys will emit escape character
+sequences that are specific to the terminal."
+  (if (not (window? win))
+      (raise (condition (&curses-wrong-type-arg-error
+			 (arg win)
+			 (expected-type 'window)))))
+  (if (not (boolean? bf))
+      (raise (condition (&curses-wrong-type-arg
+			 (arg bf)
+			 (expected-type 'boolean)))))
+  (%keypad! win bf))
+
+(define (meta! bf)
+  "If BF is true, the terminal will return 8 significant bits on input.  If
+it is #f, 7 bit input will be returned."
+  (if (not (boolean? bf))
+      (raise (condition (&curses-wrong-type-arg
+			 (arg bf)
+			 (expected-type 'boolean)))))
+  (let ((ret (%meta! win bf)))
+    (if (not ret)
+	(raise (condition (&curses-bad-state-error))))))
 
 (define (move win y x)
   (%wmove win y x))
@@ -1939,9 +1994,61 @@ optionally first moving to the location X, Y. "
      (else
       ret))))
 
+(define (nocbreak!)
+  "Enable line buffering and and erase/kill character processing."
+  (%nocbreak!))
+
+(define (nodelay! win bf)  
+  "If BF is true, 'getch' will be a non-blocking call. If BF is #f, 'getch'
+will wait for input."
+  (if (not (window? win))
+      (raise (condition (&curses-wrong-type-arg-error
+			 (arg win)
+			 (expected-type 'window)))))
+  (if (not (boolean? bf))
+      (raise (condition (&curses-wrong-type-arg
+			 (arg bf)
+			 (expected-type 'boolean)))))
+  (let ((ret (%nodelay! win bf)))
+    (if (not ret)
+	(raise (condition (&curses-bad-state-error))))))
+
+(define (noecho!)
+  "Disable echoing of typed characters."
+  (%noecho!))
+
+(define (notimeout! win bf)
+  "If BF is false, 'getch' sets a timer for how long it will wait for the 
+bytes that make up an escape sequence.  If it is true, it does not set
+a timer and will likely not interpret function keys correctly."
+  (if (not (window? win))
+      (raise (condition (&curses-wrong-type-arg-error
+			 (arg win)
+			 (expected-type 'window)))))
+  (if (not (boolean? bf))
+      (raise (condition (&curses-wrong-type-arg
+			 (arg bf)
+			 (expected-type 'boolean)))))
+  (let ((ret (%notimeout! win bf)))
+    (if (not ret)
+	(raise (condition (&curses-bad-state-error))))))
+
 ;; I hate it when people are 'clever' with dropping letters
 (define (nooutrefresh win)
   (noutrefresh win))
+
+(define (noqiflush!)
+  "Disable flushing of the input and output queues when an interrupt is
+received."
+  (let ((ret (%noqiflush!)))
+    (if (not ret)
+	(raise (condition (&curses-bad-state-error))))))
+
+(define (noraw!)
+  "Enable line buffering and erase/kill character processing."
+  (let ((ret (%noraw!)))
+    (if (not ret)
+	(raise (condition (&curses-bad-state-error))))))
 
 (define (pair-content pair)
   "Given a color pair number, this procedure returns a two-element
@@ -1960,6 +2067,20 @@ colors aren't initialized."
        (%wmove win y x)
        #t)
    (%pechochar win (xchar->list ch))))
+
+(define (qiflush!)
+  "Enable flushing of the input and output queues when an interrupt is
+received."
+  (let ((ret (%qiflush!)))
+    (if (not ret)
+	(raise (condition (&curses-bad-state-error))))))
+
+(define (raw!)
+  "Disable line buffering, interrupt processing, and erase/kill
+character processing."
+  (let ((ret (%raw!)))
+    (if (not ret)
+	(raise (condition (&curses-bad-state-error))))))
 
 (define (redrawln win beg_line end_line)
   (%wredrawln win beg_line end_line))
@@ -1990,6 +2111,20 @@ the <#screen> type and is created by 'newterm'."
     (if (not ret)
 	(raise (condition (&curses-bad-state-error))))))
 
+(define (timeout! win delay)
+  "Sets the amount of time that 'getch' will wait for a character.  If DELAY
+is negative, blocking read is used.  If DELAY is zero, non-blocking read is used.
+If delay is positive, 'getch' will block for DELAY milliseconds."
+  (if (not (window? win))
+      (raise (condition (&curses-wrong-type-arg-error
+			 (arg win)
+			 (expected-type 'window)))))
+  (if (not (integer? win))
+      (raise (condition (&curses-wrong-type-arg-error
+			 (arg delay)
+			 (expected-type 'integer)))))
+  (%timeout! win delay))
+
 (define (touchwin win)
   (%wtouchln win 0 (getmaxy win) #t))
 
@@ -2003,9 +2138,15 @@ the <#screen> type and is created by 'newterm'."
   (%wtouchln win start count #f))
 
 (define (typeahead! port-or-fd)
+  "Specifies an input port or file descriptor to be used for typeahead
+checking."
+  (if (and (not (input-port? port-or-fd)) (not (integer? port-or-fd)))
+      (raise (condition (&curses-wrong-type-arg
+			 (arg port-or-fd)
+			 (expected-type 'input-port)))))
   (cond
-   ((port? port-or-fd) (%typeahead (fileno port-or-fd)))
-   (else (%typeahead port-or-fd))))
+   ((port? port-or-fd) (%typeahead! (fileno port-or-fd)))
+   (else (%typeahead! port-or-fd))))
 
 (define (ungetch ch)
   "Pushes back a character onto the input queue so that it can later

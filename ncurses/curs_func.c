@@ -685,11 +685,7 @@ gucu_halfdelay (SCM tenths)
 {
   int c_tenths;
 
-  SCM_ASSERT (scm_is_integer (tenths), tenths, SCM_ARG1, "halfdelay!");
-
   c_tenths = scm_to_int (tenths);
-  if (c_tenths < 1 || c_tenths > 255)
-    scm_out_of_range ("halfdelay!", tenths);
 
   halfdelay (c_tenths);
 
@@ -851,16 +847,11 @@ gucu_intrflush (SCM bf)
   bool c_bf;
   int ret;
 
-  SCM_ASSERT (scm_is_bool (bf), bf, SCM_ARG1, "intrflush!");
-
   c_bf = scm_to_bool (bf);
 
   ret = intrflush (stdscr, c_bf);
-
-  if (ret == ERR)
-    curs_bad_state_error ("intrflush!");
-
-  return SCM_UNSPECIFIED;
+  /* If ret is ERR, this is a bad state */
+  RETURNTF (ret);
 }
 
 /* Return true if we are not in curses mode (endwin has been called) */
@@ -989,9 +980,6 @@ gucu_keypad_x (SCM win, SCM bf)
   bool c_bf;
   int ret;
 
-  SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "keypad!");
-  SCM_ASSERT (scm_is_bool (bf), bf, SCM_ARG2, "keypad!");
-
   c_win = _scm_to_window (win);
   c_bf = scm_to_bool (bf);
 
@@ -1068,20 +1056,16 @@ gucu_longname ()
 
 /* Set the terminal to 7 or 8 bit mode */
 SCM
-gucu_meta (SCM bf)
+gucu_meta_x (SCM bf)
 {
   bool c_bf;
   int ret;
 
-  SCM_ASSERT (scm_is_bool (bf), bf, SCM_ARG1, "meta!");
-
   c_bf = scm_to_bool (bf);
 
   ret = meta ((WINDOW *) 0, c_bf);
-  if (ret == ERR)
-    curs_bad_state_error ("meta!");
-
-  return SCM_UNSPECIFIED;
+  /* ret is ERR when state is bad */
+  RETURNTF (ret);
 }
 
 /* Set the maximum time between click and release for something to register
@@ -1272,17 +1256,11 @@ gucu_nodelay_x (SCM win, SCM bf)
   bool c_bf;
   int ret;
 
-  SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "nodelay!");
-  SCM_ASSERT (scm_is_bool (bf), bf, SCM_ARG2, "nodelay!");
-
   c_win = _scm_to_window (win);
   c_bf = scm_to_bool (bf);
 
   ret = nodelay (c_win, c_bf);
-  if (ret == ERR)
-    curs_bad_state_error ("nodelay!");
-
-  return SCM_UNSPECIFIED;
+  RETURNTF (ret);
 }
 
 /* Disable echoing of user-type characters */
@@ -1315,10 +1293,7 @@ gucu_noqiflush ()
 SCM
 gucu_noraw ()
 {
-  if (ERR == noraw ())
-    curs_bad_state_error ("noraw!");
-
-  return SCM_UNSPECIFIED;
+  RETURNTF (noraw ());
 }
 
 /* Do not set an timer for escape sequence processing */
@@ -1329,17 +1304,11 @@ gucu_notimeout_x (SCM win, SCM bf)
   bool c_bf;
   int ret;
 
-  SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "notimeout!");
-  SCM_ASSERT (scm_is_bool (bf), bf, SCM_ARG2, "notimeout!");
-
   c_win = _scm_to_window (win);
   c_bf = scm_to_bool (bf);
 
   ret = notimeout (c_win, c_bf);
-  if (ret == ERR)
-    curs_bad_state_error ("notimeout!");
-
-  return SCM_UNSPECIFIED;
+  RETURNTF (ret);
 }
 
 SCM
@@ -1515,10 +1484,7 @@ gucu_qiflush ()
 SCM
 gucu_raw ()
 {
-  if (ERR == raw ())
-    curs_bad_state_error ("raw!");
-
-  return SCM_UNSPECIFIED;
+  RETURNTF (raw ());
 }
 
 /* Indicate that this window should be redrawn in its entirity */
@@ -1861,9 +1827,6 @@ gucu_timeout_x (SCM win, SCM delay)
 {
   WINDOW *c_win;
   int c_delay;
-
-  SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "timeout!");
-  SCM_ASSERT (scm_is_integer (delay), delay, SCM_ARG2, "timeout!");
 
   c_win = _scm_to_window (win);
   c_delay = scm_to_int (delay);
@@ -2464,7 +2427,7 @@ gucu_init_function ()
   scm_c_define_gsubr ("%bkgdset!", 2, 0, 0, gucu_bkgdset_x);
   scm_c_define_gsubr ("%border", 9, 0, 0, gucu_border);
   scm_c_define_gsubr ("%can-change-color?", 0, 0, 0, gucu_can_change_color_p);
-  scm_c_define_gsubr ("cbreak!", 0, 0, 0, gucu_cbreak);
+  scm_c_define_gsubr ("%cbreak!", 0, 0, 0, gucu_cbreak);
   scm_c_define_gsubr ("%clear", 1, 0, 0, gucu_clear);
   scm_c_define_gsubr ("clearok!", 2, 0, 0, gucu_clearok);
   scm_c_define_gsubr ("%clrtobot", 1, 0, 0, gucu_clrtobot);
@@ -2482,7 +2445,7 @@ gucu_init_function ()
   scm_c_define_gsubr ("derwin", 5, 0, 0, gucu_derwin);
   scm_c_define_gsubr ("doupdate", 0, 0, 0, gucu_doupdate);
   scm_c_define_gsubr ("dupwin", 1, 0, 0, gucu_dupwin);
-  scm_c_define_gsubr ("echo!", 0, 0, 0, gucu_echo);
+  scm_c_define_gsubr ("%echo!", 0, 0, 0, gucu_echo);
   scm_c_define_gsubr ("%endwin", 0, 0, 0, gucu_endwin);
   scm_c_define_gsubr ("%erase", 1, 0, 0, gucu_erase);
   scm_c_define_gsubr ("erasechar", 0, 0, 0, gucu_erasechar);
@@ -2490,7 +2453,7 @@ gucu_init_function ()
   scm_c_define_gsubr ("%flash", 0, 0, 0, gucu_flash);
   scm_c_define_gsubr ("flushinp", 0, 0, 0, gucu_flushinp);
   scm_c_define_gsubr ("%getbkgd", 1, 0, 0, gucu_getbkgd);
-  scm_c_define_gsubr ("halfdelay!", 1, 0, 0, gucu_halfdelay);
+  scm_c_define_gsubr ("%halfdelay!", 1, 0, 0, gucu_halfdelay);
   scm_c_define_gsubr ("%has-colors?", 0, 0, 0, gucu_has_colors_p);
   scm_c_define_gsubr ("has-ic?", 0, 0, 0, gucu_has_ic_p);
   scm_c_define_gsubr ("has-il?", 0, 0, 0, gucu_has_il_p);
@@ -2501,7 +2464,7 @@ gucu_init_function ()
   scm_c_define_gsubr ("%initscr", 0, 0, 0, gucu_initscr);
   scm_c_define_gsubr ("init-color!", 4, 0, 0, gucu_init_color);
   scm_c_define_gsubr ("%init-pair!", 3, 0, 0, gucu_init_pair);
-  scm_c_define_gsubr ("intrflush!", 1, 0, 0, gucu_intrflush);
+  scm_c_define_gsubr ("%intrflush!", 1, 0, 0, gucu_intrflush);
   scm_c_define_gsubr ("%isendwin?", 0, 0, 0, gucu_isendwin_p);
   scm_c_define_gsubr ("is-linetouched?", 2, 0, 0, gucu_is_linetouched_p);
   scm_c_define_gsubr ("is-wintouched?", 1, 0, 0, gucu_is_wintouched_p);
@@ -2514,7 +2477,7 @@ gucu_init_function ()
   scm_c_define_gsubr ("killchar", 0, 0, 0, gucu_killchar);
   scm_c_define_gsubr ("leaveok!", 2, 0, 0, gucu_leaveok_x);
   scm_c_define_gsubr ("longname", 0, 0, 0, gucu_longname);
-  scm_c_define_gsubr ("meta!", 1, 0, 0, gucu_meta);
+  scm_c_define_gsubr ("%meta!", 1, 0, 0, gucu_meta_x);
   scm_c_define_gsubr ("mouseinterval", 1, 0, 0, gucu_mouseinterval);
   scm_c_define_gsubr ("mvcur", 4, 0, 0, gucu_mvcur);
   scm_c_define_gsubr ("mvderwin", 3, 0, 0, gucu_mvderwin);
@@ -2523,13 +2486,13 @@ gucu_init_function ()
   scm_c_define_gsubr ("newpad", 2, 0, 0, gucu_newpad);
   scm_c_define_gsubr ("newwin", 4, 0, 0, gucu_newwin);
   scm_c_define_gsubr ("nl!", 0, 0, 0, gucu_nl);
-  scm_c_define_gsubr ("nocbreak!", 0, 0, 0, gucu_nocbreak);
-  scm_c_define_gsubr ("nodelay!", 2, 0, 0, gucu_nodelay_x);
-  scm_c_define_gsubr ("noecho!", 0, 0, 0, gucu_noecho);
+  scm_c_define_gsubr ("%nocbreak!", 0, 0, 0, gucu_nocbreak);
+  scm_c_define_gsubr ("%nodelay!", 2, 0, 0, gucu_nodelay_x);
+  scm_c_define_gsubr ("%noecho!", 0, 0, 0, gucu_noecho);
   scm_c_define_gsubr ("nonl!", 0, 0, 0, gucu_nonl);
-  scm_c_define_gsubr ("noqiflush", 0, 0, 0, gucu_noqiflush);
-  scm_c_define_gsubr ("noraw!", 0, 0, 0, gucu_noraw);
-  scm_c_define_gsubr ("notimeout!", 2, 0, 0, gucu_notimeout_x);
+  scm_c_define_gsubr ("%noqiflush!", 0, 0, 0, gucu_noqiflush);
+  scm_c_define_gsubr ("%noraw!", 0, 0, 0, gucu_noraw);
+  scm_c_define_gsubr ("%notimeout!", 2, 0, 0, gucu_notimeout_x);
   scm_c_define_gsubr ("noutrefresh", 1, 0, 0, gucu_noutrefresh);
   scm_c_define_gsubr ("overlay", 2, 0, 0, gucu_overlay);
   scm_c_define_gsubr ("overwrite", 2, 0, 0, gucu_overwrite);
@@ -2537,8 +2500,8 @@ gucu_init_function ()
   scm_c_define_gsubr ("%pechochar", 2, 0, 0, gucu_pechochar);
   scm_c_define_gsubr ("pnoutrefresh", 7, 0, 0, gucu_pnoutrefresh);
   scm_c_define_gsubr ("prefresh", 7, 0, 0, gucu_prefresh);
-  scm_c_define_gsubr ("qiflush", 0, 0, 0, gucu_qiflush);
-  scm_c_define_gsubr ("raw!", 0, 0, 0, gucu_raw);
+  scm_c_define_gsubr ("%qiflush!", 0, 0, 0, gucu_qiflush);
+  scm_c_define_gsubr ("%raw!", 0, 0, 0, gucu_raw);
   scm_c_define_gsubr ("redrawwin", 1, 0, 0, gucu_redrawwin);
   scm_c_define_gsubr ("refresh", 1, 0, 0, gucu_refresh);
   scm_c_define_gsubr ("reset-prog-mode", 0, 0, 0, gucu_reset_prog_mode);
@@ -2560,8 +2523,8 @@ gucu_init_function ()
   scm_c_define_gsubr ("syncok!", 2, 0, 0, gucu_syncok_x);
   scm_c_define_gsubr ("term-attrs", 0, 0, 0, gucu_term_attrs);
   scm_c_define_gsubr ("termname", 0, 0, 0, gucu_termname);
-  scm_c_define_gsubr ("timeout!", 2, 0, 0, gucu_timeout_x);
-  scm_c_define_gsubr ("%typeahead", 1, 0, 0, gucu_typeahead);
+  scm_c_define_gsubr ("%timeout!", 2, 0, 0, gucu_timeout_x);
+  scm_c_define_gsubr ("%typeahead!", 1, 0, 0, gucu_typeahead_x);
   scm_c_define_gsubr ("%ungetch", 1, 0, 0, gucu_ungetch);
   scm_c_define_gsubr ("use-default-colors", 0, 0, 0, gucu_use_default_colors);
   scm_c_define_gsubr ("use-env", 1, 0, 0, gucu_use_env);
