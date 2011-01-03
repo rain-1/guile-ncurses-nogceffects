@@ -729,6 +729,13 @@ gucu_has_key_p (SCM key)
   RETURNTF (has_key (c_key));
 }
 
+/* Return #t if the mouse driver has been successfully initialized. */
+SCM
+gucu_has_mouse_p (void)
+{
+  return (scm_from_bool (has_mouse ()));
+}
+
 /* When true, try to use a terminal's hardware to clear characters */
 SCM
 gucu_idcok_x (SCM win, SCM bf)
@@ -1070,9 +1077,6 @@ SCM
 gucu_mouseinterval (SCM thousandths)
 {
   int c_thousandths, ret;
-
-  SCM_ASSERT (scm_is_integer (thousandths), thousandths, SCM_ARG1,
-	      "mouseinterval");
 
   c_thousandths = scm_to_int (thousandths);
 
@@ -2082,10 +2086,6 @@ gucu_wenclose_p (SCM win, SCM y, SCM x)
   int c_y, c_x;
   bool ret;
 
-  SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "wenclose?");
-  SCM_ASSERT (scm_is_integer (y), y, SCM_ARG2, "wenclose?");
-  SCM_ASSERT (scm_is_integer (x), x, SCM_ARG3, "wenclose?");
-
   c_win = _scm_to_window (win);
   c_y = scm_to_int (y);
   c_x = scm_to_int (x);
@@ -2442,6 +2442,7 @@ gucu_init_function ()
   scm_c_define_gsubr ("has-ic?", 0, 0, 0, gucu_has_ic_p);
   scm_c_define_gsubr ("has-il?", 0, 0, 0, gucu_has_il_p);
   scm_c_define_gsubr ("%has-key?", 1, 0, 0, gucu_has_key_p);
+  scm_c_define_gsubr ("%has-mouse?", 0, 0, 0, gucu_has_mouse_p);
   scm_c_define_gsubr ("idcok!", 2, 0, 0, gucu_idcok_x);
   scm_c_define_gsubr ("idlok!", 2, 0, 0, gucu_idlok_x);
   scm_c_define_gsubr ("immedok!", 2, 0, 0, gucu_immedok_x);
@@ -2520,7 +2521,7 @@ gucu_init_function ()
   scm_c_define_gsubr ("wcursyncup", 1, 0, 0, gucu_wcursyncup);
   scm_c_define_gsubr ("%wdelch", 1, 0, 0, gucu_wdelch);
   scm_c_define_gsubr ("%wechochar", 2, 0, 0, gucu_wechochar);
-  scm_c_define_gsubr ("wenclose?", 3, 0, 0, gucu_wenclose_p);
+  scm_c_define_gsubr ("%wenclose?", 3, 0, 0, gucu_wenclose_p);
   scm_c_define_gsubr ("%wgetch", 1, 0, 0, gucu_wgetch);
   scm_c_define_gsubr ("%whline", 3, 0, 0, gucu_whline);
   scm_c_define_gsubr ("%winch", 1, 0, 0, gucu_winch);

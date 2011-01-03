@@ -5107,6 +5107,10 @@ Mouse events are represented by @code{KEY_MOUSE} pseudo-key values in the
 
 To make mouse events visible, use the @code{mousemask} function.
 
+@deffn Procedure has-mouse?
+Returns @code{#t} if the mouse driver has been successfully installed.
+@end deffn
+
 @deffn Procedure mousemask mask
 
 This will set the mouse events to be reported.  By default, no mouse

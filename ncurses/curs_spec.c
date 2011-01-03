@@ -265,8 +265,6 @@ gucu_ungetmouse (SCM event)
   MEVENT *me;
   int ret;
 
-  SCM_ASSERT (_scm_is_mevent (event), event, SCM_ARG1, "ungetmouse");
-
   me = _scm_to_mevent (event);
   ret = ungetmouse (me);
   free (me);
@@ -911,11 +909,11 @@ gucu_init_special ()
   scm_c_define_gsubr ("%wattr-set!", 3, 0, 0, gucu_wattr_set_x);
   scm_c_define_gsubr ("%color-content", 1, 0, 0, gucu_color_content);
   scm_c_define_gsubr ("delwin", 1, 0, 0, gucu_delwin);
-  scm_c_define_gsubr ("getmouse", 0, 0, 0, gucu_getmouse);
+  scm_c_define_gsubr ("%getmouse", 0, 0, 0, gucu_getmouse);
 #ifdef HAVE_GRANTPT
   scm_c_define_gsubr ("grantpt", 1, 0, 0, gucu_grantpt);
 #endif
-  scm_c_define_gsubr ("mousemask", 1, 0, 0, gucu_mousemask);
+  scm_c_define_gsubr ("%mousemask", 1, 0, 0, gucu_mousemask);
 #ifdef HAVE_PTSNAME
   scm_c_define_gsubr ("ptsname", 1, 0, 0, gucu_ptsname);
 #endif

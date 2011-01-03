@@ -90,6 +90,7 @@
 	    has-ic?
 	    has-il?
 	    has-key?
+	    has-mouse?
 	    hline
 	    idcok!
 	    idlok!
@@ -135,6 +136,7 @@
 	    noutrefresh
 	    overlay
 	    overwrite
+	    mevent?
 	    pair-number
 	    pechochar
 	    pnoutrefresh
@@ -1690,6 +1692,11 @@ window."
 (define (getmaxy win)
   (car (getmaxyx win)))
 
+(define (getmouse)
+  "This returns either a list of mouse information or @code{#f}.
+The list is of the form (id x y z button_state)."
+  (%getmouse))
+
 (define* (getnstr win n #:key y x)
   "Receives a series of keypresses, up to N, from the given window
 until a newline or carriage return is received.  The terminating
@@ -1777,6 +1784,10 @@ current terminal type recognizes a key of that value."
 			 (arg key)
 			 (expected-type 'integer)))))
   (%has-key? key))
+
+(define (has-mouse?)
+  "Return #t if the mouse driver has been successfully initialized."
+  (%has-mouse?))
 
 (define* (hline win ch n #:key y x)
   "Draws a horizontal line of length N using the complex character CH.
@@ -2088,6 +2099,51 @@ it is #f, 7 bit input will be returned."
     (if (not ret)
 	(raise (condition (&curses-bad-state-error))))))
 
+(define (mouseinterval delay)
+  "Set the maximum time, in thousandths of a second, between click and
+release to register as a button press.  Returns the previous value.
+If delay is -1, it returns the current interval without setting it."
+  (if (not (integer? delay))
+      (raise (condition (&curses-wrong-type-arg-error
+			 (arg delay)
+			 (expected-type 'integer)))))
+  (%mouseinterval delay))
+
+(define (mousemask mask)
+  "Given a bit-mask of mouse events such as BUTTON1_PRESSED, this
+procedure sets the mouse events that are to be captured.  It
+returns a mask of those events that actually can be reported, or
+zero on failure.  Setting the mouse mask to zero turns off mouse
+events."
+  (if (not (integer? mask))
+      (raise (condition (&curses-wrong-type-arg
+			 (arg mask)
+			 (expected-type 'integer)))))
+  (%mousemask mask))
+
+(define (mouse-trafo win sy sx to_screen)
+  "If TO_SCREEN is #t, converts the window-relative coordinates SY and SX
+to stdscr relative coordinates, returned as a two-element list (Y X).  If
+TO_SCREEN is #f, it does the opposite conversion.  It returns #f if
+a conversion would put a location outside the window."
+  (if (not (window? win))
+      (raise (condition (&curses-wrong-type-arg-error
+			 (arg win)
+			 (expected-type 'window)))))
+  (if (not (and (integer? sy) (exact? sy)))
+      (raise (condition (&curses-wrong-type-arg-error
+			 (arg sy)
+			 (expected-type 'integer)))))
+  (if (not (and (integer? sx) (exact? sx)))
+      (raise (condition (&curses-wrong-type-arg-error
+			 (arg sx)
+			 (expected-type 'integer)))))
+  (if (not (boolean? to_screen))
+      (raise (condition (&curses-wrong-type-arg
+			 (arg to_screen)
+			 (expected-type 'boolean)))))
+  (%mouse-trafo win sy sx to_screen))
+
 (define (move win y x)
   (%wmove win y x))
 
@@ -2323,6 +2379,14 @@ key constant like KEY_ENTER."
 			 (expected-type 'integer/char)))))
   (%ungetch ch))
 
+(define (ungetmouse event)
+  "Pushes the mouse event EVENT back onto the input queue."
+  (if (not (mevent? event))
+      (raise (condition (&curses-wrong-type-arg
+			 (arg event)
+			 (expected-type 'mevent)))))
+  (%ungetmouse event))
+
 (define (use-extended-names enable)
   "If ENABLE is #t, this enables whether to allow user-defined,
 nonstandard names in the terminfo interface.  If ENABLE is #f, this is
@@ -2365,6 +2429,23 @@ If X and Y are given, the cursor is first moved to that location."
        (or 
 	(%wvline win (xchar->list ch) n)
 	(raise (condition (&curses-bad-state-error))))))
+
+(define (wenclose? win y x)
+  "Returns #t if the screen-relative coordinates Y and X are enclosed
+by the given window."
+  (if (not (window? win))
+      (raise (condition (&curses-wrong-type-arg
+			 (arg win)
+			 (expected-type 'window)))))
+  (if (not (and (integer? y) (exact? y)))
+      (raise (condition (&curses-wrong-type-arg-error
+			 (arg y)
+			 (expected-type 'integer)))))
+  (if (not (and (integer? x) (exact? x)))
+      (raise (condition (&curses-wrong-type-arg-error
+			 (arg x)
+			 (expected-type 'integer)))))
+  (%wenclose? win y x))
 
 (load-extension "libguile-ncurses" "gucu_init")
 

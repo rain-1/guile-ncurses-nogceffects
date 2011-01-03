@@ -120,6 +120,8 @@ GUCU_LOCAL int _scm_is_mevent (SCM x);
 GUCU_LOCAL MEVENT *_scm_to_mevent (SCM x);
 GUCU_LOCAL SCM _scm_from_mevent (MEVENT *);
 
+GUCU_API SCM gucu_is_mevent_p (SCM x);
+
 GUCU_LOCAL int _scm_is_screen (SCM x);
 GUCU_LOCAL SCREEN *_scm_to_screen (SCM x);
 GUCU_LOCAL SCM _scm_from_screen (SCREEN * x);
