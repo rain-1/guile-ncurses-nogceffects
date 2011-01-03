@@ -1645,6 +1645,14 @@ location X, Y, if given."
            #t)
        (%wgetch win)))
 
+(define (getbegx win)
+  "Returns the beginning x coordinate of the specified window."
+  (cadr (getbegyx win)))
+
+(define (getbegy win)
+  "Returns the beginning y coordinate of the specified window."
+  (car (getbegyx win)))
+
 (define (getbegyx win)
   "Returns as a two-element list (y x) the beginning coordinates of
 the specified window."
@@ -1653,6 +1661,22 @@ the specified window."
 			 (arg win)
 			 (expected-type 'window)))))
     (%getbegyx win))
+
+(define (getcurx win)
+  "Returns the current cursor X location."
+  (cadr (getyx win)))
+
+(define (getcury win)
+  "Returns the current cursor Y location."
+  (car (getyx win)))
+
+(define (getmaxx win)
+  "Returns the window's size in the X direction ."
+  (cadr (getmaxyx win)))
+
+(define (getmaxy win)
+  "Returns the window's size in the Y direction."
+  (car (getmaxyx win)))
 
 (define (getmaxyx win)
   "Returns as a two-element list (y x) the size of the specified
@@ -1695,6 +1719,16 @@ position before receiving characters."
            (%wmove win y x)
            #t)
        (%wgetnstr win n)))
+
+(define (getparx win)
+  "If WIN is a subwindow, return the x coordinate of the subwindow
+relative to the parent, or -1 if it is not a subwindow."
+  (cadr (getparyx win)))
+
+(define (getpary win)
+  "If WIN is a subwindow, return the x coordinate of the subwindow
+relative to the parent, or -1 if it is not a subwindow."
+  (car (getparyx win)))
 
 (define (getparyx win)
   "If WIN is a subwindow, this returns as a two-element list (y x) the

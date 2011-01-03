@@ -4692,26 +4692,38 @@ value of KEY_RESIZE instead of a string.
 @subsection Cursor location and window coordinates
 
 @deffn Procedure getyx win
+@deffns Procedure getcurx win
+@deffns Procedure getcury win
 The @code{getyx} procedure returns the current cursor position as a
 list containing two integers.  The first is the y position and the
 second is the x position.
+
+The other two procedures return the x y positions respectively.
 @end deffn
 
 @deffn Procedure getparyx win
+@deffnx Procedure getparx win
+@deffnx Procedure getpary win
 If @var{win} is a subwindow, the @code{getparyx} procedure places the
 beginning coordinates of the subwindow relative to the parent window
 into two element list @code{(y x)}.  Otherwise, @code{(-1 -1)} is
 returned.
+
+The other two procedures return the x and y respectively.
 @end deffn
 
 @deffn Procedure getbegyx win
-Returns the beginning coordinates of a window as two element list
-@code{(y x)}.
+@deffnx Procedure getbegx win
+@deffnx Procedure getbegy win
+The procedure @code{getbegyx} returns the beginning coordinates of a
+window as two element list @code{(y x)}.
 @end deffn
 
 @deffn Procedure getmaxyx win
-Returns the size of a window as two element list
-@code{(y x)}.
+@deffnx Procedure getmaxx win
+@deffnx Procedure getmaxy win
+The procedure @code{getmaxyx} returns the size of a window as two
+element list @code{(y x)}.
 @end deffn
 
 @node Getting a rendered character from the window, Getting a string of characters and attributes from a window, Cursor location and window coordinates, The basic curses library
