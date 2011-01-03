@@ -1838,7 +1838,7 @@ gucu_timeout_x (SCM win, SCM delay)
 
 /* Given a file descriptor, se special optimizations looking for line breaks */
 SCM
-gucu_typeahead (SCM fd)
+gucu_typeahead_x (SCM fd)
 {
   int c_fd, ret;
 
