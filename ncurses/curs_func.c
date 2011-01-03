@@ -2269,10 +2269,6 @@ gucu_wmove (SCM win, SCM y, SCM x)
   WINDOW *c_win;
   int c_y, c_x, ret;
 
-  SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "%wmove");
-  SCM_ASSERT (scm_is_integer (y), y, SCM_ARG2, "%wmove");
-  SCM_ASSERT (scm_is_integer (x), x, SCM_ARG3, "%wmove");
-
   c_win = _scm_to_window (win);
   c_y = scm_to_int (y);
   c_x = scm_to_int (x);

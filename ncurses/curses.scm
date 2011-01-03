@@ -2145,6 +2145,20 @@ a conversion would put a location outside the window."
   (%mouse-trafo win sy sx to_screen))
 
 (define (move win y x)
+  "Move the cursor to the position X, Y in the window WIN. Return #t
+if the position is within in the window."
+  (if (not (window? win))
+      (raise (condition (&curses-wrong-type-arg-error
+			 (arg win)
+			 (expected-type 'window)))))
+	(if (not (and (integer? y) (exact? y)))
+	    (raise (condition (&curses-wrong-type-arg-error
+			       (arg y)
+			       (expected-type 'integer)))))
+	(if (not (and (integer? x) (exact? x)))
+	    (raise (condition (&curses-wrong-type-arg-error
+			       (arg x)
+			       (expected-type 'integer)))))
   (%wmove win y x))
 
 (define (napms ms)
