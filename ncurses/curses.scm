@@ -1475,10 +1475,31 @@ It can return #f if the color is out of range or colors aren't initialized."
 	(raise (condition (&curses-out-of-range-error
 			   (arg win)))))))
 
+(define (curs-set vis)
+  "Sets the visiblity of the cursor.  If VIS is 0, it is invisible.
+1 is visible.  2 is very visible.  Returns the previous setting, or #f
+on error."
+  (if (not (integer? vis))
+      (raise (condition (&curses-wrong-type-arg-error
+			 (arg vis)
+			 (expected-type 'integer)))))
+  (if (or (< vis 0) (> vis 2))
+      (raise (condition (&curses-out-of-range-error
+			 (arg vis)))))
+  (%curs-set vis))
+
 (define (curses-version)
   "Returns, as a string, the version number and patch level of the 
 underlying ncurses library."
   (%curses-version))
+
+(define (def-prog-mode)
+  "Cache the current terminal mode."
+  (%def-prog-mode))
+
+(define (def-shell-mode)
+  "Cache the current terminal mode."
+  (%def-shell-mode))
 
 (define* (delch win #:key y x)
   "Deletes the character under the cursor in the given window,
@@ -1684,6 +1705,11 @@ If this is not a subwindow, (-1 -1) is returned."
 			 (arg win)
 			 (expected-type 'window)))))
     (%getparyx win))
+
+(define (getsyx)
+  "Returns the current coordinates of the virtual screen cursor as a
+two-element list (y x)."
+  (%getsyx))
 
 (define (getyx win)
   "Returns the cursor position of the given window as a two-element list."
@@ -2031,6 +2057,14 @@ it is #f, 7 bit input will be returned."
 (define (move win y x)
   (%wmove win y x))
 
+(define (napms ms)
+  "Pause for MS milliseconds."
+  (if (not (integer? ms))
+      (raise (condition (&curses-wrong-type-arg-error
+			 (arg ms)
+			 (expected-type 'integer)))))
+  (%napms ms))
+
 (define (newterm type outport inport)
   "Create a new terminal whose input and output are Guile ports."
   (if (not (defined? '%newterm))
@@ -2155,6 +2189,28 @@ character processing."
 (define (redrawln win beg_line end_line)
   (%wredrawln win beg_line end_line))
 
+(define (reset-prog-mode)
+  "If 'def-prog-mode' was called to store the terminal's state, this
+procedure will restore it to that state."
+  (%reset-prog-mode))
+
+(define (reset-shell-mode)
+  "If 'def-shell-mode' was called to store the terminal's state, this
+procedure will restore it to that state."
+  (%reset-shell-mode))
+
+(define (resetty)
+  "Restores the state of the terminal modes."
+  (%resetty))
+
+(define (resettty)
+  "An alias for 'resetty'"
+  (%resetty))
+
+(define (savetty)
+  "Saves the state of the terminal modes."
+  (%savetty))
+
 (define (scroll win)
   (scrl win 1))
 
@@ -2166,6 +2222,11 @@ the <#screen> type and is created by 'newterm'."
 			 (arg term)
 			 (expected-type 'screen)))))
   (%set-term term))
+
+(define (setsyx y x)
+  "Sets the virtual screen cursor to X, Y.  (Why would anyone use
+this?)"
+  (%setsyx y x))
 
 (define (standend! win)
   "Turns off all attributes of the given window."

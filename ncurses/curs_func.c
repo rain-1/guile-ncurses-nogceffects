@@ -392,11 +392,7 @@ gucu_curs_set (SCM visibility)
 {
   int c_visibility, ret;
 
-  SCM_ASSERT (scm_is_integer (visibility), visibility, SCM_ARG1, "curs-set");
-
   c_visibility = scm_to_int (visibility);
-  if (c_visibility < 0 || c_visibility > 2)
-    scm_out_of_range ("curs-set", visibility);
   ret = curs_set (c_visibility);
   /* Return values is the previous visibility setting, or ERR if the
      requested visibility is not supported.  */
@@ -1167,8 +1163,6 @@ gucu_napms (SCM ms)
 {
   int c_ms;
 
-  SCM_ASSERT (scm_is_integer (ms), ms, SCM_ARG1, "napms");
-
   c_ms = scm_to_int (ms);
 
   napms (c_ms);
@@ -1674,9 +1668,6 @@ SCM
 gucu_setsyx (SCM y, SCM x)
 {
   int c_y, c_x;
-
-  SCM_ASSERT (scm_is_integer (y), y, SCM_ARG1, "setsyx");
-  SCM_ASSERT (scm_is_integer (x), x, SCM_ARG2, "setsyx");
 
   c_y = scm_to_int (y);
   c_x = scm_to_int (x);
@@ -2428,10 +2419,10 @@ gucu_init_function ()
   scm_c_define_gsubr ("color-pair", 1, 0, 0, gucu_COLOR_PAIR);
   scm_c_define_gsubr ("%color-set!", 2, 0, 0, gucu_color_set);
   scm_c_define_gsubr ("copywin", 9, 0, 0, gucu_copywin);
-  scm_c_define_gsubr ("curs-set", 1, 0, 0, gucu_curs_set);
+  scm_c_define_gsubr ("%curs-set", 1, 0, 0, gucu_curs_set);
   scm_c_define_gsubr ("%curses-version", 0, 0, 0, gucu_curses_version);
-  scm_c_define_gsubr ("def-prog-mode", 0, 0, 0, gucu_def_prog_mode);
-  scm_c_define_gsubr ("def-shell-mode", 0, 0, 0, gucu_def_shell_mode);
+  scm_c_define_gsubr ("%def-prog-mode", 0, 0, 0, gucu_def_prog_mode);
+  scm_c_define_gsubr ("%def-shell-mode", 0, 0, 0, gucu_def_shell_mode);
   scm_c_define_gsubr ("define-key", 2, 0, 0, gucu_define_key);
   scm_c_define_gsubr ("delay-output", 1, 0, 0, gucu_delay_output);
   scm_c_define_gsubr ("%delscreen", 1, 0, 0, gucu_delscreen);
@@ -2475,7 +2466,7 @@ gucu_init_function ()
   scm_c_define_gsubr ("mvcur", 4, 0, 0, gucu_mvcur);
   scm_c_define_gsubr ("mvderwin", 3, 0, 0, gucu_mvderwin);
   scm_c_define_gsubr ("mvwin", 3, 0, 0, gucu_mvwin);
-  scm_c_define_gsubr ("napms", 1, 0, 0, gucu_napms);
+  scm_c_define_gsubr ("%napms", 1, 0, 0, gucu_napms);
   scm_c_define_gsubr ("newpad", 2, 0, 0, gucu_newpad);
   scm_c_define_gsubr ("newwin", 4, 0, 0, gucu_newwin);
   scm_c_define_gsubr ("nl!", 0, 0, 0, gucu_nl);
@@ -2497,10 +2488,10 @@ gucu_init_function ()
   scm_c_define_gsubr ("%raw!", 0, 0, 0, gucu_raw);
   scm_c_define_gsubr ("redrawwin", 1, 0, 0, gucu_redrawwin);
   scm_c_define_gsubr ("refresh", 1, 0, 0, gucu_refresh);
-  scm_c_define_gsubr ("reset-prog-mode", 0, 0, 0, gucu_reset_prog_mode);
-  scm_c_define_gsubr ("reset-shell-mode", 0, 0, 0, gucu_reset_shell_mode);
-  scm_c_define_gsubr ("resetty", 0, 0, 0, gucu_resetty);
-  scm_c_define_gsubr ("savetty", 0, 0, 0, gucu_savetty);
+  scm_c_define_gsubr ("%reset-prog-mode", 0, 0, 0, gucu_reset_prog_mode);
+  scm_c_define_gsubr ("%reset-shell-mode", 0, 0, 0, gucu_reset_shell_mode);
+  scm_c_define_gsubr ("%resetty", 0, 0, 0, gucu_resetty);
+  scm_c_define_gsubr ("%savetty", 0, 0, 0, gucu_savetty);
   scm_c_define_gsubr ("scr-dump", 1, 0, 0, gucu_scr_dump);
   scm_c_define_gsubr ("scr-init", 1, 0, 0, gucu_scr_init);
   scm_c_define_gsubr ("scrollok!", 2, 0, 0, gucu_scrollok_x);
@@ -2509,7 +2500,7 @@ gucu_init_function ()
   scm_c_define_gsubr ("scrl", 2, 0, 0, gucu_scrl);
   scm_c_define_gsubr ("&set-term", 1, 0, 0, gucu_set_term);
   scm_c_define_gsubr ("setscrreg!", 3, 0, 0, gucu_setscrreg_x);
-  scm_c_define_gsubr ("setsyx", 2, 0, 0, gucu_setsyx);
+  scm_c_define_gsubr ("%setsyx", 2, 0, 0, gucu_setsyx);
   scm_c_define_gsubr ("%start-color!", 0, 0, 0, gucu_start_color);
   scm_c_define_gsubr ("subpad", 5, 0, 0, gucu_subpad);
   scm_c_define_gsubr ("subwin", 5, 0, 0, gucu_subwin);

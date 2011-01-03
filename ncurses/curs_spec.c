@@ -933,7 +933,7 @@ gucu_init_special ()
   scm_c_define_gsubr ("%getbegyx", 1, 0, 0, gucu_getbegyx);
   scm_c_define_gsubr ("%getmaxyx", 1, 0, 0, gucu_getmaxyx);
   scm_c_define_gsubr ("%getparyx", 1, 0, 0, gucu_getparyx);
-  scm_c_define_gsubr ("getsyx", 0, 0, 0, gucu_getsyx);
+  scm_c_define_gsubr ("%getsyx", 0, 0, 0, gucu_getsyx);
   scm_c_define_gsubr ("%getyx", 1, 0, 0, gucu_getyx);
   scm_c_define_gsubr ("%acs-block", 0, 0, 0, gucu_ACS_BLOCK);
   scm_c_define_gsubr ("%acs-board", 0, 0, 0, gucu_ACS_BOARD);
