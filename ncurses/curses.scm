@@ -2024,7 +2024,7 @@ it is #f, 7 bit input will be returned."
       (raise (condition (&curses-wrong-type-arg
 			 (arg bf)
 			 (expected-type 'boolean)))))
-  (let ((ret (%meta! win bf)))
+  (let ((ret (%meta! bf)))
     (if (not ret)
 	(raise (condition (&curses-bad-state-error))))))
 
