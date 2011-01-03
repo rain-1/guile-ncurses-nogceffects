@@ -1934,11 +1934,39 @@ optionally first moving to the location X, Y. "
        (raise (condition (&curses-bad-state-error))))))
 
 (define* (insstr win str #:key y x (n -1))
-  (and
-   (if (and y x)
-       (%wmove win y x)
-       #t))
-  (%winsnstr win str n))
+  "Insert a character string (a regular scheme string) before the
+character under the cursor.  All character to the right of thec cursor
+are shifted right.  If N is given, it will insert at most N
+characters.  If Y and X are given, the cursor will be moved to that
+location before inserting."
+  (if (not (window? win))
+      (raise (condition (&curses-wrong-type-arg-error
+			 (arg win)
+			 (expected-type 'window)))))
+  (if (not (string? str))
+      (raise (condition (&curses-wrong-type-arg-error
+			 (arg str)
+			 (expected-type 'string)))))
+  (if (and y x)
+      (begin
+	(if (not (and (integer? y) (exact? y)))
+	    (raise (condition (&curses-wrong-type-arg-error
+			       (arg y)
+			       (expected-type 'integer)))))
+	(if (not (and (integer? x) (exact? x)))
+	    (raise (condition (&curses-wrong-type-arg-error
+			       (arg x)
+			       (expected-type 'integer)))))))
+  (if (and (not (integer? n)) (not (exact? n)))
+      (raise (condition (&curses-wrong-type-arg-error
+			 (arg n)
+			 (expected-type 'integer)))))
+  (if (and y x)
+      (%wmove win y x)
+      #t)
+  (let ((ret (%winsnstr win str n)))
+    (if (not ret)
+	(raise (condition (&curses-bad-state-error))))))
 
 (define (intrflush! bf)
   "If BF is #t, this enables the intrflush option.  When an interrupt key

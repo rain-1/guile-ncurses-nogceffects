@@ -2249,10 +2249,6 @@ gucu_winsnstr (SCM win, SCM str, SCM n)
   WINDOW *c_win;
   int c_n, ret;
 
-  SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "%winsnstr");
-  SCM_ASSERT (scm_is_string (str), str, SCM_ARG2, "%winsnstr");
-  SCM_ASSERT (scm_is_integer (n), n, SCM_ARG3, "%winsnstr");
-
   c_win = _scm_to_window (win);
   c_n = scm_to_int (n);
 
@@ -2270,7 +2266,7 @@ gucu_winsnstr (SCM win, SCM str, SCM n)
   }
 #endif
   if (ret == ERR)
-    curs_bad_state_error ("%winsnstr");
+    return SCM_BOOL_F;
 
   return SCM_UNSPECIFIED;
 }
