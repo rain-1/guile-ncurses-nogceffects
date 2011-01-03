@@ -4692,8 +4692,8 @@ value of KEY_RESIZE instead of a string.
 @subsection Cursor location and window coordinates
 
 @deffn Procedure getyx win
-@deffns Procedure getcurx win
-@deffns Procedure getcury win
+@deffnx Procedure getcurx win
+@deffnx Procedure getcury win
 The @code{getyx} procedure returns the current cursor position as a
 list containing two integers.  The first is the y position and the
 second is the x position.
