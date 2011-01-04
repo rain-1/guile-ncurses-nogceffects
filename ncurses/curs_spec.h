@@ -32,6 +32,8 @@ GUCU_API SCM gucu_getbegyx (SCM win);
 GUCU_API SCM gucu_getmaxyx (SCM win);
 GUCU_API SCM gucu_getmouse (void);
 GUCU_API SCM gucu_getparyx (SCM win);
+GUCU_API SCM gucu_getparent (SCM win);
+GUCU_API SCM gucu_getscrreg (SCM win);
 GUCU_API SCM gucu_getsyx (void);
 GUCU_API SCM gucu_getyx (SCM win);
 #ifdef HAVE_GRANTPT

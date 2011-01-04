@@ -106,6 +106,18 @@
 	    insstr
 	    instr
 	    intrflush!
+	    is-cleared?
+	    is-idcok?
+	    is-idlok?
+	    is-immedok?
+	    is-keypad?
+	    is-leaveok?
+	    is-nodelay?
+	    is-notimeout?
+	    is-pad?
+	    is-scrollok?
+	    is-subwin?
+	    is-syncok?
 	    is-linetouched?
 	    is-wintouched?
 	    isendwin?
@@ -2069,6 +2081,101 @@ tty driver queue will be flushed. #f disables this."
 			 (arg bf)
 			 (expected-type 'boolean)))))
   (%intrflush! bf))
+
+(define (is-cleared? win)
+  "True if clearok is set, that is, if the next call to 'refresh'
+will clear the screen completely and redraw"
+  (if (not (window? win))
+      (raise (condition (&curses-wrong-type-arg-error
+			 (arg win)
+			 (expected-type 'window)))))
+  (%is-clearok? win))
+
+(define (is-idcok? win)
+  "True if idcok is set, that is, if curses is allowed to use the hardware
+insert/delete character feature of the terminal."
+  (if (not (window? win))
+      (raise (condition (&curses-wrong-type-arg-error
+			 (arg win)
+			 (expected-type 'window)))))
+  (%is-idcok? win))
+
+(define (is-idlok? win)
+  "True if idlok is set, that is, if curses is allowed to use the hardware
+insert/delete line feature of the terminal."
+  (if (not (window? win))
+      (raise (condition (&curses-wrong-type-arg-error
+			 (arg win)
+			 (expected-type 'window)))))
+  (%is-idlok? win))
+
+(define (is-immedok? win)
+  "True if immedok is set, that is, if any change in the window will
+cause it to automatically refresh."
+  (if (not (window? win))
+      (raise (condition (&curses-wrong-type-arg-error
+			 (arg win)
+			 (expected-type 'window)))))
+  (%is-immedok? win))
+
+(define (is-keypad? win)
+  "True if keypad is set, that is, if function keys will be interpreted for
+this window."
+  (if (not (window? win))
+      (raise (condition (&curses-wrong-type-arg-error
+			 (arg win)
+			 (expected-type 'window)))))
+  (%is-keypad? win))
+
+(define (is-nodelay? win)
+  "True if nodelay is set, that is, if 'getch' is a non-blocking call."
+  (if (not (window? win))
+      (raise (condition (&curses-wrong-type-arg-error
+			 (arg win)
+			 (expected-type 'window)))))
+  (%is-nodelay? win))
+
+(define (is-notimeout? win)
+  "True if notimeout is set."
+  (if (not (window? win))
+      (raise (condition (&curses-wrong-type-arg-error
+			 (arg win)
+			 (expected-type 'window)))))
+  (%is-notimeout? win))
+
+(define (is-pad? win)
+  "True if the window is a pad."
+  (if (not (window? win))
+      (raise (condition (&curses-wrong-type-arg-error
+			 (arg win)
+			 (expected-type 'window)))))
+  (%is-pad? win))
+
+(define (is-scrollok? win)
+  "True if scrollok is set.  That is, if attempting to move off the bottom
+margin of the screen will cause the window to scroll."
+  (if (not (window? win))
+      (raise (condition (&curses-wrong-type-arg-error
+			 (arg win)
+			 (expected-type 'window)))))
+  (%is-scrollok? win))
+
+(define (is-subwin? win)
+  "True if this window is a subwindow of another window."
+  (if (not (window? win))
+      (raise (condition (&curses-wrong-type-arg-error
+			 (arg win)
+			 (expected-type 'window)))))
+  (%is-subwin? win))
+
+(define (is-syncok? win)
+  "True if syncok is enabled, e.g, if every change to a window changes
+the ancestors of that window."
+  (if (not (window? win))
+      (raise (condition (&curses-wrong-type-arg-error
+			 (arg win)
+			 (expected-type 'window)))))
+  (%is-syncok? win))
 
 (define (isendwin?)
   "Returns #t if the program has escaped from curses mode by calling 'endwin'"

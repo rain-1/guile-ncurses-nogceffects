@@ -857,6 +857,78 @@ gucu_intrflush (SCM bf)
   RETURNTF (ret);
 }
 
+SCM
+gucu_is_cleared_p (SCM win)
+{
+  return scm_from_bool (is_cleared (_scm_to_window (win)));
+}
+
+SCM
+gucu_is_idcok_p (SCM win)
+{
+  return scm_from_bool (is_idcok (_scm_to_window (win)));
+}
+
+SCM
+gucu_is_idlok_p (SCM win)
+{
+  return scm_from_bool (is_islok (_scm_to_window (win)));
+}
+
+SCM
+gucu_is_immedok_p (SCM win)
+{
+  return scm_from_bool (is_immedok (_scm_to_window (win)));
+}
+
+SCM
+gucu_is_keypad_p (SCM win)
+{
+  return scm_from_bool (is_keypad (_scm_to_window (win)));
+}
+
+SCM
+gucu_is_leaveok_p (SCM win)
+{
+  return scm_from_bool (is_leaveok (_scm_to_window (win)));
+}
+
+SCM
+gucu_is_nodelay_p (SCM win)
+{
+  return scm_from_bool (is_nodelay (_scm_to_window (win)));
+}
+
+SCM
+gucu_is_notimeout_p (SCM win)
+{
+  return scm_from_bool (is_notimeout (_scm_to_window (win)));
+}
+
+SCM
+gucu_is_pad_p (SCM win)
+{
+  return scm_from_bool (is_pad (_scm_to_window (win)));
+}
+
+SCM
+gucu_is_scrollok_p (SCM win)
+{
+  return scm_from_bool (is_scrollok (_scm_to_window (win)));
+}
+
+SCM
+gucu_is_subwin_p (SCM win)
+{
+  return scm_from_bool (is_subwin (_scm_to_window (win)));
+}
+
+SCM
+gucu_is_syncok_p (SCM win)
+{
+  return scm_from_bool (is_syncok (_scm_to_window (win)));
+}
+
 /* Return true if we are not in curses mode (endwin has been called) */
 SCM
 gucu_isendwin_p ()
@@ -2447,6 +2519,18 @@ gucu_init_function ()
   scm_c_define_gsubr ("%init-pair!", 3, 0, 0, gucu_init_pair);
   scm_c_define_gsubr ("%intrflush!", 1, 0, 0, gucu_intrflush);
   scm_c_define_gsubr ("%isendwin?", 0, 0, 0, gucu_isendwin_p);
+  scm_c_define_gsubr ("%is-cleared?", 1, 0, 0, gucu_is_cleared_p);
+  scm_c_define_gsubr ("%is-idcok?", 1, 0, 0, gucu_is_idcok_p);
+  scm_c_define_gsubr ("%is-idlok?", 1, 0, 0, gucu_is_idlok_p);
+  scm_c_define_gsubr ("%is-immedok?", 1, 0, 0, gucu_is_immedok_p);
+  scm_c_define_gsubr ("%is-keypad?", 1, 0, 0, gucu_is_keypad_p);
+  scm_c_define_gsubr ("%is-leaveok?", 1, 0, 0, gucu_is_leaveok_p);
+  scm_c_define_gsubr ("%is-nodelay?", 1, 0, 0, gucu_is_nodelay_p);
+  scm_c_define_gsubr ("%is-notimeout?", 1, 0, 0, gucu_is_notimeout_p);
+  scm_c_define_gsubr ("%is-pad?", 1, 0, 0, gucu_is_pad_p);
+  scm_c_define_gsubr ("%is-scrollok?", 1, 0, 0, gucu_is_scrollok_p);
+  scm_c_define_gsubr ("%is-subwin?", 1, 0, 0, gucu_is_subwin_p);
+  scm_c_define_gsubr ("%is-syncok?", 1, 0, 0, gucu_is_syncok_p);
   scm_c_define_gsubr ("is-linetouched?", 2, 0, 0, gucu_is_linetouched_p);
   scm_c_define_gsubr ("is-wintouched?", 1, 0, 0, gucu_is_wintouched_p);
   scm_c_define_gsubr ("key-f", 1, 0, 0, gucu_KEY_F);

@@ -510,6 +510,18 @@ gucu_getparyx (SCM win)
   return (scm_list_2 (scm_from_int (y), scm_from_int (x)));
 }
 
+/* Return the range of the lines in the scroll region */
+SCM
+gucu_getscrreg (SCM win)
+{
+  int top, bottom;
+
+  wgetscrreg (_scm_to_window (win), &top, &bottom);
+
+  return (scm_list_2 (scm_from_int (top), scm_from_int (bottom)));
+}
+
+
 /* Get the location of the virtual screen cursor */
 SCM
 gucu_getsyx ()
@@ -903,6 +915,16 @@ gucu_curscr ()
   return s_ret;
 }
 
+SCM
+gucu_getparent (SCM win)
+{
+  WINDOW *parent = wgetparent (_scm_to_window (win));
+  if (parent != (WINDOW *) NULL)
+    return _scm_from_win (parent);
+  else
+    return SCM_BOOL_F;
+}
+
 void
 gucu_init_special ()
 {
@@ -931,6 +953,7 @@ gucu_init_special ()
   scm_c_define_gsubr ("%getbegyx", 1, 0, 0, gucu_getbegyx);
   scm_c_define_gsubr ("%getmaxyx", 1, 0, 0, gucu_getmaxyx);
   scm_c_define_gsubr ("%getparyx", 1, 0, 0, gucu_getparyx);
+  scm_c_define_gsubr ("%getscrreg", 1, 0, 0, gucu_getscrreg);
   scm_c_define_gsubr ("%getsyx", 0, 0, 0, gucu_getsyx);
   scm_c_define_gsubr ("%getyx", 1, 0, 0, gucu_getyx);
   scm_c_define_gsubr ("%acs-block", 0, 0, 0, gucu_ACS_BLOCK);
@@ -975,4 +998,5 @@ gucu_init_special ()
 #endif
   scm_c_define_gsubr ("stdscr", 0, 0, 0, gucu_stdscr);
   scm_c_define_gsubr ("curscr", 0, 0, 0, gucu_curscr);
+  scm_c_define_gsubr ("%getparent", 1, 0, 0, gucu_getparent);
 }
