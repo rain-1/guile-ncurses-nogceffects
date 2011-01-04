@@ -4936,7 +4936,7 @@ The return value is unspecified.
 @end deffn
 
 @deffn Procedure timeout! win delay
-@cindex Blockin
+@cindex Blocking
 @cindex Input, blocking
 @findex nodelay!
 
@@ -4969,6 +4969,19 @@ checking is done.
 The routine returns @code{#t} if the mode could be set and @code{#f}
 on failure.
 @end deffn
+
+There are a set of procedures to test the input options of a given window.
+
+@deffn Procedure is-keypad? win
+@deffnx Procedure is-meta? win
+@deffnx Procedure is-nodelay? win
+@deffnx Procedure is-immedok? win
+@deffnx Procedure is-notimeout? win
+
+These test the input options of the window @var{win} and return
+@code{#t} if they are set.
+@end deffn
+
 
 @node Inserting a character before the cursor, Inserting a string before the cursor, Input options, The basic curses library
 @subsection Inserting a character before the cursor
@@ -5401,8 +5414,20 @@ curses will then be able to detect the return key.
 
 The return values are unspecified;
 
-@end deffn
+@end deffn 
 
+There are a set of procedures to test the output options of a given window.
+
+@deffn Procedure is-cleared? win
+@deffnx Procedure is-idlok? win
+@deffnx Procedure is-idcok? win
+@deffnx Procedure is-immedok? win
+@deffnx Procedure is-leaveok? win
+@deffnx Procedure is-scrollok? win
+
+These test the output options of the window @var{win} and return
+@code{#t} if they are set.
+@end deffn
 
 @node Overlay and manipulate overlapped windows, Create and display pads, Output options, The basic curses library
 @subsection Overlay and manipulate overlapped windows
@@ -5470,6 +5495,11 @@ The newpad routine creates and returns @code{#<window>} pad with the
 given number of lines, @var{nlines}, and columns, @var{ncols}.
 
 @end deffn
+
+@deffn Procedure is-pad? win
+Returns @code{#t} if @var{win} is a pad.
+@end deffn
+
 
 @deffn Procedure subpad orig nlines ncols begin-y begin-x
 @cindex Pads
@@ -5996,6 +6026,10 @@ When using this routine, it is necessary to call @code{touchwin} or
 @code{touchline} on @var{orig} before calling @code{refresh} on the
 subwindow.
 
+@end deffn
+
+@deffn Procedure is-subwin? win
+Returns @code{#t} if @var{win} is a subwin.
 @end deffn
 
 @deffn Procedure derwin orig nlines ncols begin-y begin-x
