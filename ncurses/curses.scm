@@ -1459,6 +1459,20 @@ be cleared completely and repainted at the next window refresh."
     (or ret
 	(raise (condition (&curses-bad-state-error))))))
 
+(define (clearok! win bf)
+  "If clearok is called with BF as #t, the next call to 'refresh' with 
+this window will clear the screen completely and redraw the screen from
+scratch."
+  (if (not (window? win))
+      (raise (condition (&curses-wrong-type-arg-error
+			 (arg win)
+			 (expected-type 'window)))))
+  (if (not (boolean? bf))
+      (raise (condition (&curses-wrong-type-arg-error
+			 (arg bf)
+			 (expected-type 'boolean)))))
+  (%clearok! win bf))
+
 (define (clrtobot win)
   "Erases from the cursor location to the end of screen."
   (if (not (window? win))
@@ -1911,6 +1925,44 @@ X are given, it first moves the cursor to that location."
 	     (raise (conditions (&curses-bad-state-error)))
 	     (map list->xchar ret)))))
 
+(define (idcok! win bf)
+  "If idcok! is called with BF as #t, curses may use a terminal's hardware
+insert/delete character feature if it has such a feature."
+  (if (not (window? win))
+      (raise (condition (&curses-wrong-type-arg-error
+			 (arg win)
+			 (expected-type 'window)))))
+  (if (not (boolean? bf))
+      (raise (condition (&curses-wrong-type-arg-error
+			 (arg bf)
+			 (expected-type 'boolean)))))
+  (%idcok! win bf))
+
+(define (idlok! win bf)
+  "If idlok! is called with BF as #t, curses may use a terminal's hardware
+insert/delete line feature if it has such a feature."
+  (if (not (window? win))
+      (raise (condition (&curses-wrong-type-arg-error
+			 (arg win)
+			 (expected-type 'window)))))
+  (if (not (boolean? bf))
+      (raise (condition (&curses-wrong-type-arg-error
+			 (arg bf)
+			 (expected-type 'boolean)))))
+  (%idlok! win bf))
+
+(define (immedok! win bf)
+  "If immedok! is called with BF as #t, any chahge in the window image, such as the ones called by addch, automatically causes a call to 'refresh'."
+  (if (not (window? win))
+      (raise (condition (&curses-wrong-type-arg-error
+			 (arg win)
+			 (expected-type 'window)))))
+  (if (not (boolean? bf))
+      (raise (condition (&curses-wrong-type-arg-error
+			 (arg bf)
+			 (expected-type 'boolean)))))
+  (%immedok! win bf))
+
 (define (init-color! color r g b)
   "Initializes the color number COLOR to have the red-green-blue value
 R G B.  R G and B are integers between 0 and 1000.  Returns #t on
@@ -2218,6 +2270,21 @@ sequences that are specific to the terminal."
 			 (expected-type 'boolean)))))
   (%keypad! win bf))
 
+(define (leaveokok! win bf)
+  "If leaveok! is called with BF as #t, the cursor is allowed to be
+left wherever it happens to be, instead of taking the time to move it
+into its proper position.  This is a slight optimization for those
+programs that don't use the cursor."
+  (if (not (window? win))
+      (raise (condition (&curses-wrong-type-arg-error
+			 (arg win)
+			 (expected-type 'window)))))
+  (if (not (boolean? bf))
+      (raise (condition (&curses-wrong-type-arg-error
+			 (arg bf)
+			 (expected-type 'boolean)))))
+  (%leaveok! win bf))
+
 (define (meta! bf)
   "If BF is true, the terminal will return 8 significant bits on input.  If
 it is #f, 7 bit input will be returned."
@@ -2332,6 +2399,12 @@ if the position is within in the window."
      (else
       ret))))
 
+(define (nl) 
+  "Enables the underlying display device translate the return key into
+newline on input and translates newline into return and line-feed on
+output."
+  (%nl))
+
 (define (nocbreak!)
   "Enable line buffering and and erase/kill character processing."
   (%nocbreak!))
@@ -2354,6 +2427,12 @@ will wait for input."
 (define (noecho!)
   "Disable echoing of typed characters."
   (%noecho!))
+
+(define (nl) 
+  "Prevents the underlying display device from translating the return
+key into newline on input and translating newline into return and
+line-feed on output."
+  (%nonl))
 
 (define (notimeout! win bf)
   "If BF is false, 'getch' sets a timer for how long it will wait for the 
@@ -2388,6 +2467,38 @@ received."
     (if (not ret)
 	(raise (condition (&curses-bad-state-error))))))
 
+(define (overlay srcwin dstwin)
+  "This procedure overlays window SRCWIN on top of the window DSTWIN,
+so that the text in SRCWIN is copied to DSTWIN.  SRCWWIN and DSTWIN
+need not be the same size.  Blanks are not copied."
+  (if (not (window? srcwin))
+      (raise (condition (&curses-wrong-type-arg-error
+			 (arg srcwin)
+			 (expected-type 'window)))))
+  (if (not (window? dstwin))
+      (raise (condition (&curses-wrong-type-arg-error
+			 (arg dstwin)
+			 (expected-type 'window)))))
+  (let ((ret (%overlay srcwin dstwin)))
+    (if (not ret)
+	(raise (condition (&curses-bad-state-error))))))
+
+(define (overwrite srcwin dstwin)
+  "This procedure overlays window SRCWIN on top of the window DSTWIN,
+so that the text in SRCWIN is copied to DSTWIN.  SRCWWIN and DSTWIN
+need not be the same size.  Both text and blanks are copied."
+  (if (not (window? srcwin))
+      (raise (condition (&curses-wrong-type-arg-error
+			 (arg srcwin)
+			 (expected-type 'window)))))
+  (if (not (window? dstwin))
+      (raise (condition (&curses-wrong-type-arg-error
+			 (arg dstwin)
+			 (expected-type 'window)))))
+  (let ((ret (%overwrite srcwin dstwin)))
+    (if (not ret)
+	(raise (condition (&curses-bad-state-error))))))
+
 (define (pair-content pair)
   "Given a color pair number, this procedure returns a two-element
 list containing the foreground color number and the background color
@@ -2397,7 +2508,7 @@ colors aren't initialized."
       (raise (condition (&curses-wrong-type-arg-error
 			 (arg pair)
 			 (expected-type 'integer)))))
-  (%pair-content pair))  
+  (%pair-content pair)))  
 
 (define* (pechochar win ch #:key y x)
   (and
@@ -2456,6 +2567,13 @@ the <#screen> type and is created by 'newterm'."
 			 (arg term)
 			 (expected-type 'screen)))))
   (%set-term term))
+
+(define (setscrreg! win top bot)
+  "Sets the region of the window that will be scrolled if scrolling is
+enabled.  If the cursor moves off the bottom of the BOT line of the
+window, the region from line number TOP to line number BOT will
+scroll."
+  (%setscrreg! win top bot))
 
 (define (setsyx y x)
   "Sets the virtual screen cursor to X, Y.  (Why would anyone use
