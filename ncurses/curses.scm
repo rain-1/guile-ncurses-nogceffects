@@ -26,381 +26,390 @@
   #:use-module (srfi srfi-34)
   #:use-module (srfi srfi-35)
   #:export (
-	    %filter
-	    %wide-ncurses
-	    %ucs4-chars
-	    %scheme-char-to-c-char
-	    %scheme-char-from-c-char
-	    %scheme-char-to-c-wchar
-	    %scheme-char-from-c-wchar
-	    %xchar-from-chtype
-	    %xchar-to-chtype
-	    addch
-	    addchstr
-	    addstr
-	    assume-default-colors
-	    attr->list
-	    attr-get
-	    attr-off!
-	    attr-on!
-	    attr-set!
-	    baudrate
-	    beep
-	    bkgd
-	    bkgdset!
-	    border
-	    box
-	    can-change-color?
-	    cbreak!
-	    chgat
-	    clear
-	    clearok!
-	    clrtobot
-	    clrtoeol
-	    color-pair
-	    color-set!
-	    copywin
-	    curs-set
-	    curses-version
-	    def-prog-mode
-	    def-shell-mode
-	    define-key
-	    delay-output
-	    delch
-	    deleteln
-	    delscreen
-	    derwin
-	    doupdate
-	    dupwin
-	    echo!
-	    echochar
-	    endwin
-	    erase
-	    erasechar
-	    flash
-	    flushinp
-	    getbkgd
-	    getch
-	    getmaxy
-	    getmaxyx
-	    getnstr
-	    getwin
-	    halfdelay!
-	    has-colors?
-	    has-ic?
-	    has-il?
-	    has-key?
-	    has-mouse?
-	    hline
-	    idcok!
-	    idlok!
-	    immedok!
-	    inch
-	    inchstr
-	    init-color!
-	    init-pair!
-	    initscr
-	    insch
-	    insdelln
-	    insertln
-	    insstr
-	    instr
-	    intrflush!
-	    is-cleared?
-	    is-idcok?
-	    is-idlok?
-	    is-immedok?
-	    is-keypad?
-	    is-leaveok?
-	    is-nodelay?
-	    is-notimeout?
-	    is-pad?
-	    is-scrollok?
-	    is-subwin?
-	    is-syncok?
-	    is-linetouched?
-	    is-wintouched?
-	    isendwin?
-	    key-f
-	    keyname
-	    keypad!
-	    killchar
-	    leaveok!
-	    longname
-	    meta!
-	    mouseinterval
-	    move
-	    mvcur
-	    mvderwin
-	    mvwin
-	    napms
-	    newpad
-	    newwin
-	    nl!
-	    nocbreak!
-	    nodelay!
-	    noecho!
-	    nonl!
-	    nooutrefresh
-	    noqiflush!
-	    noraw!
-	    notimeout!
-	    noutrefresh
-	    overlay
-	    overwrite
-	    mevent?
-	    pair-number
-	    pechochar
-	    pnoutrefresh
-	    prefresh
-	    putwin
-	    qiflush!
-	    raw!
-	    redrawln
-	    redrawwin
-	    refresh
-	    reset-prog-mode
-	    reset-shell-mode
-	    resetty
-	    savetty
-	    scr-dump
-	    scr-init
-	    scr-restore
-	    scr-set
-	    scrl
-	    scroll
-	    scrollok!
-	    set-term
-	    setscrreg!
-	    setsyx
-	    standend!
-	    standout!
-	    start-color!
-	    subpad
-	    subwin
-	    syncok!
-	    term-attrs
-	    termname
-	    timeout!
-	    touchline
-	    touchwin
-	    typeahead!
-	    ungetch
-	    untouchline
-	    untouchwin
-	    use-default-colors
-	    use-env
-	    vline
-	    wcursyncup
-	    wenclose?
-	    wsyncdown
-	    wsyncup
-            %wmove
 
-	    EOF
-	    ERR
-	    FALSE
-	    OK
-	    TRUE
-	    A_ALTCHARSET
-	    A_ATTRIBUTES
-	    A_BLINK
-	    A_BOLD
-	    A_CHARTEXT
-	    A_COLOR
-	    A_DIM
-	    A_INVIS
-	    A_NORMAL
-	    A_PROTECT
-	    A_REVERSE
-	    A_STANDOUT
-	    A_UNDERLINE
+            %filter
+            %scheme-char-from-c-char
+            %scheme-char-from-c-wchar
+            %scheme-char-to-c-char
+            %scheme-char-to-c-wchar
+            %ucs4-chars
+            %wide-ncurses
+            %wmove
+            %xchar-from-chtype
+            %xchar-to-chtype
+            ALL_MOUSE_EVENTS
+            A_ALTCHARSET
+            A_ATTRIBUTES
+            A_BLINK
+            A_BOLD
+            A_CHARTEXT
+            A_COLOR
+            A_DIM
             A_HORIZONTAL
+            A_INVIS
             A_LEFT
             A_LOW
+            A_NORMAL
+            A_PROTECT
+            A_REVERSE
             A_RIGHT
+            A_STANDOUT
             A_TOP
+            A_UNDERLINE
             A_VERTICAL
-	    COLOR_BLACK
-	    COLOR_GREEN
-	    COLOR_RED
-	    COLOR_YELLOW
-	    COLOR_BLUE
-	    COLOR_MAGENTA
-	    COLOR_CYAN
-	    COLOR_WHITE
-	    KEY_CODE_YES
-	    KEY_MIN
-	    KEY_BREAK
-	    KEY_SRESET
-	    KEY_RESET
-	    KEY_DOWN
-	    KEY_UP
-	    KEY_LEFT
-	    KEY_RIGHT
-	    KEY_HOME
-	    KEY_BACKSPACE
-	    KEY_F0
-	    KEY_DL
-	    KEY_IL
-	    KEY_DC
-	    KEY_IC
-	    KEY_EIC
-	    KEY_CLEAR
-	    KEY_EOS
-	    KEY_EOL
-	    KEY_SF
-	    KEY_SR
-	    KEY_NPAGE
-	    KEY_PPAGE
-	    KEY_STAB
-	    KEY_CTAB
-	    KEY_CATAB
-	    KEY_ENTER
-	    KEY_PRINT
-	    KEY_LL
-	    KEY_A1
-	    KEY_A3
-	    KEY_B2
-	    KEY_C1
-	    KEY_C3
-	    KEY_BTAB
-	    KEY_BEG
-	    KEY_CANCEL
-	    KEY_CLOSE
-	    KEY_COMMAND
-	    KEY_COPY
-	    KEY_CREATE
-	    KEY_END
-	    KEY_EXIT
-	    KEY_FIND
-	    KEY_HELP
-	    KEY_MARK
-	    KEY_MESSAGE
-	    KEY_MOVE
-	    KEY_NEXT
-	    KEY_OPEN
-	    KEY_OPTIONS
-	    KEY_PREVIOUS
-	    KEY_REDO
-	    KEY_REFERENCE
-	    KEY_REFRESH
-	    KEY_REPLACE
-	    KEY_RESTART
-	    KEY_RESUME
-	    KEY_SAVE
-	    KEY_SBEG
-	    KEY_SCANCEL
-	    KEY_SCOMMAND
-	    KEY_SCOPY
-	    KEY_SCREATE
-	    KEY_SDC
-	    KEY_SDL
-	    KEY_SELECT
-	    KEY_SEND
-	    KEY_SEOL
-	    KEY_SEXIT
-	    KEY_SFIND
-	    KEY_SHELP
-	    KEY_SHOME
-	    KEY_SIC
-	    KEY_SLEFT
-	    KEY_SMESSAGE
-	    KEY_SMOVE
-	    KEY_SNEXT
-	    KEY_SOPTIONS
-	    KEY_SPREVIOUS
-	    KEY_SPRINT
-	    KEY_SREDO
-	    KEY_SREPLACE
-	    KEY_SRIGHT
-	    KEY_SRSUME
-	    KEY_SSAVE
-	    KEY_SSUSPEND
-	    KEY_SUNDO
-	    KEY_SUSPEND
-	    KEY_UNDO
-	    KEY_MOUSE
-	    KEY_RESIZE
-	    BUTTON1_PRESSED
-	    BUTTON1_RELEASED
-	    BUTTON1_CLICKED
-	    BUTTON1_DOUBLE_CLICKED
-	    BUTTON1_TRIPLE_CLICKED
-	    BUTTON2_PRESSED
-	    BUTTON2_RELEASED
-	    BUTTON2_CLICKED
-	    BUTTON2_DOUBLE_CLICKED
-	    BUTTON2_TRIPLE_CLICKED
-	    BUTTON3_PRESSED
-	    BUTTON3_RELEASED
-	    BUTTON3_CLICKED
-	    BUTTON3_DOUBLE_CLICKED
-	    BUTTON3_TRIPLE_CLICKED
-	    BUTTON4_PRESSED
-	    BUTTON4_RELEASED
-	    BUTTON4_CLICKED
-	    BUTTON4_DOUBLE_CLICKED
-	    BUTTON4_TRIPLE_CLICKED
-	    BUTTON_SHIFT
-	    BUTTON_CTRL
-	    BUTTON_ALT
-	    ALL_MOUSE_EVENTS
-	    REPORT_MOUSE_POSITION
-	    color-content
-	    delwin
-	    getmouse
-	    mousemask
-	    mouse-trafo
-	    pair-content
-	    ungetmouse
-	    getbegyx
-	    getparyx
-	    getsyx
-	    getyx
-	    acs-block
-	    acs-board
-	    acs-btee
-	    acs-bullet
-	    acs-ckboard
-	    acs-darrow
-	    acs-degree
-	    acs-diamond
-	    acs-gequal
-	    acs-hline
-	    acs-lantern
-	    acs-larrow
-	    acs-lequal
-	    acs-llcorner
-	    acs-lrcorner
-	    acs-ltee
-	    acs-nequal
-	    acs-pi
-	    acs-plminus
-	    acs-plus
-	    acs-rarrow
-	    acs-rtee
-	    acs-s1
-	    acs-s3
-	    acs-s7
-	    acs-s9
-	    acs-sterling
-	    acs-ttee
-	    acs-uarrow
-	    acs-ulcorner
-	    acs-urcorner
-	    acs-vline
-	    lines
-	    cols
-	    colors
-	    color-pairs
-	    tabsize
-	    set-tabsize!
-	    stdscr
-	    curscr
-	    window?
-	    screen?
-	    open-curses-port
+            BUTTON1_CLICKED
+            BUTTON1_DOUBLE_CLICKED
+            BUTTON1_PRESSED
+            BUTTON1_RELEASED
+            BUTTON1_TRIPLE_CLICKED
+            BUTTON2_CLICKED
+            BUTTON2_DOUBLE_CLICKED
+            BUTTON2_PRESSED
+            BUTTON2_RELEASED
+            BUTTON2_TRIPLE_CLICKED
+            BUTTON3_CLICKED
+            BUTTON3_DOUBLE_CLICKED
+            BUTTON3_PRESSED
+            BUTTON3_RELEASED
+            BUTTON3_TRIPLE_CLICKED
+            BUTTON4_CLICKED
+            BUTTON4_DOUBLE_CLICKED
+            BUTTON4_PRESSED
+            BUTTON4_RELEASED
+            BUTTON4_TRIPLE_CLICKED
+            BUTTON_ALT
+            BUTTON_CTRL
+            BUTTON_SHIFT
+            COLOR_BLACK
+            COLOR_BLUE
+            COLOR_CYAN
+            COLOR_GREEN
+            COLOR_MAGENTA
+            COLOR_RED
+            COLOR_WHITE
+            COLOR_YELLOW
+            EOF
+            ERR
+            FALSE
+            KEY_A1
+            KEY_A3
+            KEY_B2
+            KEY_BACKSPACE
+            KEY_BEG
+            KEY_BREAK
+            KEY_BTAB
+            KEY_C1
+            KEY_C3
+            KEY_CANCEL
+            KEY_CATAB
+            KEY_CLEAR
+            KEY_CLOSE
+            KEY_CODE_YES
+            KEY_COMMAND
+            KEY_COPY
+            KEY_CREATE
+            KEY_CTAB
+            KEY_DC
+            KEY_DL
+            KEY_DOWN
+            KEY_EIC
+            KEY_END
+            KEY_ENTER
+            KEY_EOL
+            KEY_EOS
+            KEY_EXIT
+            KEY_F0
+            KEY_FIND
+            KEY_HELP
+            KEY_HOME
+            KEY_IC
+            KEY_IL
+            KEY_LEFT
+            KEY_LL
+            KEY_MARK
+            KEY_MESSAGE
+            KEY_MIN
+            KEY_MOUSE
+            KEY_MOVE
+            KEY_NEXT
+            KEY_NPAGE
+            KEY_OPEN
+            KEY_OPTIONS
+            KEY_PPAGE
+            KEY_PREVIOUS
+            KEY_PRINT
+            KEY_REDO
+            KEY_REFERENCE
+            KEY_REFRESH
+            KEY_REPLACE
+            KEY_RESET
+            KEY_RESIZE
+            KEY_RESTART
+            KEY_RESUME
+            KEY_RIGHT
+            KEY_SAVE
+            KEY_SBEG
+            KEY_SCANCEL
+            KEY_SCOMMAND
+            KEY_SCOPY
+            KEY_SCREATE
+            KEY_SDC
+            KEY_SDL
+            KEY_SELECT
+            KEY_SEND
+            KEY_SEOL
+            KEY_SEXIT
+            KEY_SF
+            KEY_SFIND
+            KEY_SHELP
+            KEY_SHOME
+            KEY_SIC
+            KEY_SLEFT
+            KEY_SMESSAGE
+            KEY_SMOVE
+            KEY_SNEXT
+            KEY_SOPTIONS
+            KEY_SPREVIOUS
+            KEY_SPRINT
+            KEY_SR
+            KEY_SREDO
+            KEY_SREPLACE
+            KEY_SRESET
+            KEY_SRIGHT
+            KEY_SRSUME
+            KEY_SSAVE
+            KEY_SSUSPEND
+            KEY_STAB
+            KEY_SUNDO
+            KEY_SUSPEND
+            KEY_UNDO
+            KEY_UP
+            OK
+            REPORT_MOUSE_POSITION
+            TRUE
+            acs-block
+            acs-board
+            acs-btee
+            acs-bullet
+            acs-ckboard
+            acs-darrow
+            acs-degree
+            acs-diamond
+            acs-gequal
+            acs-hline
+            acs-lantern
+            acs-larrow
+            acs-lequal
+            acs-llcorner
+            acs-lrcorner
+            acs-ltee
+            acs-nequal
+            acs-pi
+            acs-plminus
+            acs-plus
+            acs-rarrow
+            acs-rtee
+            acs-s1
+            acs-s3
+            acs-s7
+            acs-s9
+            acs-sterling
+            acs-ttee
+            acs-uarrow
+            acs-ulcorner
+            acs-urcorner
+            acs-vline
+            addch
+            addchstr
+            addstr
+            assume-default-colors
+            attr->list
+            attr-get
+            attr-off!
+            attr-on!
+            attr-set!
+            baudrate
+            beep
+            bkgd
+            bkgdset!
+            border
+            box
+            can-change-color?
+            cbreak!
+            chgat
+            clear
+            clearok!
+            clrtobot
+            clrtoeol
+            color-content
+            color-pair
+            color-pairs
+            color-set!
+            colors
+            cols
+            copywin
+            curs-set
+            curscr
+            curses-version
+            def-prog-mode
+            def-shell-mode
+            define-key
+            delay-output
+            delch
+            deleteln
+            delscreen
+            delwin
+            derwin
+            doupdate
+            dupwin
+            echo!
+            echochar
+            endwin
+            erase
+            erasechar
+            flash
+            flushinp
+            getbegx
+            getbegy
+            getbegyx
+            getbkgd
+            getch
+	    getcurx
+	    getcury
+            getmaxx
+            getmaxy
+            getmaxyx
+            getmouse
+            getnstr
+            getparent
+            getparx
+            getpary
+            getparyx
+	    getscrreg
+            getsyx
+            getwin
+            getyx
+            halfdelay!
+            has-colors?
+            has-ic?
+            has-il?
+            has-key?
+            has-mouse?
+            hline
+            idcok!
+            idlok!
+            immedok!
+            inch
+            inchstr
+            init-color!
+            init-pair!
+            initscr
+            insch
+            insdelln
+            insertln
+            insstr
+            instr
+            intrflush!
+            is-cleared?
+            is-idcok?
+            is-idlok?
+            is-immedok?
+            is-keypad?
+            is-leaveok?
+            is-linetouched?
+            is-nodelay?
+            is-notimeout?
+            is-pad?
+            is-scrollok?
+            is-subwin?
+            is-syncok?
+            is-wintouched?
+            isendwin?
+            key-f
+            keyname
+            keypad!
+            killchar
+            leaveok!
+            lines
+            longname
+            meta!
+            mevent?
+            mouse-trafo
+            mouseinterval
+            mousemask
+            move
+            mvcur
+            mvderwin
+            mvwin
+            napms
+            newpad
+            newwin
+            nl!
+            nocbreak!
+            nodelay!
+            noecho!
+            nonl!
+            nooutrefresh
+            noqiflush!
+            noraw!
+            notimeout!
+            noutrefresh
+            open-curses-port
+            overlay
+            overwrite
+            pair-content
+            pair-number
+            pechochar
+            pnoutrefresh
+            prefresh
+            putwin
+            qiflush!
+            raw!
+            redrawln
+            redrawwin
+            refresh
+            reset-prog-mode
+            reset-shell-mode
+            resetty
+            savetty
+            scr-dump
+            scr-init
+            scr-restore
+            scr-set
+            screen?
+            scrl
+            scroll
+            scrollok!
+            set-tabsize!
+            set-term
+            setscrreg!
+            setsyx
+            standend!
+            standout!
+            start-color!
+            stdscr
+            subpad
+            subwin
+            syncok!
+            tabsize
+            term-attrs
+            termname
+            timeout!
+            touchline
+            touchwin
+            typeahead!
+            ungetch
+            ungetmouse
+            untouchline
+            untouchwin
+            use-default-colors
+            use-env
+            vline
+            wcursyncup
+            wenclose?
+            window?
+            wsyncdown
+            wsyncup
 
 	    ;; error codes
 	    &curses-error
@@ -1631,6 +1640,23 @@ char."
     (or ret
 	(raise (condition (&curses-bad-state-error))))))
 
+(define (getbegx win)
+  "Returns the beginning x coordinate of the specified window."
+  (cadr (getbegyx win)))
+
+(define (getbegy win)
+  "Returns the beginning y coordinate of the specified window."
+  (car (getbegyx win)))
+
+(define (getbegyx win)
+  "Returns as a two-element list (y x) the beginning coordinates of
+the specified window."
+    (if (not (window? win))
+      (raise (condition (&curses-wrong-type-arg-error
+			 (arg win)
+			 (expected-type 'window)))))
+    (%getbegyx win))
+
 (define* (getch win #:key y x)
   "Read a character from the keyboard for the given window.  If
 no-delay mode, if no input is waiting, #f is returned.  If the
@@ -1658,23 +1684,6 @@ location X, Y, if given."
            (%wmove win y x)
            #t)
        (%wgetch win)))
-
-(define (getbegx win)
-  "Returns the beginning x coordinate of the specified window."
-  (cadr (getbegyx win)))
-
-(define (getbegy win)
-  "Returns the beginning y coordinate of the specified window."
-  (car (getbegyx win)))
-
-(define (getbegyx win)
-  "Returns as a two-element list (y x) the beginning coordinates of
-the specified window."
-    (if (not (window? win))
-      (raise (condition (&curses-wrong-type-arg-error
-			 (arg win)
-			 (expected-type 'window)))))
-    (%getbegyx win))
 
 (define (getcurx win)
   "Returns the current cursor X location."
@@ -1739,6 +1748,15 @@ position before receiving characters."
            #t)
        (%wgetnstr win n)))
 
+(define (getparent win)
+  "Returns the parent window of WIN, if any.  If WIN is a root window, 
+it returns #f."
+    (if (not (window? win))
+      (raise (condition (&curses-wrong-type-arg-error
+			 (arg win)
+			 (expected-type 'window)))))
+  (%getparent win))
+
 (define (getparx win)
   "If WIN is a subwindow, return the x coordinate of the subwindow
 relative to the parent, or -1 if it is not a subwindow."
@@ -1758,6 +1776,11 @@ If this is not a subwindow, (-1 -1) is returned."
 			 (arg win)
 			 (expected-type 'window)))))
     (%getparyx win))
+
+(define (getscrreg win)
+  "Returns, as a two element list, the top and bottom line numbers of the
+scroll region for the window."
+  (%getscrreg win))
 
 (define (getsyx)
   "Returns the current coordinates of the virtual screen cursor as a
