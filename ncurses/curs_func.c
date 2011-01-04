@@ -356,16 +356,6 @@ gucu_copywin (SCM srcwin, SCM dstwin, SCM sminrow, SCM smincol, SCM dminrow,
   int c_sminrow, c_smincol, c_dminrow, c_dmincol, c_dmaxrow, c_dmaxcol;
   int c_overlay, ret;
 
-  SCM_ASSERT (_scm_is_window (srcwin), srcwin, SCM_ARG1, "copywin");
-  SCM_ASSERT (_scm_is_window (dstwin), dstwin, SCM_ARG2, "copywin");
-  SCM_ASSERT (scm_is_integer (sminrow), sminrow, SCM_ARG3, "copywin");
-  SCM_ASSERT (scm_is_integer (smincol), smincol, SCM_ARG4, "copywin");
-  SCM_ASSERT (scm_is_integer (dminrow), dminrow, SCM_ARG5, "copywin");
-  SCM_ASSERT (scm_is_integer (dmincol), dmincol, SCM_ARG6, "copywin");
-  SCM_ASSERT (scm_is_integer (dmaxrow), dmaxrow, SCM_ARG7, "copywin");
-  SCM_ASSERT (scm_is_integer (dmaxcol), dmaxcol, 8, "copywin");
-  SCM_ASSERT (scm_is_integer (_overlay), _overlay, 9, "copywin");
-
   c_srcwin = _scm_to_window (srcwin);
   c_dstwin = _scm_to_window (dstwin);
   c_sminrow = scm_to_int (sminrow);
@@ -2453,7 +2443,7 @@ gucu_init_function ()
   scm_c_define_gsubr ("%clrtoeol", 1, 0, 0, gucu_clrtoeol);
   scm_c_define_gsubr ("color-pair", 1, 0, 0, gucu_COLOR_PAIR);
   scm_c_define_gsubr ("%color-set!", 2, 0, 0, gucu_color_set);
-  scm_c_define_gsubr ("copywin", 9, 0, 0, gucu_copywin);
+  scm_c_define_gsubr ("%copywin", 9, 0, 0, gucu_copywin);
   scm_c_define_gsubr ("%curs-set", 1, 0, 0, gucu_curs_set);
   scm_c_define_gsubr ("%curses-version", 0, 0, 0, gucu_curses_version);
   scm_c_define_gsubr ("%def-prog-mode", 0, 0, 0, gucu_def_prog_mode);

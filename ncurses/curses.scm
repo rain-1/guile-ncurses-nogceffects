@@ -1,4 +1,4 @@
-;; -*- Mode: scheme; -*-
+;; -*- Mode: scheme; indent-tabs-mode: nil -*-
 
 ;; curses.scm
 
@@ -1524,6 +1524,32 @@ on error."
       (raise (condition (&curses-out-of-range-error
                          (arg vis)))))
   (%curs-set vis))
+
+(define (copywin srcwin destwin sminrow smincol dminrow dmincol
+		 dmaxrow dmaxcol overlay)
+  "This routine copies text from SRCWIN to DESTWIN.  A rectangle is
+specified in the destination window DMINROW DMINCOL to DMAXROW DMAXCOL, and 
+the upper-left-corner of the source window is specified SMINROW and SMINCOL.
+If OVERLAY is 1, only text and not blanks are copied.  If overlay is 0,
+text and blanks are copied.  Returns #t on success. or #f on failure.  Failure
+usually indicates a problem with your coordinates."
+  (if (not (window? srcwin))
+      (raise (condition (&curses-wrong-type-arg-error
+                         (arg srcwin)
+                         (expected-type 'window)))))
+  (if (not (window? destwin))
+      (raise (condition (&curses-wrong-type-arg-error
+                         (arg destwin)
+                         (expected-type 'window)))))
+  (map (lambda (x)
+         (if (not (and (integer? x) (exact? x)))
+             (raise (condition (&curses-wrong-type-arg-error
+                                (arg x)
+                                (expected-type 'integer))))))
+       (list sminrow smincol dminrow dmincol dmaxrow dmaxcol
+	     overlay))
+  (%copywin srcwin destwin sminrow smincol dminrow dmincol dmaxrow dmaxcol
+	    overlay))
 
 (define (curses-version)
   "Returns, as a string, the version number and patch level of the 
