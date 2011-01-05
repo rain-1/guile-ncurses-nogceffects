@@ -2392,6 +2392,21 @@ if the position is within in the window."
                          (expected-type 'integer)))))
   (%napms ms))
 
+(define (newpad nlines ncols)
+  "Creates and returns a pointer to a new pad data structure with the 
+given number of lines and columns.  A pad is like a window, except it is
+not restricted by screen size.  It returns a window structure on success
+or #f on failure"
+  (if (not (integer? nlines))
+      (raise (condition (&curses-wrong-type-arg-error
+                         (arg nlines)
+                         (expected-type 'integer)))))
+  (if (not (integer? ncols))
+      (raise (condition (&curses-wrong-type-arg-error
+                         (arg ncols)
+                         (expected-type 'integer)))))
+  (%newpad nlines ncols))
+
 (define (newterm type outport inport)
   "Create a new terminal whose input and output are Guile ports."
   (if (not (defined? '%newterm))
@@ -2537,11 +2552,71 @@ colors aren't initialized."
   (%pair-content pair))  
 
 (define* (pechochar win ch #:key y x)
+  "Add character ch to the pad WIN, and then refresh the pad."
+  (if (not (and (window? win) (is-pad? win)))
+      (raise (condition (&curses-wrong-type-arg-error
+                         (arg win)
+                         (expected-type 'pad)))))
+  (if (not (xchar? ch))
+      (raise (condition (&curses-wrong-type-arg-error
+                         (arg ch)
+                         (expected-type 'xchar)))))
+  (if (and y x)
+      (begin
+        (if (not (and (integer? y) (exact? y)))
+            (raise (condition (&curses-wrong-type-arg-error
+                               (arg y)
+                               (expected-type 'integer)))))
+        (if (not (and (integer? x) (exact? x)))
+            (raise (condition (&curses-wrong-type-arg-error
+                               (arg x)
+                               (expected-type 'integer)))))))
   (and
    (if (and y x)
        (%wmove win y x)
        #t)
    (%pechochar win (xchar->list ch))))
+
+(define (pnoutrefresh pad pminrow pmincol sminrow smincol smaxrow smaxcol)
+  "This is analagous to wnoutrefresh except for pads instead of windows.
+The additional parameters are needed to indicate what part of the pad
+and screen are involved.  The PMINROW and PMINCOL parameters specify
+the upper left-hand corner of the rectangle to be displayed in the
+pad.  SMINROW, SMINCOL, SMAXROW and SMAXCOL specify the edges of the
+rectangle to be displayed on the screen."
+  (if (not (and (window? pad) (is-pad? pad)))
+      (raise (condition (&curses-wrong-type-arg-error
+                         (arg win)
+                         (expected-type 'window)))))
+  (for-each 
+   (lambda (ch) 
+     (if (and (not (xchar? ch)) (not (eq? ch 0)))
+         (raise (condition (&curses-wrong-type-arg-error
+                            (arg ch)
+                            (expected-type 'xchar))))))
+   (list pminrow pmincol sminrow smincol smaxrow smaxcol))
+  (%pnoutrefresh pad pminrow pmincol sminrow smincol smaxrow smaxcol))
+
+
+(define (prefresh pad pminrow pmincol sminrow smincol smaxrow smaxcol)
+  "This is analagous to wrefresh except for pads instead of windows.
+The additional parameters are needed to indicate what part of the pad
+and screen are involved.  The PMINROW and PMINCOL parameters specify the
+upper left-hand corner of the rectangle to be displayed in the pad.
+SMINROW, SMINCOL, SMAXROW and SMAXCOL specify the edges of the rectangle
+to be displayed on the screen."
+  (if (not (and (window? pad) (is-pad? pad)))
+      (raise (condition (&curses-wrong-type-arg-error
+                         (arg win)
+                         (expected-type 'window)))))
+  (for-each 
+   (lambda (ch) 
+     (if (and (not (xchar? ch)) (not (eq? ch 0)))
+         (raise (condition (&curses-wrong-type-arg-error
+                            (arg ch)
+                            (expected-type 'xchar))))))
+   (list pminrow pmincol sminrow smincol smaxrow smaxcol))
+  (%prefresh pad pminrow pmincol sminrow smincol smaxrow smaxcol))
 
 (define (qiflush!)
   "Enable flushing of the input and output queues when an interrupt is
@@ -2620,6 +2695,24 @@ this?)"
     (if (not ret)
         (raise (condition (&curses-bad-state-error))))))
 
+(define (subpad origwin nlines ncols begin_y begin_x)
+  "Creates and returns a window strucure of a subwindow within a pad window.
+The subpad has NLINES lines and NCOLS columns and begins at the position
+BEGIN_X and BEGIN_Y on the pad.  The window is made in the middle of the
+window ORIGWIN, so that changes made to one affect both windows.  It
+returns #f on failure or a window structure on success"
+  (if (not (and (window? origwin) (is-pad? origwin)))
+      (raise (condition (&curses-wrong-type-arg-error
+                         (arg origwin)
+                         (expected-type 'window)))))
+  (map (lambda (x)
+         (if (not (and (integer? x) (exact? x)))
+             (raise (condition (&curses-wrong-type-arg-error
+                                (arg x)
+                                (expected-type 'integer))))))
+       (list nlines ncols begin_y begin_x))
+  (%subpad origwin nlines ncols begin_y begin_x))
+
 (define (timeout! win delay)
   "Sets the amount of time that 'getch' will wait for a character.  If DELAY
 is negative, blocking read is used.  If DELAY is zero, non-blocking read is used.
@@ -2628,7 +2721,7 @@ If delay is positive, 'getch' will block for DELAY milliseconds."
       (raise (condition (&curses-wrong-type-arg-error
                          (arg win)
                          (expected-type 'window)))))
-  (if (not (integer? win))
+  (if (not (integer? delay))
       (raise (condition (&curses-wrong-type-arg-error
                          (arg delay)
                          (expected-type 'integer)))))

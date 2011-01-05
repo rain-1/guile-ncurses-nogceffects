@@ -1225,9 +1225,6 @@ gucu_newpad (SCM nlines, SCM ncols)
   int c_nlines, c_ncols;
   WINDOW *ret;
 
-  SCM_ASSERT (scm_is_integer (nlines), nlines, SCM_ARG1, "newpad");
-  SCM_ASSERT (scm_is_integer (ncols), ncols, SCM_ARG2, "newpad");
-
   c_nlines = scm_to_int (nlines);
   c_ncols = scm_to_int (ncols);
   if (c_nlines <= 0)
@@ -1237,7 +1234,7 @@ gucu_newpad (SCM nlines, SCM ncols)
 
   ret = newpad (c_nlines, c_ncols);
   if (ret == NULL)
-    curs_param_or_bad_state_error ("newpad");
+    return SCM_BOOL_F;
 
   return _scm_from_window (ret);
 }
@@ -1453,14 +1450,6 @@ gucu_pnoutrefresh (SCM win, SCM pminrow, SCM pmincol, SCM sminrow,
   WINDOW *c_win;
   int c_pminrow, c_pmincol, c_sminrow, c_smincol, c_smaxrow, c_smaxcol, ret;
 
-  SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "pnoutrefresh");
-  SCM_ASSERT (scm_is_integer (pminrow), pminrow, SCM_ARG2, "pnoutrefresh");
-  SCM_ASSERT (scm_is_integer (pmincol), pmincol, SCM_ARG3, "pnoutrefresh");
-  SCM_ASSERT (scm_is_integer (sminrow), sminrow, SCM_ARG4, "pnoutrefresh");
-  SCM_ASSERT (scm_is_integer (smincol), smincol, SCM_ARG5, "pnoutrefresh");
-  SCM_ASSERT (scm_is_integer (smaxrow), smaxrow, SCM_ARG6, "pnoutrefresh");
-  SCM_ASSERT (scm_is_integer (smaxcol), smaxcol, SCM_ARG7, "pnoutrefresh");
-
   c_win = _scm_to_window (win);
   c_pminrow = scm_to_int (pminrow);
   c_pmincol = scm_to_int (pmincol);
@@ -1480,14 +1469,6 @@ gucu_prefresh (SCM win, SCM pminrow, SCM pmincol, SCM sminrow, SCM smincol,
 {
   WINDOW *c_win;
   int c_pminrow, c_pmincol, c_sminrow, c_smincol, c_smaxrow, c_smaxcol, ret;
-
-  SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "prefresh");
-  SCM_ASSERT (scm_is_integer (pminrow), pminrow, SCM_ARG2, "prefresh");
-  SCM_ASSERT (scm_is_integer (pmincol), pmincol, SCM_ARG3, "prefresh");
-  SCM_ASSERT (scm_is_integer (sminrow), sminrow, SCM_ARG4, "prefresh");
-  SCM_ASSERT (scm_is_integer (smincol), smincol, SCM_ARG5, "prefresh");
-  SCM_ASSERT (scm_is_integer (smaxrow), smaxrow, SCM_ARG6, "prefresh");
-  SCM_ASSERT (scm_is_integer (smaxcol), smaxcol, SCM_ARG7, "prefresh");
 
   c_win = _scm_to_window (win);
   c_pminrow = scm_to_int (pminrow);
@@ -1737,12 +1718,6 @@ gucu_subpad (SCM orig, SCM nlines, SCM ncols, SCM begin_y, SCM begin_x)
   int c_nlines, c_ncols, c_begin_y, c_begin_x;
   WINDOW *c_orig, *ret;
 
-  SCM_ASSERT (_scm_is_window (orig), orig, SCM_ARG1, "subpad");
-  SCM_ASSERT (scm_is_integer (nlines), nlines, SCM_ARG2, "subpad");
-  SCM_ASSERT (scm_is_integer (ncols), ncols, SCM_ARG3, "subpad");
-  SCM_ASSERT (scm_is_integer (begin_y), begin_y, SCM_ARG4, "subpad");
-  SCM_ASSERT (scm_is_integer (begin_x), begin_x, SCM_ARG5, "subpad");
-
   c_orig = _scm_to_window (orig);
   c_nlines = scm_to_int (nlines);
   c_ncols = scm_to_int (ncols);
@@ -1751,7 +1726,7 @@ gucu_subpad (SCM orig, SCM nlines, SCM ncols, SCM begin_y, SCM begin_x)
 
   ret = subpad (c_orig, c_nlines, c_ncols, c_begin_y, c_begin_x);
   if (ret == NULL)
-    curs_param_or_bad_state_error ("subpad");
+    return SCM_BOOL_F;
 
   return _scm_from_window (ret);
 }
@@ -2505,7 +2480,7 @@ gucu_init_function ()
   scm_c_define_gsubr ("mvderwin", 3, 0, 0, gucu_mvderwin);
   scm_c_define_gsubr ("mvwin", 3, 0, 0, gucu_mvwin);
   scm_c_define_gsubr ("%napms", 1, 0, 0, gucu_napms);
-  scm_c_define_gsubr ("newpad", 2, 0, 0, gucu_newpad);
+  scm_c_define_gsubr ("%newpad", 2, 0, 0, gucu_newpad);
   scm_c_define_gsubr ("newwin", 4, 0, 0, gucu_newwin);
   scm_c_define_gsubr ("%nl!", 0, 0, 0, gucu_nl);
   scm_c_define_gsubr ("%nocbreak!", 0, 0, 0, gucu_nocbreak);
@@ -2520,8 +2495,8 @@ gucu_init_function ()
   scm_c_define_gsubr ("%overwrite", 2, 0, 0, gucu_overwrite);
   scm_c_define_gsubr ("pair-number", 1, 0, 0, gucu_PAIR_NUMBER);
   scm_c_define_gsubr ("%pechochar", 2, 0, 0, gucu_pechochar);
-  scm_c_define_gsubr ("pnoutrefresh", 7, 0, 0, gucu_pnoutrefresh);
-  scm_c_define_gsubr ("prefresh", 7, 0, 0, gucu_prefresh);
+  scm_c_define_gsubr ("%pnoutrefresh", 7, 0, 0, gucu_pnoutrefresh);
+  scm_c_define_gsubr ("%prefresh", 7, 0, 0, gucu_prefresh);
   scm_c_define_gsubr ("%qiflush!", 0, 0, 0, gucu_qiflush);
   scm_c_define_gsubr ("%raw!", 0, 0, 0, gucu_raw);
   scm_c_define_gsubr ("redrawwin", 1, 0, 0, gucu_redrawwin);
@@ -2540,7 +2515,7 @@ gucu_init_function ()
   scm_c_define_gsubr ("%setscrreg!", 3, 0, 0, gucu_setscrreg_x);
   scm_c_define_gsubr ("%setsyx", 2, 0, 0, gucu_setsyx);
   scm_c_define_gsubr ("%start-color!", 0, 0, 0, gucu_start_color);
-  scm_c_define_gsubr ("subpad", 5, 0, 0, gucu_subpad);
+  scm_c_define_gsubr ("%subpad", 5, 0, 0, gucu_subpad);
   scm_c_define_gsubr ("subwin", 5, 0, 0, gucu_subwin);
   scm_c_define_gsubr ("syncok!", 2, 0, 0, gucu_syncok_x);
   scm_c_define_gsubr ("term-attrs", 0, 0, 0, gucu_term_attrs);
