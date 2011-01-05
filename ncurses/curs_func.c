@@ -1413,9 +1413,6 @@ gucu_pechochar (SCM pad, SCM ch)
   WINDOW *c_pad;
   int ret;
 
-  SCM_ASSERT (_scm_is_window (pad), pad, SCM_ARG1, "%pechochar");
-  SCM_ASSERT (_scm_is_xchar (ch), ch, SCM_ARG2, "%pechochar");
-
   c_pad = _scm_to_window (pad);
 
 #ifndef NCURSES_OPAQUE
