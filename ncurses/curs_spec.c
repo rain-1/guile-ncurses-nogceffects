@@ -934,7 +934,7 @@ gucu_getparent (SCM win)
 {
   WINDOW *parent = wgetparent (_scm_to_window (win));
   if (parent != (WINDOW *) NULL)
-    return _scm_from_win (parent);
+    return _scm_from_window (parent);
   else
     return SCM_BOOL_F;
 }
