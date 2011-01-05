@@ -245,6 +245,7 @@ The basic curses library: @code{(ncurses curses)}
 * Output options::              
 * Overlay and manipulate overlapped windows::  
 * Create and display pads::     
+* Print data to a terminal-attached ports::  
 * Refresh windows and lines::   
 * Reading and writing a curses screen to a file::  
 * Scroll a window::             
@@ -3032,6 +3033,7 @@ C-language API.
 * Output options::              
 * Overlay and manipulate overlapped windows::  
 * Create and display pads::     
+* Print data to a terminal-attached ports::  
 * Refresh windows and lines::   
 * Reading and writing a curses screen to a file::  
 * Scroll a window::             
@@ -5473,7 +5475,7 @@ Returns @code{#t} on success or @code{#f} on failure.  @code{#f} could
 indicate that some part of the window would be placed offscreen.
 @end deffn
 
-@node Create and display pads, Refresh windows and lines, Overlay and manipulate overlapped windows, The basic curses library
+@node Create and display pads, Print data to a terminal-attached ports, Overlay and manipulate overlapped windows, The basic curses library
 @subsection Create and display pads
 @cindex Pads
 @cindex Pads, creating
@@ -5569,8 +5571,29 @@ Returns @code{#f} upon failure and @code{#t} upon successful
 completion.
 @end deffn
 
+@node Print data to a terminal-attached ports, Refresh windows and lines, Create and display pads, The basic curses library
+@subsection Print data to a terminal-attached ports
 
-@node Refresh windows and lines, Reading and writing a curses screen to a file, Create and display pads, The basic curses library
+Some old-school hardware terminals had serial or parallel ports
+attached to them.  There is a procedure to send data to those ports.
+Usually those ports were used for old serial dot-matrix printers.  This
+function is likely obsolete.
+
+@deffn Procedure mcprint str
+This procedure takes the given @var{str}, converts it into a byte stream
+using the current locale, and then sends the data to a terminal's
+printer port.  A terminal that has a printer port must terminfo
+information that describes it, such as @emph{mc5p} or @emph{mc4}
+capabilities.  Explaining this is beyond the scope of this library.
+
+Those hardware terminal ports and the printers that used them were slow,
+and the application must take the responsibility to not flood the port.
+
+The procedure returns @code{#f} if the write fails.  Otherwise, it
+returns the number of bytes actually printed.
+@end deffn
+
+@node Refresh windows and lines, Reading and writing a curses screen to a file, Print data to a terminal-attached ports, The basic curses library
 @subsection Refresh windows and lines
 
 @deffn Procedure refresh win

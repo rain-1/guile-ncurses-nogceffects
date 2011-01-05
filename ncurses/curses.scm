@@ -332,6 +332,7 @@
             leaveok!
             lines
             longname
+	    mcprint
             meta!
             mevent?
             mouse-trafo
@@ -2310,6 +2311,12 @@ programs that don't use the cursor."
                          (arg bf)
                          (expected-type 'boolean)))))
   (%leaveok! win bf))
+
+(define (mcprint str)
+  "If the terminal has a printer attached and had the capability to 
+send data to it, this procedure will send STR to the printer.  It
+returns #f on error or otherwise the number of characters sent."
+  (%mcprint str))
 
 (define (meta! bf)
   "If BF is true, the terminal will return 8 significant bits on input.  If

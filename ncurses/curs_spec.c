@@ -168,6 +168,20 @@ gucu_grantpt (SCM fd)
 }
 #endif
 
+/* Write data to terminal-attached printer */
+SCM
+gucu_mcprint (SCM data)
+{
+  size_t len;
+  char *str = scm_to_locale_stringn (data, &len);
+  int ret;
+  ret = mcprint (str, len);
+  if (ret == ERR)
+    return SCM_BOOL_F;
+  
+  return scm_from_int (ret);
+}
+
 SCM
 gucu_mousemask (SCM x)
 {
@@ -935,6 +949,7 @@ gucu_init_special ()
 #ifdef HAVE_GRANTPT
   scm_c_define_gsubr ("grantpt", 1, 0, 0, gucu_grantpt);
 #endif
+  scm_c_define_gsubr ("%mcprint", 1, 0, 0, gucu_mcprint);
   scm_c_define_gsubr ("%mousemask", 1, 0, 0, gucu_mousemask);
 #ifdef HAVE_PTSNAME
   scm_c_define_gsubr ("ptsname", 1, 0, 0, gucu_ptsname);
