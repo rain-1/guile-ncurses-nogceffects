@@ -1556,8 +1556,6 @@ gucu_scr_dump (SCM fname)
   char *c_fname;
   int ret;
 
-  SCM_ASSERT (scm_is_string (fname), fname, SCM_ARG1, "scr-dump");
-
   c_fname = scm_to_locale_string (fname);
   ret = scr_dump (c_fname);
   free (c_fname);
@@ -1571,8 +1569,6 @@ gucu_scr_init (SCM fname)
 {
   char *c_fname;
   int ret;
-
-  SCM_ASSERT (scm_is_string (fname), fname, SCM_ARG1, "scr-init");
 
   c_fname = scm_to_locale_string (fname);
   ret = scr_init (c_fname);
@@ -1588,8 +1584,6 @@ gucu_scr_restore (SCM fname)
   char *c_fname;
   int ret;
 
-  SCM_ASSERT (scm_is_string (fname), fname, SCM_ARG1, "scr-restore");
-
   c_fname = scm_to_locale_string (fname);
   ret = scr_restore (c_fname);
   free (c_fname);
@@ -1603,8 +1597,6 @@ gucu_scr_set (SCM fname)
 {
   char *c_fname;
   int ret;
-
-  SCM_ASSERT (scm_is_string (fname), fname, SCM_ARG1, "scr-set");
 
   c_fname = scm_to_locale_string (fname);
   ret = scr_set (c_fname);
@@ -2493,11 +2485,11 @@ gucu_init_function ()
   scm_c_define_gsubr ("%reset-shell-mode", 0, 0, 0, gucu_reset_shell_mode);
   scm_c_define_gsubr ("%resetty", 0, 0, 0, gucu_resetty);
   scm_c_define_gsubr ("%savetty", 0, 0, 0, gucu_savetty);
-  scm_c_define_gsubr ("scr-dump", 1, 0, 0, gucu_scr_dump);
-  scm_c_define_gsubr ("scr-init", 1, 0, 0, gucu_scr_init);
+  scm_c_define_gsubr ("%scr-dump", 1, 0, 0, gucu_scr_dump);
+  scm_c_define_gsubr ("%scr-init", 1, 0, 0, gucu_scr_init);
   scm_c_define_gsubr ("scrollok!", 2, 0, 0, gucu_scrollok_x);
-  scm_c_define_gsubr ("scr-restore", 1, 0, 0, gucu_scr_restore);
-  scm_c_define_gsubr ("scr-set", 1, 0, 0, gucu_scr_set);
+  scm_c_define_gsubr ("%scr-restore", 1, 0, 0, gucu_scr_restore);
+  scm_c_define_gsubr ("%scr-set", 1, 0, 0, gucu_scr_set);
   scm_c_define_gsubr ("scrl", 2, 0, 0, gucu_scrl);
   scm_c_define_gsubr ("&set-term", 1, 0, 0, gucu_set_term);
   scm_c_define_gsubr ("%setscrreg!", 3, 0, 0, gucu_setscrreg_x);
