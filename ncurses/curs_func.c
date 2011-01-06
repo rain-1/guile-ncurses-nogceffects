@@ -535,8 +535,8 @@ gucu_doupdate ()
 {
   int ret = doupdate ();
   /* doupdate probably only fails when the screen is NULL */
-  if (ret == ERR)
-    curs_bad_state_error ("doupdate");
+  //if (ret == ERR)
+  //  curs_bad_state_error ("doupdate");
 
   return SCM_UNSPECIFIED;
 }
@@ -554,7 +554,7 @@ gucu_dupwin (SCM win)
   ret = dupwin (c_win);
   /* dupwin only fails if window is NULL, which should never happen */
   if (ret == NULL)
-    curs_bad_state_error ("doupdate");
+    curs_bad_state_error ("dupwin");
 
   return _scm_from_window (ret);
 }
@@ -1357,8 +1357,6 @@ gucu_noutrefresh (SCM win)
   WINDOW *c_win;
   int ret;
 
-  SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "noutrefresh");
-
   c_win = _scm_to_window (win);
 
   ret = wnoutrefresh (c_win);
@@ -1503,8 +1501,6 @@ gucu_redrawwin (SCM win)
   WINDOW *c_win;
   int ret;
 
-  SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "redrawwin");
-
   c_win = _scm_to_window (win);
 
   ret = redrawwin (c_win);
@@ -1518,9 +1514,8 @@ gucu_refresh (SCM win)
   WINDOW *c_win;
   int ret;
 
-  SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "refresh");
   if (stdscr == NULL)
-    curs_bad_state_error ("refresh");
+    return SCM_BOOL_F;
 
   c_win = _scm_to_window (win);
 
@@ -2286,10 +2281,6 @@ gucu_wredrawln (SCM win, SCM beg, SCM end)
   WINDOW *c_win;
   int c_beg, c_end, ret;
 
-  SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "%wredrawln");
-  SCM_ASSERT (scm_is_integer (beg), beg, SCM_ARG2, "%wredrawln");
-  SCM_ASSERT (scm_is_integer (end), end, SCM_ARG3, "%wredrawln");
-
   c_win = _scm_to_window (win);
   c_beg = scm_to_int (beg);
   c_end = scm_to_int (end);
@@ -2424,7 +2415,7 @@ gucu_init_function ()
   scm_c_define_gsubr ("delay-output", 1, 0, 0, gucu_delay_output);
   scm_c_define_gsubr ("%delscreen", 1, 0, 0, gucu_delscreen);
   scm_c_define_gsubr ("derwin", 5, 0, 0, gucu_derwin);
-  scm_c_define_gsubr ("doupdate", 0, 0, 0, gucu_doupdate);
+  scm_c_define_gsubr ("%doupdate", 0, 0, 0, gucu_doupdate);
   scm_c_define_gsubr ("dupwin", 1, 0, 0, gucu_dupwin);
   scm_c_define_gsubr ("%echo!", 0, 0, 0, gucu_echo);
   scm_c_define_gsubr ("%endwin", 0, 0, 0, gucu_endwin);
@@ -2487,7 +2478,7 @@ gucu_init_function ()
   scm_c_define_gsubr ("%noqiflush!", 0, 0, 0, gucu_noqiflush);
   scm_c_define_gsubr ("%noraw!", 0, 0, 0, gucu_noraw);
   scm_c_define_gsubr ("%notimeout!", 2, 0, 0, gucu_notimeout_x);
-  scm_c_define_gsubr ("noutrefresh", 1, 0, 0, gucu_noutrefresh);
+  scm_c_define_gsubr ("%noutrefresh", 1, 0, 0, gucu_noutrefresh);
   scm_c_define_gsubr ("%overlay", 2, 0, 0, gucu_overlay);
   scm_c_define_gsubr ("%overwrite", 2, 0, 0, gucu_overwrite);
   scm_c_define_gsubr ("pair-number", 1, 0, 0, gucu_PAIR_NUMBER);
@@ -2496,8 +2487,8 @@ gucu_init_function ()
   scm_c_define_gsubr ("%prefresh", 7, 0, 0, gucu_prefresh);
   scm_c_define_gsubr ("%qiflush!", 0, 0, 0, gucu_qiflush);
   scm_c_define_gsubr ("%raw!", 0, 0, 0, gucu_raw);
-  scm_c_define_gsubr ("redrawwin", 1, 0, 0, gucu_redrawwin);
-  scm_c_define_gsubr ("refresh", 1, 0, 0, gucu_refresh);
+  scm_c_define_gsubr ("%redrawwin", 1, 0, 0, gucu_redrawwin);
+  scm_c_define_gsubr ("%refresh", 1, 0, 0, gucu_refresh);
   scm_c_define_gsubr ("%reset-prog-mode", 0, 0, 0, gucu_reset_prog_mode);
   scm_c_define_gsubr ("%reset-shell-mode", 0, 0, 0, gucu_reset_shell_mode);
   scm_c_define_gsubr ("%resetty", 0, 0, 0, gucu_resetty);

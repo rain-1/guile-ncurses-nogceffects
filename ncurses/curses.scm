@@ -1622,8 +1622,12 @@ moving to the position X, Y"
   (or (%delscreen scr)
       (raise (condition (&curses-bad-state-error)))))
 
+(define (doupdate)
+  "Copies the virtual screen to the physical screen."
+  (%doupdate))
+
 (define (echo!)
-  "Enable echoing of typed characters"
+  "Enable echoing of typed characters."
   (%echo!))
 
 (define* (echochar win ch #:key y x)
@@ -2500,7 +2504,17 @@ a timer and will likely not interpret function keys correctly."
 
 ;; I hate it when people are 'clever' with dropping letters
 (define (nooutrefresh win)
+  "An alias for noutrefresh"
   (noutrefresh win))
+
+(define (noutrefresh win)
+  (if (not (window? win))
+      (raise (condition (&curses-wrong-type-arg-error
+                         (arg win)
+                         (expected-type 'window)))))
+  "The procedure copies this window to the virtual screen.  Calling
+'doupdate' will then copy the virtual screen to the actual screen."
+  (%noutrefresh))
 
 (define (noqiflush!)
   "Disable flushing of the input and output queues when an interrupt is
@@ -2640,7 +2654,41 @@ character processing."
         (raise (condition (&curses-bad-state-error))))))
 
 (define (redrawln win beg_line end_line)
+  "This procedure notifies curses that it should not use optimization when
+redrawing the following lines of the window.  It should redraw those lines
+entirely."
+  (if (not (window? win))
+      (raise (condition (&curses-wrong-type-arg-error
+                         (arg win)
+                         (expected-type 'window)))))
+  (if (not (and (integer? beg_line) (exact? beg_line)))
+      (raise (condition (&curses-wrong-type-arg-error
+			 (arg beg_line)
+			 (expected-type 'integer)))))
+  (if (not (and (integer? end_line) (exact? end_line)))
+      (raise (condition (&curses-wrong-type-arg-error
+			 (arg end_line)
+			 (expected-type 'integer)))))
   (%wredrawln win beg_line end_line))
+
+(define (redrawwin win)
+  "This procedure notifies curses that it should not use optimization on
+the next screen refresh.  It should redraw the entire window."
+  (if (not (window? win))
+      (raise (condition (&curses-wrong-type-arg-error
+                         (arg win)
+                         (expected-type 'window)))))
+  (%redrawwin win))
+
+(define (refresh win)
+  "This procedure must be called to get actual output to the terminal, as
+other routines simply manipulate data structures.  This procedure copies
+the named window to the physical terminal screen."
+  (if (not (window? win))
+      (raise (condition (&curses-wrong-type-arg-error
+                         (arg win)
+                         (expected-type 'window)))))
+  (%refresh win))
 
 (define (reset-prog-mode)
   "If 'def-prog-mode' was called to store the terminal's state, this
