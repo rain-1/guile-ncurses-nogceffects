@@ -6093,12 +6093,12 @@ Calling @code{dupwin} creates an exact duplicate of the window @var{win}.
 
 @end deffn
 
-@deffn Procedure wsyncup win
+@deffn Procedure syncup win
 @findex syncok!
 
-Calling @code{wsyncup} touches all locations in ancestors of @var{win}
+Calling @code{syncup} touches all locations in ancestors of @var{win}
 that are changed in @var{win}.  If @code{syncok!} is called with second
-argument @code{#t} then @code{wsyncup} is called automatically
+argument @code{#t} then @code{syncup} is called automatically
 whenever there is a change in the window.
 
 @end deffn
@@ -6106,17 +6106,17 @@ whenever there is a change in the window.
 @deffn Procecure syncok! win bf
 
 If @code{syncok!} is called with the second argument @code{#t} then
-@code{wsyncup} is called automatically whenever there is a change in the
+@code{syncup} is called automatically whenever there is a change in the
 window.
 
 The return value is unspecified.
 @end deffn
 
-@deffn Procedure wsyncdown win
+@deffn Procedure syncdown win
 
 @findex refresh
 
-The @code{wsyncdown} routine touches each location in @var{win} that
+The @code{syncdown} routine touches each location in @var{win} that
 has been touched in any of its ancestor windows. This routine is
 called by @code{refresh}, so it should almost never be necessary to
 call it manually.
@@ -6124,9 +6124,9 @@ call it manually.
 @end deffn
 
 
-@deffn Procedure wcursyncup win
+@deffn Procedure cursyncup win
 
-The routine @code{wcursyncup} updates the current cursor position of
+The routine @code{cursyncup} updates the current cursor position of
 all the ancestors of the window to reflect the current cursor position
 of the window.
 

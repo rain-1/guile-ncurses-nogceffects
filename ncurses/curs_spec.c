@@ -110,8 +110,6 @@ gucu_color_content (SCM s_color)
 SCM
 gucu_delwin (SCM win)
 {
-  SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "delwin");
-
   WINDOW *c_win = _scm_to_window (win);
 
   SCM_SET_SMOB_DATA (win, NULL);
@@ -944,7 +942,7 @@ gucu_init_special ()
 {
   scm_c_define_gsubr ("%wattr-set!", 3, 0, 0, gucu_wattr_set_x);
   scm_c_define_gsubr ("%color-content", 1, 0, 0, gucu_color_content);
-  scm_c_define_gsubr ("delwin", 1, 0, 0, gucu_delwin);
+  scm_c_define_gsubr ("%delwin", 1, 0, 0, gucu_delwin);
   scm_c_define_gsubr ("%getmouse", 0, 0, 0, gucu_getmouse);
 #ifdef HAVE_GRANTPT
   scm_c_define_gsubr ("grantpt", 1, 0, 0, gucu_grantpt);

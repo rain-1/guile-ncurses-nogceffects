@@ -406,11 +406,11 @@
             use-default-colors
             use-env
             vline
-            wcursyncup
+            cursyncup
             wenclose?
             window?
-            wsyncdown
-            wsyncup
+            syncdown
+            syncup
 
             ;; error codes
             &curses-error
@@ -1316,6 +1316,10 @@ the color pair given by COLOR."
         (%wattr-set! win attr color))
       (%wattr-set! win attr (pair-number attr))))
 
+(define (baudrate)
+  "Returns the baudrate of this terminal"
+  (%baudrate))
+
 (define (beep)
   "Sounds an audible alarm on the terminal.  Returns #t on success or
 #f on failure."
@@ -1526,6 +1530,11 @@ on error."
                          (arg vis)))))
   (%curs-set vis))
 
+(define (cursyncup win)
+  "Synchronizes the location of the cursor between WIN and all parents
+of WIN."
+  (%syncup win))
+
 (define (copywin srcwin destwin sminrow smincol dminrow dmincol
 		 dmaxrow dmaxcol overlay)
   "This routine copies text from SRCWIN to DESTWIN.  A rectangle is
@@ -1622,9 +1631,48 @@ moving to the position X, Y"
   (or (%delscreen scr)
       (raise (condition (&curses-bad-state-error)))))
 
+(define (delwin win)
+  "Forcibly frees a window.  Note that the garbage collector will normally
+free a window when it is no longer being used, so calling this explicitly is
+usually not necessary."
+  (if (not (window? win))
+      (raise (condition (&curses-wrong-type-error
+			 (arg win)
+			 (expected-type 'win)))))
+  (%delwin win))
+
+(define (derwin origwin nlines ncols begin_y begin_x)
+  "Creates and returns a new window with the given number of lines and
+columns.  The window is at position BEGIN_Y, BEGIN_X on the original
+window ORIGWIN.  The window is made in the middle of the window
+ORIGWIN, so that changes made to one window will affect both windows.
+The subwindow shares memory with the original window."
+  (if (not (and (window? origwin) (is-pad? origwin)))
+      (raise (condition (&curses-wrong-type-arg-error
+                         (arg origwin)
+                         (expected-type 'window)))))
+  (map (lambda (x)
+         (if (not (and (integer? x) (exact? x)))
+             (raise (condition (&curses-wrong-type-arg-error
+                                (arg x)
+                                (expected-type 'integer))))))
+       (list nlines ncols begin_y begin_x))
+  (%derwin origwin nlines ncols begin_y begin_x)))
+
 (define (doupdate)
   "Copies the virtual screen to the physical screen."
   (%doupdate))
+
+(define (dupwin win)
+  "Create a duplicate of a window."
+  (if (not (window? win))
+      (raise (condition (&curses-wrong-type-arg-error
+                         (arg win)
+                         (expected-type 'window)))))
+  (let ((ret (%dupwin win)))
+    (if (not ret)
+	(raise (condition (&curses-bad-state-error)))
+	ret)))
 
 (define (echo!)
   "Enable echoing of typed characters."
@@ -1669,6 +1717,9 @@ to (X,Y) first.  Returns #t on success."
                          (arg win)
                          (expected-type 'window)))))
   (%erase win))
+
+(define (erasechar)
+  "Returns the character that is used to erase the screen.")
 
 (define (flash)
   "Flashes the screen.  Returns #t on success or #f on failure."
@@ -1855,6 +1906,16 @@ only wait TENTHS tenths of seconds for a keypress"
 (define (has-colors?)
   "Returns #t if the current terminal has color capability."
   (%has-colors?))
+
+(define (has-ic?)
+  "Returns #t if this terminal has a hardware capability to insert
+and delete characters."
+  (%has-ic?))
+
+(define (has-il?)
+  "Returns #t if this terminal has a hardware capability to insert
+and delete lines."
+  (%has-il?))
 
 (define (has-key? key)
   "Given a curses integer key constant like KEY_ENTER, returns #t if the
@@ -2301,6 +2362,10 @@ sequences that are specific to the terminal."
                          (expected-type 'boolean)))))
   (%keypad! win bf))
 
+(define (killchar)
+  "Returns the character used to kill lines."
+  (%killchar))
+
 (define (leaveokok! win bf)
   "If leaveok! is called with BF as #t, the cursor is allowed to be
 left wherever it happens to be, instead of taking the time to move it
@@ -2315,6 +2380,10 @@ programs that don't use the cursor."
                          (arg bf)
                          (expected-type 'boolean)))))
   (%leaveok! win bf))
+
+(define (longname)
+  "Returns the name of the current terminal."
+  (%longname))
 
 (define (mcprint str)
   "If the terminal has a printer attached and had the capability to 
@@ -2395,6 +2464,39 @@ if the position is within in the window."
                          (expected-type 'integer)))))
   (%wmove win y x))
 
+(define (mvderwin win y x)
+  "Moves the derived window inside its parent window so that the
+upper-left corner is at Y, X."
+  (if (not (window? win))
+      (raise (condition (&curses-wrong-type-arg-error
+                         (arg win)
+                         (expected-type 'window)))))
+  (if (not (and (integer? y) (exact? y)))
+      (raise (condition (&curses-wrong-type-arg-error
+                         (arg y)
+                         (expected-type 'integer)))))
+  (if (not (and (integer? x) (exact? x)))
+      (raise (condition (&curses-wrong-type-arg-error
+                         (arg x)
+                         (expected-type 'integer)))))
+  (%mvderwin win y x))
+
+(define (mvwin win y x)
+  "Moves the window so that the upper-left corner is at Y, X."
+  (if (not (window? win))
+      (raise (condition (&curses-wrong-type-arg-error
+                         (arg win)
+                         (expected-type 'window)))))
+  (if (not (and (integer? y) (exact? y)))
+      (raise (condition (&curses-wrong-type-arg-error
+                         (arg y)
+                         (expected-type 'integer)))))
+  (if (not (and (integer? x) (exact? x)))
+      (raise (condition (&curses-wrong-type-arg-error
+                         (arg x)
+                         (expected-type 'integer)))))
+  (%mvwin win y x))
+
 (define (napms ms)
   "Pause for MS milliseconds."
   (if (not (integer? ms))
@@ -2450,6 +2552,30 @@ or #f on failure"
           (raise (condition (&curses-bad-state-error)))))
      (else
       ret))))
+
+(define (newwin nlines ncols begin_y begin_x)
+  "Creates and returns a window with the given number of lines and columns.
+The upper, left-hand corner of the window is at line BEGIN_Y and column
+BEGIN_X.  If either NLINES or NCOLS is zero, the window will extend to the
+bottom, right-hand cornder of the screen.  A new, full-screen window is
+created by calling (newwin 0 0 0 0)."
+  (if (not (and (integer? nlines) (exact? nlines)))
+      (raise (condition (&curses-wrong-type-arg-error
+                         (arg nlines)
+                         (expected-type 'integer)))))
+  (if (not (and (integer? ncols) (exact? ncols)))
+      (raise (condition (&curses-wrong-type-arg-error
+                         (arg ncols)
+                         (expected-type 'integer)))))
+  (if (not (and (integer? begin_y) (exact? begin_y)))
+      (raise (condition (&curses-wrong-type-arg-error
+                         (arg begin_y)
+                         (expected-type 'integer)))))
+  (if (not (and (integer? begin_x) (exact? begin_x)))
+      (raise (condition (&curses-wrong-type-arg-error
+                         (arg begin_x)
+                         (expected-type 'integer)))))
+  (%newwin nlines ncols begin_y begin_x))
 
 (define (nl!) 
   "Enables the underlying display device to translate the return key
@@ -2748,8 +2874,25 @@ initialize the curses data structures as well as the virtual screen."
 			 (expected-type 'string)))))
   (%scr-set filename))
 
+(define (scrl win n)
+  "Scroll the window by N lines.  N can be negative"
+  (if (not (and (window? origwin) (is-pad? origwin)))
+      (raise (condition (&curses-wrong-type-arg-error
+                         (arg origwin)
+                         (expected-type 'window)))))
+  (if (not (and (integer? n) (exact? n)))
+      (raise (condition (&curses-wrong-type-arg-error
+                         (arg n)
+                         (expected-type 'integer)))))
+  (%scrl win n))
+
 (define (scroll win)
-  (scrl win 1))
+  "Scroll the window by 1 line."
+  (if (not (and (window? origwin) (is-pad? origwin)))
+      (raise (condition (&curses-wrong-type-arg-error
+                         (arg origwin)
+                         (expected-type 'window)))))
+  (%scrl win 1))
 
 (define (set-term term)
   "Switch to a new terminal indicated by the parameter TERM.  TERM has
@@ -2803,6 +2946,42 @@ returns #f on failure or a window structure on success"
                                 (expected-type 'integer))))))
        (list nlines ncols begin_y begin_x))
   (%subpad origwin nlines ncols begin_y begin_x))
+
+(define (subwin origwin nlines ncols begin_y begin_x)
+  "Creates and returns a new window with the given number of lines and
+columns.  The window is at position BEGIN_Y, BEGIN_X on the screen.
+The window is made in the middle of the window ORIGWIN, so that
+changes made to one window will affect both windows.  The subwindow
+shares memory with the original window."
+  (if (not (and (window? origwin) (is-pad? origwin)))
+      (raise (condition (&curses-wrong-type-arg-error
+                         (arg origwin)
+                         (expected-type 'window)))))
+  (map (lambda (x)
+         (if (not (and (integer? x) (exact? x)))
+             (raise (condition (&curses-wrong-type-arg-error
+                                (arg x)
+                                (expected-type 'integer))))))
+       (list nlines ncols begin_y begin_x))
+  (%subwin origwin nlines ncols begin_y begin_x)))
+
+(define (syncdown win)
+  "Touches all location in children of WIN that are changed in WIN."
+  (%syncup win))
+
+(define (syncup win)
+  "Touches all location in ancestors of WIN that are changed in WIN."
+  (%syncup win))
+
+(define (termattrs)
+  "Returns an integer that is a 'logical or' of all the video attributes
+supported by the terminal.  It can be compared to the constants A_ALTCHARSET,
+A_ATTRIBUTES, A_BLINK, A_BOLD, etc"
+  (%termattrs))
+
+(define (termname)
+  "Returns the name of the current terminal"
+  (%termname))
 
 (define (timeout! win delay)
   "Sets the amount of time that 'getch' will wait for a character.  If DELAY
