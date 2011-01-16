@@ -538,10 +538,10 @@ string."
     (if (logtest attr A_UNDERLINE) " underline" "")
     (if (logtest attr A_HORIZONTAL) " horizontal" "")
     (if (logtest attr A_LEFT) " left" "")
-    (if (logtest attr A_LOW) " low") "")
-   (if (logtest attr A_RIGHT) " right" "")
-   (if (logtest attr A_TOP) " top" "")
-   (if (logtest attr A_VERTICAL) " vertical" "")))
+    (if (logtest attr A_LOW) " low" "")
+    (if (logtest attr A_RIGHT) " right" "")
+    (if (logtest attr A_TOP) " top" "")
+    (if (logtest attr A_VERTICAL) " vertical" ""))))
 
 (define (acs-char-name c)
   "If C is a member of the alternate character set, this returns the
