@@ -1657,7 +1657,7 @@ The subwindow shares memory with the original window."
                                 (arg x)
                                 (expected-type 'integer))))))
        (list nlines ncols begin_y begin_x))
-  (%derwin origwin nlines ncols begin_y begin_x)))
+  (%derwin origwin nlines ncols begin_y begin_x))
 
 (define (doupdate)
   "Copies the virtual screen to the physical screen."
@@ -1719,7 +1719,8 @@ to (X,Y) first.  Returns #t on success."
   (%erase win))
 
 (define (erasechar)
-  "Returns the character that is used to erase the screen.")
+  "Returns the character that is used to erase the screen."
+  (%erasechar))
 
 (define (flash)
   "Flashes the screen.  Returns #t on success or #f on failure."
@@ -2640,7 +2641,7 @@ a timer and will likely not interpret function keys correctly."
                          (expected-type 'window)))))
   "The procedure copies this window to the virtual screen.  Calling
 'doupdate' will then copy the virtual screen to the actual screen."
-  (%noutrefresh))
+  (%noutrefresh win))
 
 (define (noqiflush!)
   "Disable flushing of the input and output queues when an interrupt is
@@ -2737,7 +2738,7 @@ rectangle to be displayed on the screen."
                          (expected-type 'window)))))
   (for-each 
    (lambda (ch) 
-     (if (and (not (xchar? ch)) (not (eq? ch 0)))
+     (if (not (integer? ch))
          (raise (condition (&curses-wrong-type-arg-error
                             (arg ch)
                             (expected-type 'xchar))))))
@@ -2758,7 +2759,7 @@ to be displayed on the screen."
                          (expected-type 'window)))))
   (for-each 
    (lambda (ch) 
-     (if (and (not (xchar? ch)) (not (eq? ch 0)))
+     (if (not (integer? ch))
          (raise (condition (&curses-wrong-type-arg-error
                             (arg ch)
                             (expected-type 'xchar))))))
@@ -2876,9 +2877,9 @@ initialize the curses data structures as well as the virtual screen."
 
 (define (scrl win n)
   "Scroll the window by N lines.  N can be negative"
-  (if (not (and (window? origwin) (is-pad? origwin)))
+  (if (not (window? win))
       (raise (condition (&curses-wrong-type-arg-error
-                         (arg origwin)
+                         (arg win)
                          (expected-type 'window)))))
   (if (not (and (integer? n) (exact? n)))
       (raise (condition (&curses-wrong-type-arg-error
@@ -2888,9 +2889,9 @@ initialize the curses data structures as well as the virtual screen."
 
 (define (scroll win)
   "Scroll the window by 1 line."
-  (if (not (and (window? origwin) (is-pad? origwin)))
+  (if (not (window? win))
       (raise (condition (&curses-wrong-type-arg-error
-                         (arg origwin)
+                         (arg win)
                          (expected-type 'window)))))
   (%scrl win 1))
 
@@ -2953,7 +2954,7 @@ columns.  The window is at position BEGIN_Y, BEGIN_X on the screen.
 The window is made in the middle of the window ORIGWIN, so that
 changes made to one window will affect both windows.  The subwindow
 shares memory with the original window."
-  (if (not (and (window? origwin) (is-pad? origwin)))
+  (if (not (window? origwin))
       (raise (condition (&curses-wrong-type-arg-error
                          (arg origwin)
                          (expected-type 'window)))))
@@ -2963,7 +2964,7 @@ shares memory with the original window."
                                 (arg x)
                                 (expected-type 'integer))))))
        (list nlines ncols begin_y begin_x))
-  (%subwin origwin nlines ncols begin_y begin_x)))
+  (%subwin origwin nlines ncols begin_y begin_x))
 
 (define (syncdown win)
   "Touches all location in children of WIN that are changed in WIN."
@@ -2973,11 +2974,11 @@ shares memory with the original window."
   "Touches all location in ancestors of WIN that are changed in WIN."
   (%syncup win))
 
-(define (termattrs)
+(define (term-attrs)
   "Returns an integer that is a 'logical or' of all the video attributes
 supported by the terminal.  It can be compared to the constants A_ALTCHARSET,
 A_ATTRIBUTES, A_BLINK, A_BOLD, etc"
-  (%termattrs))
+  (%term-attrs))
 
 (define (termname)
   "Returns the name of the current terminal"
