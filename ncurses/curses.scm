@@ -1134,6 +1134,58 @@ not modified, but the color pair, if any, is modified."
 (define (acs-urcorner) (list->xchar (%acs-urcorner)))
 (define (acs-vline)    (list->xchar (%acs-vline)))
 
+;; Typecheck macros
+(define-syntax typecheck
+  (syntax-rules ()
+    ((_ val type-name type-test)
+     (if (not (type-test val))
+         (raise (condition (&curses-wrong-type-arg-error
+                            (arg val)
+                            (expected-type type-name))))))
+    ((_ val type-name type-test1 type-test2)
+     (if (not (and (type-test1 val) (type-test2 val)))
+         (raise (condition (&curses-wrong-type-arg-error
+                            (arg val)
+                            (expected-type type-name))))))))
+
+(define-syntax assert-boolean
+  (syntax-rules ()
+    ((_ val)
+     (typecheck val 'boolean boolean?))))
+(define-syntax assert-integer
+  (syntax-rules ()
+    ((_ val)
+     (typecheck val 'integer integer? exact?))))
+(define-syntax assert-pad
+  (syntax-rules ()
+    ((_ val)
+     (typecheck val 'pad window? is-pad?))))
+(define-syntax assert-pos-if-defined
+  (syntax-rules ()
+    ((_ x y)
+     (if (and x y)
+         (begin
+           (assert-integer x)
+           (assert-integer y))))))
+(define-syntax assert-string
+  (syntax-rules ()
+    ((_ val)
+     (typecheck val 'string string?))))
+(define-syntax assert-window
+  (syntax-rules ()
+    ((_ val)
+     (typecheck val 'window window?))))
+(define-syntax assert-xchar
+  (syntax-rules ()
+    ((_ val)
+     (typecheck val 'xchar xchar?))))
+(define-syntax assert-xstring
+  (syntax-rules ()
+    ((_ str)
+     (if (or (not (list? str)) (not (every xchar? str)))
+         (raise (condition (&curses-wrong-type-arg-error
+                            (arg str)
+                            (expected-type 'xstring))))))))
 
 ;; Scheme calling wrappers for C functions
 
@@ -1141,24 +1193,9 @@ not modified, but the color pair, if any, is modified."
   "Puts the character CH into the given window at its current window
 position.  If Y and X are set, moves to (X,Y) first.  Returns #t on
 success."
-  (if (not (window? win))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg win)
-                         (expected-type 'window)))))
-  (if (not (xchar? ch))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg ch)
-                         (expected-type 'xchar)))))
-  (if (and y x)
-      (begin
-        (if (not (and (integer? y) (exact? y)))
-            (raise (condition (&curses-wrong-type-arg-error
-                               (arg y)
-                               (expected-type 'integer)))))
-        (if (not (and (integer? x) (exact? x)))
-            (raise (condition (&curses-wrong-type-arg-error
-                               (arg x)
-                               (expected-type 'integer)))))))
+  (assert-window win)
+  (assert-xchar ch)
+  (assert-pos-if-defined x y)
   (and (if (and y x)
            (%wmove win y x)
            #t)
@@ -1170,28 +1207,10 @@ after the current cursor position.  If X and Y are set, the cursor
 will be moved to that position first.  If N is set, and maximum of N
 complex characters will be added.  Returns #t on success or #f on
 failure."
-  (if (not (window? win))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg win)
-                         (expected-type 'window)))))
-  (if (or (not (list? str)) (not (every xchar? str)))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg str)
-                         (expected-type 'xstring)))))
-  (if (and y x)
-      (begin
-        (if (not (and (integer? y) (exact? y)))
-            (raise (condition (&curses-wrong-type-arg-error
-                               (arg y)
-                               (expected-type 'integer)))))
-        (if (not (and (integer? x) (exact? x)))
-            (raise (condition (&curses-wrong-type-arg-error
-                               (arg x)
-                               (expected-type 'integer)))))))
-  (if (not (and (integer? n) (exact? n)))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg n)
-                         (expected-type 'integer)))))
+  (assert-window win)
+  (assert-xstring str)
+  (assert-pos-if-defined x y)
+  (assert-integer n)
   (and (if (and y x)
            (%wmove win y x)
            #t)
@@ -1202,28 +1221,10 @@ failure."
 cursor position.  If X and Y are set, the cursor will be moved to that
 position first.  If N is set, and maximum of N characters will be
 added.  Returns #t on success or #f on failure."
-  (if (not (window? win))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg win)
-                         (expected-type 'window)))))
-  (if (not (string? str))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg str)
-                         (expected-type 'string)))))
-  (if (and y x)
-      (begin
-        (if (not (and (integer? y) (exact? y)))
-            (raise (condition (&curses-wrong-type-arg-error
-                               (arg y)
-                               (expected-type 'integer)))))
-        (if (not (and (integer? x) (exact? x)))
-            (raise (condition (&curses-wrong-type-arg-error
-                               (arg x)
-                               (expected-type 'integer)))))))
-  (if (not (and (integer? n) (exact? n)))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg n)
-                         (expected-type 'integer)))))
+  (assert-window win)
+  (assert-string str)
+  (assert-pos-if-defined x y)
+  (assert-integer n)
   (and (if (and y x)
            (%wmove win y x)
            #t)
@@ -1233,10 +1234,7 @@ added.  Returns #t on success or #f on failure."
   "Returns the rendtion of the current window as a two-element list.
 The first element is the integer representation of the attributes, and
 the second element is the color pair number."
-  (if (not (window? win))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg win)
-                         (expected-type 'window)))))
+  (assert-window win)
   (let* ((ac (%wattr-get win))
          (attr (car ac))
          (color (cadr ac)))
@@ -1281,14 +1279,8 @@ attributes."
 (define (attr-off! win attrs)
   "Turns off the attributes ATTRS of the given window without turning
 any other attributes on or off."
-  (if (not (window? win))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg win)
-                         (expected-type 'window)))))
-  (if (not (and (integer? attrs) (exact? attrs)))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg attrs)
-                         (expected-type 'integer)))))
+  (assert-window win)
+  (assert-integer attrs)
   (let ((ret (%attr-off! win attrs)))
     (if (not ret)
         (raise (condition (&ncurses-bad-state-error))))))
@@ -1296,14 +1288,8 @@ any other attributes on or off."
 (define (attr-on! win attrs)
   "Turns on the attributes ATTRS of the given window without turning
 any other attributes on or off."
-  (if (not (window? win))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg win)
-                         (expected-type 'window)))))
-  (if (not (and (integer? attrs) (exact? attrs)))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg attrs)
-                         (expected-type 'integer)))))
+  (assert-window win)
+  (assert-integer attrs)
   (let ((ret (%attr-on! win attrs)))
     (if (not ret)
         (raise (condition (&ncurses-bad-state-error))))))
@@ -1311,6 +1297,8 @@ any other attributes on or off."
 (define* (attr-set! win attr #:optional color)
   "Sets the given window to have the attributes ATTRS and optionally
 the color pair given by COLOR."
+  (assert-window win)
+  (assert-integer attr)
   (if color
       (begin
         (%wattr-set! win attr color))
@@ -1328,28 +1316,16 @@ the color pair given by COLOR."
 (define (bkgd win ch)
   "Sets the background of the named window WIN to the given complex
 char CH and applies it to all characters in the window."
-  (if (not (window? win))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg win)
-                         (expected-type 'window)))))
-  (if (not (xchar? ch))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg ch)
-                         (expected-type 'xchar)))))
+  (assert-window win)
+  (assert-xchar ch)
   (%bkgd win (xchar->list ch)))
 
 (define (bkgdset! win ch)
   "Sets the background for the window to the given complex character
 CH.  This will be combined with all new characters added to the
 window."
-  (if (not (window? win))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg win)
-                         (expected-type 'window)))))
-  (if (not (xchar? ch))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg ch)
-                         (expected-type 'xchar)))))
+  (assert-window win)
+  (assert-xchar ch)
   (%bkgdset! win (xchar->list ch)))
 
 (define (border win left right top bottom topleft topright bottomleft 
@@ -1358,10 +1334,7 @@ window."
 TOP, LEFT, RIGHT, etc.  If the number 0 is used instead of a complex
 character, then the default character will be used for that border
 element."
-  (if (not (window? win))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg win)
-                         (expected-type 'window)))))
+  (assert-window win)
   (for-each 
    (lambda (ch) 
      (if (and (not (xchar? ch)) (not (eq? ch 0)))
@@ -1401,6 +1374,7 @@ element."
 the verical lines and the complex character H for the horizontal
 lines.  If the number 0 is used for H or V instead of a complex
 character, the default lines will be used."
+  (assert-window win)
   (let ((v2 (if (equal? v 0) (xchar->list (normal (acs-vline))) (xchar->list v)))
         (h2 (if (equal? h 0) (xchar->list (normal (acs-hline))) (xchar->list h))))
     (%border win v2 v2 h2 h2
@@ -1420,32 +1394,11 @@ the terminal has preassigned, unmodifiable colors."
   "Changes that attributes and color pair of of a given number of
 characters starting at the current cursor location in the window WIN.
 If X and Y are defined, first move to that position."
-  (if (not (window? win))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg win)
-                         (expected-type 'window)))))
-  (if (not (and (integer? n) (exact? n)))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg n)
-                         (expected-type 'integer)))))
-  (if (not (and (integer? attr) (exact? attr)))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg attr)
-                         (expected-type 'integer)))))
-  (if (not (and (integer? color) (exact? color)))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg n)
-                         (expected-type 'integer)))))
-  (if (and y x)
-      (begin
-        (if (not (and (integer? y) (exact? y)))
-            (raise (condition (&curses-wrong-type-arg-error
-                               (arg y)
-                               (expected-type 'integer)))))
-        (if (not (and (integer? x) (exact? x)))
-            (raise (condition (&curses-wrong-type-arg-error
-                               (arg x)
-                               (expected-type 'integer)))))))
+  (assert-window win)
+  (assert-integer n)
+  (assert-integer attr)
+  (assert-integer color)
+  (assert-pos-if-defined x y)
   (let ((ret (and (if (and y x)
                       (%wmove win y x)
                       #t)
@@ -1456,10 +1409,7 @@ If X and Y are defined, first move to that position."
 (define (clear win)
   "Copy blanks to every position in the window, and set it to
 be cleared completely and repainted at the next window refresh."
-  (if (not (window? win))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg win)
-                         (expected-type 'window)))))
+  (assert-window win)
   (let ((ret (%clear win)))
     (or ret
         (raise (condition (&curses-bad-state-error))))))
@@ -1468,50 +1418,33 @@ be cleared completely and repainted at the next window refresh."
   "If clearok is called with BF as #t, the next call to 'refresh' with 
 this window will clear the screen completely and redraw the screen from
 scratch."
-  (if (not (window? win))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg win)
-                         (expected-type 'window)))))
-  (if (not (boolean? bf))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg bf)
-                         (expected-type 'boolean)))))
+  (assert-window win)
+  (assert-boolean bf)
   (%clearok! win bf))
 
 (define (clrtobot win)
   "Erases from the cursor location to the end of screen."
-  (if (not (window? win))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg win)
-                         (expected-type 'window)))))
+  (assert-window win)
   (let ((ret (%clrtobot win)))
     (or ret
         (raise (condition (&curses-bad-state-error))))))
 
 (define (clrtoeol win)
   "Erases from the cursor location to the end of the current line."
-  (if (not (window? win))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg win)
-                         (expected-type 'window)))))
+  (assert-window win)
   (%clrtoeol win))
 
 (define (color-content c)
   "Given a color number, this procedure returns a three-element list
 containing the red, green, and blue values of the color on a 0 to 1000 scale.
 It can return #f if the color is out of range or colors aren't initialized."
-  (if (or (not (exact? c)) (not (integer? c)))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg c)
-                         (expected-type 'integer)))))
+  (assert-integer c)
   (%color-content c))  
 
 (define (color-set! win pair)
   "Sets the window's color pair to the color pair number PAIR."
-  (if (not (window? win))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg win)
-                         (expected-type 'window)))))
+  (assert-window win)
+  (assert-integer pair)
   (let ((ret (%color-set! win pair)))
     (if (not ret)
         (raise (condition (&curses-out-of-range-error
@@ -1521,10 +1454,7 @@ It can return #f if the color is out of range or colors aren't initialized."
   "Sets the visiblity of the cursor.  If VIS is 0, it is invisible.
 1 is visible.  2 is very visible.  Returns the previous setting, or #f
 on error."
-  (if (not (integer? vis))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg vis)
-                         (expected-type 'integer)))))
+  (assert-integer vis)
   (if (or (< vis 0) (> vis 2))
       (raise (condition (&curses-out-of-range-error
                          (arg vis)))))
@@ -1533,6 +1463,7 @@ on error."
 (define (cursyncup win)
   "Synchronizes the location of the cursor between WIN and all parents
 of WIN."
+  (assert-window win)
   (%syncup win))
 
 (define (copywin srcwin destwin sminrow smincol dminrow dmincol
@@ -1543,21 +1474,11 @@ the upper-left-corner of the source window is specified SMINROW and SMINCOL.
 If OVERLAY is 1, only text and not blanks are copied.  If overlay is 0,
 text and blanks are copied.  Returns #t on success. or #f on failure.  Failure
 usually indicates a problem with your coordinates."
-  (if (not (window? srcwin))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg srcwin)
-                         (expected-type 'window)))))
-  (if (not (window? destwin))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg destwin)
-                         (expected-type 'window)))))
-  (map (lambda (x)
-         (if (not (and (integer? x) (exact? x)))
-             (raise (condition (&curses-wrong-type-arg-error
-                                (arg x)
-                                (expected-type 'integer))))))
-       (list sminrow smincol dminrow dmincol dmaxrow dmaxcol
-	     overlay))
+  (assert-window srcwin)
+  (assert-window destwin)
+  (for-each (lambda (x) (assert-integer x))
+            (list sminrow smincol dminrow dmincol dmaxrow dmaxcol
+                  overlay))
   (%copywin srcwin destwin sminrow smincol dminrow dmincol dmaxrow dmaxcol
 	    overlay))
 
@@ -1577,20 +1498,8 @@ underlying ncurses library."
 (define* (delch win #:key y x)
   "Deletes the character under the cursor in the given window,
 optionally first moving to the location X, Y."
-  (if (not (window? win))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg win)
-                         (expected-type 'window)))))
-  (if (and y x)
-      (begin
-        (if (not (and (integer? y) (exact? y)))
-            (raise (condition (&curses-wrong-type-arg-error
-                               (arg y)
-                               (expected-type 'integer)))))
-        (if (not (and (integer? x) (exact? x)))
-            (raise (condition (&curses-wrong-type-arg-error
-                               (arg x)
-                               (expected-type 'integer)))))))
+  (assert-window win)
+  (assert-pos-if-defined x y)
   (and
    (if (and y x)
        (%wmove win y x)
@@ -1601,20 +1510,8 @@ optionally first moving to the location X, Y."
 (define* (deleteln win #:key y x)
   "Deletes the line under the cursor in the given window, optionally first
 moving to the position X, Y"
-  (if (not (window? win))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg win)
-                         (expected-type 'window)))))
-  (if (and y x)
-      (begin
-        (if (not (and (integer? y) (exact? y)))
-            (raise (condition (&curses-wrong-type-arg-error
-                               (arg y)
-                               (expected-type 'integer)))))
-        (if (not (and (integer? x) (exact? x)))
-            (raise (condition (&curses-wrong-type-arg-error
-                               (arg x)
-                               (expected-type 'integer)))))))
+  (assert-window win)
+  (assert-pos-if-defined x y)
   (and
    (if (and y x)
        (%wmove win y x)
@@ -1635,10 +1532,7 @@ moving to the position X, Y"
   "Forcibly frees a window.  Note that the garbage collector will normally
 free a window when it is no longer being used, so calling this explicitly is
 usually not necessary."
-  (if (not (window? win))
-      (raise (condition (&curses-wrong-type-error
-			 (arg win)
-			 (expected-type 'win)))))
+  (assert-window win)
   (%delwin win))
 
 (define (derwin origwin nlines ncols begin_y begin_x)
@@ -1647,16 +1541,9 @@ columns.  The window is at position BEGIN_Y, BEGIN_X on the original
 window ORIGWIN.  The window is made in the middle of the window
 ORIGWIN, so that changes made to one window will affect both windows.
 The subwindow shares memory with the original window."
-  (if (not (and (window? origwin) (is-pad? origwin)))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg origwin)
-                         (expected-type 'window)))))
-  (map (lambda (x)
-         (if (not (and (integer? x) (exact? x)))
-             (raise (condition (&curses-wrong-type-arg-error
-                                (arg x)
-                                (expected-type 'integer))))))
-       (list nlines ncols begin_y begin_x))
+  (assert-window origwin)
+  (for-each (lambda (x) (assert-integer x))
+            (list nlines ncols begin_y begin_x))
   (%derwin origwin nlines ncols begin_y begin_x))
 
 (define (doupdate)
@@ -1665,10 +1552,7 @@ The subwindow shares memory with the original window."
 
 (define (dupwin win)
   "Create a duplicate of a window."
-  (if (not (window? win))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg win)
-                         (expected-type 'window)))))
+  (assert-window win)
   (let ((ret (%dupwin win)))
     (if (not ret)
 	(raise (condition (&curses-bad-state-error)))
@@ -1682,24 +1566,9 @@ The subwindow shares memory with the original window."
   "Puts the character CH into the given window at its current window
 position and then refreshes the window.  If Y and X are set, moves
 to (X,Y) first.  Returns #t on success."
-  (if (not (window? win))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg win)
-                         (expected-type 'window)))))
-  (if (not (xchar? ch))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg ch)
-                         (expected-type 'xchar)))))
-  (if (and y x)
-      (begin
-        (if (not (and (integer? y) (exact? y)))
-            (raise (condition (&curses-wrong-type-arg-error
-                               (arg y)
-                               (expected-type 'integer)))))
-        (if (not (and (integer? x) (exact? x)))
-            (raise (condition (&curses-wrong-type-arg-error
-                               (arg x)
-                               (expected-type 'integer)))))))
+  (assert-window win)
+  (assert-xchar ch)
+  (assert-pos-if-defined x y)
   (and
    (if (and y x)
        (%wmove win y x)
@@ -1712,10 +1581,7 @@ to (X,Y) first.  Returns #t on success."
 
 (define (erase win)
   "Copy blanks to every position in the window."
-  (if (not (window? win))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg win)
-                         (expected-type 'window)))))
+  (assert-window win)
   (%erase win))
 
 (define (erasechar)
@@ -1729,29 +1595,25 @@ to (X,Y) first.  Returns #t on success."
 (define (getbkgd win)
   "Returns the default background of the given window as a complex
 char."
-  (if (not (window? win))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg win)
-                         (expected-type 'window)))))
+  (assert-window win)
   (let ((ret (%getbkgd win)))
     (or ret
         (raise (condition (&curses-bad-state-error))))))
 
 (define (getbegx win)
   "Returns the beginning x coordinate of the specified window."
+  (assert-window win)
   (cadr (getbegyx win)))
 
 (define (getbegy win)
   "Returns the beginning y coordinate of the specified window."
+  (assert-window win)
   (car (getbegyx win)))
 
 (define (getbegyx win)
   "Returns as a two-element list (y x) the beginning coordinates of
 the specified window."
-  (if (not (window? win))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg win)
-                         (expected-type 'window)))))
+  (assert-window win)
   (%getbegyx win))
 
 (define* (getch win #:key y x)
@@ -1762,21 +1624,8 @@ maps to a control character, and keypad! has been called, then an
 integer curses constant, like KEY_ENTER.  The character may appear on
 the screen based on the setting of noecho!.  Optionally, first move to
 location X, Y, if given."
-  (if (not (window? win))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg win)
-                         (expected-type 'window)))))
-  (if (and y x)
-      (begin
-        (if (not (and (integer? y) (exact? y)))
-            (raise (condition (&curses-wrong-type-arg-error
-                               (arg y)
-                               (expected-type 'integer)))))
-        (if (not (and (integer? x) (exact? x)))
-            (raise (condition (&curses-wrong-type-arg-error
-                               (arg x)
-                               (expected-type 'integer)))))))
-
+  (assert-window win)
+  (assert-pos-if-defined x y)
   (and (if (and y x)
            (%wmove win y x)
            #t)
@@ -1784,30 +1633,32 @@ location X, Y, if given."
 
 (define (getcurx win)
   "Returns the current cursor X location."
+  (assert-window win)
   (cadr (getyx win)))
 
 (define (getcury win)
   "Returns the current cursor Y location."
+  (assert-window win)
   (car (getyx win)))
 
 (define (getmaxx win)
   "Returns the window's size in the X direction ."
+  (assert-window win)
   (cadr (getmaxyx win)))
 
 (define (getmaxy win)
   "Returns the window's size in the Y direction."
+  (assert-window win)
   (car (getmaxyx win)))
 
 (define (getmaxyx win)
   "Returns as a two-element list (y x) the size of the specified
 window."
-  (if (not (window? win))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg win)
-                         (expected-type 'window)))))
+  (assert-window win)
   (%getmaxyx win))
 
 (define (getmaxy win)
+  (assert-window win)
   (car (getmaxyx win)))
 
 (define (getmouse)
@@ -1822,24 +1673,9 @@ character is not included in the return string.  If a SIGWINCH (window
 resize) interrupts the function, it instead returns the KEY_RESIZE
 integer code. Optionally, it will move the cursort to the X, Y,
 position before receiving characters."
-  (if (not (window? win))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg win)
-                         (expected-type 'window)))))
-  (if (not (and (integer? n) (exact? n)))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg n)
-                         (expected-type 'integer)))))
-  (if (and y x)
-      (begin
-        (if (not (and (integer? y) (exact? y)))
-            (raise (condition (&curses-wrong-type-arg-error
-                               (arg y)
-                               (expected-type 'integer)))))
-        (if (not (and (integer? x) (exact? x)))
-            (raise (condition (&curses-wrong-type-arg-error
-                               (arg x)
-                               (expected-type 'integer)))))))
+  (assert-window win)
+  (assert-integer n)
+  (assert-pos-if-defined x y)
   (and (if (and y x)
            (%wmove win y x)
            #t)
@@ -1848,35 +1684,32 @@ position before receiving characters."
 (define (getparent win)
   "Returns the parent window of WIN, if any.  If WIN is a root window, 
 it returns #f."
-  (if (not (window? win))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg win)
-                         (expected-type 'window)))))
+  (assert-window win)
   (%getparent win))
 
 (define (getparx win)
   "If WIN is a subwindow, return the x coordinate of the subwindow
 relative to the parent, or -1 if it is not a subwindow."
+  (assert-window win)
   (cadr (getparyx win)))
 
 (define (getpary win)
   "If WIN is a subwindow, return the x coordinate of the subwindow
 relative to the parent, or -1 if it is not a subwindow."
+  (assert-window win)
   (car (getparyx win)))
 
 (define (getparyx win)
   "If WIN is a subwindow, this returns as a two-element list (y x) the
 beginning coordinates of the subwindow relative to the parent window.
 If this is not a subwindow, (-1 -1) is returned."
-  (if (not (window? win))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg win)
-                         (expected-type 'window)))))
+  (assert-window win)
   (%getparyx win))
 
 (define (getscrreg win)
   "Returns, as a two element list, the top and bottom line numbers of the
 scroll region for the window."
+  (assert-window win)
   (%getscrreg win))
 
 (define (getsyx)
@@ -1886,19 +1719,13 @@ two-element list (y x)."
 
 (define (getyx win)
   "Returns the cursor position of the given window as a two-element list."
-  (if (not (window? win))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg win)
-                         (expected-type 'window)))))
+  (assert-window win)
   (%getyx win))
 
 (define (halfdelay! tenths)
   "Disable line buffering and erase/kill character processing, but, 
 only wait TENTHS tenths of seconds for a keypress"
-  (if (or (not (integer? tenths)) (not (exact? tenths)))
-      (raise (condition (&curses-wrong-type-arg
-                         (arg tenths)
-                         (expected-type 'integer)))))
+  (assert-integer tenths)
   (if (or (< tenths 1) (> tenths 255))
       (raise (condition (&curses-out-of-range-error
                          (arg tenths)))))
@@ -1921,10 +1748,7 @@ and delete lines."
 (define (has-key? key)
   "Given a curses integer key constant like KEY_ENTER, returns #t if the
 current terminal type recognizes a key of that value."
-  (if (and (not (integer? key)) (not (exact? key)))
-      (raise (condition (&curses-wrong-type-arg
-                         (arg key)
-                         (expected-type 'integer)))))
+  (assert-integer key)
   (%has-key? key))
 
 (define (has-mouse?)
@@ -1934,28 +1758,10 @@ current terminal type recognizes a key of that value."
 (define* (hline win ch n #:key y x)
   "Draws a horizontal line of length N using the complex character CH.
 If X and Y are given, the cursor is first moved to that location."
-  (if (not (window? win))
-      (raise (condition (&curses-wrong-type-arg
-                         (arg win)
-                         (expected-type 'window)))))
-  (if (not (xchar? ch))
-      (raise (condition (&curses-wrong-type-arg
-                         (arg win)
-                         (expected-type 'xchar)))))
-  (if (and y x)
-      (begin
-        (if (not (and (integer? y) (exact? y)))
-            (raise (condition (&curses-wrong-type-arg-error
-                               (arg y)
-                               (expected-type 'integer)))))
-        (if (not (and (integer? x) (exact? x)))
-            (raise (condition (&curses-wrong-type-arg-error
-                               (arg x)
-                               (expected-type 'integer)))))))
-  (if (not (and (integer? n) (exact? n)))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg n)
-                         (expected-type 'integer)))))
+  (assert-window win)
+  (assert-xchar ch)
+  (assert-integer n)
+  (assert-pos-if-defined x y)
   (and (if (and y x)
            (%wmove win y x)
            #t)
@@ -1966,20 +1772,8 @@ If X and Y are given, the cursor is first moved to that location."
 (define* (inch win #:key y x)
   "Returns a complex character containg the character at the current
 position in the given window, optionally first moving to Y, X."
-  (if (not (window? win))
-      (raise (condition (&curses-wrong-type-arg
-                         (arg win)
-                         (expected-type 'window)))))
-  (if (and y x)
-      (begin
-        (if (not (and (integer? y) (exact? y)))
-            (raise (condition (&curses-wrong-type-arg-error
-                               (arg y)
-                               (expected-type 'integer)))))
-        (if (not (and (integer? x) (exact? x)))
-            (raise (condition (&curses-wrong-type-arg-error
-                               (arg x)
-                               (expected-type 'integer)))))))
+  (assert-window win)
+  (assert-pos-if-defined x y)
   (and (if (and y x)
            (%wmove win y x)
            #t)
@@ -1992,24 +1786,9 @@ position in the given window, optionally first moving to Y, X."
 starting at the cursor location and ending at the right margin of the
 window.  If N is given it returns a maximum of N characters.  If Y and
 X are given, it first moves the cursor to that location."
-  (if (not (window? win))
-      (raise (condition (&curses-wrong-type-arg
-                         (arg win)
-                         (expected-type 'window)))))
-  (if (and y x)
-      (begin
-        (if (not (and (integer? y) (exact? y)))
-            (raise (condition (&curses-wrong-type-arg-error
-                               (arg y)
-                               (expected-type 'integer)))))
-        (if (not (and (integer? x) (exact? x)))
-            (raise (condition (&curses-wrong-type-arg-error
-                               (arg x)
-                               (expected-type 'integer)))))))
-  (if (not (and (integer? n) (exact? n)))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg n)
-                         (expected-type 'integer)))))
+  (assert-window win)
+  (assert-pos-if-defined x y)
+  (assert-integer n)
   (and (if (and y x)
            (%wmove win y x)
            #t)
@@ -2021,51 +1800,29 @@ X are given, it first moves the cursor to that location."
 (define (idcok! win bf)
   "If idcok! is called with BF as #t, curses may use a terminal's hardware
 insert/delete character feature if it has such a feature."
-  (if (not (window? win))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg win)
-                         (expected-type 'window)))))
-  (if (not (boolean? bf))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg bf)
-                         (expected-type 'boolean)))))
+  (assert-window win)
+  (assert-boolean bf)
   (%idcok! win bf))
 
 (define (idlok! win bf)
   "If idlok! is called with BF as #t, curses may use a terminal's hardware
 insert/delete line feature if it has such a feature."
-  (if (not (window? win))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg win)
-                         (expected-type 'window)))))
-  (if (not (boolean? bf))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg bf)
-                         (expected-type 'boolean)))))
+  (assert-window win)
+  (assert-boolean bf)
   (%idlok! win bf))
 
 (define (immedok! win bf)
   "If immedok! is called with BF as #t, any chahge in the window image, such as the ones called by addch, automatically causes a call to 'refresh'."
-  (if (not (window? win))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg win)
-                         (expected-type 'window)))))
-  (if (not (boolean? bf))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg bf)
-                         (expected-type 'boolean)))))
+  (assert-window win)
+  (assert-boolean bf)
   (%immedok! win bf))
 
 (define (init-color! color r g b)
   "Initializes the color number COLOR to have the red-green-blue value
 R G B.  R G and B are integers between 0 and 1000.  Returns #t on
 success or #f on failure."
-  (map (lambda (x)
-         (if (not (and (integer? x) (exact? x)))
-             (raise (condition (&curses-wrong-type-arg-error
-                                (arg x)
-                                (expected-type 'integer))))))
-       (list color r g b))
+  (for-each (lambda (x) (assert-integer x))
+            (list color r g b))
   (map (lambda (x)
          (if (or (< color 0) (> color 1000))
              (raise (condition (&curses-out-of-range-error
@@ -2077,18 +1834,9 @@ success or #f on failure."
   "Initializes the color pair PAIR to have color number FORE as its
 foreground color and color number BACK as its background color.  Returns
 #t on success or #f on failure."
-  (if (not (and (integer? pair) (exact? pair)))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg pair)
-                         (expected-type 'integer)))))
-  (if (not (and (integer? fore) (exact? fore)))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg fore)
-                         (expected-type 'integer)))))
-  (if (not (and (integer? back) (exact? back)))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg back)
-                         (expected-type 'integer)))))
+  (assert-integer pair)
+  (assert-integer fore)
+  (assert-integer back)
   (%init-pair! pair fore back))
 
 (define (initscr)
@@ -2101,24 +1849,9 @@ foreground color and color number BACK as its background color.  Returns
 (define* (insch win ch #:key y x)
   "Insert the complex character CH before the character under the cursor
 in the given window.  Optionally move to X, Y before doing the insertion."
-  (if (not (window? win))
-      (raise (condition (&curses-wrong-type-arg
-                         (arg win)
-                         (expected-type 'window)))))
-  (if (not (xchar? ch))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg ch)
-                         (expected-type 'xchar)))))
-  (if (and y x)
-      (begin
-        (if (not (and (integer? y) (exact? y)))
-            (raise (condition (&curses-wrong-type-arg-error
-                               (arg y)
-                               (expected-type 'integer)))))
-        (if (not (and (integer? x) (exact? x)))
-            (raise (condition (&curses-wrong-type-arg-error
-                               (arg x)
-                               (expected-type 'integer)))))))
+  (assert-window win)
+  (assert-xchar ch)
+  (assert-pos-if-defined x y)
   (if (and y x)
       (%wmove win y x))
   (let ((ret (%winsch win (xchar->list ch))))
@@ -2129,24 +1862,9 @@ in the given window.  Optionally move to X, Y before doing the insertion."
   "Returns, as a simple string, the characters starting at the current
 position in the given window.  If N is given, the string will contain
 no more than N characters.  If Y and X are given, move to X, Y first."
-  (if (not (window? win))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg win)
-                         (expected-type 'window)))))
-  (if (and y x)
-      (begin
-        (if (not (and (integer? y) (exact? y)))
-            (raise (condition (&curses-wrong-type-arg-error
-                               (arg y)
-                               (expected-type 'integer)))))
-        (if (not (and (integer? x) (exact? x)))
-            (raise (condition (&curses-wrong-type-arg-error
-                               (arg x)
-                               (expected-type 'integer)))))))
-  (if (and (not (integer? n)) (not (exact? n)))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg n)
-                         (expected-type 'integer)))))
+  (assert-window win)
+  (assert-pos-if-defined x y)
+  (assert-integer n)
   (and (if (and y x)
            (%wmove win y x)
            #t)
@@ -2156,24 +1874,9 @@ no more than N characters.  If Y and X are given, move to X, Y first."
   "For positive N, inserts N lines into the specified window above the
 current line.  For negative N, deletes N lines starting with the one
 under the cursor.  Optionally, move to position X, Y first."
-  (if (not (window? win))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg win)
-                         (expected-type 'window)))))
-  (if (not (and (integer? n) (exact? n)))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg n)
-                         (expected-type 'integer)))))
-  (if (and y x)
-      (begin
-        (if (not (and (integer? y) (exact? y)))
-            (raise (condition (&curses-wrong-type-arg-error
-                               (arg y)
-                               (expected-type 'integer)))))
-        (if (not (and (integer? x) (exact? x)))
-            (raise (condition (&curses-wrong-type-arg-error
-                               (arg x)
-                               (expected-type 'integer)))))))
+  (assert-window win)
+  (assert-integer n)
+  (assert-pos-if-defined x y)
   (and
    (if (and y x)
        (%wmove win y x)
@@ -2184,20 +1887,8 @@ under the cursor.  Optionally, move to position X, Y first."
 (define* (insertln win #:key y x)
   "Inserts a line in the current window above the current line,
 optionally first moving to the location X, Y. "
-  (if (not (window? win))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg win)
-                         (expected-type 'window)))))
-  (if (and y x)
-      (begin
-        (if (not (and (integer? y) (exact? y)))
-            (raise (condition (&curses-wrong-type-arg-error
-                               (arg y)
-                               (expected-type 'integer)))))
-        (if (not (and (integer? x) (exact? x)))
-            (raise (condition (&curses-wrong-type-arg-error
-                               (arg x)
-                               (expected-type 'integer)))))))
+  (assert-window win)
+  (assert-pos-if-defined x y)
   (and
    (if (and y x)
        (%wmove win y x)
@@ -2211,28 +1902,10 @@ character under the cursor.  All character to the right of thec cursor
 are shifted right.  If N is given, it will insert at most N
 characters.  If Y and X are given, the cursor will be moved to that
 location before inserting."
-  (if (not (window? win))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg win)
-                         (expected-type 'window)))))
-  (if (not (string? str))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg str)
-                         (expected-type 'string)))))
-  (if (and y x)
-      (begin
-        (if (not (and (integer? y) (exact? y)))
-            (raise (condition (&curses-wrong-type-arg-error
-                               (arg y)
-                               (expected-type 'integer)))))
-        (if (not (and (integer? x) (exact? x)))
-            (raise (condition (&curses-wrong-type-arg-error
-                               (arg x)
-                               (expected-type 'integer)))))))
-  (if (and (not (integer? n)) (not (exact? n)))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg n)
-                         (expected-type 'integer)))))
+  (assert-window win)
+  (assert-string str)
+  (assert-pos-if-defined x y)
+  (assert-integer n)
   (if (and y x)
       (%wmove win y x)
       #t)
@@ -2244,105 +1917,69 @@ location before inserting."
   "If BF is #t, this enables the intrflush option.  When an interrupt key
 is pressed on the keyboard (interrupt, break, or quit) all output to the
 tty driver queue will be flushed. #f disables this."
-  (if (not (boolean? bf))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg bf)
-                         (expected-type 'boolean)))))
+  (assert-boolean bf)
   (%intrflush! bf))
 
 (define (is-cleared? win)
   "True if clearok is set, that is, if the next call to 'refresh'
 will clear the screen completely and redraw"
-  (if (not (window? win))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg win)
-                         (expected-type 'window)))))
+  (assert-window win)
   (%is-clearok? win))
 
 (define (is-idcok? win)
   "True if idcok is set, that is, if curses is allowed to use the hardware
 insert/delete character feature of the terminal."
-  (if (not (window? win))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg win)
-                         (expected-type 'window)))))
+  (assert-window win)
   (%is-idcok? win))
 
 (define (is-idlok? win)
   "True if idlok is set, that is, if curses is allowed to use the hardware
 insert/delete line feature of the terminal."
-  (if (not (window? win))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg win)
-                         (expected-type 'window)))))
+  (assert-window win)
   (%is-idlok? win))
 
 (define (is-immedok? win)
   "True if immedok is set, that is, if any change in the window will
 cause it to automatically refresh."
-  (if (not (window? win))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg win)
-                         (expected-type 'window)))))
+  (assert-window win)
   (%is-immedok? win))
 
 (define (is-keypad? win)
   "True if keypad is set, that is, if function keys will be interpreted for
 this window."
-  (if (not (window? win))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg win)
-                         (expected-type 'window)))))
+  (assert-window win)
   (%is-keypad? win))
 
 (define (is-nodelay? win)
   "True if nodelay is set, that is, if 'getch' is a non-blocking call."
-  (if (not (window? win))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg win)
-                         (expected-type 'window)))))
+  (assert-window win)
   (%is-nodelay? win))
 
 (define (is-notimeout? win)
   "True if notimeout is set."
-  (if (not (window? win))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg win)
-                         (expected-type 'window)))))
+  (assert-window win)
   (%is-notimeout? win))
 
 (define (is-pad? win)
   "True if the window is a pad."
-  (if (not (window? win))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg win)
-                         (expected-type 'window)))))
+  (assert-window win)
   (%is-pad? win))
 
 (define (is-scrollok? win)
   "True if scrollok is set.  That is, if attempting to move off the bottom
 margin of the screen will cause the window to scroll."
-  (if (not (window? win))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg win)
-                         (expected-type 'window)))))
+  (assert-window win)
   (%is-scrollok? win))
 
 (define (is-subwin? win)
   "True if this window is a subwindow of another window."
-  (if (not (window? win))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg win)
-                         (expected-type 'window)))))
+  (assert-window win)
   (%is-subwin? win))
 
 (define (is-syncok? win)
   "True if syncok is enabled, e.g, if every change to a window changes
 the ancestors of that window."
-  (if (not (window? win))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg win)
-                         (expected-type 'window)))))
+  (assert-window win)
   (%is-syncok? win))
 
 (define (isendwin?)
@@ -2353,14 +1990,8 @@ the ancestors of that window."
   "If BF is true, functions keys will create integer key constants in routines
 like 'getch'.  If it is #f, function keys will emit escape character
 sequences that are specific to the terminal."
-  (if (not (window? win))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg win)
-                         (expected-type 'window)))))
-  (if (not (boolean? bf))
-      (raise (condition (&curses-wrong-type-arg
-                         (arg bf)
-                         (expected-type 'boolean)))))
+  (assert-window win)
+  (assert-boolean bf)
   (%keypad! win bf))
 
 (define (killchar)
@@ -2372,14 +2003,8 @@ sequences that are specific to the terminal."
 left wherever it happens to be, instead of taking the time to move it
 into its proper position.  This is a slight optimization for those
 programs that don't use the cursor."
-  (if (not (window? win))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg win)
-                         (expected-type 'window)))))
-  (if (not (boolean? bf))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg bf)
-                         (expected-type 'boolean)))))
+  (assert-window win)
+  (assert-boolean bf)
   (%leaveok! win bf))
 
 (define (longname)
@@ -2395,10 +2020,7 @@ returns #f on error or otherwise the number of characters sent."
 (define (meta! bf)
   "If BF is true, the terminal will return 8 significant bits on input.  If
 it is #f, 7 bit input will be returned."
-  (if (not (boolean? bf))
-      (raise (condition (&curses-wrong-type-arg
-                         (arg bf)
-                         (expected-type 'boolean)))))
+  (assert-boolean bf)
   (let ((ret (%meta! bf)))
     (if (not ret)
         (raise (condition (&curses-bad-state-error))))))
@@ -2407,10 +2029,7 @@ it is #f, 7 bit input will be returned."
   "Set the maximum time, in thousandths of a second, between click and
 release to register as a button press.  Returns the previous value.
 If delay is -1, it returns the current interval without setting it."
-  (if (not (integer? delay))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg delay)
-                         (expected-type 'integer)))))
+  (assert-integer delay)
   (%mouseinterval delay))
 
 (define (mousemask mask)
@@ -2419,10 +2038,7 @@ procedure sets the mouse events that are to be captured.  It
 returns a mask of those events that actually can be reported, or
 zero on failure.  Setting the mouse mask to zero turns off mouse
 events."
-  (if (not (integer? mask))
-      (raise (condition (&curses-wrong-type-arg
-                         (arg mask)
-                         (expected-type 'integer)))))
+  (assert-integer mask)
   (%mousemask mask))
 
 (define (mouse-trafo win sy sx to_screen)
@@ -2430,80 +2046,38 @@ events."
 to stdscr relative coordinates, returned as a two-element list (Y X).  If
 TO_SCREEN is #f, it does the opposite conversion.  It returns #f if
 a conversion would put a location outside the window."
-  (if (not (window? win))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg win)
-                         (expected-type 'window)))))
-  (if (not (and (integer? sy) (exact? sy)))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg sy)
-                         (expected-type 'integer)))))
-  (if (not (and (integer? sx) (exact? sx)))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg sx)
-                         (expected-type 'integer)))))
-  (if (not (boolean? to_screen))
-      (raise (condition (&curses-wrong-type-arg
-                         (arg to_screen)
-                         (expected-type 'boolean)))))
+  (assert-window win)
+  (assert-integer sy)
+  (assert-integer sx)
+  (assert-boolean to_screen)
   (%mouse-trafo win sy sx to_screen))
 
 (define (move win y x)
   "Move the cursor to the position X, Y in the window WIN. Return #t
 if the position is within in the window."
-  (if (not (window? win))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg win)
-                         (expected-type 'window)))))
-  (if (not (and (integer? y) (exact? y)))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg y)
-                         (expected-type 'integer)))))
-  (if (not (and (integer? x) (exact? x)))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg x)
-                         (expected-type 'integer)))))
+  (assert-window win)
+  (assert-integer y)
+  (assert-integer x)
   (%wmove win y x))
 
 (define (mvderwin win y x)
   "Moves the derived window inside its parent window so that the
 upper-left corner is at Y, X."
-  (if (not (window? win))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg win)
-                         (expected-type 'window)))))
-  (if (not (and (integer? y) (exact? y)))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg y)
-                         (expected-type 'integer)))))
-  (if (not (and (integer? x) (exact? x)))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg x)
-                         (expected-type 'integer)))))
+  (assert-window win)
+  (assert-integer y)
+  (assert-integer x)
   (%mvderwin win y x))
 
 (define (mvwin win y x)
   "Moves the window so that the upper-left corner is at Y, X."
-  (if (not (window? win))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg win)
-                         (expected-type 'window)))))
-  (if (not (and (integer? y) (exact? y)))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg y)
-                         (expected-type 'integer)))))
-  (if (not (and (integer? x) (exact? x)))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg x)
-                         (expected-type 'integer)))))
+  (assert-window win)
+  (assert-integer y)
+  (assert-integer x)
   (%mvwin win y x))
 
 (define (napms ms)
   "Pause for MS milliseconds."
-  (if (not (integer? ms))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg ms)
-                         (expected-type 'integer)))))
+  (assert-integer ms)
   (%napms ms))
 
 (define (newpad nlines ncols)
@@ -2511,14 +2085,8 @@ upper-left corner is at Y, X."
 given number of lines and columns.  A pad is like a window, except it is
 not restricted by screen size.  It returns a window structure on success
 or #f on failure"
-  (if (not (integer? nlines))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg nlines)
-                         (expected-type 'integer)))))
-  (if (not (integer? ncols))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg ncols)
-                         (expected-type 'integer)))))
+  (assert-integer nlines)
+  (assert-integer ncols)
   (%newpad nlines ncols))
 
 (define (newterm type outport inport)
@@ -2526,10 +2094,7 @@ or #f on failure"
   (if (not (defined? '%newterm))
       (raise (condition (&curses-missing-function-error
                          (function '%newterm)))))
-  (if (not (string? type))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg type)
-                         (expected-type 'string)))))
+  (assert-string type)
   (if (not (output-port? outport))
       (raise (condition (&curses-wrong-type-arg-error
                          (arg outport)
@@ -2560,22 +2125,8 @@ The upper, left-hand corner of the window is at line BEGIN_Y and column
 BEGIN_X.  If either NLINES or NCOLS is zero, the window will extend to the
 bottom, right-hand cornder of the screen.  A new, full-screen window is
 created by calling (newwin 0 0 0 0)."
-  (if (not (and (integer? nlines) (exact? nlines)))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg nlines)
-                         (expected-type 'integer)))))
-  (if (not (and (integer? ncols) (exact? ncols)))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg ncols)
-                         (expected-type 'integer)))))
-  (if (not (and (integer? begin_y) (exact? begin_y)))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg begin_y)
-                         (expected-type 'integer)))))
-  (if (not (and (integer? begin_x) (exact? begin_x)))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg begin_x)
-                         (expected-type 'integer)))))
+  (for-each (lambda (x) (assert-integer x))
+            (list nlines ncols begin_y begin_x))
   (%newwin nlines ncols begin_y begin_x))
 
 (define (nl!) 
@@ -2591,14 +2142,8 @@ line-feed on output."
 (define (nodelay! win bf)  
   "If BF is true, 'getch' will be a non-blocking call. If BF is #f, 'getch'
 will wait for input."
-  (if (not (window? win))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg win)
-                         (expected-type 'window)))))
-  (if (not (boolean? bf))
-      (raise (condition (&curses-wrong-type-arg
-                         (arg bf)
-                         (expected-type 'boolean)))))
+  (assert-window win)
+  (assert-boolean bf)
   (let ((ret (%nodelay! win bf)))
     (if (not ret)
         (raise (condition (&curses-bad-state-error))))))
@@ -2617,14 +2162,8 @@ line-feed on output."
   "If BF is false, 'getch' sets a timer for how long it will wait for the 
 bytes that make up an escape sequence.  If it is true, it does not set
 a timer and will likely not interpret function keys correctly."
-  (if (not (window? win))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg win)
-                         (expected-type 'window)))))
-  (if (not (boolean? bf))
-      (raise (condition (&curses-wrong-type-arg
-                         (arg bf)
-                         (expected-type 'boolean)))))
+  (assert-window win)
+  (assert-boolean bf)
   (let ((ret (%notimeout! win bf)))
     (if (not ret)
         (raise (condition (&curses-bad-state-error))))))
@@ -2632,15 +2171,13 @@ a timer and will likely not interpret function keys correctly."
 ;; I hate it when people are 'clever' with dropping letters
 (define (nooutrefresh win)
   "An alias for noutrefresh"
+  (assert-window win)
   (noutrefresh win))
 
 (define (noutrefresh win)
-  (if (not (window? win))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg win)
-                         (expected-type 'window)))))
   "The procedure copies this window to the virtual screen.  Calling
 'doupdate' will then copy the virtual screen to the actual screen."
+  (assert-window win)
   (%noutrefresh win))
 
 (define (noqiflush!)
@@ -2660,14 +2197,8 @@ received."
   "This procedure overlays window SRCWIN on top of the window DSTWIN,
 so that the text in SRCWIN is copied to DSTWIN.  SRCWWIN and DSTWIN
 need not be the same size.  Blanks are not copied."
-  (if (not (window? srcwin))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg srcwin)
-                         (expected-type 'window)))))
-  (if (not (window? dstwin))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg dstwin)
-                         (expected-type 'window)))))
+  (assert-window srcwin)
+  (assert-window dstwin)
   (let ((ret (%overlay srcwin dstwin)))
     (if (not ret)
         (raise (condition (&curses-bad-state-error))))))
@@ -2676,14 +2207,8 @@ need not be the same size.  Blanks are not copied."
   "This procedure overlays window SRCWIN on top of the window DSTWIN,
 so that the text in SRCWIN is copied to DSTWIN.  SRCWWIN and DSTWIN
 need not be the same size.  Both text and blanks are copied."
-  (if (not (window? srcwin))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg srcwin)
-                         (expected-type 'window)))))
-  (if (not (window? dstwin))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg dstwin)
-                         (expected-type 'window)))))
+  (assert-window srcwin)
+  (assert-window dstwin)
   (let ((ret (%overwrite srcwin dstwin)))
     (if (not ret)
         (raise (condition (&curses-bad-state-error))))))
@@ -2693,32 +2218,14 @@ need not be the same size.  Both text and blanks are copied."
 list containing the foreground color number and the background color
 number.  It can return #f if the color pair number is out of range or
 colors aren't initialized."
-  (if (or (not (exact? pair)) (not (integer? pair)))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg pair)
-                         (expected-type 'integer)))))
+  (assert-integer pair)
   (%pair-content pair))  
 
 (define* (pechochar win ch #:key y x)
   "Add character ch to the pad WIN, and then refresh the pad."
-  (if (not (and (window? win) (is-pad? win)))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg win)
-                         (expected-type 'pad)))))
-  (if (not (xchar? ch))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg ch)
-                         (expected-type 'xchar)))))
-  (if (and y x)
-      (begin
-        (if (not (and (integer? y) (exact? y)))
-            (raise (condition (&curses-wrong-type-arg-error
-                               (arg y)
-                               (expected-type 'integer)))))
-        (if (not (and (integer? x) (exact? x)))
-            (raise (condition (&curses-wrong-type-arg-error
-                               (arg x)
-                               (expected-type 'integer)))))))
+  (assert-pad win)
+  (assert-xchar ch)
+  (assert-pos-if-defined x y)
   (and
    (if (and y x)
        (%wmove win y x)
@@ -2732,17 +2239,9 @@ and screen are involved.  The PMINROW and PMINCOL parameters specify
 the upper left-hand corner of the rectangle to be displayed in the
 pad.  SMINROW, SMINCOL, SMAXROW and SMAXCOL specify the edges of the
 rectangle to be displayed on the screen."
-  (if (not (and (window? pad) (is-pad? pad)))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg win)
-                         (expected-type 'window)))))
-  (for-each 
-   (lambda (ch) 
-     (if (not (integer? ch))
-         (raise (condition (&curses-wrong-type-arg-error
-                            (arg ch)
-                            (expected-type 'xchar))))))
-   (list pminrow pmincol sminrow smincol smaxrow smaxcol))
+  (assert-pad pad)
+  (for-each (lambda (x) (assert-integer x))
+            (list pminrow pmincol sminrow smincol smaxrow smaxcol))
   (%pnoutrefresh pad pminrow pmincol sminrow smincol smaxrow smaxcol))
 
 
@@ -2753,17 +2252,9 @@ and screen are involved.  The PMINROW and PMINCOL parameters specify the
 upper left-hand corner of the rectangle to be displayed in the pad.
 SMINROW, SMINCOL, SMAXROW and SMAXCOL specify the edges of the rectangle
 to be displayed on the screen."
-  (if (not (and (window? pad) (is-pad? pad)))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg win)
-                         (expected-type 'window)))))
-  (for-each 
-   (lambda (ch) 
-     (if (not (integer? ch))
-         (raise (condition (&curses-wrong-type-arg-error
-                            (arg ch)
-                            (expected-type 'xchar))))))
-   (list pminrow pmincol sminrow smincol smaxrow smaxcol))
+  (assert-pad pad)
+  (for-each (lambda (x) (assert-integer x))
+            (list pminrow pmincol sminrow smincol smaxrow smaxcol))
   (%prefresh pad pminrow pmincol sminrow smincol smaxrow smaxcol))
 
 (define (qiflush!)
@@ -2784,37 +2275,22 @@ character processing."
   "This procedure notifies curses that it should not use optimization when
 redrawing the following lines of the window.  It should redraw those lines
 entirely."
-  (if (not (window? win))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg win)
-                         (expected-type 'window)))))
-  (if (not (and (integer? beg_line) (exact? beg_line)))
-      (raise (condition (&curses-wrong-type-arg-error
-			 (arg beg_line)
-			 (expected-type 'integer)))))
-  (if (not (and (integer? end_line) (exact? end_line)))
-      (raise (condition (&curses-wrong-type-arg-error
-			 (arg end_line)
-			 (expected-type 'integer)))))
+  (assert-window win)
+  (assert-integer beg_line)
+  (assert-integer end_line)
   (%wredrawln win beg_line end_line))
 
 (define (redrawwin win)
   "This procedure notifies curses that it should not use optimization on
 the next screen refresh.  It should redraw the entire window."
-  (if (not (window? win))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg win)
-                         (expected-type 'window)))))
+  (assert-window win)
   (%redrawwin win))
 
 (define (refresh win)
   "This procedure must be called to get actual output to the terminal, as
 other routines simply manipulate data structures.  This procedure copies
 the named window to the physical terminal screen."
-  (if (not (window? win))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg win)
-                         (expected-type 'window)))))
+  (assert-window win)
   (%refresh win))
 
 (define (reset-prog-mode)
@@ -2842,57 +2318,36 @@ procedure will restore it to that state."
 (define (scr-dump filename)
   "Dumps the current contents of the virtual screen to the file
 FILENAME."
-  (if (not (string? filename))
-      (raise (condition (&curses-wrong-type-arg-error
-			 (arg filename)
-			 (expected-type 'string)))))
+  (assert-string filename)
   (%scr-dump filename))
 
 (define (scr-restore filename)
   "Reads the file FILENAME generated by a call to 'scr-dump' and copies the 
 contents to the virtual screen.  A call to 'doupdate' will make it visible."
-  (if (not (string? filename))
-      (raise (condition (&curses-wrong-type-arg-error
-			 (arg filename)
-			 (expected-type 'string)))))
+  (assert-string filename)
   (%scr-restore filename))
 
 (define (scr-init filename)
   "Reads the file FILENAME generated by a call to 'scr-dump' and uses it to
 initialize the curses data structures."
-  (if (not (string? filename))
-      (raise (condition (&curses-wrong-type-arg-error
-			 (arg filename)
-			 (expected-type 'string)))))
+  (assert-string filename)
   (%scr-init filename))
 
 (define (scr-set filename)
   "Reads the file FILENAME generated by a call to 'scr-dump' and uses it to
 initialize the curses data structures as well as the virtual screen."
-  (if (not (string? filename))
-      (raise (condition (&curses-wrong-type-arg-error
-			 (arg filename)
-			 (expected-type 'string)))))
+  (assert-string filename)
   (%scr-set filename))
 
 (define (scrl win n)
   "Scroll the window by N lines.  N can be negative"
-  (if (not (window? win))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg win)
-                         (expected-type 'window)))))
-  (if (not (and (integer? n) (exact? n)))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg n)
-                         (expected-type 'integer)))))
+  (assert-window win)
+  (assert-integer n)
   (%scrl win n))
 
 (define (scroll win)
   "Scroll the window by 1 line."
-  (if (not (window? win))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg win)
-                         (expected-type 'window)))))
+  (assert-window win)
   (%scrl win 1))
 
 (define (set-term term)
@@ -2909,6 +2364,9 @@ the <#screen> type and is created by 'newterm'."
 enabled.  If the cursor moves off the bottom of the BOT line of the
 window, the region from line number TOP to line number BOT will
 scroll."
+  (assert-window win)
+  (assert-integer top)
+  (assert-integer bot)
   (%setscrreg! win top bot))
 
 (define (setsyx y x)
@@ -2918,6 +2376,7 @@ this?)"
 
 (define (standend! win)
   "Turns off all attributes of the given window."
+  (assert-window win)
   (%wattr-set! win A_NORMAL (second (%wattr-get win))))
 
 (define (standout! win)
@@ -2936,16 +2395,11 @@ The subpad has NLINES lines and NCOLS columns and begins at the position
 BEGIN_X and BEGIN_Y on the pad.  The window is made in the middle of the
 window ORIGWIN, so that changes made to one affect both windows.  It
 returns #f on failure or a window structure on success"
-  (if (not (and (window? origwin) (is-pad? origwin)))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg origwin)
-                         (expected-type 'window)))))
-  (map (lambda (x)
-         (if (not (and (integer? x) (exact? x)))
-             (raise (condition (&curses-wrong-type-arg-error
-                                (arg x)
-                                (expected-type 'integer))))))
-       (list nlines ncols begin_y begin_x))
+  (assert-pad origwin)
+  (assert-integer nlines)
+  (assert-integer ncols)
+  (assert-integer begin_y)
+  (assert-integer begin_x)
   (%subpad origwin nlines ncols begin_y begin_x))
 
 (define (subwin origwin nlines ncols begin_y begin_x)
@@ -2954,24 +2408,21 @@ columns.  The window is at position BEGIN_Y, BEGIN_X on the screen.
 The window is made in the middle of the window ORIGWIN, so that
 changes made to one window will affect both windows.  The subwindow
 shares memory with the original window."
-  (if (not (window? origwin))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg origwin)
-                         (expected-type 'window)))))
-  (map (lambda (x)
-         (if (not (and (integer? x) (exact? x)))
-             (raise (condition (&curses-wrong-type-arg-error
-                                (arg x)
-                                (expected-type 'integer))))))
-       (list nlines ncols begin_y begin_x))
+  (assert-window origwin)
+  (assert-integer nlines)
+  (assert-integer ncols)
+  (assert-integer begin_y)
+  (assert-integer begin_x)
   (%subwin origwin nlines ncols begin_y begin_x))
 
 (define (syncdown win)
   "Touches all location in children of WIN that are changed in WIN."
+  (assert-window win)
   (%syncup win))
 
 (define (syncup win)
   "Touches all location in ancestors of WIN that are changed in WIN."
+  (assert-window win)
   (%syncup win))
 
 (define (term-attrs)
@@ -2988,33 +2439,31 @@ A_ATTRIBUTES, A_BLINK, A_BOLD, etc"
   "Sets the amount of time that 'getch' will wait for a character.  If DELAY
 is negative, blocking read is used.  If DELAY is zero, non-blocking read is used.
 If delay is positive, 'getch' will block for DELAY milliseconds."
-  (if (not (window? win))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg win)
-                         (expected-type 'window)))))
-  (if (not (integer? delay))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg delay)
-                         (expected-type 'integer)))))
+  (assert-window win)
+  (assert-integer delay)
   (%timeout! win delay))
 
 (define (touchwin win)
+  (assert-window win)
   (%wtouchln win 0 (getmaxy win) #t))
 
 (define (untouchwin win)
+  (assert-window win)
   (%wtouchln win 0 (getmaxy win) #f))
 
 (define* (touchline win start #:optional (count 1))
+  (assert-window win)
   (%wtouchln win start count #t))
 
 (define* (untouchline win start #:optional (count 1))
+  (assert-window win)
   (%wtouchln win start count #f))
 
 (define (typeahead! port-or-fd)
   "Specifies an input port or file descriptor to be used for typeahead
 checking."
   (if (and (not (input-port? port-or-fd)) (not (integer? port-or-fd)))
-      (raise (condition (&curses-wrong-type-arg
+      (raise (condition (&curses-wrong-type-arg-error
                          (arg port-or-fd)
                          (expected-type 'input-port)))))
   (cond
@@ -3026,7 +2475,7 @@ checking."
 be retrieved with getch.  CH must either be a character or a curses
 key constant like KEY_ENTER."
   (if (and (not (integer? ch)) (not (char? ch)))
-      (raise (condition (&curses-wrong-type-arg
+      (raise (condition (&curses-wrong-type-arg-error
                          (arg ch)
                          (expected-type 'integer/char)))))
   (%ungetch ch))
@@ -3034,7 +2483,7 @@ key constant like KEY_ENTER."
 (define (ungetmouse event)
   "Pushes the mouse event EVENT back onto the input queue."
   (if (not (mevent? event))
-      (raise (condition (&curses-wrong-type-arg
+      (raise (condition (&curses-wrong-type-arg-error
                          (arg event)
                          (expected-type 'mevent)))))
   (%ungetmouse event))
@@ -3043,38 +2492,16 @@ key constant like KEY_ENTER."
   "If ENABLE is #t, this enables whether to allow user-defined,
 nonstandard names in the terminfo interface.  If ENABLE is #f, this is
 disabled"
-  (if (not (boolean? enable))
-      (raise (condition (&curses-wrong-type-arg
-                         (arg enable)
-                         (expected-type 'boolean)))))
+  (assert-boolean enable)
   (%use-extended-names enable))
 
 (define* (vline win ch n #:key y x)
   "Draws a vertical line of length N using the complex character CH.
 If X and Y are given, the cursor is first moved to that location."
-  (if (not (window? win))
-      (raise (condition (&curses-wrong-type-arg
-                         (arg win)
-                         (expected-type 'window)))))
-  (if (not (xchar? ch))
-      (raise (condition (&curses-wrong-type-arg
-                         (arg win)
-                         (expected-type 'xchar)))))
-  (if (and y x)
-      (begin
-        (if (not (and (integer? y) (exact? y)))
-            (raise (condition (&curses-wrong-type-arg-error
-                               (arg y)
-                               (expected-type 'integer)))))
-        (if (not (and (integer? x) (exact? x)))
-            (raise (condition (&curses-wrong-type-arg-error
-                               (arg x)
-                               (expected-type 'integer)))))))
-  (if (not (and (integer? n) (exact? n)))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg n)
-                         (expected-type 'integer)))))
-
+  (assert-window win)
+  (assert-xchar ch)
+  (assert-integer n)
+  (assert-pos-if-defined x y)
   (and (if (and y x)
            (%wmove win y x)
            #t)
@@ -3085,18 +2512,9 @@ If X and Y are given, the cursor is first moved to that location."
 (define (wenclose? win y x)
   "Returns #t if the screen-relative coordinates Y and X are enclosed
 by the given window."
-  (if (not (window? win))
-      (raise (condition (&curses-wrong-type-arg
-                         (arg win)
-                         (expected-type 'window)))))
-  (if (not (and (integer? y) (exact? y)))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg y)
-                         (expected-type 'integer)))))
-  (if (not (and (integer? x) (exact? x)))
-      (raise (condition (&curses-wrong-type-arg-error
-                         (arg x)
-                         (expected-type 'integer)))))
+  (assert-window win)
+  (assert-integer x)
+  (assert-integer y)
   (%wenclose? win y x))
 
 (load-extension "libguile-ncurses" "gucu_init")
