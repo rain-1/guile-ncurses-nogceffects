@@ -820,7 +820,7 @@ gucu_is_idcok_p (SCM win)
 SCM
 gucu_is_idlok_p (SCM win)
 {
-  return scm_from_bool (is_islok (_scm_to_window (win)));
+  return scm_from_bool (is_idlok (_scm_to_window (win)));
 }
 
 SCM
