@@ -480,6 +480,9 @@
             xchar-chars
             ))
 
+(if (string=? "1.8" (string-take (version) 3)) 
+    (use-syntax (ice-9 syncase)))
+
 ;;; Exceptions
 
 (define-condition-type &curses-error &error
