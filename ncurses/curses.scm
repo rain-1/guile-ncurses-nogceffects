@@ -476,6 +476,8 @@
             vertical
             vertical-off
             vertical-on
+            xchar?
+            xchar-chars
             ))
 
 ;;; Exceptions
@@ -520,7 +522,7 @@
            (r (list-ref cc 0))
            (g (list-ref cc 1))
            (b (list-ref cc 2)))
-      (format port "R~a G~a B~a" r g b)))))
+      (format #t "R~a G~a B~a" r g b)))))
 
 (define (attr-name attr)
   "Given an attribute stored as a integer, return a descriptive
@@ -1283,7 +1285,7 @@ any other attributes on or off."
   (assert-integer attrs)
   (let ((ret (%attr-off! win attrs)))
     (if (not ret)
-        (raise (condition (&ncurses-bad-state-error))))))
+        (raise (condition (&curses-bad-state-error))))))
 
 (define (attr-on! win attrs)
   "Turns on the attributes ATTRS of the given window without turning
@@ -1292,7 +1294,7 @@ any other attributes on or off."
   (assert-integer attrs)
   (let ((ret (%attr-on! win attrs)))
     (if (not ret)
-        (raise (condition (&ncurses-bad-state-error))))))
+        (raise (condition (&curses-bad-state-error))))))
 
 (define* (attr-set! win attr #:optional color)
   "Sets the given window to have the attributes ATTRS and optionally
@@ -1404,7 +1406,7 @@ If X and Y are defined, first move to that position."
                       #t)
                   (%wchgat win n attr color))))
     (if (not ret)
-        (raise (condition (&ncurses-error))))))
+        (raise (condition (&curses-bad-state-error))))))
 
 (define (clear win)
   "Copy blanks to every position in the window, and set it to
