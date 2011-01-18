@@ -23,8 +23,7 @@
 (use-modules (test lib)
              (test lib2)
              (srfi srfi-1)
-             (ncurses curses)
-	     (ncurses lib))
+             (ncurses curses))
 
 (define test (curses-test-start))
 

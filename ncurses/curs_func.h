@@ -1,7 +1,7 @@
 /*
   curs_func.h
 
-  Copyright 2009, 2010 Free Software Foundation, Inc.
+  Copyright 2009, 2010, 2011 Free Software Foundation, Inc.
 
   This file is part of GNU Guile-Ncurses.
 
@@ -68,6 +68,7 @@ GUCU_API SCM gucu_has_colors_p (void);
 GUCU_API SCM gucu_has_ic_p (void);
 GUCU_API SCM gucu_has_il_p (void);
 GUCU_API SCM gucu_has_key_p (SCM key);
+GUCU_API SCM gucu_has_mouse_p (void);
 GUCU_API SCM gucu_idcok_x (SCM arg1, SCM arg2);
 GUCU_API SCM gucu_idlok_x (SCM arg1, SCM arg2);
 GUCU_API SCM gucu_immedok_x (SCM arg1, SCM arg2);
@@ -85,7 +86,7 @@ GUCU_API SCM gucu_keypad_x (SCM arg1, SCM arg2);
 GUCU_API SCM gucu_killchar (void);
 GUCU_API SCM gucu_leaveok_x (SCM arg1, SCM arg2);
 GUCU_API SCM gucu_longname (void);
-GUCU_API SCM gucu_meta (SCM bf);
+GUCU_API SCM gucu_meta_x (SCM bf);
 GUCU_API SCM gucu_mouseinterval (SCM arg1);
 GUCU_API SCM gucu_mvcur (SCM arg1, SCM arg2, SCM arg3, SCM arg4);
 GUCU_API SCM gucu_mvderwin (SCM arg1, SCM arg2, SCM arg3);
@@ -136,7 +137,7 @@ GUCU_API SCM gucu_syncok_x (SCM arg1, SCM arg2);
 GUCU_API SCM gucu_term_attrs (void);
 GUCU_API SCM gucu_termname (void);
 GUCU_API SCM gucu_timeout_x (SCM arg1, SCM arg2);
-GUCU_API SCM gucu_typeahead (SCM arg1);
+GUCU_API SCM gucu_typeahead_x (SCM arg1);
 GUCU_API SCM gucu_ungetch (SCM arg1);
 GUCU_API SCM gucu_use_default_colors (void);
 GUCU_API SCM gucu_use_extended_names (SCM bf);

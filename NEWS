@@ -1,10 +1,26 @@
 The NEWS file for GNU Guile-NCurses
 
-  Copyright 2009, 2010 Free Software Foundation, Inc.
+  Copyright 2009, 2010, 2011 Free Software Foundation, Inc.
 
   Copying and distribution of this file, with or without modification,
   are permitted in any medium without royalty provided the copyright
   notice and this notice are preserved.
+
+Release 1.2
+- Add many docstrings for curses library
+- Convert curses library to use srfi-34/35 conditions.  Curses
+  predicate functions added: curses-wrong-type-arg-error?,
+  curses-bad-state-error? 
+- New curses functions: mcprint, is-subwin?, is-pad?, is-cleared?,
+  is-idlok?, is-idcok?, is-immedok?, is-leaveok?, is-scrollok?,
+  getscrreg, has-mouse?, is-keypad?, is-meta?, is-nodelay?,
+  is-immedok?, is-notimeout?, getmaxx, getmaxy, getbegx, getbegy,
+  getparx, getpary, getcurx, getcury
+- New utility functions: wcwidth, standout, standout-on, standout-off
+- wsyncdown renamed to syncdown
+- wsyncup renamed to syncup
+- wcursyncup renamed to cursyncup
+- Many bugfixes
 
 Release 1.0
 - Fix bad installation directory

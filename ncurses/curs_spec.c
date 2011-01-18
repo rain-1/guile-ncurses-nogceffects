@@ -1,7 +1,7 @@
 /*
 curs_spec.c
 
-Copyright 2009, 2010 Free Software Foundation, Inc.
+Copyright 2009, 2010, 2011 Free Software Foundation, Inc.
 
 This file is part of GNU Guile-Ncurses.
 
@@ -94,29 +94,21 @@ gucu_color_content (SCM s_color)
 {
   int ret;
   short c_red, c_green, c_blue;
-  SCM s_list;
-
-  SCM_ASSERT (scm_is_integer (s_color), s_color, SCM_ARG1, "color-content");
 
   ret = color_content (scm_to_short (s_color), &c_red, &c_green, &c_blue);
   if (ret == OK)
     {
-      s_list = scm_list_3 (scm_from_short (c_red),
-			   scm_from_short (c_green), scm_from_short (c_blue));
+      return scm_list_3 (scm_from_short (c_red),
+			 scm_from_short (c_green), scm_from_short (c_blue));
     }
   else
-    scm_misc_error ("color-content", "out of range error or not initialized",
-		    SCM_BOOL_F);
-
-  return s_list;
+    return SCM_BOOL_F;
 }
 
 /* Free the C memory of a window */
 SCM
 gucu_delwin (SCM win)
 {
-  SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "delwin");
-
   WINDOW *c_win = _scm_to_window (win);
 
   SCM_SET_SMOB_DATA (win, NULL);
@@ -173,6 +165,20 @@ gucu_grantpt (SCM fd)
 }
 #endif
 
+/* Write data to terminal-attached printer */
+SCM
+gucu_mcprint (SCM data)
+{
+  size_t len;
+  char *str = scm_to_locale_stringn (data, &len);
+  int ret;
+  ret = mcprint (str, len);
+  if (ret == ERR)
+    return SCM_BOOL_F;
+  
+  return scm_from_int (ret);
+}
+
 SCM
 gucu_mousemask (SCM x)
 {
@@ -185,20 +191,14 @@ gucu_pair_content (SCM s_pair)
 {
   int ret;
   short c_fore, c_back;
-  SCM s_list;
-
-  SCM_ASSERT (scm_is_integer (s_pair), s_pair, SCM_ARG1, "pair-content");
 
   ret = pair_content (scm_to_short (s_pair), &c_fore, &c_back);
   if (ret == OK)
     {
-      s_list = scm_list_2 (scm_from_short (c_fore), scm_from_short (c_back));
+      return scm_list_2 (scm_from_short (c_fore), scm_from_short (c_back));
     }
   else
-    scm_misc_error ("pair-content", "out of range or not initialized",
-		    SCM_BOOL_F);
-
-  return s_list;
+    return SCM_BOOL_F;
 }
 
 #ifdef HAVE_PTSNAME
@@ -276,8 +276,6 @@ gucu_ungetmouse (SCM event)
   MEVENT *me;
   int ret;
 
-  SCM_ASSERT (_scm_is_mevent (event), event, SCM_ARG1, "ungetmouse");
-
   me = _scm_to_mevent (event);
   ret = ungetmouse (me);
   free (me);
@@ -311,8 +309,6 @@ gucu_wattr_get (SCM win)
   SCM s_list;
   int ret;
 
-  SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "%wattr-get");
-
   c_win = _scm_to_window (win);
 
   /* wattr_get appears to be a macro that always returns OK */
@@ -332,9 +328,6 @@ gucu_wgetnstr (SCM win, SCM n)
   SCM s_str;
   int ret;
   int c_n;
-
-  SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "%wgetnstr");
-  SCM_ASSERT (scm_is_integer (n), n, SCM_ARG2, "%wgetnstr");
 
   c_n = scm_to_int (n);
   if (c_n <= 0)
@@ -390,9 +383,6 @@ gucu_winchnstr (SCM win, SCM n)
   SCM s_str;
   int c_n;
 
-  SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "%winchnstr");
-  SCM_ASSERT (scm_is_integer (n), n, SCM_ARG2, "%winchnstr");
-
   c_win = _scm_to_window (win);
   c_n = scm_to_int (n);
   if (c_n == -1)
@@ -405,7 +395,7 @@ gucu_winchnstr (SCM win, SCM n)
 
     ret = win_wchnstr (c_win, c_cstr, c_n);
     if (ret == ERR)
-      curs_bad_state_error ("%winchnstr");
+      return SCM_BOOL_F;
     s_str = _scm_xstring_from_cstring (c_cstr);
     free (c_cstr);
   }
@@ -434,9 +424,6 @@ gucu_winnstr (SCM win, SCM n)
   SCM s_str;
   int c_n;
   int ret;
-
-  SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "%winnstr");
-  SCM_ASSERT (scm_is_integer (n), n, SCM_ARG2, "%winnstr");
 
   /* -1 indicates that up to an entire line is requested */
   c_n = scm_to_int (n);
@@ -506,8 +493,6 @@ gucu_wmouse_trafo (SCM win, SCM sy, SCM sx, SCM to_screen)
 SCM
 gucu_getbegyx (SCM win)
 {
-  SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "getbegyx");
-
   int y, x;
 
   getbegyx (_scm_to_window (win), y, x);
@@ -521,8 +506,6 @@ gucu_getmaxyx (SCM win)
 {
   int y, x;
 
-  SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "getmaxyx");
-
   getmaxyx (_scm_to_window (win), y, x);
 
   return (scm_list_2 (scm_from_int (y), scm_from_int (x)));
@@ -531,14 +514,24 @@ gucu_getmaxyx (SCM win)
 SCM
 gucu_getparyx (SCM win)
 {
-  SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "getparyx");
-
   int y, x;
 
   getparyx (_scm_to_window (win), y, x);
 
   return (scm_list_2 (scm_from_int (y), scm_from_int (x)));
 }
+
+/* Return the range of the lines in the scroll region */
+SCM
+gucu_getscrreg (SCM win)
+{
+  int top, bottom;
+
+  wgetscrreg (_scm_to_window (win), &top, &bottom);
+
+  return (scm_list_2 (scm_from_int (top), scm_from_int (bottom)));
+}
+
 
 /* Get the location of the virtual screen cursor */
 SCM
@@ -554,8 +547,6 @@ gucu_getsyx ()
 SCM
 gucu_getyx (SCM win)
 {
-  SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "getyx");
-
   int y, x;
 
   getyx (_scm_to_window (win), y, x);
@@ -935,22 +926,33 @@ gucu_curscr ()
   return s_ret;
 }
 
+SCM
+gucu_getparent (SCM win)
+{
+  WINDOW *parent = wgetparent (_scm_to_window (win));
+  if (parent != (WINDOW *) NULL)
+    return _scm_from_window (parent);
+  else
+    return SCM_BOOL_F;
+}
+
 void
 gucu_init_special ()
 {
   scm_c_define_gsubr ("%wattr-set!", 3, 0, 0, gucu_wattr_set_x);
-  scm_c_define_gsubr ("color-content", 1, 0, 0, gucu_color_content);
-  scm_c_define_gsubr ("delwin", 1, 0, 0, gucu_delwin);
-  scm_c_define_gsubr ("getmouse", 0, 0, 0, gucu_getmouse);
+  scm_c_define_gsubr ("%color-content", 1, 0, 0, gucu_color_content);
+  scm_c_define_gsubr ("%delwin", 1, 0, 0, gucu_delwin);
+  scm_c_define_gsubr ("%getmouse", 0, 0, 0, gucu_getmouse);
 #ifdef HAVE_GRANTPT
   scm_c_define_gsubr ("grantpt", 1, 0, 0, gucu_grantpt);
 #endif
-  scm_c_define_gsubr ("mousemask", 1, 0, 0, gucu_mousemask);
+  scm_c_define_gsubr ("%mcprint", 1, 0, 0, gucu_mcprint);
+  scm_c_define_gsubr ("%mousemask", 1, 0, 0, gucu_mousemask);
 #ifdef HAVE_PTSNAME
   scm_c_define_gsubr ("ptsname", 1, 0, 0, gucu_ptsname);
 #endif
   scm_c_define_gsubr ("ptsmakeraw", 1, 0, 0, gucu_ptsmakeraw);
-  scm_c_define_gsubr ("pair-content", 1, 0, 0, gucu_pair_content);
+  scm_c_define_gsubr ("%pair-content", 1, 0, 0, gucu_pair_content);
   scm_c_define_gsubr ("ungetmouse", 1, 0, 0, gucu_ungetmouse);
 #ifdef HAVE_UNLOCKPT
   scm_c_define_gsubr ("unlockpt", 1, 0, 0, gucu_unlockpt);
@@ -960,11 +962,12 @@ gucu_init_special ()
   scm_c_define_gsubr ("%winchnstr", 2, 0, 0, gucu_winchnstr);
   scm_c_define_gsubr ("%winnstr", 2, 0, 0, gucu_winnstr);
   scm_c_define_gsubr ("mouse-trafo", 4, 0, 0, gucu_wmouse_trafo);
-  scm_c_define_gsubr ("getbegyx", 1, 0, 0, gucu_getbegyx);
-  scm_c_define_gsubr ("getmaxyx", 1, 0, 0, gucu_getmaxyx);
-  scm_c_define_gsubr ("getparyx", 1, 0, 0, gucu_getparyx);
-  scm_c_define_gsubr ("getsyx", 0, 0, 0, gucu_getsyx);
-  scm_c_define_gsubr ("getyx", 1, 0, 0, gucu_getyx);
+  scm_c_define_gsubr ("%getbegyx", 1, 0, 0, gucu_getbegyx);
+  scm_c_define_gsubr ("%getmaxyx", 1, 0, 0, gucu_getmaxyx);
+  scm_c_define_gsubr ("%getparyx", 1, 0, 0, gucu_getparyx);
+  scm_c_define_gsubr ("%getscrreg", 1, 0, 0, gucu_getscrreg);
+  scm_c_define_gsubr ("%getsyx", 0, 0, 0, gucu_getsyx);
+  scm_c_define_gsubr ("%getyx", 1, 0, 0, gucu_getyx);
   scm_c_define_gsubr ("%acs-block", 0, 0, 0, gucu_ACS_BLOCK);
   scm_c_define_gsubr ("%acs-board", 0, 0, 0, gucu_ACS_BOARD);
   scm_c_define_gsubr ("%acs-btee", 0, 0, 0, gucu_ACS_BTEE);
@@ -1007,4 +1010,5 @@ gucu_init_special ()
 #endif
   scm_c_define_gsubr ("stdscr", 0, 0, 0, gucu_stdscr);
   scm_c_define_gsubr ("curscr", 0, 0, 0, gucu_curscr);
+  scm_c_define_gsubr ("%getparent", 1, 0, 0, gucu_getparent);
 }

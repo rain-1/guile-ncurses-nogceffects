@@ -1,3 +1,852 @@
+Michael Gran <spk121@yahoo.com>	2011-01-16
+
+    bump library version
+    
+    * configure.ac: bump interface version
+
+Michael Gran <spk121@yahoo.com>	2011-01-16
+
+    typo in is_idlok
+    
+    * ncurses/curs_func.c (gucu_is_idlok_p): typo
+
+Michael Gran <spk121@yahoo.com>	2011-01-16
+
+    Conditionally use ice-9 syncase
+    
+    * ncurses/curses.scm: use syncase for guile 1.8
+
+Michael Gran <spk121@yahoo.com>	2011-01-16
+
+    Update copyright dates
+    
+    * README
+    * README.cygwin
+    * configure.ac
+    * doc/guile-ncurses.texi
+    * ncurses/curs_func.c
+    * ncurses/curs_func.h
+    * ncurses/curs_port.c
+    * ncurses/curs_spec.c
+    * ncurses/curses.scm
+    * ncurses/type.c
+    * ncurses/type.h
+
+Michael Gran <spk121@yahoo.com>	2011-01-16
+
+    Prep for 1.2
+    
+    * aclocal.m4: autoreconf
+    * configure.ac: bump to 1.2
+    * ncurses/curses.scm: regression
+
+Michael Gran <spk121@yahoo.com>	2011-01-16
+
+    Macroify typechecks
+    
+    * ncurses/curses.scm (typecheck, assert-boolean, assert-integer)
+      (assert-pad, assert-pos-if-defined, assert-string, assert-window)
+      (assert-xchar, assert-xstring): new typecheck macros
+      Use typecheck macros, all functions changed.
+
+Michael Gran <spk121@yahoo.com>	2011-01-16
+
+    regression in attr-name
+    
+    * ncurses/curses.scm (attr-name): bad parentheses
+
+Michael Gran <spk121@yahoo.com>	2011-01-16
+
+    Fix many regressions
+    
+    * ncurses/curses.scm (derwin): bad parentheses
+      (erasechar): re-enable
+      (noutrefresh): missing arg
+      (pnoutrefresh): bad typecheck
+      (prefresh): bad typecheck
+      (scrl): bad typecheck
+      (subwin): bad typecheck
+      (termattrs): rename to term-attrs
+
+Michael Gran <spk121@yahoo.com>	2011-01-07
+
+    Update windows family functions
+    
+    * doc/guile-ncurses.texi: doc update
+    * ncurses/curs_func.c (gucu_derwin): remove typechecks, rangechecks, errors
+      (gucu_doupdate): remove typechecks, errors
+      (gucu_mvderwin, gucu_mvwin, gucu_newwin, gucu_scrl)
+      (gucu_subwin, gucu_wcursyncup): remove typechecks, errors
+    * ncurses/curs_spec.c (gucu_delwin): remove typechecks
+    * ncurses/curses.scm (baudrate, cursyncup, delwin, derwin, dupwin)
+      (erasechar, has-ic?, has-il? killchar, longname, mvderwin)
+      (mvwin, newwin, scrl, subwin, syncdown, syncup, termname): new procedures
+
+Michael Gran <spk121@yahoo.com>	2011-01-05
+
+    Add typechecks and srfi-35 exceptions to scr-dump family functions
+    
+    * ncurses/curs_func.c (gucu_scr_dump, gucu_scr_init, gucu_scr_restore)
+      (gucu_scr_set): remove typechecks
+    * ncurses/curses.scm (scr-dump, scr-init, scr-set, scr-resetore): new procedures
+
+Michael Gran <spk121@yahoo.com>	2011-01-05
+
+    Add docstring and srfi-35 exceptions to refresh family functions
+    
+    * ncurses/curs_func.c (gucu_doupdate): remove typecheck
+      (gucu_dupwin):  typo
+      (gucu_noutrefresh): remove typecheck
+      (gucu_redrawwin): remove typecheck
+      (gucu_refresh): remove typecheck and error
+      (gucu_redrawln): remove typechecks
+      (gucu_init_function): rename doupdate -> %doupdate
+      noutrefresh -> %noutrefresh, redrawwin -> %redrawwin,
+      refresh -> %refresh
+    * ncurses/curses.scm (doupdate): new procedure
+      (nooutrefresh): add docstring
+      (noutrefresh): new procedure
+      (redrawln): add typechecks
+      (redrawwin, refresh): new procedure
+
+Michael Gran <spk121@yahoo.com>	2011-01-05
+
+    Redundant typecheck in echochar
+    
+    * ncurses/curs_func.c (gucu_pechochar): remove typecheck.
+
+Michael Gran <spk121@yahoo.com>	2011-01-05
+
+    conversion bug in getparent
+    
+    * ncurses/curs_spec.c (gucu_getparent): return window, not win
+
+Michael Gran <spk121@yahoo.com>	2011-01-05
+
+    Add mcprint function
+    
+    * doc/guile-ncurses.texi: add mcprint documentation
+    * ncurses/curs_spec.c (gucu_mcprint): new procedure
+      (gucu_init_special): new procedure %mcprint
+    * ncurses/curses.scm (mcprint): new procedure
+
+Michael Gran <spk121@yahoo.com>	2011-01-04
+
+    Add docstrings and srfi-35 exceptions to pad family functions
+    
+    * ncurses/curs_func.c (gucu_newpad): remove typechecks and error
+      (gucu_pnoutrefresh): remove typechecks
+      (gucu_prefresh): remove typechecks
+      (gucu_subpad): remove typechecks and error
+      (gucu_init_function): rename newpad -> %newpad, pnoutrefresh -> %pnoutrefresh
+      prefresh -> %prefresh, subpad -> %subpad
+    * ncurses/curses.scm (newpad, pnoutrefresh, prefresh, subpad): new procedures
+      (pechochar): add docstring and srfi-35 exception
+
+Michael Gran <spk121@yahoo.com>	2011-01-04
+
+    Add docstring and srfi-35 exceptions to copywin
+    
+    * ncurses/curs_func.c (gucu_copywin): remove typechecks
+      (gucu_init_function): rename copywin -> %copywin
+    * ncurses/curses.scm (copywin): new procedure
+
+Michael Gran <spk121@yahoo.com>	2011-01-04
+
+    whitespace
+    
+    *ncurses/curses.scm
+
+Michael Gran <spk121@yahoo.com>	2011-01-04
+
+    Add docstrings and srfi-35 exceptions to outopts and overlay family functions
+    
+    * ncurses/curs_func.c (gucu_clearok, gucu_idcok_x, gucu_idlok_x)
+      (gucu_immedok_x): remove typechecks
+      (gucu_leaveok_x): remove typechecks, return #f on error
+      (gucu_overlay_x, gucu_overwrite_x): remove typechecks, return #f on error
+      (gucu_setscrreg_x): remove typechecks
+      (gucu_init_function): rename clearok! -> %clearok!, idcok! -> %idcok
+      idlok! -> %idlok!, immedok! -> %immedok!, leaveok! -> %leaveok!,
+      nl! -> %nl!, nonl! -> %nonl, overlay -> %overlay, overwrite -> %overwrite
+      setscrreg! -> %setscrreg!
+    * ncurses/curses.scm (clearok!, idcok!, idlok!, immedok!, leaveok!, nl!)
+      (nonl!, overlay, overwrite, setscrreg!): new procedures
+
+Merge: d4148c1 5639587
+Michael Gran <spk121@yahoo.com>	2011-01-03
+
+    Merge remote branch 'remotes/origin/1.2' into 1.2
+    
+    Conflicts:
+doc/guile-ncurses.texi           
+ncurses/curses.scm           
+
+Michael Gran <spk121@yahoo.com>	2011-01-03
+
+    Realphabetize function list
+    
+    * ncurses/curses.scm
+
+Michael Gran <spk121@yahoo.com>	2011-01-03
+
+    Add opaque family functions to query window properties
+    
+    * doc/guile-ncurses.texi: add documentation
+    * ncurses/curs_func.c (gucu_is_cleared_p, gucu_is_idcok_p, gucu_is_idlok_p)
+      (gucu_is_immedok_p, gucu_is_keypad_p, gucu_is_leaveok_p, gucu_is_nodelay_p)
+      (gucu_is_notimeout_p, gucu_is_pad_p, gucu_is_subwin_p, gucu_is_syncok_p):
+      new functions
+      (gucu_init_function): new functions %is-cleared?, %is-idcok?, %is-idlok?
+      %is-immedok?, %is-keypad?, %is-leaveok?, %is-nodelay?, %is-notimeout?,
+      %is-pad?, %is-subwin?, %is-syncok?
+    * ncurses/curs_spec.c (gucu_getscrreg, gucu_getparent): new functions
+      (gucu_init_special): %getscrreg, %getparent new procedures
+    * ncurses/curs_func.h: add declarations
+    * ncurses/curses.scm (is-cleared?, is-idcok?, is-idlok?, is-immedok?)
+      (is-keypad?, is-leaveok?, is-nodelay?, is-notimeout?, is-pad?)
+      (is-scrollok?, is-subwin?, is-syncok?, getscrreg, getparent): new procedures
+
+Michael Gran <spk121@yahoo.com>	2011-01-03
+
+    Add opaque family functions to query window properties
+    
+    * doc/guile-ncurses.texi: add documentation
+    * ncurses/curs_func.c (gucu_is_cleared_p, gucu_is_idcok_p, gucu_is_idlok_p)
+      (gucu_is_immedok_p, gucu_is_keypad_p, gucu_is_leaveok_p, gucu_is_nodelay_p)
+      (gucu_is_notimeout_p, gucu_is_pad_p, gucu_is_subwin_p, gucu_is_syncok_p):
+      new functions
+      (gucu_init_function): new functions %is-cleared?, %is-idcok?, %is-idlok?
+      %is-immedok?, %is-keypad?, %is-leaveok?, %is-nodelay?, %is-notimeout?,
+      %is-pad?, %is-subwin?, %is-syncok?
+    * ncurses/curses.scm (is-cleared?, is-idcok?, is-idlok?, is-immedok?)
+      (is-keypad?, is-leaveok?, is-nodelay?, is-notimeout?, is-pad?)
+      (is-scrollok?, is-subwin?, is-syncok?): new procedures
+
+Michael Gran <spk121@yahoo.com>	2011-01-02
+
+    Add docstring and srfi-35 exception to move
+    
+    * ncurses/curs_func.c (gucu_wmove): remove typechecks
+    * ncurses/curses.scm (move): add docstring and typechecks
+
+Michael Gran <spk121@yahoo.com>	2011-01-02
+
+    typo in manual
+    
+    * doc/guile-ncurses.texi: fix
+
+Michael Gran <spk121@yahoo.com>	2011-01-02
+
+    Updates to mouse family functions
+    
+    * doc/guile-ncurses.texi: document has-mouse?
+    * ncurses/curs_func.c (gucu_has_mouse_p): new procedure
+      (gucu_mouseinterval): remove typecheck
+      (gucu_wenclose_p): remove typechecks
+      (gucu_init_function): add %has-mouse?, rename wenclose? -> %wenclose?
+    * ncurses/curs_func.h: add declaration
+    * ncurses/curs_spec.c (gucu_ungetmouse): remove typecheck
+      (gucu_init_special): rename getmouse -> %getmouse
+      rename mousemask -> %mousemask
+    * ncurses/curses.scm (has-mouse?): new procedure
+      (mevent?): new procedure
+      (getmouse, mouseinterval, mousemask, mouse-trafo, ungetmouse)
+      (wenclose?): new procedures
+    * ncurses/type.c (gucu_is_event_p): new function
+      (gucu_init_type): add mevent?
+    * ncurses/type.h: add declaration
+
+Michael Gran <spk121@yahoo.com>	2011-01-02
+
+    Add curses legacy functions
+    
+    * doc/guile-ncurses.texi: add documentation
+    * ncurses/curses.scm (getbegx, getbegy, getcurx, getcury, getmaxx, getmaxy)
+      (getparx, getpary): new procedures
+
+Michael Gran <spk121@yahoo.com>	2011-01-02
+
+    Add docstrings and srfi-35 exceptions for kernel functions
+    
+    * ncurses/curs_func.c (gucu_curs_set): remove typecheck, rangecheck
+      (gucu_napms): remove typecheck
+      (gucu_setsyx): remove typecheck
+      (gucu_init_function): rename curs-set -> %curs-set,
+      def-prog-mode -> %def-prog-mode, def-shell-mode -> %def-shell-mode,
+      napms -> %napms, reset-prog-mode -> %reset-prog-mode,
+      reset-shell-mode -> %reset-shell-mode, resetty -> resetty,
+      savetty -> %savetty, setsyx -> %setsyx
+    * ncurses/curs_spec.c (gucu_init_special): rename getsyx -> %getsyx
+    * ncurses/curses.scm (curs-set, def-prog-mode, def-shell-mode)
+      (getsyx, napms, reset-prog-mode, reset-shell-mode, resetty)
+      (resettty, savetty, setsyx): new procedures
+
+Michael Gran <spk121@yahoo.com>	2011-01-02
+
+    bad arguments regression in meta!
+    
+    * ncurses/curses.scm (meta!): bad arguments
+
+Michael Gran <spk121@yahoo.com>	2011-01-02
+
+    Bad rename of gucu_typeahead_x
+    
+    * ncurses/curs_func.c (gucu_typeahead): actually do the rename to
+      gucu_typeahead_x
+
+Michael Gran <spk121@yahoo.com>	2011-01-02
+
+    Add docstring and srfi-35 exception to instr
+    
+    * ncurses/curs_spec.c (gucu_winnstr): remove typechecks
+    * ncurses/curses.scm (instr): add docstring and typechecks
+
+Michael Gran <spk121@yahoo.com>	2011-01-02
+
+    Add docstring and srfi-35 exception to insnstr
+    
+    * ncurses/curs_func.c (gucu_winsnstr): remove typechecks, return #f on error
+    * ncurses/curses.scm (insstr): add docstring and typechecks
+
+Michael Gran <spk121@yahoo.com>	2011-01-02
+
+    Add docstring and srfi-35 exception for insch
+    
+    * ncurses/curs_func.c (gucu_winsch): remove typechecks, return #f on error
+    * ncurses/curses.scm (insch): add docstring and typechecks
+
+Michael Gran <spk121@yahoo.com>	2011-01-02
+
+    Add docstrings and srfi-35 exceptions to inopts family functions
+    
+    * ncurses/curs_func.c
+      (gucu_halfdelay): remove type and range checks
+      (gucu_intrflush): remove typecheck, return #f on error
+      (gucu_isendwin_p): remove typechecks
+      (gucu_meta): rename to gucu_meta_x
+      (gucu_meta_x): remove typecheck, return #f on error
+      (gucu_nodelay_x): remvoe typechecks, return #f on error
+      (gucu_noraw): return #F on error
+      (gucu_notimeout_x): remove typechecks, return #F on error
+      (gucu_raw): return #f on error
+      (gucu_timeout_x): remove typechecks
+      (gucu_init_function): rename
+       cbreak! -> %cbreak, echo! -> %echo!, halfdelay! -> %halfdelay!,
+       intrflush! -> %intrflush!, meta! -> %meta,
+       nocbreak! -> %nocbreak!, nodelay! -> %nodelay!, noecho! -> %noecho!
+       noqiflush -> %noqiflush!, noraw! -> %noraw!, notimeout! -> %notimeout!
+       qiflush -> %qiflush!, raw! -> %raw!, timeout! -> %timeout!
+       %typeahead -> %typeahead!
+    * ncurses/curs_func.h: rename gucu_meta -> gucu_meta_x,
+      gucu_typeahead -> gucu_typeahead_x
+    * ncurses/curses.scm (cbreak!, echo!, halfdelay!, intrflush!, keypad!)
+      (meta!, nocbreak!, nodelay!, noecho!, notimeout!, noqiflush!, noraw!)
+      (qiflush!, raw!, timeout!): new procedures
+      (typeahead!): add docstring and typecheck.
+
+Michael Gran <spk121@yahoo.com>	2011-01-02
+
+    Add docstrings and srfi-35 exceptions to initscr family functions
+    
+    * ncurses/curs_func.c (gucu_delscreen): remove typecheck, return #f on error
+      (gucu_initscr): return #f on error
+      (gucu_set_term): remove typecheck
+      (gucu_init_function): rename delscreen -> %delscreen, endwin -> %endwin
+      initscr -> %initscr, isendwin? -> %isendwin, set-term -> %set-term
+    * ncurses/curs_port.c (gucu_newterm): remove typechecks, return integer on error
+      (gucu_init_port): rename newterm -> %newterm
+    * ncurses/curses.scm (&curses-missing-function-error, curses-missing-function-error?):
+      new exception
+      (delscreen, endwin, initscr, isendwin?, newterm, set-term): new procedures
+
+Michael Gran <spk121@yahoo.com>	2011-01-02
+
+    Adds docstrings and srfi-35 exceptions to inch and inchstr
+    
+    * ncurses/curs_func.c (gucu_winch): remove typecheck, return #f on error
+    * ncurses/curs_spec.c (gucu_winchnstr): remove typecheck, return #f on error
+    * ncurses/curses.scm (inch, inchstr): add docstrings, typechecks, srfi-35 exceptions
+
+Michael Gran <spk121@yahoo.com>	2011-01-02
+
+    Add docstrings and srfi-35 exceptions to getyx family functions
+    
+    * ncurses/curs_spec.c (gucu_getbegyx): remove typecheck
+      (gucu_getmaxyx, gucu_getparyx, gucu_getyx): remove typecheck
+      (gucu_init_special) rename getbegyx -> %getbegyx,
+      getmaxyx -> %getmaxyx, getparyx -> %getparyx, getyx -> %getyx
+
+Michael Gran <spk121@yahoo.com>	2011-01-02
+
+    Add docstring and srfi-35 exceptions to getnstr
+    
+    * ncurses/curs_spec (gucu_wgetnstr): remove type checks
+    * ncurses/curses.scm (getnstr): add docstring, typechecks
+
+Michael Gran <spk121@yahoo.com>	2011-01-02
+
+    Add docstrings and srfi-35 exceptions to getch family functions
+    
+    * ncurses/curs_func.c (gucu_has_key_p): remove typecheck
+      (gucu_ungetch): return #f on error
+      (gucu_wgetch): remove typecheck
+      (gucu_init_function): rename has-key? -> %has-key?, ungetch -> %ungetch
+    * ncurses/curses.scm (getch): add docstring, srfi-35 exceptions
+      (has-key?, ungetch): new procedures
+
+Michael Gran <spk121@yahoo.com>	2011-01-02
+
+    Add docstrings and srfi-35 exceptions to extend family functions
+    
+    * ncurses/curs_func.c (gucu_use_extended_names): remove typecheck
+      (gucu_init_function): rename curses-version to %curses-version,
+      use-extended-names -> %use-extended-names
+    * ncurses/curses.scm (curses-version, use-extended-names): new procedures
+
+Michael Gran <spk121@yahoo.com>	2011-01-02
+
+    Add docstrings and srfi-35 exceptions to delch and deleteln family functions
+    
+    * ncurses/curs_func.c (gucu_wdelch): remove typecheck, return T/F
+      (gucu_winsdelln): remove typecheck, return T/F
+    * ncurses/curses.scm (delch, deleteln, insdelln, insertln): add typecheck,
+      srfi-35 exceptions
+
+Michael Gran <spk121@yahoo.com>	2011-01-02
+
+    Add docsctrings and srfi-35 exceptions to color family functions
+    
+    * ncurses/curs_func.c (gucu_init_color): remove typechecks
+      (gucu_init_pair): remove typechecks
+      (gucu_start_color): remove errors, now return T/F
+      (gucu_init_function): rename can-change-color? to %can-change-color?
+      rename has-colors? to %has-colors?
+      rename init-pair! to %init-pair!. Rename start-color! to %start-color!
+    * ncurses/curs_spec.c (gucu_color_content): remove typechecks, return #f on error
+      (gucu_pair_content): remove typecheck, return #f on error
+      (gucu_init_special): rename color-content! to %color-content!
+      Rename pair-content to %pair-content.
+    * ncurses/curses.scm (can-change-color?, color-content, has-colors?)
+      (init-color!, init-pair!, pair-content, start-color!): new functions
+
+Michael Gran <spk121@yahoo.com>	2011-01-02
+
+    Add docstrings and srfi-35 exceptions to clear family functions
+    
+    * ncurses/curs_func.c (gucu_clear): remove typechecks, errors, return T/F
+      (gucu_clrtobot): remove typecheck, errors, remove T/F
+      (gucu_clrtoeol): remove typecheck
+      (gucu_erase): remove typecheck
+      (gucu_init_function): rename clear to %clear, clrtobot to %clrtobot,
+       clrtoeol to %clrtoeol, erase to %erase
+    * ncurses/cursews.scm (clear, clrtobot, clrtoeol, erase): new procedures
+
+Michael Gran <spk121@yahoo.com>	2011-01-01
+
+    Add docstrings and srfi-35 exceptions to border functions
+    
+    * ncurses/curs_func.c (gucu_border): remove typechecks
+      (gucu_whline): remove typechecks, return #f on error
+      (gucu_wvline): remove typechecks, return #f on error
+    * ncurses/curses.scm (border): add typechecks, srfi-35 exceptions
+      (box): add docstring
+      (hline): add docstring, srfi-35 exceptions
+      (vline): add docstring, srfi-35 exceptions
+
+Michael Gran <spk121@yahoo.com>	2011-01-01
+
+    Add docstrings and srfi-35 exceptions to bkgd family functions
+    
+    * ncurses/curs_func.c (gucu_bkgd): remove typechecks
+      (gucu_bkgdset_x): remove typechecks
+      (gucu_getbkgd): remove typecheck, return #f on error
+      (gucu_init_function): rename getbkgd to %getbkgd
+    * ncurses/curses.scm (bkgd): add docstring, typechecks, and srfi-35 exceptions
+      (bkgdset!): add docstring, typechecks, and srfi-35 exceptions
+      (getbkgd): add docstring, typechecks, and srfi-35 exceptions
+
+Michael Gran <spk121@yahoo.com>	2011-01-01
+
+    Add docstrings to beep family functions
+    
+    * ncurses/curs_func.c: internalize beep / flash
+    * ncurses/curses.scm (beep, flash): new functions
+
+Michael Gran <spk121@yahoo.com>	2011-01-01
+
+    Add docstrings and srfi-35 exceptions to attr family functions
+    
+    * ncurses/curs_func.c (gucu_attr_off_x, gucu_attr_on_x):
+      (gucu_color_set, gucu_wchgat): remove typechecks, return T/F
+      (gucu_init_function): rename functions
+    * ncurses/curs_spec.c (gucu_wattr_get): remove typecheck
+    * ncurses/curses.scm (&curses-out-of-range-error, curses-out-of-range-error?)
+      (&curses-bad-state-error, curses-bad-state-error?): new srfi-35 exceptions
+      (attr-get): add docstring, typechecks, srfi-35 exception
+      (attr->list): add docstring
+      (attr-off!): add docstring, typechecks, srfi-35 exceptions
+      (attr-set!): add docstring
+      (chgat): add docstring, typechecks, srfi-35 exceptions
+      (standend!, standout!): add docstrings
+
+Michael Gran <spk121@yahoo.com>	2011-01-01
+
+    Add standout, standout-on, standout-off
+    
+    These were missing from the rendition functions
+    
+    * ncurses/curses.scm (standout, standout-on, standout-off): new procedures
+    * doc/guile-ncurses.texi (Making rendered characters): describe procedures
+
+Michael Gran <spk121@yahoo.com>	2011-01-01
+
+    Add docstring and add srfi-35 exceptions to addstr
+    
+    * ncurses/curs_func.c (gucu_waddnstr): remove typechecks
+    * ncurses/curses.scm (addstr): add docstring and typechecks
+
+Michael Gran <spk121@yahoo.com>	2011-01-01
+
+    Add docstring and use srfi-35 exceptions for addchstr family
+    
+    * ncurses/curs_func.c (gucu_waddchnstr): remove typechecks
+    * ncurses/curses.scm (addchstr): docstring, typechecks
+
+Michael Gran <spk121@yahoo.com>	2010-12-31
+
+    For addch family, add docstrings and move to srfi-35 exceptions
+    
+    * ncurses/curs_func.c (gucu_waddch, gucu_wechochar): remove typecheck
+      assertions
+    * ncurses/curses.scm (&curses-error, &curses-wrong-type-arg-error)
+      (curses-error? curses-wrong-type-arg-error?)
+      (curses-wrong-type-arg-error:arg curses-wrong-type-arg-error:expected-type):
+      new srfi-35 exceptions
+      (addch, echochar): docstrings and error checking
+
+Michael Gran <spk121@yahoo.com>	2010-12-31
+
+    Begin documenting srfi-35 exceptions for the curses lib
+    
+    * doc/guile-ncurses.texi (Errors and Exceptions): new section
+
+Michael Gran <spk121@yahoo.com>	2010-12-31
+
+    Move (ncurses lib) into (ncurses curses)
+    
+    * ncurses/lib.scm: removed
+      (make-xchar, xchar? xchar-attr, xchar-color, set-xchar-attr!)
+      (set-xchar-attr!, set-xchar-color!, set-xchar-chars!)
+      (xchar->list, list->xchar, xchar-equal?): move to curses.scm
+    * ncurses/Makefile.am: remove references to lib.scm
+    * ncurses/curses.scm:
+      (make-xchar, xchar? xchar-attr, xchar-color, set-xchar-attr!)
+      (set-xchar-attr!, set-xchar-color!, set-xchar-chars!)
+      (xchar->list, list->xchar, xchar-equal?): move from lib.scm
+    * ncurses/extra.scm: don't include (ncurses lib)
+    * test/curses_004_characters.test: don't include (ncurses lib)
+
+Michael Gran <spk121@yahoo.com>	2010-12-31
+
+    Add docstrings to rendition procedures
+    
+    * ncurses/curses.scm (blink, blink-off, blink-on, bold, bold-off, bold-on)
+      (dim, dim-off, dim-on, horizontal, horizontal-off, horizontal-on)
+      (invis, invis-off, invis-on, left, left-off, left-on)
+      (low, low-off, low-on, normal, protect, protect-off, protect-on)
+      (inverse, inverse-off, inverse-on, right, right-off, right-on)
+      (top, top-off, top-on, underline, underline-off, underline-on)
+      (vertical, vertical-off, vertical-on): add docstrings
+
+Michael Gran <spk121@yahoo.com>	2010-12-31
+
+    Remove library text domain
+    
+    * ncurses/curs_main.c (gucu_init): remove text domain
+
+U-Cain\Mike <Mike@Cain.(none)>	2010-10-31
+
+    Regenerate autotools
+    
+    * aclocal.m4
+    * config.h.in
+    * ncurses/Makefile.am
+
+U-Cain\Mike <Mike@Cain.(none)>	2010-10-31
+
+    Conditional compile for cfsetspeed, tcgetsid, and termios constants
+    
+    * ncurses/extra_func.c (gucu_cfsetspeed_x, gucu_tcgetsid, gucu_strwidth):
+      conditional compilation
+    * configure.ac: add checks for tcgetsid, cfsetspeed
+    * ncurses/extra_const.c (XCASE, ECHOPRT, PENDIN): conditional compilation
+    * ncurses/extra.scm (cfsetspeed!, tcgetsid, XCASE, PENDIN, ECHOPRT): conditional inclusion
+
+U-Cain\Mike <Mike@Cain.(none)>	2010-10-31
+
+    Missing include in extra_type
+    
+    * ncurses/extra_type.c: add missing include files
+
+U-Cain\Mike <Mike@Cain.(none)>	2010-10-31
+
+    Stray Parenthesis
+    
+    * ncurses/lib.scm: fixed
+
+U-Cain\Mike <Mike@Cain.(none)>	2010-10-31
+
+    Update aclocal
+    
+    * aclocal.m4: updated
+
+U-Cain\Mike <Mike@Cain.(none)>	2010-10-31
+
+    extraneous backslash
+    
+    * m4/Makefile.am: modified
+
+U-Cain\Mike <Mike@Cain.(none)>	2010-10-31
+
+    unistr.h only when UCS4
+    
+    * ncurses/curs_spec.c: modified
+
+U-Cain\Mike <Mike@Cain.(none)>	2010-10-31
+
+    bad file permissions
+    
+    * doc/ex_form.scm
+    * doc/ex_hello_world.scm
+    * doc/ex_init_func_usage.scm
+
+U-Cain\Mike <Mike@Cain.(none)>	2010-10-31
+
+    Disable automatic dependency tracking in automake
+    
+    * configure.ac: add no-dependencies to AM_INIT_AUTOMAKE
+
+U-Cain\Mike <Mike@Cain.(none)>	2010-10-31
+
+    Remove gettext support
+    
+    I'll be moving to srfi-35 exceptions eventually.
+    
+    * Makefile.am: remove po dir
+    * configure.ac: remove po dir and gettext calls
+    * m4/Makefile.am: remove gnulib-cache.m4
+    * all gettext calls removed
+    * po/.gitignore: removed
+    * po/Makevars: removed
+    * po/POTFILES.in: removed
+    * po/guile-ncurses.pot: removed
+
+Michael Gran <spk121@yahoo.com>	2010-10-17
+
+    Fix some includes
+    
+    * ncurses/curses.scm: modified
+    * ncurses/extra.scm: modified
+    * ncurses/lib.scm: modified
+
+Michael Gran <spk121@yahoo.com>	2010-10-17
+
+    Use gc's free when freeing termios
+    
+    * ncurses/extra_type.c (gc_free_termios): use scm_gc_free
+
+Michael Gran <spk121@yahoo.com>	2010-10-05
+
+    Rename termios module to extra
+    
+    * ncurses/termios.scm: moved
+    * ncurses/extra.scm: new file
+    * ncurses/termios_const.c: moved
+      (gucu_termios_init_const): renamed
+    * ncurses/extra_const.c: new file
+      (gucu_extra_init_const): new function
+    * ncurses/termios_const.h: moved
+    * ncurses/extra_const.h:
+    * ncurses/termios_func.c: moved
+      (gucu_termios_init_function): moved
+    * ncurses/extra_func.c:
+      (gucu_extra_init_function):
+    * ncurses/termios_func.h: moved
+    * ncurses/extra_func.h:
+    * ncurses/termios_main.c: moved
+      (gucu_termios_init): moved
+    * ncurses/extra_main.c:
+      (gucu_extra_init):
+    * ncurses/Makefile.am: add extra files, remove termios files
+
+Michael Gran <spk121@yahoo.com>	2010-10-05
+
+    Bad integer conversion in cfsetospeed
+    
+    * ncurses/termios_func.c (gucu_cfsetospeed_x): modified
+
+Michael Gran <spk121@yahoo.com>	2010-10-05
+
+    Add wcwidth interface
+    
+    * termios.scm (wcwidth): new procedure
+    * termios_func.c (gucu_strwidth): new function
+      (gucu_termios_init_function): add gucu_strwidth
+    * termios_func.h: add declaration for gucu_strwidth
+
+Michael Gran <spk121@yahoo.com>	2010-10-05
+
+    Add new port debugging variables for use with Gano
+    
+    * tools/shell.c (inner_main): add new scheme variables
+     (%guile-ncurses-shell-stdscr, %guile-ncurses-shell-write-port)
+     (%guile-ncurses-shell-read-port): new scheme variables
+
+Michael Gran <spk121@yahoo.com>	2010-10-05
+
+    Bad allocation and free of termios smob
+    
+    * ncurses/termios_type.c (gc_free_termios, gucu_new_termios): modified
+
+Michael Gran <spk121@yahoo.com>	2010-10-02
+
+    Add termios interface
+    
+    * ncurses/Makefile.am: add new termios sourcefiles
+    * ncurses/termios.scm: new file
+    * ncurses/termios_const.h: new file
+    * ncurses/termios_const.c: new file
+    * ncurses/termios_func.h: new file
+    * ncurses/termios_func.c: new file
+    * ncurses/termios_main.c: new file
+    * ncurses/termios_type.c: new file
+    * ncurses/termios_type.h: new file
+
+Michael Gran <spk121@yahoo.com>	2010-10-02
+
+    Modify guile site dir installation path
+    
+    * configure.ac: new option --with-guilesitedir
+    * ncurses/Makefile.am: use new ${guilesitedir}
+
+Michael Gran <spk121@yahoo.com>	2010-10-02
+
+    Modify guile site dir installation path
+    
+    * configure.ac: new option --with-guilesitedir
+    * ncurses/Makefile.am: use new ${guilesitedir}
+
+Michael Gran <spk121@yahoo.com>	2010-10-02
+
+    Bump for 1.0
+    
+    * NEWS: update news
+    * configure.ac: update version number
+    * po/guile-ncurses.pot: update pot
+
+Michael Gran <spk121@yahoo.com>	2010-10-02
+
+    Add maybe-sleep to  f005_form_page.test
+    
+    * test/f005_form_page.test: modified
+
+Michael Gran <spk121@yahoo.com>	2010-10-02
+
+    Doc error about getch
+    
+    * doc/guile-ncurses.texi: modified
+
+Michael Gran <spk121@yahoo.com>	2010-09-05
+
+    Scheme files are installed in wrong directory
+    
+    * configure.ac: find Guile's site dir
+    * ncurses/Makefile.am: install in ncurses dir, not PACKAGE
+
+Michael Gran <spk121@yahoo.com>	2010-09-02
+
+    Update readme files
+    
+    * README: updated
+    * README.cygwin: updated
+
+Michael Gran <spk121@yahoo.com>	2010-09-02
+
+    Remove unused m4/ax_with_curses.m4
+    
+    * m4/ax_with_curses.m4: removed
+    * m4/Makefile.am: remove ax_with_curses.m4
+
+Michael Gran <spk121@yahoo.com>	2010-09-02
+
+    Handle when curses.h is ncurses/curses.h
+    
+    * aclocal.m4: don't include ax_with_curses.m4
+    * config.h.in (HAVE_NCURSES): new
+      (HAVE_NCURSES_CURSES_H): new
+      (HAVE_NCURSESW_H): removed
+      (HAVE_NCURSES_H): removed
+    * configure.ac: don't use ax_with_ncurses.m4 and new custom ncurses tests
+      (NCURSES_LIB): new define
+    * ncurses/Makefile.am: use NCURSES_LIB instead of CURSES_LIB
+    * tools/Makefile.am: use NCURSES_LIB instead of CURSES_LIB
+    * ncurses/curs_const.c: conditionally include ncurses/curses.h
+    * ncurses/curs_func.c: conditionally include ncurses/curses.h
+    * ncurses/curs_main.c: conditionally include ncurses/curses.h
+    * ncurses/curs_port.c: conditionally include ncurses/curses.h
+    * ncurses/curs_spec.c: conditionally include ncurses/curses.h
+    * ncurses/eti_const.c: conditionally include ncurses/curses.h
+    * ncurses/form_const.c: conditionally include ncurses/curses.h
+    * ncurses/form_func.c: conditionally include ncurses/curses.h
+    * ncurses/form_spec.c: conditionally include ncurses/curses.h
+    * ncurses/form_type.c: conditionally include ncurses/curses.h
+    * ncurses/form_type.h: conditionally include ncurses/curses.h
+    * ncurses/menu_const.c: conditionally include ncurses/curses.h
+    * ncurses/menu_func.c: conditionally include ncurses/curses.h
+    * ncurses/menu_spec.c: conditionally include ncurses/curses.h
+    * ncurses/menu_type.c: conditionally include ncurses/curses.h
+    * ncurses/menu_type.h: conditionally include ncurses/curses.h
+    * ncurses/panel_func.c: conditionally include ncurses/curses.h
+    * ncurses/panel_spec.c: conditionally include ncurses/curses.h
+    * ncurses/panel_type.c: conditionally include ncurses/curses.h
+    * ncurses/panel_type.h: conditionally include ncurses/curses.h
+    * ncurses/slk_func.c: conditionally include ncurses/curses.h
+    * ncurses/type.c: conditionally include ncurses/curses.h
+    * ncurses/type.h: conditionally include ncurses/curses.h
+    * ncurses/shell.c: conditionally include ncurses/curses.h
+
+Michael Gran <spk121@yahoo.com>	2010-09-02
+
+    Print termattrs test results in non-curses mode
+    
+    * test/curses_032_termatters.test: Print test results in non-curses mode
+
+Michael Gran <spk121@yahoo.com>	2010-09-02
+
+    Return #t if erasechar/killchar doesn't exist
+    
+    * ncurses/curs_func.c (gucu_erasechar): return #t is erasechar returns ERR
+      (gucu_killchar): return #f is killchar returns ERR
+
+Michael Gran <spk121@yahoo.com>	2010-08-24
+
+    Don't run wide char tests if the locale isn't utf
+    
+    The underlying ncurses library doesn't not correctly store
+    wide characters pushed back with ungetch on locales that don't
+    support those characters.
+    
+    * test/r038_get_wch.test: don't run in non-utf8 locale
+    * test/r039_get_wstr.test: don't run in non-utf8 locale
+
+Michael Gran <spk121@yahoo.com>	2010-08-24
+
+    Enable some disable wide-character tests
+    
+    * test/r038_get_wch.test: enable wide character tests
+    * test/r039_get_wstr.test: enable wide string tests
+
 Michael Gran <spk121@yahoo.com>	2010-08-24
 
     Update ChangeLog

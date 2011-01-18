@@ -64,6 +64,6 @@ endif
 ### scheme files ###
 pkgguilesitedir = $(guilesitedir)/ncurses
 dist_pkgguilesite_DATA = curses.scm menu.scm panel.scm form.scm	\
-	eti.scm slk.scm extra.scm lib.scm
+	eti.scm slk.scm extra.scm
 ETAGS_ARGS = curses.scm menu.scm panel.scm form.scm eti.scm slk.scm	\
-	extra.scm lib.scm
+	extra.scm

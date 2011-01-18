@@ -1,7 +1,7 @@
 /*
   type.c
 
-  Copyright 2009, 2010 Free Software Foundation, Inc.
+  Copyright 2009, 2010, 2011 Free Software Foundation, Inc.
 
   This file is part of GNU Guile-Ncurses.
 
@@ -827,6 +827,13 @@ _scm_from_mevent (MEVENT * me)
      scm_from_int (me->y), scm_from_int (me->z), scm_from_ulong (me->bstate));
 }
 
+SCM
+gucu_is_mevent_p (SCM x)
+{
+  return scm_from_bool (_scm_is_mevent (x));
+}
+
+
 // screen -- in C, a SCREEN *.	In Scheme, a smob that contains that pointer.
 
 int
@@ -1045,6 +1052,9 @@ gucu_init_type ()
 
   if (first)
     {
+
+      scm_c_define_gsubr ("mevent?", 1, 0, 0, gucu_is_mevent_p);
+
       screen_tag = scm_make_smob_type ("screen", sizeof (SCREEN *));
       scm_set_smob_print (screen_tag, print_screen);
       scm_c_define_gsubr ("screen?", 1, 0, 0, gucu_is_screen_p);

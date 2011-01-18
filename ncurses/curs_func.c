@@ -1,7 +1,7 @@
 /*
   curs_func.c
 
-  Copyright 2009, 2010 Free Software Foundation, Inc.
+  Copyright 2009, 2010, 2011 Free Software Foundation, Inc.
 
   This file is part of GNU Guile-Ncurses.
 
@@ -81,18 +81,12 @@ gucu_attr_off_x (SCM win, SCM attrs)
   attr_t c_attrs;
   int ret;
 
-  SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "attr-off!");
-  SCM_ASSERT (_scm_is_attr (attrs), attrs, SCM_ARG2, "attr-off!");
-
   c_win = _scm_to_window (win);
   c_attrs = _scm_to_attr (attrs);
 
   ret = wattr_off (c_win, c_attrs, (void *) 0);
   /* wattr_off only fails if win is null  */
-  if (ret == ERR)
-    curs_bad_state_error ("attr-off!");
-
-  return SCM_UNSPECIFIED;
+  RETURNTF (ret);
 }
 
 /* Turn on window attributes */
@@ -103,18 +97,12 @@ gucu_attr_on_x (SCM win, SCM attrs)
   attr_t c_attrs;
   int ret;
 
-  SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "attr-on!");
-  SCM_ASSERT (_scm_is_attr (attrs), attrs, SCM_ARG2, "attr-on!");
-
   c_win = _scm_to_window (win);
   c_attrs = _scm_to_attr (attrs);
 
   ret = wattr_on (c_win, c_attrs, (void *) 0);
   /* wattr_on apparently only fails if c_win is null  */
-  if (ret == ERR)
-    curs_bad_state_error ("attr-on!");
-
-  return SCM_UNSPECIFIED;
+  RETURNTF (ret);
 }
 
 /* Return the output speed of the terminal as an integer */
@@ -143,9 +131,6 @@ gucu_bkgd (SCM win, SCM ch)
   WINDOW *c_win;
   int ret;
 
-  SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "%bkgd");
-  SCM_ASSERT (_scm_is_xchar (ch), ch, SCM_ARG2, "%bkgd");
-
   c_win = _scm_to_window (win);
 
 #ifdef HAVE_NCURSESW
@@ -171,9 +156,6 @@ SCM
 gucu_bkgdset_x (SCM win, SCM ch)
 {
   WINDOW *c_win;
-
-  SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "%bkgdset!");
-  SCM_ASSERT (_scm_is_xchar (ch), ch, SCM_ARG2, "%bkgdset!");
 
   c_win = _scm_to_window (win);
 
@@ -202,16 +184,6 @@ gucu_border (SCM win, SCM left, SCM right, SCM top, SCM bottom,
 {
   WINDOW *c_win;
   int ret;
-
-  SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "%border");
-  SCM_ASSERT (_scm_is_xchar (left), left, SCM_ARG2, "%border");
-  SCM_ASSERT (_scm_is_xchar (right), right, SCM_ARG3, "%border");
-  SCM_ASSERT (_scm_is_xchar (top), top, SCM_ARG4, "%border");
-  SCM_ASSERT (_scm_is_xchar (bottom), bottom, SCM_ARG5, "%border");
-  SCM_ASSERT (_scm_is_xchar (topleft), topleft, SCM_ARG6, "%border");
-  SCM_ASSERT (_scm_is_xchar (topright), topright, SCM_ARG7, "%border");
-  SCM_ASSERT (_scm_is_xchar (bottomleft), bottomleft, 8, "%border");
-  SCM_ASSERT (_scm_is_xchar (bottomright), bottomright, 9, "%border");
 
   c_win = _scm_to_window (win);
 
@@ -290,18 +262,11 @@ gucu_clear (SCM win)
   WINDOW *c_win;
   int ret;
 
-  SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "clear");
-
   c_win = _scm_to_window (win);
 
   ret = wclear (c_win);
-  if (ret == ERR)
-    {
-      /* window is NULL */
-      curs_bad_state_error ("clear");
-    }
-
-  return SCM_UNSPECIFIED;
+  /* Returns ERR if window is NULL */
+  RETURNTF (ret);
 }
 
 /* Enable or disable if the next call to wrefresh will completely
@@ -311,9 +276,6 @@ gucu_clearok (SCM win, SCM bf)
 {
   WINDOW *c_win;
   bool c_bf;
-
-  SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "clearok!");
-  SCM_ASSERT (scm_is_bool (bf), bf, SCM_ARG2, "clearok!");
 
   c_win = _scm_to_window (win);
   c_bf = scm_to_bool (bf);
@@ -330,18 +292,11 @@ gucu_clrtobot (SCM win)
   WINDOW *c_win;
   int ret;
 
-  SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "clrtobot");
-
   c_win = _scm_to_window (win);
 
   ret = wclrtobot (c_win);
-  if (ret == ERR)
-    {
-      /* wclrtobot only returns ERR when the window is null */
-      curs_bad_state_error ("clrtobot");
-    }
-
-  return SCM_UNSPECIFIED;
+  /* wclrtobot only returns ERR when the window is null */
+  RETURNTF (ret);
 }
 
 /* Clear to end of line */
@@ -350,8 +305,6 @@ gucu_clrtoeol (SCM win)
 {
   WINDOW *c_win;
   int ret;
-
-  SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "clrtoeol");
 
   c_win = _scm_to_window (win);
 
@@ -385,18 +338,12 @@ gucu_color_set (SCM win, SCM pair)
   short c_pair;
   int ret;
 
-  SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "color-set!");
-  SCM_ASSERT (scm_is_integer (pair), pair, SCM_ARG2, "color-set!");
-
   c_win = _scm_to_window (win);
   c_pair = scm_to_short (pair);
 
   ret = wcolor_set (c_win, c_pair, 0);
   /* wcolor_set returns an error if pair is not 0 to COLOR_PAIRS -1 */
-  if (ret == ERR)
-    scm_out_of_range ("color-set!", pair);
-
-  return SCM_UNSPECIFIED;
+  RETURNTF (ret);
 }
 
 /* Copy part of srcwin onto part of destwin */
@@ -407,16 +354,6 @@ gucu_copywin (SCM srcwin, SCM dstwin, SCM sminrow, SCM smincol, SCM dminrow,
   WINDOW *c_srcwin, *c_dstwin;
   int c_sminrow, c_smincol, c_dminrow, c_dmincol, c_dmaxrow, c_dmaxcol;
   int c_overlay, ret;
-
-  SCM_ASSERT (_scm_is_window (srcwin), srcwin, SCM_ARG1, "copywin");
-  SCM_ASSERT (_scm_is_window (dstwin), dstwin, SCM_ARG2, "copywin");
-  SCM_ASSERT (scm_is_integer (sminrow), sminrow, SCM_ARG3, "copywin");
-  SCM_ASSERT (scm_is_integer (smincol), smincol, SCM_ARG4, "copywin");
-  SCM_ASSERT (scm_is_integer (dminrow), dminrow, SCM_ARG5, "copywin");
-  SCM_ASSERT (scm_is_integer (dmincol), dmincol, SCM_ARG6, "copywin");
-  SCM_ASSERT (scm_is_integer (dmaxrow), dmaxrow, SCM_ARG7, "copywin");
-  SCM_ASSERT (scm_is_integer (dmaxcol), dmaxcol, 8, "copywin");
-  SCM_ASSERT (scm_is_integer (_overlay), _overlay, 9, "copywin");
 
   c_srcwin = _scm_to_window (srcwin);
   c_dstwin = _scm_to_window (dstwin);
@@ -441,11 +378,7 @@ gucu_curs_set (SCM visibility)
 {
   int c_visibility, ret;
 
-  SCM_ASSERT (scm_is_integer (visibility), visibility, SCM_ARG1, "curs-set");
-
   c_visibility = scm_to_int (visibility);
-  if (c_visibility < 0 || c_visibility > 2)
-    scm_out_of_range ("curs-set", visibility);
   ret = curs_set (c_visibility);
   /* Return values is the previous visibility setting, or ERR if the
      requested visibility is not supported.  */
@@ -532,20 +465,17 @@ gucu_delscreen (SCM scr)
 {
   SCREEN *c_scr;
 
-  SCM_ASSERT (_scm_is_screen (scr), scr, SCM_ARG1, "delscreen");
-
   c_scr = _scm_to_screen (scr);
 
   if (!isendwin ())
-    scm_misc_error ("delscreen",
-		    "the terminal was freed while still in curses mode: ~A",
-		    scr);
+    /* terminal was freed while still in curses mode */
+    return SCM_BOOL_F;
 
   delscreen (c_scr);
   /* delscreen returns void */
   SCM_SET_SMOB_DATA (scr, 0);
 
-  return SCM_UNSPECIFIED;
+  return SCM_BOOL_T;
 }
 
 /* Create a pointer to a window enclosed by and sharing memory with
@@ -556,39 +486,11 @@ gucu_derwin (SCM orig, SCM nlines, SCM ncols, SCM begin_y, SCM begin_x)
   int c_nlines, c_ncols, c_begin_y, c_begin_x;
   WINDOW *c_orig, *ret;
 
-  SCM_ASSERT (_scm_is_window (orig), orig, SCM_ARG1, "derwin");
-  SCM_ASSERT (scm_is_integer (nlines), nlines, SCM_ARG2, "derwin");
-  SCM_ASSERT (scm_is_integer (ncols), ncols, SCM_ARG3, "derwin");
-  SCM_ASSERT (scm_is_integer (begin_y), begin_y, SCM_ARG4, "derwin");
-  SCM_ASSERT (scm_is_integer (begin_x), begin_x, SCM_ARG5, "derwin");
-
   c_orig = _scm_to_window (orig);
   c_nlines = scm_to_int (nlines);
   c_ncols = scm_to_int (ncols);
   c_begin_y = scm_to_int (begin_y);
   c_begin_x = scm_to_int (begin_x);
-
-  /* Necessary but not complete set of range checks */
-  if (c_begin_y < 0)
-    scm_out_of_range ("derwin", begin_y);
-  if (c_begin_x < 0)
-    scm_out_of_range ("derwin", begin_x);
-  if (c_nlines < 0)
-    scm_out_of_range ("derwin", nlines);
-
-  /* FIXME: add test to see if windows is a complete type.  */
-#ifndef NCURSES_OPAQUE
-  if (c_begin_y + c_nlines > c_orig->_maxy + 1)
-    scm_out_of_range ("derwin", nlines);
-#endif
-
-  if (c_ncols < 0)
-    scm_out_of_range ("derwin", ncols);
-
-#ifndef NCURSES_OPAQUE
-  if (c_begin_x + c_ncols > c_orig->_maxx + 1)
-    scm_out_of_range ("derwin", ncols);
-#endif
 
   ret = derwin (c_orig, c_nlines, c_ncols, c_begin_y, c_begin_x);
   if (ret == 0)
@@ -604,8 +506,8 @@ gucu_doupdate ()
 {
   int ret = doupdate ();
   /* doupdate probably only fails when the screen is NULL */
-  if (ret == ERR)
-    curs_bad_state_error ("doupdate");
+  //if (ret == ERR)
+  //  curs_bad_state_error ("doupdate");
 
   return SCM_UNSPECIFIED;
 }
@@ -616,14 +518,12 @@ gucu_dupwin (SCM win)
 {
   WINDOW *c_win, *ret;
 
-  SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "dupwin");
-
   c_win = _scm_to_window (win);
 
   ret = dupwin (c_win);
   /* dupwin only fails if window is NULL, which should never happen */
   if (ret == NULL)
-    curs_bad_state_error ("doupdate");
+    return SCM_BOOL_F;
 
   return _scm_from_window (ret);
 }
@@ -652,8 +552,6 @@ gucu_erase (SCM win)
 {
   WINDOW *c_win;
   int ret;
-
-  SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "erase");
 
   c_win = _scm_to_window (win);
 
@@ -716,15 +614,13 @@ gucu_getbkgd (SCM win)
 {
   WINDOW *c_win;
 
-  SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "getbkgd");
-
   c_win = _scm_to_window (win);
 #ifdef HAVE_NCURSESW
   {
     cchar_t ch;
     int ret = wgetbkgrnd (c_win, &ch);
     if (ret == ERR)
-      curs_bad_state_error ("getbkgd");
+      return SCM_BOOL_F;
     return _scm_xchar_from_cchar (&ch);
   }
 #else
@@ -741,11 +637,7 @@ gucu_halfdelay (SCM tenths)
 {
   int c_tenths;
 
-  SCM_ASSERT (scm_is_integer (tenths), tenths, SCM_ARG1, "halfdelay!");
-
   c_tenths = scm_to_int (tenths);
-  if (c_tenths < 1 || c_tenths > 255)
-    scm_out_of_range ("halfdelay!", tenths);
 
   halfdelay (c_tenths);
 
@@ -788,11 +680,16 @@ gucu_has_key_p (SCM key)
 {
   int c_key;
 
-  SCM_ASSERT (scm_is_integer (key), key, SCM_ARG1, "has-key");
-
   c_key = scm_to_int (key);
 
   RETURNTF (has_key (c_key));
+}
+
+/* Return #t if the mouse driver has been successfully initialized. */
+SCM
+gucu_has_mouse_p (void)
+{
+  return (scm_from_bool (has_mouse ()));
 }
 
 /* When true, try to use a terminal's hardware to clear characters */
@@ -801,9 +698,6 @@ gucu_idcok_x (SCM win, SCM bf)
 {
   WINDOW *c_win;
   bool c_bf;
-
-  SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "idcok!");
-  SCM_ASSERT (scm_is_bool (bf), bf, SCM_ARG2, "idcok!");
 
   c_win = _scm_to_window (win);
   c_bf = scm_to_bool (bf);
@@ -820,9 +714,6 @@ gucu_idlok_x (SCM win, SCM bf)
   WINDOW *c_win;
   bool c_bf;
 
-  SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "idlok!");
-  SCM_ASSERT (scm_is_bool (bf), bf, SCM_ARG2, "idlok!");
-
   c_win = _scm_to_window (win);
   c_bf = scm_to_bool (bf);
 
@@ -837,9 +728,6 @@ gucu_immedok_x (SCM win, SCM bf)
 {
   WINDOW *c_win;
   bool c_bf;
-
-  SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "immedok!");
-  SCM_ASSERT (scm_is_bool (bf), bf, SCM_ARG2, "immedok!");
 
   c_win = _scm_to_window (win);
   c_bf = scm_to_bool (bf);
@@ -856,8 +744,9 @@ gucu_initscr ()
   WINDOW *ret;
 
   ret = initscr ();
+  /* Initscr only fails when something really bad happens. */
   if (ret == NULL)
-    curs_bad_state_error ("initscr");
+    return SCM_BOOL_F;
 
   return _scm_from_window (ret);
 }
@@ -868,11 +757,6 @@ gucu_init_color (SCM color, SCM r, SCM g, SCM b)
 {
   short c_color, c_r, c_g, c_b;
   int ret;
-
-  SCM_ASSERT (scm_is_integer (color), color, SCM_ARG1, "init-color!");
-  SCM_ASSERT (scm_is_integer (r), r, SCM_ARG2, "init-color!");
-  SCM_ASSERT (scm_is_integer (g), g, SCM_ARG3, "init-color!");
-  SCM_ASSERT (scm_is_integer (b), b, SCM_ARG4, "init-color!");
 
   c_color = scm_to_short (color);
   c_r = scm_to_short (r);
@@ -899,10 +783,6 @@ gucu_init_pair (SCM pair, SCM fore, SCM back)
   int ret;
   short c_pair, c_fore, c_back;
 
-  SCM_ASSERT (scm_is_integer (pair), pair, SCM_ARG1, "init-pair!");
-  SCM_ASSERT (scm_is_integer (fore), fore, SCM_ARG2, "init-pair!");
-  SCM_ASSERT (scm_is_integer (back), back, SCM_ARG3, "init-pair!");
-
   c_pair = scm_to_short (pair);
   c_fore = scm_to_short (fore);
   c_back = scm_to_short (back);
@@ -917,16 +797,83 @@ gucu_intrflush (SCM bf)
   bool c_bf;
   int ret;
 
-  SCM_ASSERT (scm_is_bool (bf), bf, SCM_ARG1, "intrflush!");
-
   c_bf = scm_to_bool (bf);
 
   ret = intrflush (stdscr, c_bf);
+  /* If ret is ERR, this is a bad state */
+  RETURNTF (ret);
+}
 
-  if (ret == ERR)
-    curs_bad_state_error ("intrflush!");
+SCM
+gucu_is_cleared_p (SCM win)
+{
+  return scm_from_bool (is_cleared (_scm_to_window (win)));
+}
 
-  return SCM_UNSPECIFIED;
+SCM
+gucu_is_idcok_p (SCM win)
+{
+  return scm_from_bool (is_idcok (_scm_to_window (win)));
+}
+
+SCM
+gucu_is_idlok_p (SCM win)
+{
+  return scm_from_bool (is_idlok (_scm_to_window (win)));
+}
+
+SCM
+gucu_is_immedok_p (SCM win)
+{
+  return scm_from_bool (is_immedok (_scm_to_window (win)));
+}
+
+SCM
+gucu_is_keypad_p (SCM win)
+{
+  return scm_from_bool (is_keypad (_scm_to_window (win)));
+}
+
+SCM
+gucu_is_leaveok_p (SCM win)
+{
+  return scm_from_bool (is_leaveok (_scm_to_window (win)));
+}
+
+SCM
+gucu_is_nodelay_p (SCM win)
+{
+  return scm_from_bool (is_nodelay (_scm_to_window (win)));
+}
+
+SCM
+gucu_is_notimeout_p (SCM win)
+{
+  return scm_from_bool (is_notimeout (_scm_to_window (win)));
+}
+
+SCM
+gucu_is_pad_p (SCM win)
+{
+  return scm_from_bool (is_pad (_scm_to_window (win)));
+}
+
+SCM
+gucu_is_scrollok_p (SCM win)
+{
+  return scm_from_bool (is_scrollok (_scm_to_window (win)));
+}
+
+SCM
+gucu_is_subwin_p (SCM win)
+{
+  return scm_from_bool (is_subwin (_scm_to_window (win)));
+}
+
+SCM
+gucu_is_syncok_p (SCM win)
+{
+  return scm_from_bool (is_syncok (_scm_to_window (win)));
 }
 
 /* Return true if we are not in curses mode (endwin has been called) */
@@ -1055,9 +1002,6 @@ gucu_keypad_x (SCM win, SCM bf)
   bool c_bf;
   int ret;
 
-  SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "keypad!");
-  SCM_ASSERT (scm_is_bool (bf), bf, SCM_ARG2, "keypad!");
-
   c_win = _scm_to_window (win);
   c_bf = scm_to_bool (bf);
 
@@ -1099,17 +1043,12 @@ gucu_leaveok_x (SCM win, SCM bf)
   bool c_bf;
   int ret;
 
-  SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "leaveok!");
-  SCM_ASSERT (scm_is_bool (bf), bf, SCM_ARG2, "leaveok!");
-
   c_win = _scm_to_window (win);
   c_bf = scm_to_bool (bf);
 
   ret = leaveok (c_win, c_bf);
-  if (ret == ERR)
-    curs_bad_state_error ("leaveok!");
-
-  return SCM_UNSPECIFIED;
+  /* ERR is bad state */
+  RETURNTF (ret);
 }
 
 /* Return a verbose description of the current terminal */
@@ -1134,20 +1073,16 @@ gucu_longname ()
 
 /* Set the terminal to 7 or 8 bit mode */
 SCM
-gucu_meta (SCM bf)
+gucu_meta_x (SCM bf)
 {
   bool c_bf;
   int ret;
 
-  SCM_ASSERT (scm_is_bool (bf), bf, SCM_ARG1, "meta!");
-
   c_bf = scm_to_bool (bf);
 
   ret = meta ((WINDOW *) 0, c_bf);
-  if (ret == ERR)
-    curs_bad_state_error ("meta!");
-
-  return SCM_UNSPECIFIED;
+  /* ret is ERR when state is bad */
+  RETURNTF (ret);
 }
 
 /* Set the maximum time between click and release for something to register
@@ -1156,9 +1091,6 @@ SCM
 gucu_mouseinterval (SCM thousandths)
 {
   int c_thousandths, ret;
-
-  SCM_ASSERT (scm_is_integer (thousandths), thousandths, SCM_ARG1,
-	      "mouseinterval");
 
   c_thousandths = scm_to_int (thousandths);
 
@@ -1195,28 +1127,13 @@ gucu_mvderwin (SCM win, SCM par_y, SCM par_x)
   WINDOW *c_win;
   int c_par_y, c_par_x, ret;
 
-  SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "mvderwin");
-  SCM_ASSERT (scm_is_integer (par_y), par_y, SCM_ARG2, "mvderwin");
-  SCM_ASSERT (scm_is_integer (par_x), par_x, SCM_ARG3, "mvderwin");
-
   c_win = _scm_to_window (win);
   c_par_y = scm_to_int (par_y);
   c_par_x = scm_to_int (par_x);
-  if (c_par_x < 0)
-    scm_out_of_range ("mvderwin", par_x);
-  if (c_par_y < 0)
-    scm_out_of_range ("mvderwin", par_y);
-
-#ifndef NCURSES_OPAQUE
-  if (c_par_x + getmaxx (c_win) > getmaxx (c_win->_parent))
-    scm_out_of_range ("mvderwin", par_x);
-  if (c_par_y + getmaxy (c_win) > getmaxy (c_win->_parent))
-    scm_out_of_range ("mvderwin", par_y);
-#endif
 
   ret = mvderwin (c_win, c_par_y, c_par_x);
   if (ret == ERR)
-    curs_bad_state_error ("mvderwin");
+    return SCM_BOOL_F;
 
   return SCM_UNSPECIFIED;
 }
@@ -1228,17 +1145,13 @@ gucu_mvwin (SCM win, SCM y, SCM x)
   WINDOW *c_win;
   int c_y, c_x, ret;
 
-  SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "mvwin");
-  SCM_ASSERT (scm_is_integer (y), y, SCM_ARG2, "mvwin");
-  SCM_ASSERT (scm_is_integer (x), x, SCM_ARG3, "mvwin");
-
   c_win = _scm_to_window (win);
   c_y = scm_to_int (y);
   c_x = scm_to_int (x);
 
   ret = mvwin (c_win, c_y, c_x);
   if (ret == ERR)
-    curs_param_or_bad_state_error ("mvwin");
+    return SCM_BOOL_F;
 
   return SCM_UNSPECIFIED;
 }
@@ -1248,8 +1161,6 @@ SCM
 gucu_napms (SCM ms)
 {
   int c_ms;
-
-  SCM_ASSERT (scm_is_integer (ms), ms, SCM_ARG1, "napms");
 
   c_ms = scm_to_int (ms);
 
@@ -1264,9 +1175,6 @@ gucu_newpad (SCM nlines, SCM ncols)
   int c_nlines, c_ncols;
   WINDOW *ret;
 
-  SCM_ASSERT (scm_is_integer (nlines), nlines, SCM_ARG1, "newpad");
-  SCM_ASSERT (scm_is_integer (ncols), ncols, SCM_ARG2, "newpad");
-
   c_nlines = scm_to_int (nlines);
   c_ncols = scm_to_int (ncols);
   if (c_nlines <= 0)
@@ -1276,7 +1184,7 @@ gucu_newpad (SCM nlines, SCM ncols)
 
   ret = newpad (c_nlines, c_ncols);
   if (ret == NULL)
-    curs_param_or_bad_state_error ("newpad");
+    return SCM_BOOL_F;
 
   return _scm_from_window (ret);
 }
@@ -1288,27 +1196,14 @@ gucu_newwin (SCM nlines, SCM ncols, SCM begin_y, SCM begin_x)
   int c_nlines, c_ncols, c_begin_y, c_begin_x;
   WINDOW *c_win;
 
-  SCM_ASSERT (scm_is_integer (nlines), nlines, SCM_ARG1, "newwin");
-  SCM_ASSERT (scm_is_integer (ncols), ncols, SCM_ARG2, "newwin");
-  SCM_ASSERT (scm_is_integer (begin_y), begin_y, SCM_ARG3, "newwin");
-  SCM_ASSERT (scm_is_integer (begin_x), begin_x, SCM_ARG4, "newwin");
-
   c_nlines = scm_to_int (nlines);
   c_ncols = scm_to_int (ncols);
   c_begin_y = scm_to_int (begin_y);
   c_begin_x = scm_to_int (begin_x);
-  if (c_nlines < 0)
-    scm_out_of_range ("newwin", nlines);
-  if (c_ncols < 0)
-    scm_out_of_range ("newwin", ncols);
-  if (c_begin_y < 0)
-    scm_out_of_range ("newwin", begin_y);
-  if (c_begin_x < 0)
-    scm_out_of_range ("newwin", begin_x);
 
   c_win = newwin (c_nlines, c_ncols, c_begin_y, c_begin_x);
   if (c_win == NULL)
-    curs_param_or_bad_state_error ("newwin");
+    return SCM_BOOL_F;
 
   return _scm_from_window (c_win);
 }
@@ -1338,17 +1233,11 @@ gucu_nodelay_x (SCM win, SCM bf)
   bool c_bf;
   int ret;
 
-  SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "nodelay!");
-  SCM_ASSERT (scm_is_bool (bf), bf, SCM_ARG2, "nodelay!");
-
   c_win = _scm_to_window (win);
   c_bf = scm_to_bool (bf);
 
   ret = nodelay (c_win, c_bf);
-  if (ret == ERR)
-    curs_bad_state_error ("nodelay!");
-
-  return SCM_UNSPECIFIED;
+  RETURNTF (ret);
 }
 
 /* Disable echoing of user-type characters */
@@ -1381,10 +1270,7 @@ gucu_noqiflush ()
 SCM
 gucu_noraw ()
 {
-  if (ERR == noraw ())
-    curs_bad_state_error ("noraw!");
-
-  return SCM_UNSPECIFIED;
+  RETURNTF (noraw ());
 }
 
 /* Do not set an timer for escape sequence processing */
@@ -1395,17 +1281,11 @@ gucu_notimeout_x (SCM win, SCM bf)
   bool c_bf;
   int ret;
 
-  SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "notimeout!");
-  SCM_ASSERT (scm_is_bool (bf), bf, SCM_ARG2, "notimeout!");
-
   c_win = _scm_to_window (win);
   c_bf = scm_to_bool (bf);
 
   ret = notimeout (c_win, c_bf);
-  if (ret == ERR)
-    curs_bad_state_error ("notimeout!");
-
-  return SCM_UNSPECIFIED;
+  RETURNTF (ret);
 }
 
 SCM
@@ -1413,8 +1293,6 @@ gucu_noutrefresh (SCM win)
 {
   WINDOW *c_win;
   int ret;
-
-  SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "noutrefresh");
 
   c_win = _scm_to_window (win);
 
@@ -1429,17 +1307,11 @@ gucu_overlay (SCM srcwin, SCM destwin)
   WINDOW *c_srcwin, *c_destwin;
   int ret;
 
-  SCM_ASSERT (_scm_is_window (srcwin), srcwin, SCM_ARG1, "overlay");
-  SCM_ASSERT (_scm_is_window (destwin), destwin, SCM_ARG2, "overlay");
-
   c_srcwin = _scm_to_window (srcwin);
   c_destwin = _scm_to_window (destwin);
 
   ret = overlay (c_srcwin, c_destwin);
-  if (ret == ERR)
-    curs_bad_state_error ("overlay");
-
-  return SCM_UNSPECIFIED;
+  RETURNTF (ret);
 }
 
 /* Overlay srcwin  on top of destwin, including blanks */
@@ -1449,17 +1321,11 @@ gucu_overwrite (SCM srcwin, SCM destwin)
   WINDOW *c_srcwin, *c_destwin;
   int ret;
 
-  SCM_ASSERT (_scm_is_window (srcwin), srcwin, SCM_ARG1, "overwrite");
-  SCM_ASSERT (_scm_is_window (destwin), destwin, SCM_ARG2, "overwrite");
-
   c_srcwin = _scm_to_window (srcwin);
   c_destwin = _scm_to_window (destwin);
 
   ret = overwrite (c_srcwin, c_destwin);
-  if (ret == ERR)
-    curs_bad_state_error ("overwrite");
-
-  return SCM_UNSPECIFIED;
+  RETURNTF (ret);
 }
 
 /* Return the pair number associated with a color pair attribute */
@@ -1481,9 +1347,6 @@ gucu_pechochar (SCM pad, SCM ch)
 {
   WINDOW *c_pad;
   int ret;
-
-  SCM_ASSERT (_scm_is_window (pad), pad, SCM_ARG1, "%pechochar");
-  SCM_ASSERT (_scm_is_xchar (ch), ch, SCM_ARG2, "%pechochar");
 
   c_pad = _scm_to_window (pad);
 
@@ -1519,14 +1382,6 @@ gucu_pnoutrefresh (SCM win, SCM pminrow, SCM pmincol, SCM sminrow,
   WINDOW *c_win;
   int c_pminrow, c_pmincol, c_sminrow, c_smincol, c_smaxrow, c_smaxcol, ret;
 
-  SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "pnoutrefresh");
-  SCM_ASSERT (scm_is_integer (pminrow), pminrow, SCM_ARG2, "pnoutrefresh");
-  SCM_ASSERT (scm_is_integer (pmincol), pmincol, SCM_ARG3, "pnoutrefresh");
-  SCM_ASSERT (scm_is_integer (sminrow), sminrow, SCM_ARG4, "pnoutrefresh");
-  SCM_ASSERT (scm_is_integer (smincol), smincol, SCM_ARG5, "pnoutrefresh");
-  SCM_ASSERT (scm_is_integer (smaxrow), smaxrow, SCM_ARG6, "pnoutrefresh");
-  SCM_ASSERT (scm_is_integer (smaxcol), smaxcol, SCM_ARG7, "pnoutrefresh");
-
   c_win = _scm_to_window (win);
   c_pminrow = scm_to_int (pminrow);
   c_pmincol = scm_to_int (pmincol);
@@ -1546,14 +1401,6 @@ gucu_prefresh (SCM win, SCM pminrow, SCM pmincol, SCM sminrow, SCM smincol,
 {
   WINDOW *c_win;
   int c_pminrow, c_pmincol, c_sminrow, c_smincol, c_smaxrow, c_smaxcol, ret;
-
-  SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "prefresh");
-  SCM_ASSERT (scm_is_integer (pminrow), pminrow, SCM_ARG2, "prefresh");
-  SCM_ASSERT (scm_is_integer (pmincol), pmincol, SCM_ARG3, "prefresh");
-  SCM_ASSERT (scm_is_integer (sminrow), sminrow, SCM_ARG4, "prefresh");
-  SCM_ASSERT (scm_is_integer (smincol), smincol, SCM_ARG5, "prefresh");
-  SCM_ASSERT (scm_is_integer (smaxrow), smaxrow, SCM_ARG6, "prefresh");
-  SCM_ASSERT (scm_is_integer (smaxcol), smaxcol, SCM_ARG7, "prefresh");
 
   c_win = _scm_to_window (win);
   c_pminrow = scm_to_int (pminrow);
@@ -1581,10 +1428,7 @@ gucu_qiflush ()
 SCM
 gucu_raw ()
 {
-  if (ERR == raw ())
-    curs_bad_state_error ("raw!");
-
-  return SCM_UNSPECIFIED;
+  RETURNTF (raw ());
 }
 
 /* Indicate that this window should be redrawn in its entirity */
@@ -1593,8 +1437,6 @@ gucu_redrawwin (SCM win)
 {
   WINDOW *c_win;
   int ret;
-
-  SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "redrawwin");
 
   c_win = _scm_to_window (win);
 
@@ -1609,9 +1451,8 @@ gucu_refresh (SCM win)
   WINDOW *c_win;
   int ret;
 
-  SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "refresh");
   if (stdscr == NULL)
-    curs_bad_state_error ("refresh");
+    return SCM_BOOL_F;
 
   c_win = _scm_to_window (win);
 
@@ -1652,8 +1493,6 @@ gucu_scr_dump (SCM fname)
   char *c_fname;
   int ret;
 
-  SCM_ASSERT (scm_is_string (fname), fname, SCM_ARG1, "scr-dump");
-
   c_fname = scm_to_locale_string (fname);
   ret = scr_dump (c_fname);
   free (c_fname);
@@ -1667,8 +1506,6 @@ gucu_scr_init (SCM fname)
 {
   char *c_fname;
   int ret;
-
-  SCM_ASSERT (scm_is_string (fname), fname, SCM_ARG1, "scr-init");
 
   c_fname = scm_to_locale_string (fname);
   ret = scr_init (c_fname);
@@ -1684,8 +1521,6 @@ gucu_scr_restore (SCM fname)
   char *c_fname;
   int ret;
 
-  SCM_ASSERT (scm_is_string (fname), fname, SCM_ARG1, "scr-restore");
-
   c_fname = scm_to_locale_string (fname);
   ret = scr_restore (c_fname);
   free (c_fname);
@@ -1700,8 +1535,6 @@ gucu_scr_set (SCM fname)
   char *c_fname;
   int ret;
 
-  SCM_ASSERT (scm_is_string (fname), fname, SCM_ARG1, "scr-set");
-
   c_fname = scm_to_locale_string (fname);
   ret = scr_set (c_fname);
   free (c_fname);
@@ -1715,9 +1548,6 @@ gucu_scrl (SCM win, SCM n)
 {
   WINDOW *c_win;
   int c_n, ret;
-
-  SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "scrl");
-  SCM_ASSERT (scm_is_integer (n), n, SCM_ARG2, "scrl");
 
   c_win = _scm_to_window (win);
   c_n = scm_to_int (n);
@@ -1756,10 +1586,6 @@ gucu_setscrreg_x (SCM win, SCM top, SCM bot)
   WINDOW *c_win;
   int c_top, c_bot, ret;
 
-  SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "setscrreg!");
-  SCM_ASSERT (scm_is_integer (top), top, SCM_ARG2, "setscrreg!");
-  SCM_ASSERT (scm_is_integer (bot), bot, SCM_ARG3, "setscrreg!");
-
   c_win = _scm_to_window (win);
   c_top = scm_to_int (top);
   c_bot = scm_to_int (bot);
@@ -1775,9 +1601,6 @@ gucu_setsyx (SCM y, SCM x)
 {
   int c_y, c_x;
 
-  SCM_ASSERT (scm_is_integer (y), y, SCM_ARG1, "setsyx");
-  SCM_ASSERT (scm_is_integer (x), x, SCM_ARG2, "setsyx");
-
   c_y = scm_to_int (y);
   c_x = scm_to_int (x);
 
@@ -1792,9 +1615,6 @@ gucu_set_term (SCM newterminal)
 {
   SCREEN *c_newterminal;
 
-  SCM_ASSERT (_scm_is_screen (newterminal), newterminal, SCM_ARG1,
-	      "set-term");
-
   c_newterminal = _scm_to_screen (newterminal);
 
   set_term (c_newterminal);
@@ -1807,11 +1627,7 @@ SCM
 gucu_start_color ()
 {
   int ret = start_color ();
-
-  if (ret == ERR)
-    curs_bad_state_error ("start-color!");
-
-  return SCM_UNSPECIFIED;
+  RETURNTF (ret);
 }
 
 SCM
@@ -1819,12 +1635,6 @@ gucu_subpad (SCM orig, SCM nlines, SCM ncols, SCM begin_y, SCM begin_x)
 {
   int c_nlines, c_ncols, c_begin_y, c_begin_x;
   WINDOW *c_orig, *ret;
-
-  SCM_ASSERT (_scm_is_window (orig), orig, SCM_ARG1, "subpad");
-  SCM_ASSERT (scm_is_integer (nlines), nlines, SCM_ARG2, "subpad");
-  SCM_ASSERT (scm_is_integer (ncols), ncols, SCM_ARG3, "subpad");
-  SCM_ASSERT (scm_is_integer (begin_y), begin_y, SCM_ARG4, "subpad");
-  SCM_ASSERT (scm_is_integer (begin_x), begin_x, SCM_ARG5, "subpad");
 
   c_orig = _scm_to_window (orig);
   c_nlines = scm_to_int (nlines);
@@ -1834,7 +1644,7 @@ gucu_subpad (SCM orig, SCM nlines, SCM ncols, SCM begin_y, SCM begin_x)
 
   ret = subpad (c_orig, c_nlines, c_ncols, c_begin_y, c_begin_x);
   if (ret == NULL)
-    curs_param_or_bad_state_error ("subpad");
+    return SCM_BOOL_F;
 
   return _scm_from_window (ret);
 }
@@ -1847,12 +1657,6 @@ gucu_subwin (SCM orig, SCM nlines, SCM ncols, SCM begin_y, SCM begin_x)
   int c_nlines, c_ncols, c_begin_y, c_begin_x;
   WINDOW *c_orig, *ret;
 
-  SCM_ASSERT (_scm_is_window (orig), orig, SCM_ARG1, "subwin");
-  SCM_ASSERT (scm_is_integer (nlines), nlines, SCM_ARG2, "subwin");
-  SCM_ASSERT (scm_is_integer (ncols), ncols, SCM_ARG3, "subwin");
-  SCM_ASSERT (scm_is_integer (begin_y), begin_y, SCM_ARG4, "subwin");
-  SCM_ASSERT (scm_is_integer (begin_x), begin_x, SCM_ARG5, "subwin");
-
   c_orig = _scm_to_window (orig);
   c_nlines = scm_to_int (nlines);
   c_ncols = scm_to_int (ncols);
@@ -1861,7 +1665,7 @@ gucu_subwin (SCM orig, SCM nlines, SCM ncols, SCM begin_y, SCM begin_x)
 
   ret = subwin (c_orig, c_nlines, c_ncols, c_begin_y, c_begin_x);
   if (ret == NULL)
-    curs_param_or_bad_state_error ("subwin");
+    return SCM_BOOL_F;
 
   return _scm_from_window (ret);
 }
@@ -1935,9 +1739,6 @@ gucu_timeout_x (SCM win, SCM delay)
   WINDOW *c_win;
   int c_delay;
 
-  SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "timeout!");
-  SCM_ASSERT (scm_is_integer (delay), delay, SCM_ARG2, "timeout!");
-
   c_win = _scm_to_window (win);
   c_delay = scm_to_int (delay);
 
@@ -1948,7 +1749,7 @@ gucu_timeout_x (SCM win, SCM delay)
 
 /* Given a file descriptor, se special optimizations looking for line breaks */
 SCM
-gucu_typeahead (SCM fd)
+gucu_typeahead_x (SCM fd)
 {
   int c_fd, ret;
 
@@ -1975,12 +1776,9 @@ gucu_ungetch (SCM ch)
       }
     else if (scm_is_integer (ch))
       {
-	ret = unget_wch (scm_to_uint (ch));
+	ret = 0;
       }
-    else
-      {
-	scm_wrong_type_arg ("ungetch", SCM_ARG1, ch);
-      }
+
   }
 #else
   {
@@ -1995,7 +1793,7 @@ gucu_ungetch (SCM ch)
       }
     else
       {
-	scm_wrong_type_arg ("ungetch", SCM_ARG1, ch);
+	ret = 0;
       }
   }
 #endif
@@ -2031,8 +1829,6 @@ gucu_use_extended_names (SCM bf)
 {
   bool c_bf;
 
-  SCM_ASSERT (scm_is_bool (bf), bf, SCM_ARG1, "use-extended-names");
-
   c_bf = scm_to_bool (bf);
 
   RETURNTF (use_extended_names (c_bf));
@@ -2045,9 +1841,6 @@ gucu_waddch (SCM win, SCM ch)
 {
   WINDOW *c_win;
   int ret;
-
-  SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "%waddch");
-  SCM_ASSERT (_scm_is_xchar (ch), ch, SCM_ARG2, "%waddch");
 
   c_win = _scm_to_window (win);
 #ifdef HAVE_NCURSESW
@@ -2075,10 +1868,6 @@ gucu_waddchnstr (SCM win, SCM chstr, SCM n)
   WINDOW *c_win;
   int c_n, ret;
 
-  SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "%waddchnstr");
-  SCM_ASSERT (_scm_is_xstring (chstr), chstr, SCM_ARG2, "%waddchnstr");
-  SCM_ASSERT (scm_is_integer (n), n, SCM_ARG3, "%waddchnstr");
-
   c_win = _scm_to_window (win);
   c_n = scm_to_int (n);
 
@@ -2105,10 +1894,6 @@ gucu_waddnstr (SCM win, SCM str, SCM n)
 {
   WINDOW *c_win;
   int c_n, ret;
-
-  SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "%waddnstr");
-  SCM_ASSERT (scm_is_string (str), str, SCM_ARG2, "%waddnstr");
-  SCM_ASSERT (scm_is_integer (n), n, SCM_ARG3, "%waddnstr");
 
   c_win = _scm_to_window (win);
   c_n = scm_to_int (n);
@@ -2140,21 +1925,14 @@ gucu_wchgat (SCM win, SCM n, SCM attr, SCM color)
   short c_color;
   int ret;
 
-  SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "%wchgat");
-  SCM_ASSERT (scm_is_integer (n), n, SCM_ARG2, "%wchgat");
-  SCM_ASSERT (_scm_is_attr (attr), attr, SCM_ARG3, "%wchgat");
-  SCM_ASSERT (scm_is_integer (color), color, SCM_ARG4, "%wchgat");
-
   c_win = _scm_to_window (win);
   c_n = scm_to_int (n);
   c_attr = _scm_to_attr (attr);
   c_color = scm_to_short (color);
 
   ret = wchgat (c_win, c_n, c_attr, c_color, 0);
-  if (ret == ERR)
-    curs_param_or_bad_state_error ("%wchgat");
-
-  return SCM_UNSPECIFIED;
+  /* param or bad state error */
+  RETURNTF (ret);
 }
 
 
@@ -2163,8 +1941,6 @@ SCM
 gucu_wcursyncup (SCM win)
 {
   WINDOW *c_win;
-
-  SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "wcursyncup");
 
   c_win = _scm_to_window (win);
 
@@ -2182,15 +1958,10 @@ gucu_wdelch (SCM win)
   WINDOW *c_win;
   int ret;
 
-  SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "%wdelch");
-
   c_win = _scm_to_window (win);
 
   ret = wdelch (c_win);
-  if (ret == ERR)
-    curs_bad_state_error ("%wdelch");
-
-  return SCM_UNSPECIFIED;
+  RETURNTF (ret);
 }
 
 /* Write ch to the given window without advancing the curses.  Refresh
@@ -2200,9 +1971,6 @@ gucu_wechochar (SCM win, SCM ch)
 {
   WINDOW *c_win;
   int ret;
-
-  SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "%echochar");
-  SCM_ASSERT (_scm_is_xchar (ch), ch, SCM_ARG2, "%echochar");
 
   c_win = _scm_to_window (win);
 #ifdef HAVE_NCURSESW
@@ -2232,10 +2000,6 @@ gucu_wenclose_p (SCM win, SCM y, SCM x)
   int c_y, c_x;
   bool ret;
 
-  SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "wenclose?");
-  SCM_ASSERT (scm_is_integer (y), y, SCM_ARG2, "wenclose?");
-  SCM_ASSERT (scm_is_integer (x), x, SCM_ARG3, "wenclose?");
-
   c_win = _scm_to_window (win);
   c_y = scm_to_int (y);
   c_x = scm_to_int (x);
@@ -2252,8 +2016,6 @@ gucu_wgetch (SCM win)
 {
   WINDOW *c_win;
   int ret;
-
-  SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "%wgetch");
 
   c_win = _scm_to_window (win);
 
@@ -2295,10 +2057,6 @@ gucu_whline (SCM win, SCM ch, SCM n)
   WINDOW *c_win;
   int c_n, ret;
 
-  SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "%whline");
-  SCM_ASSERT (_scm_is_xchar (ch), ch, SCM_ARG2, "%whline");
-  SCM_ASSERT (scm_is_integer (n), n, SCM_ARG3, "%whline");
-
   c_win = _scm_to_window (win);
   c_n = scm_to_int (n);
 
@@ -2317,7 +2075,7 @@ gucu_whline (SCM win, SCM ch, SCM n)
   }
 #endif
   if (ret == ERR)
-    curs_bad_state_error ("%whline");
+    return SCM_BOOL_F;
 
   return SCM_UNSPECIFIED;
 }
@@ -2329,8 +2087,6 @@ gucu_winch (SCM win)
   WINDOW *c_win;
   SCM ch;
 
-  SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "%winch");
-
   c_win = _scm_to_window (win);
 #ifdef HAVE_NCURSESW
   {
@@ -2338,7 +2094,7 @@ gucu_winch (SCM win)
     cchar_t c_ch;
     ret = win_wch (c_win, &c_ch);
     if (ret == ERR)
-      curs_bad_state_error ("%winch");
+      return SCM_BOOL_F;
     ch = _scm_xchar_from_cchar (&c_ch);
   }
 #else
@@ -2358,9 +2114,6 @@ gucu_winsch (SCM win, SCM ch)
   WINDOW *c_win;
   int ret;
 
-  SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "%winsch");
-  SCM_ASSERT (_scm_is_xchar (ch), ch, SCM_ARG2, "%winsch");
-
   c_win = _scm_to_window (win);
 #ifdef HAVE_NCURSESW
   {
@@ -2375,7 +2128,7 @@ gucu_winsch (SCM win, SCM ch)
   }
 #endif
   if (ret == ERR)
-    curs_bad_state_error ("%winsch");
+    return SCM_BOOL_F;
 
   return SCM_UNSPECIFIED;
 }
@@ -2387,18 +2140,12 @@ gucu_winsdelln (SCM win, SCM n)
   WINDOW *c_win;
   int c_n, ret;
 
-  SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "winsdelln");
-  SCM_ASSERT (scm_is_integer (n), n, SCM_ARG2, "winsdelln");
-
   c_win = _scm_to_window (win);
   c_n = scm_to_int (n);
 
   ret = winsdelln (c_win, c_n);
   /* winsdelln returns ERR when window == NULL */
-  if (ret == ERR)
-    curs_bad_state_error ("winsdelln");
-
-  return SCM_UNSPECIFIED;
+  RETURNTF (ret);
 }
 
 SCM
@@ -2406,10 +2153,6 @@ gucu_winsnstr (SCM win, SCM str, SCM n)
 {
   WINDOW *c_win;
   int c_n, ret;
-
-  SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "%winsnstr");
-  SCM_ASSERT (scm_is_string (str), str, SCM_ARG2, "%winsnstr");
-  SCM_ASSERT (scm_is_integer (n), n, SCM_ARG3, "%winsnstr");
 
   c_win = _scm_to_window (win);
   c_n = scm_to_int (n);
@@ -2428,7 +2171,7 @@ gucu_winsnstr (SCM win, SCM str, SCM n)
   }
 #endif
   if (ret == ERR)
-    curs_bad_state_error ("%winsnstr");
+    return SCM_BOOL_F;
 
   return SCM_UNSPECIFIED;
 }
@@ -2439,10 +2182,6 @@ gucu_wmove (SCM win, SCM y, SCM x)
 {
   WINDOW *c_win;
   int c_y, c_x, ret;
-
-  SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "%wmove");
-  SCM_ASSERT (scm_is_integer (y), y, SCM_ARG2, "%wmove");
-  SCM_ASSERT (scm_is_integer (x), x, SCM_ARG3, "%wmove");
 
   c_win = _scm_to_window (win);
   c_y = scm_to_int (y);
@@ -2459,10 +2198,6 @@ gucu_wredrawln (SCM win, SCM beg, SCM end)
 {
   WINDOW *c_win;
   int c_beg, c_end, ret;
-
-  SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "%wredrawln");
-  SCM_ASSERT (scm_is_integer (beg), beg, SCM_ARG2, "%wredrawln");
-  SCM_ASSERT (scm_is_integer (end), end, SCM_ARG3, "%wredrawln");
 
   c_win = _scm_to_window (win);
   c_beg = scm_to_int (beg);
@@ -2545,10 +2280,6 @@ gucu_wvline (SCM win, SCM ch, SCM n)
   WINDOW *c_win;
   int c_n, ret;
 
-  SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "%wvline");
-  SCM_ASSERT (_scm_is_xchar (ch), ch, SCM_ARG2, "%wvline");
-  SCM_ASSERT (scm_is_integer (n), n, SCM_ARG3, "%wvline");
-
   c_win = _scm_to_window (win);
   c_n = scm_to_int (n);
 
@@ -2568,7 +2299,7 @@ gucu_wvline (SCM win, SCM ch, SCM n)
   }
 #endif
   if (ret == ERR)
-    curs_bad_state_error ("%wvline");
+    return SCM_BOOL_F;
 
   return SCM_UNSPECIFIED;
 }
@@ -2578,53 +2309,66 @@ gucu_init_function ()
 {
   scm_c_define_gsubr ("assume-default-colors", 2, 0, 0,
 		      gucu_assume_default_colors);
-  scm_c_define_gsubr ("attr-off!", 2, 0, 0, gucu_attr_off_x);
-  scm_c_define_gsubr ("attr-on!", 2, 0, 0, gucu_attr_on_x);
-  scm_c_define_gsubr ("baudrate", 0, 0, 0, gucu_baudrate);
-  scm_c_define_gsubr ("beep", 0, 0, 0, gucu_beep);
+  scm_c_define_gsubr ("%attr-off!", 2, 0, 0, gucu_attr_off_x);
+  scm_c_define_gsubr ("%attr-on!", 2, 0, 0, gucu_attr_on_x);
+  scm_c_define_gsubr ("%baudrate", 0, 0, 0, gucu_baudrate);
+  scm_c_define_gsubr ("%beep", 0, 0, 0, gucu_beep);
   scm_c_define_gsubr ("%bkgd", 2, 0, 0, gucu_bkgd);
   scm_c_define_gsubr ("%bkgdset!", 2, 0, 0, gucu_bkgdset_x);
   scm_c_define_gsubr ("%border", 9, 0, 0, gucu_border);
-  scm_c_define_gsubr ("can-change-color?", 0, 0, 0, gucu_can_change_color_p);
-  scm_c_define_gsubr ("cbreak!", 0, 0, 0, gucu_cbreak);
-  scm_c_define_gsubr ("clear", 1, 0, 0, gucu_clear);
-  scm_c_define_gsubr ("clearok!", 2, 0, 0, gucu_clearok);
-  scm_c_define_gsubr ("clrtobot", 1, 0, 0, gucu_clrtobot);
-  scm_c_define_gsubr ("clrtoeol", 1, 0, 0, gucu_clrtoeol);
+  scm_c_define_gsubr ("%can-change-color?", 0, 0, 0, gucu_can_change_color_p);
+  scm_c_define_gsubr ("%cbreak!", 0, 0, 0, gucu_cbreak);
+  scm_c_define_gsubr ("%clear", 1, 0, 0, gucu_clear);
+  scm_c_define_gsubr ("%clearok!", 2, 0, 0, gucu_clearok);
+  scm_c_define_gsubr ("%clrtobot", 1, 0, 0, gucu_clrtobot);
+  scm_c_define_gsubr ("%clrtoeol", 1, 0, 0, gucu_clrtoeol);
   scm_c_define_gsubr ("color-pair", 1, 0, 0, gucu_COLOR_PAIR);
-  scm_c_define_gsubr ("color-set!", 2, 0, 0, gucu_color_set);
-  scm_c_define_gsubr ("copywin", 9, 0, 0, gucu_copywin);
-  scm_c_define_gsubr ("curs-set", 1, 0, 0, gucu_curs_set);
-  scm_c_define_gsubr ("curses-version", 0, 0, 0, gucu_curses_version);
-  scm_c_define_gsubr ("def-prog-mode", 0, 0, 0, gucu_def_prog_mode);
-  scm_c_define_gsubr ("def-shell-mode", 0, 0, 0, gucu_def_shell_mode);
+  scm_c_define_gsubr ("%color-set!", 2, 0, 0, gucu_color_set);
+  scm_c_define_gsubr ("%copywin", 9, 0, 0, gucu_copywin);
+  scm_c_define_gsubr ("%curs-set", 1, 0, 0, gucu_curs_set);
+  scm_c_define_gsubr ("%curses-version", 0, 0, 0, gucu_curses_version);
+  scm_c_define_gsubr ("%def-prog-mode", 0, 0, 0, gucu_def_prog_mode);
+  scm_c_define_gsubr ("%def-shell-mode", 0, 0, 0, gucu_def_shell_mode);
   scm_c_define_gsubr ("define-key", 2, 0, 0, gucu_define_key);
   scm_c_define_gsubr ("delay-output", 1, 0, 0, gucu_delay_output);
-  scm_c_define_gsubr ("delscreen", 1, 0, 0, gucu_delscreen);
+  scm_c_define_gsubr ("%delscreen", 1, 0, 0, gucu_delscreen);
   scm_c_define_gsubr ("derwin", 5, 0, 0, gucu_derwin);
-  scm_c_define_gsubr ("doupdate", 0, 0, 0, gucu_doupdate);
-  scm_c_define_gsubr ("dupwin", 1, 0, 0, gucu_dupwin);
-  scm_c_define_gsubr ("echo!", 0, 0, 0, gucu_echo);
-  scm_c_define_gsubr ("endwin", 0, 0, 0, gucu_endwin);
-  scm_c_define_gsubr ("erase", 1, 0, 0, gucu_erase);
-  scm_c_define_gsubr ("erasechar", 0, 0, 0, gucu_erasechar);
+  scm_c_define_gsubr ("%doupdate", 0, 0, 0, gucu_doupdate);
+  scm_c_define_gsubr ("%dupwin", 1, 0, 0, gucu_dupwin);
+  scm_c_define_gsubr ("%echo!", 0, 0, 0, gucu_echo);
+  scm_c_define_gsubr ("%endwin", 0, 0, 0, gucu_endwin);
+  scm_c_define_gsubr ("%erase", 1, 0, 0, gucu_erase);
+  scm_c_define_gsubr ("%erasechar", 0, 0, 0, gucu_erasechar);
   scm_c_define_gsubr ("%filter", 0, 0, 0, gucu_filter);
-  scm_c_define_gsubr ("flash", 0, 0, 0, gucu_flash);
+  scm_c_define_gsubr ("%flash", 0, 0, 0, gucu_flash);
   scm_c_define_gsubr ("flushinp", 0, 0, 0, gucu_flushinp);
-  scm_c_define_gsubr ("getbkgd", 1, 0, 0, gucu_getbkgd);
-  scm_c_define_gsubr ("halfdelay!", 1, 0, 0, gucu_halfdelay);
-  scm_c_define_gsubr ("has-colors?", 0, 0, 0, gucu_has_colors_p);
-  scm_c_define_gsubr ("has-ic?", 0, 0, 0, gucu_has_ic_p);
-  scm_c_define_gsubr ("has-il?", 0, 0, 0, gucu_has_il_p);
-  scm_c_define_gsubr ("has-key?", 1, 0, 0, gucu_has_key_p);
-  scm_c_define_gsubr ("idcok!", 2, 0, 0, gucu_idcok_x);
-  scm_c_define_gsubr ("idlok!", 2, 0, 0, gucu_idlok_x);
-  scm_c_define_gsubr ("immedok!", 2, 0, 0, gucu_immedok_x);
-  scm_c_define_gsubr ("initscr", 0, 0, 0, gucu_initscr);
+  scm_c_define_gsubr ("%getbkgd", 1, 0, 0, gucu_getbkgd);
+  scm_c_define_gsubr ("%halfdelay!", 1, 0, 0, gucu_halfdelay);
+  scm_c_define_gsubr ("%has-colors?", 0, 0, 0, gucu_has_colors_p);
+  scm_c_define_gsubr ("%has-ic?", 0, 0, 0, gucu_has_ic_p);
+  scm_c_define_gsubr ("%has-il?", 0, 0, 0, gucu_has_il_p);
+  scm_c_define_gsubr ("%has-key?", 1, 0, 0, gucu_has_key_p);
+  scm_c_define_gsubr ("%has-mouse?", 0, 0, 0, gucu_has_mouse_p);
+  scm_c_define_gsubr ("%idcok!", 2, 0, 0, gucu_idcok_x);
+  scm_c_define_gsubr ("%idlok!", 2, 0, 0, gucu_idlok_x);
+  scm_c_define_gsubr ("%immedok!", 2, 0, 0, gucu_immedok_x);
+  scm_c_define_gsubr ("%initscr", 0, 0, 0, gucu_initscr);
   scm_c_define_gsubr ("init-color!", 4, 0, 0, gucu_init_color);
-  scm_c_define_gsubr ("init-pair!", 3, 0, 0, gucu_init_pair);
-  scm_c_define_gsubr ("intrflush!", 1, 0, 0, gucu_intrflush);
-  scm_c_define_gsubr ("isendwin?", 0, 0, 0, gucu_isendwin_p);
+  scm_c_define_gsubr ("%init-pair!", 3, 0, 0, gucu_init_pair);
+  scm_c_define_gsubr ("%intrflush!", 1, 0, 0, gucu_intrflush);
+  scm_c_define_gsubr ("%isendwin?", 0, 0, 0, gucu_isendwin_p);
+  scm_c_define_gsubr ("%is-cleared?", 1, 0, 0, gucu_is_cleared_p);
+  scm_c_define_gsubr ("%is-idcok?", 1, 0, 0, gucu_is_idcok_p);
+  scm_c_define_gsubr ("%is-idlok?", 1, 0, 0, gucu_is_idlok_p);
+  scm_c_define_gsubr ("%is-immedok?", 1, 0, 0, gucu_is_immedok_p);
+  scm_c_define_gsubr ("%is-keypad?", 1, 0, 0, gucu_is_keypad_p);
+  scm_c_define_gsubr ("%is-leaveok?", 1, 0, 0, gucu_is_leaveok_p);
+  scm_c_define_gsubr ("%is-nodelay?", 1, 0, 0, gucu_is_nodelay_p);
+  scm_c_define_gsubr ("%is-notimeout?", 1, 0, 0, gucu_is_notimeout_p);
+  scm_c_define_gsubr ("%is-pad?", 1, 0, 0, gucu_is_pad_p);
+  scm_c_define_gsubr ("%is-scrollok?", 1, 0, 0, gucu_is_scrollok_p);
+  scm_c_define_gsubr ("%is-subwin?", 1, 0, 0, gucu_is_subwin_p);
+  scm_c_define_gsubr ("%is-syncok?", 1, 0, 0, gucu_is_syncok_p);
   scm_c_define_gsubr ("is-linetouched?", 2, 0, 0, gucu_is_linetouched_p);
   scm_c_define_gsubr ("is-wintouched?", 1, 0, 0, gucu_is_wintouched_p);
   scm_c_define_gsubr ("key-f", 1, 0, 0, gucu_KEY_F);
@@ -2633,69 +2377,69 @@ gucu_init_function ()
 #endif
   scm_c_define_gsubr ("keyname", 1, 0, 0, gucu_keyname);
   scm_c_define_gsubr ("keypad!", 2, 0, 0, gucu_keypad_x);
-  scm_c_define_gsubr ("killchar", 0, 0, 0, gucu_killchar);
-  scm_c_define_gsubr ("leaveok!", 2, 0, 0, gucu_leaveok_x);
-  scm_c_define_gsubr ("longname", 0, 0, 0, gucu_longname);
-  scm_c_define_gsubr ("meta!", 1, 0, 0, gucu_meta);
+  scm_c_define_gsubr ("%killchar", 0, 0, 0, gucu_killchar);
+  scm_c_define_gsubr ("%leaveok!", 2, 0, 0, gucu_leaveok_x);
+  scm_c_define_gsubr ("%longname", 0, 0, 0, gucu_longname);
+  scm_c_define_gsubr ("%meta!", 1, 0, 0, gucu_meta_x);
   scm_c_define_gsubr ("mouseinterval", 1, 0, 0, gucu_mouseinterval);
   scm_c_define_gsubr ("mvcur", 4, 0, 0, gucu_mvcur);
-  scm_c_define_gsubr ("mvderwin", 3, 0, 0, gucu_mvderwin);
-  scm_c_define_gsubr ("mvwin", 3, 0, 0, gucu_mvwin);
-  scm_c_define_gsubr ("napms", 1, 0, 0, gucu_napms);
-  scm_c_define_gsubr ("newpad", 2, 0, 0, gucu_newpad);
-  scm_c_define_gsubr ("newwin", 4, 0, 0, gucu_newwin);
-  scm_c_define_gsubr ("nl!", 0, 0, 0, gucu_nl);
-  scm_c_define_gsubr ("nocbreak!", 0, 0, 0, gucu_nocbreak);
-  scm_c_define_gsubr ("nodelay!", 2, 0, 0, gucu_nodelay_x);
-  scm_c_define_gsubr ("noecho!", 0, 0, 0, gucu_noecho);
-  scm_c_define_gsubr ("nonl!", 0, 0, 0, gucu_nonl);
-  scm_c_define_gsubr ("noqiflush", 0, 0, 0, gucu_noqiflush);
-  scm_c_define_gsubr ("noraw!", 0, 0, 0, gucu_noraw);
-  scm_c_define_gsubr ("notimeout!", 2, 0, 0, gucu_notimeout_x);
-  scm_c_define_gsubr ("noutrefresh", 1, 0, 0, gucu_noutrefresh);
-  scm_c_define_gsubr ("overlay", 2, 0, 0, gucu_overlay);
-  scm_c_define_gsubr ("overwrite", 2, 0, 0, gucu_overwrite);
+  scm_c_define_gsubr ("%mvderwin", 3, 0, 0, gucu_mvderwin);
+  scm_c_define_gsubr ("%mvwin", 3, 0, 0, gucu_mvwin);
+  scm_c_define_gsubr ("%napms", 1, 0, 0, gucu_napms);
+  scm_c_define_gsubr ("%newpad", 2, 0, 0, gucu_newpad);
+  scm_c_define_gsubr ("%newwin", 4, 0, 0, gucu_newwin);
+  scm_c_define_gsubr ("%nl!", 0, 0, 0, gucu_nl);
+  scm_c_define_gsubr ("%nocbreak!", 0, 0, 0, gucu_nocbreak);
+  scm_c_define_gsubr ("%nodelay!", 2, 0, 0, gucu_nodelay_x);
+  scm_c_define_gsubr ("%noecho!", 0, 0, 0, gucu_noecho);
+  scm_c_define_gsubr ("%nonl!", 0, 0, 0, gucu_nonl);
+  scm_c_define_gsubr ("%noqiflush!", 0, 0, 0, gucu_noqiflush);
+  scm_c_define_gsubr ("%noraw!", 0, 0, 0, gucu_noraw);
+  scm_c_define_gsubr ("%notimeout!", 2, 0, 0, gucu_notimeout_x);
+  scm_c_define_gsubr ("%noutrefresh", 1, 0, 0, gucu_noutrefresh);
+  scm_c_define_gsubr ("%overlay", 2, 0, 0, gucu_overlay);
+  scm_c_define_gsubr ("%overwrite", 2, 0, 0, gucu_overwrite);
   scm_c_define_gsubr ("pair-number", 1, 0, 0, gucu_PAIR_NUMBER);
   scm_c_define_gsubr ("%pechochar", 2, 0, 0, gucu_pechochar);
-  scm_c_define_gsubr ("pnoutrefresh", 7, 0, 0, gucu_pnoutrefresh);
-  scm_c_define_gsubr ("prefresh", 7, 0, 0, gucu_prefresh);
-  scm_c_define_gsubr ("qiflush", 0, 0, 0, gucu_qiflush);
-  scm_c_define_gsubr ("raw!", 0, 0, 0, gucu_raw);
-  scm_c_define_gsubr ("redrawwin", 1, 0, 0, gucu_redrawwin);
-  scm_c_define_gsubr ("refresh", 1, 0, 0, gucu_refresh);
-  scm_c_define_gsubr ("reset-prog-mode", 0, 0, 0, gucu_reset_prog_mode);
-  scm_c_define_gsubr ("reset-shell-mode", 0, 0, 0, gucu_reset_shell_mode);
-  scm_c_define_gsubr ("resetty", 0, 0, 0, gucu_resetty);
-  scm_c_define_gsubr ("savetty", 0, 0, 0, gucu_savetty);
-  scm_c_define_gsubr ("scr-dump", 1, 0, 0, gucu_scr_dump);
-  scm_c_define_gsubr ("scr-init", 1, 0, 0, gucu_scr_init);
+  scm_c_define_gsubr ("%pnoutrefresh", 7, 0, 0, gucu_pnoutrefresh);
+  scm_c_define_gsubr ("%prefresh", 7, 0, 0, gucu_prefresh);
+  scm_c_define_gsubr ("%qiflush!", 0, 0, 0, gucu_qiflush);
+  scm_c_define_gsubr ("%raw!", 0, 0, 0, gucu_raw);
+  scm_c_define_gsubr ("%redrawwin", 1, 0, 0, gucu_redrawwin);
+  scm_c_define_gsubr ("%refresh", 1, 0, 0, gucu_refresh);
+  scm_c_define_gsubr ("%reset-prog-mode", 0, 0, 0, gucu_reset_prog_mode);
+  scm_c_define_gsubr ("%reset-shell-mode", 0, 0, 0, gucu_reset_shell_mode);
+  scm_c_define_gsubr ("%resetty", 0, 0, 0, gucu_resetty);
+  scm_c_define_gsubr ("%savetty", 0, 0, 0, gucu_savetty);
+  scm_c_define_gsubr ("%scr-dump", 1, 0, 0, gucu_scr_dump);
+  scm_c_define_gsubr ("%scr-init", 1, 0, 0, gucu_scr_init);
   scm_c_define_gsubr ("scrollok!", 2, 0, 0, gucu_scrollok_x);
-  scm_c_define_gsubr ("scr-restore", 1, 0, 0, gucu_scr_restore);
-  scm_c_define_gsubr ("scr-set", 1, 0, 0, gucu_scr_set);
-  scm_c_define_gsubr ("scrl", 2, 0, 0, gucu_scrl);
-  scm_c_define_gsubr ("set-term", 1, 0, 0, gucu_set_term);
-  scm_c_define_gsubr ("setscrreg!", 3, 0, 0, gucu_setscrreg_x);
-  scm_c_define_gsubr ("setsyx", 2, 0, 0, gucu_setsyx);
-  scm_c_define_gsubr ("start-color!", 0, 0, 0, gucu_start_color);
-  scm_c_define_gsubr ("subpad", 5, 0, 0, gucu_subpad);
-  scm_c_define_gsubr ("subwin", 5, 0, 0, gucu_subwin);
+  scm_c_define_gsubr ("%scr-restore", 1, 0, 0, gucu_scr_restore);
+  scm_c_define_gsubr ("%scr-set", 1, 0, 0, gucu_scr_set);
+  scm_c_define_gsubr ("%scrl", 2, 0, 0, gucu_scrl);
+  scm_c_define_gsubr ("%set-term", 1, 0, 0, gucu_set_term);
+  scm_c_define_gsubr ("%setscrreg!", 3, 0, 0, gucu_setscrreg_x);
+  scm_c_define_gsubr ("%setsyx", 2, 0, 0, gucu_setsyx);
+  scm_c_define_gsubr ("%start-color!", 0, 0, 0, gucu_start_color);
+  scm_c_define_gsubr ("%subpad", 5, 0, 0, gucu_subpad);
+  scm_c_define_gsubr ("%subwin", 5, 0, 0, gucu_subwin);
   scm_c_define_gsubr ("syncok!", 2, 0, 0, gucu_syncok_x);
-  scm_c_define_gsubr ("term-attrs", 0, 0, 0, gucu_term_attrs);
-  scm_c_define_gsubr ("termname", 0, 0, 0, gucu_termname);
-  scm_c_define_gsubr ("timeout!", 2, 0, 0, gucu_timeout_x);
-  scm_c_define_gsubr ("%typeahead", 1, 0, 0, gucu_typeahead);
-  scm_c_define_gsubr ("ungetch", 1, 0, 0, gucu_ungetch);
+  scm_c_define_gsubr ("%term-attrs", 0, 0, 0, gucu_term_attrs);
+  scm_c_define_gsubr ("%termname", 0, 0, 0, gucu_termname);
+  scm_c_define_gsubr ("%timeout!", 2, 0, 0, gucu_timeout_x);
+  scm_c_define_gsubr ("%typeahead!", 1, 0, 0, gucu_typeahead_x);
+  scm_c_define_gsubr ("%ungetch", 1, 0, 0, gucu_ungetch);
   scm_c_define_gsubr ("use-default-colors", 0, 0, 0, gucu_use_default_colors);
   scm_c_define_gsubr ("use-env", 1, 0, 0, gucu_use_env);
-  scm_c_define_gsubr ("use-extended-names", 1, 0, 0, gucu_use_extended_names);
+  scm_c_define_gsubr ("%use-extended-names", 1, 0, 0, gucu_use_extended_names);
   scm_c_define_gsubr ("%waddch", 2, 0, 0, gucu_waddch);
   scm_c_define_gsubr ("%waddchnstr", 3, 0, 0, gucu_waddchnstr);
   scm_c_define_gsubr ("%waddnstr", 3, 0, 0, gucu_waddnstr);
   scm_c_define_gsubr ("%wchgat", 4, 0, 0, gucu_wchgat);
-  scm_c_define_gsubr ("wcursyncup", 1, 0, 0, gucu_wcursyncup);
+  scm_c_define_gsubr ("%wcursyncup", 1, 0, 0, gucu_wcursyncup);
   scm_c_define_gsubr ("%wdelch", 1, 0, 0, gucu_wdelch);
   scm_c_define_gsubr ("%wechochar", 2, 0, 0, gucu_wechochar);
-  scm_c_define_gsubr ("wenclose?", 3, 0, 0, gucu_wenclose_p);
+  scm_c_define_gsubr ("%wenclose?", 3, 0, 0, gucu_wenclose_p);
   scm_c_define_gsubr ("%wgetch", 1, 0, 0, gucu_wgetch);
   scm_c_define_gsubr ("%whline", 3, 0, 0, gucu_whline);
   scm_c_define_gsubr ("%winch", 1, 0, 0, gucu_winch);
