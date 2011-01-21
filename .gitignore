@@ -4,6 +4,7 @@
 *.dvi
 *.fn
 *.fns
+*.html
 *.info
 *.info-[0-9]*
 *.ky
