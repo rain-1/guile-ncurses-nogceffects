@@ -452,7 +452,8 @@ SCM
 gucu_strwidth (SCM str)
 {
 #ifdef GUILE_CHARS_ARE_UCS4
-  size_t i, len, siz;
+  SCM s_siz;
+  size_t i, len;
   uint32_t *s;
 
   SCM_ASSERT (scm_is_string (str), str, SCM_ARG1, "%strwidth");
@@ -461,9 +462,9 @@ gucu_strwidth (SCM str)
   for (i = 0; i < len; i ++)
     s[i] = SCM_CHAR (scm_c_string_ref (str, i));
   s[len] = 0;
-  siz = scm_from_int (u32_strwidth (s, "UTF-8"));
+  s_siz = scm_from_int (u32_strwidth (s, "UTF-8"));
   free (s);
-  return siz;
+  return s_siz;
 #else
   size_t i, len, s, siz;
 
