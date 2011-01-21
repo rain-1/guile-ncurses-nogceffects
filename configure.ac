@@ -19,7 +19,7 @@
 
 ##################
 # Package info
-AC_INIT([GNU Guile-Ncurses],[1.2],[spk121@yahoo.com])
+AC_INIT([GNU Guile-Ncurses],[1.2],[bug-guile-ncurses@gnu.org])
 
 AC_CONFIG_AUX_DIR([build_aux])
 AM_INIT_AUTOMAKE([gnu std-options -Wall])
