@@ -45,12 +45,16 @@
 ;; (format #t "TERMINFO ~a~%" (getenv "TERMINFO"))
 
 (if (not (string=? (getenv "ORIGTERM") "xterm"))
-    (format #t
-	    "WARNING: this terminal is a(n) ~s
-This test suite uses the terminfo for an 'xterm'.
-This may cause odd things to happen to the display
-while the test is being run.
-"
-	    (getenv "ORIGTERM")))
+    (begin
+      (if (string-null? (getenv "ORIGTERM"))
+	  (format #t "WARNING: I can't detect the terminal you're running now.~%")
+	  (format #t "WARNING: This terminal is a ~s.~%" (getenv "ORIGTERM")))
+      (format #t
+"This test suite assumes it is being run on an 'xterm'.
+This mismatch won't affect the results of the tests, but, 
+you may see some strange things while the test is being run.
+
+")
+      (sleep 2)))
 
 (sleep 2)
