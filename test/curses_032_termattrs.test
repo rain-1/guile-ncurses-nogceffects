@@ -52,29 +52,34 @@
               (maybe-sleep 1)
               (eqv? b expected-baudrate))))
 
- ;; Not sure what the correct answer for
- ;; erasechar should be.  Gnu/Linux xterm gives
- ;; #\del.  Cygwin gives ERR.
+ ;; erasechar and killchar get their data from the terminal line
+ ;; settings, so it isn't possible to say what the 'correct' response
+ ;; should be, yet.  (In the future, we can compare this to the
+ ;; response from the termios functions.)  
+ ;; Gnu/Linux xterm gives #\del. Cygwin gives ERR.
  (pass-if "erasechar"
           (begin
             (clear win)
             (let ((c (erasechar)))
               (endwin)
-              (format #t "Erasechar: ~s (expected ~s)~%" c expected-erasechar)
-              (maybe-sleep 1)
-              (eqv? c expected-erasechar))))
+              ;; (format #t "Erasechar: ~s (expected ~s)~%" c expected-erasechar)
+              ;; (maybe-sleep 1)
+              ;; (eqv? c expected-erasechar)
+	      (throw 'unresolved))))
  
- ;; Not sure what the correct answer for killchar
- ;; should be.  Gnu/Linux xterm give #\nak. Cygwin
+ ;; erasechar and killchar get their data from the terminal line settings,
+ ;; so it isn't possible to say what the 'correct' response should be.
+ ;; Gnu/Linux xterm give #\nak. Cygwin
  ;; gives ERR
  (pass-if "killchar"
           (begin
             (clear win)
             (let ((c (killchar)))
               (endwin)
-              (format #t "Killchar: ~s (expected ~s)~%" c expected-killchar)
-              (maybe-sleep 1)
-              (eqv? c expected-killchar))))
+              ;; (format #t "Killchar: ~s (expected ~s)~%" c expected-killchar)
+              ;; (maybe-sleep 1)
+              ;; (eqv? c expected-killchar)
+	      (throw 'unresolved))))
 
  (pass-if "has-ic?"
           (begin
