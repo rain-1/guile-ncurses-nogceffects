@@ -1,7 +1,7 @@
 ;;;; -*- Mode: scheme; -*-
 ;;;; curses_003_color.test --- test suite for curses's color functions
 
-;; Copyright 2009, 2010 Free Software Foundation, Inc.
+;; Copyright 2009, 2010, 2011 Free Software Foundation, Inc.
 
 ;; This file is part of Guile-Ncurses.
 
@@ -27,7 +27,6 @@
 (define test (curses-test-start))
 
 ;;; These values are the xterm values
-(setenv "TERM" "xterm")
 
 (define scr (initscr))
 
@@ -138,4 +137,4 @@
 
 (endwin)
 
-(curses-test-end test "r001_color.out")
+(curses-test-end test "curses_003_color.out")

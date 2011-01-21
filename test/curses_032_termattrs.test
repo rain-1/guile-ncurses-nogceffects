@@ -2,7 +2,7 @@
 ;;;; curses_032_termattrs.test --- test suite for curses's term attrs
 
 
-;; Copyright 2009, 2010 Free Software Foundation, Inc.
+;; Copyright 2009, 2010, 2011 Free Software Foundation, Inc.
 
 ;; This file is part of Guile-Ncurses.
 
@@ -29,7 +29,6 @@
 
 (define test (curses-test-start))
 
-(setenv "TERM" "xterm")
 (define win (initscr))
 (start-color!)
 (set! *sleep* #f)
@@ -117,7 +116,7 @@
               (endwin)
               (format #t "Terminal Name: ~a~%" c)
               (maybe-sleep 1)
-              (not (not (string= c "xterm" 0 4 0 4))))))
+              (not (not (string= c "testxterm" 0 4 0 4))))))
  
  (pass-if "term-attrs"
           (begin

@@ -1,7 +1,7 @@
 ;;;; -*- Mode: scheme; -*-
 ;;;; curses_008_attr.test --- test suite for curses's attr
 
-;; Copyright 2009, 2010 Free Software Foundation, Inc.
+;; Copyright 2009, 2010, 2011 Free Software Foundation, Inc.
 
 ;; This file is part of Guile-Ncurses.
 
@@ -29,7 +29,6 @@
 (define test (curses-test-start))
 
 ;; Requires a color terminal, so setting this to xterm
-(setenv "TERM" "xterm")
 
 (define win (initscr))
 (start-color!)

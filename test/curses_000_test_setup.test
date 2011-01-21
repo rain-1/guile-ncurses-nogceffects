@@ -42,14 +42,15 @@
 (newline)
 (newline)
 
-(if (not (string=? (getenv "TERM") "xterm"))
+;; (format #t "TERMINFO ~a~%" (getenv "TERMINFO"))
+
+(if (not (string=? (getenv "ORIGTERM") "xterm"))
     (format #t
 	    "WARNING: this terminal is a(n) ~s
-This test suite should be run in an xterm.
-The environment will be set to 'xterm' for now.
+This test suite uses the terminfo for an 'xterm'.
 This may cause odd things to happen to the display
 while the test is being run.
 "
-(getenv "TERM")))
+	    (getenv "ORIGTERM")))
 
 (sleep 2)

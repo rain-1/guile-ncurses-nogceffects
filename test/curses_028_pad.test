@@ -1,8 +1,7 @@
 ;;;; -*- Mode: scheme; -*-
 ;;;; curses_028_pad.test --- test suite for curses's pad functions
 
-
-;; Copyright 2009, 2010 Free Software Foundation, Inc.
+;; Copyright 2009, 2010, 2011 Free Software Foundation, Inc.
 
 ;; This file is part of Guile-Ncurses.
 
@@ -77,4 +76,4 @@
 
 (endwin)
 
-(curses-test-end test "r026_pad.out")
+(curses-test-end test "curses_028_pad.out")

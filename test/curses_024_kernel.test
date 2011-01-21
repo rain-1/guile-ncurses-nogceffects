@@ -2,7 +2,7 @@
 ;;;; curses_024_kernel.test --- test suite for curses's low level functions
 
 
-;; Copyright 2009, 2010 Free Software Foundation, Inc.
+;; Copyright 2009, 2010, 2011 Free Software Foundation, Inc.
 
 ;; This file is part of Guile-Ncurses.
 
@@ -26,7 +26,6 @@
              (srfi srfi-1))
 
 (define test (curses-test-start))
-(setenv "TERM" "xterm")
 
 (define win (initscr))
 

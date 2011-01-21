@@ -2,7 +2,7 @@
 ;;;; curses_010_bkgd.test --- test suite for curses's background
 ;;;; functions
 
-;; Copyright 2009, 2010 Free Software Foundation, Inc.
+;; Copyright 2009, 2010, 2011 Free Software Foundation, Inc.
 
 ;; This file is part of Guile-Ncurses.
 
@@ -30,7 +30,6 @@
 (define test (curses-test-start))
 
 ;; Requires a terminal that can do color
-(setenv "TERM" "xterm")
 
 (set! *sleep* #f)
 

@@ -1,6 +1,6 @@
 # Makefile.am for guile-ncurses/test.
 #
-# Copyright 2009, 2010 Free Software Foundation, Inc.
+# Copyright 2009, 2010, 2011 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU Lesser General Public License as
@@ -18,9 +18,13 @@
 
 TESTLIB = lib.scm lib2.scm
 
-TESTS_ENVIRONMENT = GUILE_AUTO_COMPILE=0 ${top_builddir}/libtool	\
--dlopen ${top_builddir}/ncurses/libguile-ncurses.la 			\
---mode=execute guile -L $(abs_top_srcdir) -s
+TESTS_ENVIRONMENT = ORIGTERM=${TERM} \
+  TERM=testxterm \
+  TERMINFO=${abs_top_srcdir}/test \
+  GUILE_AUTO_COMPILE=0 \
+  ${top_builddir}/libtool \
+    -dlopen ${top_builddir}/ncurses/libguile-ncurses.la \
+    --mode=execute guile -L $(abs_top_srcdir) -s
 
 NARROWTESTS = curses_000_test_setup.test				\
 curses_001_char_conversion.test curses_002_initscr.test		\
@@ -57,4 +61,4 @@ TESTS += $(WIDETESTS)
 endif
 endif
 
-EXTRA_DIST = $(TESTLIB) $(TESTS)
+EXTRA_DIST = $(TESTLIB) $(TESTS) t/testxterm
