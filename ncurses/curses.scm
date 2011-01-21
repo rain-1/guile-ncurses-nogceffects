@@ -1931,7 +1931,7 @@ tty driver queue will be flushed. #f disables this."
   "True if clearok is set, that is, if the next call to 'refresh'
 will clear the screen completely and redraw"
   (assert-window win)
-  (%is-clearok? win))
+  (%is-cleared? win))
 
 (define (is-idcok? win)
   "True if idcok is set, that is, if curses is allowed to use the hardware
@@ -1956,6 +1956,13 @@ cause it to automatically refresh."
 this window."
   (assert-window win)
   (%is-keypad? win))
+
+(define (is-leaveok? win)
+  "True if leaveok is set, that is, if you don't care that the cursor gets
+returned to its true position after a refresh."
+  (assert-window win)
+  (%is-leaveok? win))
+
 
 (define (is-nodelay? win)
   "True if nodelay is set, that is, if 'getch' is a non-blocking call."
@@ -2020,7 +2027,7 @@ sequences that are specific to the terminal."
   "Returns the character used to kill lines."
   (%killchar))
 
-(define (leaveokok! win bf)
+(define (leaveok! win bf)
   "If leaveok! is called with BF as #t, the cursor is allowed to be
 left wherever it happens to be, instead of taking the time to move it
 into its proper position.  This is a slight optimization for those
