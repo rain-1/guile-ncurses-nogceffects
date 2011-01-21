@@ -852,11 +852,22 @@ gucu_is_notimeout_p (SCM win)
   return scm_from_bool (is_notimeout (_scm_to_window (win)));
 }
 
+#if defined(HAVE_IS_PAD) || ! defined(NCURSES_OPAQUE)
 SCM
 gucu_is_pad_p (SCM win)
 {
-  return scm_from_bool (is_pad (_scm_to_window (win)));
+  WINDOW *c_pad;
+  int ret;
+
+  c_pad = _scm_to_window (win);
+
+#ifdef HAVE_IS_PAD
+  return scm_from_bool (is_pad (c_pad));
+#else
+  return scm_from_bool (c_pad->_flags & _ISPAD);
+#endif
 }
+#endif
 
 SCM
 gucu_is_scrollok_p (SCM win)
@@ -864,11 +875,22 @@ gucu_is_scrollok_p (SCM win)
   return scm_from_bool (is_scrollok (_scm_to_window (win)));
 }
 
+#if defined(HAVE_IS_SUBWIN) || ! defined(NCURSES_OPAQUE)
 SCM
 gucu_is_subwin_p (SCM win)
 {
-  return scm_from_bool (is_subwin (_scm_to_window (win)));
+  WINDOW *c_subwin;
+  int ret;
+
+  c_subwin = _scm_to_window (win);
+
+#ifdef HAVE_IS_SUBWIN
+  return scm_from_bool (is_subwin (c_subwin));
+#else
+  return scm_from_bool (c_subwin->_flags & _SUBWIN);
+#endif
 }
+#endif
 
 SCM
 gucu_is_syncok_p (SCM win)
@@ -2365,9 +2387,13 @@ gucu_init_function ()
   scm_c_define_gsubr ("%is-leaveok?", 1, 0, 0, gucu_is_leaveok_p);
   scm_c_define_gsubr ("%is-nodelay?", 1, 0, 0, gucu_is_nodelay_p);
   scm_c_define_gsubr ("%is-notimeout?", 1, 0, 0, gucu_is_notimeout_p);
+#if defined(HAVE_IS_PAD) || ! defined(NCURSES_OPAQUE)
   scm_c_define_gsubr ("%is-pad?", 1, 0, 0, gucu_is_pad_p);
+#endif
   scm_c_define_gsubr ("%is-scrollok?", 1, 0, 0, gucu_is_scrollok_p);
+#if defined(HAVE_IS_SUBWIN) || ! defined(NCURSES_OPAQUE)
   scm_c_define_gsubr ("%is-subwin?", 1, 0, 0, gucu_is_subwin_p);
+#endif
   scm_c_define_gsubr ("%is-syncok?", 1, 0, 0, gucu_is_syncok_p);
   scm_c_define_gsubr ("is-linetouched?", 2, 0, 0, gucu_is_linetouched_p);
   scm_c_define_gsubr ("is-wintouched?", 1, 0, 0, gucu_is_wintouched_p);

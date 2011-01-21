@@ -36,6 +36,12 @@
 /* Define to 1 if you have the <inttypes.h> header file. */
 #undef HAVE_INTTYPES_H
 
+/* Define to 1 if you have the `is_pad' function. */
+#undef HAVE_IS_PAD
+
+/* Define to 1 if you have the `is_subwin' function. */
+#undef HAVE_IS_SUBWIN
+
 /* Define to 1 if you have the `key_defined' function. */
 #undef HAVE_KEY_DEFINED
 

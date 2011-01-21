@@ -1,7 +1,7 @@
 /*
 curs_const.c
 
-Copyright 2009, 2010 Free Software Foundation, Inc.
+Copyright 2009, 2010, 2011 Free Software Foundation, Inc.
 
 This file is part of GNU Guile-Ncurses.
 
@@ -194,6 +194,8 @@ SCM gucu_REPORT_MOUSE_POSITION;
 
 SCM gucu_wide_ncurses;
 SCM gucu_ucs4_chars;
+SCM gucu_broken_is_pad;
+SCM gucu_broken_is_subwin;
 
 void
 gucu_init_constant ()
@@ -635,4 +637,19 @@ gucu_init_constant ()
     scm_permanent_object (scm_c_define ("%ucs4-chars", SCM_BOOL_F));
 #endif
 
+#if defined(HAVE_IS_PAD) || ! defined(NCURSES_OPAQUE)
+  gucu_broken_is_pad = 
+    scm_permanent_object (scm_c_define ("%is-pad-broken", SCM_BOOL_F));
+#else
+  gucu_broken_is_pad = 
+    scm_permanent_object (scm_c_define ("%is-pad-broken", SCM_BOOL_T));
+#endif
+
+#if defined(HAVE_IS_SUBWIN) || ! defined(NCURSES_OPAQUE)
+  gucu_broken_is_subwin = 
+    scm_permanent_object (scm_c_define ("%is-subwin-broken", SCM_BOOL_F));
+#else
+  gucu_broken_is_subwin = 
+    scm_permanent_object (scm_c_define ("%is-subwin-broken", SCM_BOOL_T));
+#endif
 }

@@ -28,6 +28,8 @@
   #:export (
 
             %filter
+            %is-pad-broken
+            %is-subwin-broken
             %scheme-char-from-c-char
             %scheme-char-from-c-wchar
             %scheme-char-to-c-char
@@ -1966,9 +1968,16 @@ this window."
   (%is-notimeout? win))
 
 (define (is-pad? win)
-  "True if the window is a pad."
+  "True if the window is a pad. Also true if we can't distinguish between
+pads and normal windows, which could be true if you're running old versions
+of curses that have been compiled to be opaque.  False otherwise.
+
+To see if this function can actually detect a pad, check the value of the
+%is-pad-broken constant."
   (assert-window win)
-  (%is-pad? win))
+  (if %is-pad-broken
+      #t
+      (%is-pad? win)))
 
 (define (is-scrollok? win)
   "True if scrollok is set.  That is, if attempting to move off the bottom
@@ -1977,9 +1986,17 @@ margin of the screen will cause the window to scroll."
   (%is-scrollok? win))
 
 (define (is-subwin? win)
-  "True if this window is a subwindow of another window."
+  "True if this window is a subwindow of another window.  Also true if
+the underlying ncurses library has no way of reporting if a window
+is a subwindow, which may be true for older versions of ncurses compiled
+to be opaque.  False otherwise.
+
+To see if this function actually works, chech the value of the
+%is-subwin-broken constant."
   (assert-window win)
-  (%is-subwin? win))
+  (if %is-subwin-broken
+      #t
+      (%is-subwin? win)))
 
 (define (is-syncok? win)
   "True if syncok is enabled, e.g, if every change to a window changes

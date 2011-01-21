@@ -5536,8 +5536,18 @@ given number of lines, @var{nlines}, and columns, @var{ncols}.
 
 @end deffn
 
+@findex %is-pad-broken
 @deffn Procedure is-pad? win
-Returns @code{#t} if @var{win} is a pad.
+Returns @code{#t} if @var{win} is a pad.  @code{#f} otherwise.
+
+If the underlying ncurses implementation is not capable of reporting
+whether a window is a pad, this function will always return @code{#t}.
+This can happen in older versions of ncurses that were compiled with
+the @code{NCURSES_OPAQUE} option enabled.
+
+To see if this @code{is-pad?} procedure actually works, you can check
+the constant @code{%is-pad-broken}, which will be #f is @code{is-pad?}
+actually works.
 @end deffn
 
 
@@ -6089,8 +6099,18 @@ subwindow.
 
 @end deffn
 
+@findex %is-subwin-broken
 @deffn Procedure is-subwin? win
-Returns @code{#t} if @var{win} is a subwin.
+Returns @code{#t} if @var{win} is a subwin.  Otherwise, @code{#f}.
+
+If the underlying ncurses implementation is not capable of reporting
+whether a window is a subwindow, this function will always return
+@code{#t}.  This can happen in older versions of ncurses that were
+compiled with the @code{NCURSES_OPAQUE} option enabled.
+
+To see if this @code{is-subwin?} procedure actually works, you can check
+the constant @code{%is-subwin-broken}, which will be #f is @code{is-subwin?}
+actually works.
 @end deffn
 
 @deffn Procedure derwin orig nlines ncols begin-y begin-x
