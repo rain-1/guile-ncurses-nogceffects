@@ -1,3 +1,115 @@
+Michael Gran <spk121@yahoo.com>	2011-01-21
+
+    Add copyright for terminfo file
+    
+    * test/t/README: new file
+
+Michael Gran <spk121@yahoo.com>	2011-01-21
+
+    Bad cast in gucu_strwidth
+    
+    * ncurses/extra_func.c (gucu_strwidth): wrong type
+
+Michael Gran <spk121@yahoo.com>	2011-01-21
+
+    Change bug address to bug-guile-ncurses@gnu.org
+    
+    * configure.ac: change e-mail address
+
+Michael Gran <spk121@yahoo.com>	2011-01-21
+
+    Update warning about term not being an xterm
+    
+    * test/curses_000_test_setup.test: change warning
+
+Michael Gran <spk121@yahoo.com>	2011-01-21
+
+    Print less information in termattrs test
+    
+    * test/curses_032_termattrs.test: quiet
+
+Michael Gran <spk121@yahoo.com>	2011-01-21
+
+    Add tests for windows properties
+    
+    * test/curses_038_properties.test: new test file
+    * test/Makefile.am: add new test file
+
+Michael Gran <spk121@yahoo.com>	2011-01-21
+
+    Don't test Erasechar and Killchar since they are stty properties
+    
+    Since erasechar and killchar are termios properties, not terminfo
+    properties, they can change depending on the test environment.  So
+    their return values don't make for good tests
+    
+    * test/curses_032_termattrs.test: disable killchar, erasechar tests
+
+Michael Gran <spk121@yahoo.com>	2011-01-21
+
+    Include a terminfo file in the test tree
+    
+    * test/t/terminfo: new file
+    * test/Makefile.am (TESTS_ENVIRONMENT): use local terminfo file
+    * test/curses_000_test_setup.test: new info
+    * test/curses_003_color.test: don't set TERM
+    * test/curses_008_attr.test: don't set TERM
+    * test/curses_009_beep.test: don't set TERM
+    * test/curses_010_bkgd.test: don't set TERM
+    * test/curses_024_kernel.test: don't set TERM
+    * test/curses_028_pad.test: don't set TERM
+    * test/curses_032_termattrs.test: don't set TERM, termname returns testxterm
+    * test/curses_037_mouse.test: don't set TERM
+
+Michael Gran <spk121@yahoo.com>	2011-01-21
+
+    Typo bugs in window properties functions
+    
+    * ncurses/curses.scm (is-cleared?): calls wrong procedure
+      (is-leaveok?): new procedure
+      (leaveokok!): removed, should have been leaveok!
+      (leaveok!): new procedure
+
+Michael Gran <spk121@yahoo.com>	2011-01-21
+
+    git ignore html files
+    
+    * .gitignore: ignore html
+
+Michael Gran <spk121@yahoo.com>	2011-01-21
+
+    Don't presume existence of is_pad and is_subwin in ncurses lib
+    
+    * config.h.in (HAVE_IS_PAD, HAVE_IS_SUBWIN): new defines
+    * configure.ac: check for is_pad, is_subwin
+    * doc/guile-ncurses.texi: document is-pad?, %is-pad-broken, is-subwin?
+      %is-subwin-broken
+    * ncurses/curs_const.c (gucu_broken_is_pad, gucu_broken_is_subwin): new
+      (gucu_init_constant): new constants %is-pad-broken and %is-subwin-broken
+    * ncurses/curs_func.c (gucu_is_pad_p): conditionally compile
+      (gucu_is_subwin_p): conditionally compile
+      (gucu_init_function): conditionally define %is-pad? and %is-subwin?
+    * ncurses/curses.scm (%is-pad-broken, %is-subwin-broken): new exports
+      (is-pad?): return #t if ncurses doesn't support it
+      (is-subwin?): return #t if ncurses doesn't support it
+
+Merge: ecfbacb 752b07f
+Michael Gran <spk121@yahoo.com>	2011-01-17
+
+    Merge branch '1.2'
+
+Michael Gran <spk121@yahoo.com>	2011-01-17
+
+    Update NEWS
+    
+    * NEWS: update
+
+Michael Gran <spk121@yahoo.com>	2011-01-17
+
+    Update Changelog and News
+    
+    * Changelog: updated
+
 Michael Gran <spk121@yahoo.com>	2011-01-16
 
     bump library version
@@ -564,6 +676,46 @@ Michael Gran <spk121@yahoo.com>	2010-12-31
     Remove library text domain
     
     * ncurses/curs_main.c (gucu_init): remove text domain
+
+Michael Gran <spk121@yahoo.com>	2010-11-05
+
+    Document guile-ncurses-shell variables
+    
+    * doc/guile-ncurses.texi: updated
+
+Michael Gran <spk121@yahoo.com>	2010-11-05
+
+    Give warning if shell can't find xterm
+    
+    * tools/shell.c (open_terminal): give warning on xterm failure
+
+Michael Gran <spk121@yahoo.com>	2010-11-05
+
+    More deinternationalization
+    
+    * ncurses/curs_func.c: remove libintl.h
+    * ncurses/curs_main.c: remove libintl.h
+    * ncurses/curs_port.c: remove libintl.h
+    * ncurses/curs_spec.c:remove libintl.h
+    * ncurses/extra_type.c: remove libintl.h
+    * ncurses/form_func.c: remove libintl.h
+    * ncurses/form_type.c: remove libintl.h
+    * ncurses/menu_func.c: remove libintl.h
+    * ncurses/menu_type.c: remove libintl.h
+    * ncurses/panel_type.c: remove libintl.h
+    * ncurses/type.c: remove libintl.h
+
+Michael Gran <spk121@yahoo.com>	2010-11-05
+
+    remove gnulib support
+    
+    * m4/gnulib-cache.m4: removed
+
+Michael Gran <spk121@yahoo.com>	2010-11-05
+
+    only workaround unistring bugs when UCS4 is enabled
+    
+    * ncurses/curs_spec.c: modified
 
 U-Cain\Mike <Mike@Cain.(none)>	2010-10-31
 
