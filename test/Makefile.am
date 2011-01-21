@@ -40,6 +40,7 @@ curses_027_overlay.test curses_028_pad.test curses_029_refresh.test	\
 curses_030_scr_dump.test curses_031_scroll.test			\
 curses_032_termattrs.test curses_033_touch.test curses_034_util.test	\
 curses_035_attributes.test curses_036_ports.test curses_037_mouse.test	\
+curses_038_properties.test \
 p001_panel.test f001_new_form.test f002_data.test			\
 f003_field_attributes.test f004_form_field.test f005_form_page.test	\
 f006_form_field_just.test f007_form_field_opts.test			\

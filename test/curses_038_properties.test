@@ -1,0 +1,180 @@
+;;;; -*- Mode: scheme; -*-
+;;;; curses_038_properties.test --- test suite for curses's 
+;;;; window properties functions
+
+
+;; Copyright 2011 Free Software Foundation, Inc.
+
+;; This file is part of Guile-Ncurses.
+
+;; Guile-Ncurses is free software: you can redistribute it and/or
+;; modify it under the terms of the GNU Lesser General Public License
+;; as published by the Free Software Foundation, either version 3 of
+;; the License, or (at your option) any later version.
+
+;; Guile-Ncurses is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+;; Lesser General Public License for more details.
+
+;; You should have received a copy of the GNU Lesser General Public
+;; License along with Guile-Ncurses.  If not, see
+;; <http://www.gnu.org/licenses/>.
+
+(use-modules (test lib)
+             (test lib2)
+             (ncurses curses)
+             (srfi srfi-1))
+
+(define test (curses-test-start))
+
+(define mainwin (initscr))
+(set! *sleep* #f)
+
+(define win (newwin 10 10 1 1))
+(define swin (subwin win 3 3 3 3))
+(define pad (newpad 10 10))
+(define spad (subpad pad 4 4 3 3))
+
+(endwin)
+
+(with-test-prefix
+ "window properties"
+ 
+ (pass-if "is-cleared? #t"
+          (begin
+	    (clearok! win #t)
+	    (is-cleared? win)))
+ 
+ (pass-if "is-cleared? #f"
+          (begin
+	    (clearok! win #f)
+	    (not (is-cleared? win))))
+ 
+ (pass-if "is-idcok? #t"
+          (begin
+	    (idcok! win #t)
+	    (is-idcok? win)))
+ 
+ (pass-if "is-idcok? #f"
+          (begin
+	    (idcok! win #f)
+	    (not (is-idcok? win))))
+ 
+ (pass-if "is-idlok? #t"
+          (begin
+	    (idlok! win #t)
+	    (is-idlok? win)))
+
+ (pass-if "is-idlok? #f"
+          (begin
+	    (idlok! win #f)
+	    (not (is-idlok? win))))
+
+ (pass-if "is-immedok? #t"
+          (begin
+	    (immedok! win #t)
+	    (is-immedok? win)))
+
+ (pass-if "is-immedok? #f"
+          (begin
+	    (immedok! win #f)
+	    (not (is-immedok? win))))
+
+ (pass-if "is-keypad? #t"
+          (begin
+	    (keypad! win #t)
+	    (is-keypad? win)))
+
+ (pass-if "is-keypad? #f"
+          (begin
+	    (keypad! win #f)
+	    (not (is-keypad? win))))
+
+ (pass-if "is-leaveok? #t"
+          (begin
+	    (leaveok! win #t)
+	    (is-leaveok? win)))
+
+ (pass-if "is-leaveok? #f"
+          (begin
+	    (leaveok! win #f)
+	    (not (is-leaveok? win))))
+
+ (pass-if "is-nodelay? #t"
+          (begin
+	    (nodelay! win #t)
+	    (is-nodelay? win)))
+
+ (pass-if "is-nodelay? #f"
+          (begin
+	    (nodelay! win #f)
+	    (not (is-nodelay? win))))
+
+ (pass-if "is-notimeout? #t"
+          (begin
+	    (notimeout! win #t)
+	    (is-notimeout? win)))
+
+ (pass-if "is-notimeout? #f"
+          (begin
+	    (notimeout! win #f)
+	    (not (is-notimeout? win))))
+
+ (pass-if "is-scrollok? #t"
+          (begin
+	    (scrollok! win #t)
+	    (is-scrollok? win)))
+
+ (pass-if "is-scrollok? #f"
+          (begin
+	    (scrollok! win #f)
+	    (not (is-scrollok? win))))
+
+ (pass-if "is-syncok? #t"
+          (begin
+	    (syncok! win #t)
+	    (is-syncok? win)))
+
+ (pass-if "is-syncok? #f"
+          (begin
+	    (syncok! win #f)
+	    (not (is-syncok? win))))
+
+ (pass-if "is-pad? #t"
+          (if %is-pad-broken
+	      (throw 'unresolved)
+	      ;; else
+	      (is-pad? pad)))
+
+ (pass-if "is-pad? #f"
+          (if %is-pad-broken
+	      (throw 'unresolved)
+	      ;; else
+	      (not (is-pad? win))))
+
+ (pass-if "is-subwin? #t"
+          (if %is-subwin-broken
+	      (throw 'unresolved)
+	      ;; else
+	      (is-subwin? swin)))
+
+ (pass-if "is-subwin? #f"
+          (if %is-subwin-broken
+	      (throw 'unresolved)
+	      ;; else
+	      (not (is-subwin? win))))
+
+ (pass-if "is-subwin? and is-pad? #t"
+          (if (or %is-subwin-broken %is-pad-broken)
+	      (throw 'unresolved)
+	      ;; else
+	      (and (is-pad? spad) (is-subwin? spad))))
+
+ (pass-if "is-subwin? and is-pad? #f"
+          (if (or %is-subwin-broken %is-pad-broken)
+	      (throw 'unresolved)
+	      ;; else
+	      (not (and (is-pad? win) (is-subwin? win))))))
+
+(curses-test-end test "curses_038_properties.out")
