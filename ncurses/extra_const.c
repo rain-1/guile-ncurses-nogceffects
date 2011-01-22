@@ -1,7 +1,7 @@
 /*
   extra_const.c
 
-  Copyright 2010 Free Software Foundation, Inc.
+  Copyright 2010, 2011 Free Software Foundation, Inc.
 
   This file is part of GNU Guile-Ncurses.
 
@@ -23,6 +23,7 @@
 #include <config.h>
 
 #include <libguile.h>
+#define _GNU_SOURCE /* Only really need _BSD_SOURCE and _XOPEN_SOURCE */
 #include <termios.h>
 
 #if HAVE_CURSES_H
@@ -169,21 +170,21 @@ SCM gucu_B9600;
 void
 gucu_extra_init_const ()
 {
-  D(BS0);
-  D(BS1);
-  D(BSDLY);
-  D(CR0);
-  D(CR1);
-  D(CR2);
-  D(CR3);
-  D(CRDLY);
-  D(FF0);
-  D(FF1);
-  D(FFDLY);
+  D(BS0);			/* XOPEN */
+  D(BS1);			/* XOPEN */
+  D(BSDLY);			/* XOPEN */
+  D(CR0);			/* XOPEN */
+  D(CR1);			/* XOPEN */
+  d(CR2);			/* XOPEN */
+  D(CR3);			/* XOPEN */
+  D(CRDLY);			/* XOPEN */
+  D(FF0);			/* XOPEN */
+  D(FF1);			/* XOPEN */
+  D(FFDLY);			/* XOPEN */
   D(IUCLC);
-  D(NL0);
-  D(NL1);
-  D(NLDLY);
+  D(NL0);			/* XOPEN */
+  D(NL1);			/* XOPEN */
+  D(NLDLY);			/* XOPEN */
   D(OCRNL);
   D(OFDEL);
   D(OFILL);
@@ -192,10 +193,10 @@ gucu_extra_init_const ()
   D(ONLRET);
   D(ONOCR);
   D(OPOST);
-  D(TAB1);
-  D(TAB2);
-  D(TAB3);
-  D(TABDLY);
+  D(TAB1);			/* XOPEN */
+  D(TAB2);			/* XOPEN */
+  D(TAB3);			/* XOPEN */
+  D(TABDLY);			/* XOPEN */
   D(TCIFLUSH);
   D(TCIOFF);
   D(TCIOFLUSH);
@@ -210,7 +211,7 @@ gucu_extra_init_const ()
   D(VT1);
   D(VTDLY);
 #if HAVE_DECL_XCASE
-  D(XCASE);
+  D(XCASE);			/* XOPEN */
 #endif
 
   D(NCCS);
@@ -260,21 +261,21 @@ gucu_extra_init_const ()
   D(VTIME);
 
   D(ECHO);
-  D(ECHOCTL);
-  D(ECHOE);
+  D(ECHOCTL);			/* BSD/SVID */
+  D(ECHOE);			
   D(ECHOK);
-  D(ECHOKE);
+  D(ECHOKE);			/* BSD/SVID */
   D(ECHONL);
 #if HAVE_DECL_ECHOPRT
-  D(ECHOPRT);
+  D(ECHOPRT);			/* BSD/SVID */
 #endif
-  D(FLUSHO);
+  D(FLUSHO);			/* BSD/SVID */
   D(ICANON);
   D(IEXTEN);
   D(ISIG);
   D(NOFLSH);
 #if HAVE_DECL_PENDIN
-  D(PENDIN);
+  D(PENDIN);			/* BSD/SVID */
 #endif
   D(TOSTOP);
 
