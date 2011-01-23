@@ -43,14 +43,19 @@
 (with-test-prefix
  "termattrs"
  
+ ;; baudrate gets its data from the terminal line settings, I think.
+ ;; So there is no correct response.  I get 38400 when called 
+ ;; interactively in an xterm and 0 when called within nohup.
  (pass-if "baudrate"
           (begin
             (clear win)
             (let ((b (baudrate)))
               (endwin)
-              ;; (format #t "Baudrate: ~a (expected ~a)~%" b expected-baudrate)
+	      ()
+              (format #t "Baudrate: ~a (expected ~a)~%" b expected-baudrate)
               (maybe-sleep 1)
-              (eqv? b expected-baudrate))))
+              (eqv? b expected-baudrate)
+	      (throw 'untested))))
 
  ;; erasechar and killchar get their data from the terminal line
  ;; settings, so it isn't possible to say what the 'correct' response
@@ -67,10 +72,9 @@
               ;; (eqv? c expected-erasechar)
 	      (throw 'unresolved))))
  
- ;; erasechar and killchar get their data from the terminal line settings,
- ;; so it isn't possible to say what the 'correct' response should be.
- ;; Gnu/Linux xterm give #\nak. Cygwin
- ;; gives ERR
+ ;; erasechar and killchar get their data from the terminal line
+ ;; settings, so it isn't possible to say what the 'correct' response
+ ;; should be.  Gnu/Linux xterm give #\nak. Cygwin gives ERR
  (pass-if "killchar"
           (begin
             (clear win)

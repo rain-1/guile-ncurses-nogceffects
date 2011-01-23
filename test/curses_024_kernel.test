@@ -29,12 +29,14 @@
 
 (define win (initscr))
 
-;; WTF?: def-shell-mode and def-shell-mode crash hard on Cygwin
 (with-test-prefix
  "def-prog-mode"
 
  (pass-if "def-prog-mode"
-          (def-prog-mode)))
+	  ;; If we are detached from a terminal (such as when
+	  ;; being called in nohup) this can return #f.
+          (def-prog-mode)
+	  (throw 'untested)))
 
 ;; Should be able to save and reset tty
 (with-test-prefix
@@ -47,13 +49,15 @@
             (setsyx 6 6)
             (lset= equal? '(6 6) (getsyx))))
 
- ;; WTF?: True on Linux, False on Cygwin
  (pass-if "savetty / resettty"
           (begin
             (clear win)
             (refresh win)
+	    ;; If we are detached from a terminal (such as when being
+	    ;; called in nohup) this can return #f.
             (and (savetty)
-                 (resetty))))
+                 (resetty))
+	    (throw 'untested)))
 
  ;; Curs-set should not return #f if this terminal
  ;; has the capability to set the visiblity of the
