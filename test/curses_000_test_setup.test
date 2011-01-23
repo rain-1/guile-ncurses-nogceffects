@@ -28,7 +28,10 @@
 (write %load-path) (newline)
 (display "Current test directory:  ") (write (getcwd)) (newline)
 (display "Current locale:          ") (display (setlocale LC_ALL "")) (newline)
-(display "TERM:                    ") (display (getenv "TERM")) (newline)
+(display "TERM:                    ") (display (getenv "ORIGTERM")) (newline)
+(display "TERM for this test:      ") (display (getenv "TERM")) (newline)
+(display "isatty?:                 ") (write (isatty? (current-output-port))) (newline)
+(display "ttyname:                 ") (display (false-if-exception (ttyname (current-output-port)))) (newline)
 (display "Guile version:           ") (display (version)) (newline)
 (if %ucs4-chars
     (display "Guile character storage: UCS-4")
