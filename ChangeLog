@@ -1,3 +1,35 @@
+Michael Gran <spk121@yahoo.com>	2011-01-23
+
+    Remove tests that are different when run detached from a terminal
+    
+    These tests all fail when being run under 'nohup', for example
+    
+    * test/curses_002_initscr.test: disable endwin tests
+    * test/curses_024_kernel.test: disable def-prog-mode and resetty tests
+    * test/curses_032_termattrs.test: disable baudrate test
+
+Michael Gran <spk121@yahoo.com>	2011-01-23
+
+    Add more test information into test header
+    
+    * test/curses_000_test_setup.test: more prints
+
+Michael Gran <spk121@yahoo.com>	2011-01-22
+
+    feature macro required for some termios constants
+    
+    Even though these constants are LSB valid, GNU libc still requires
+    feature test macros be enabled for them
+    
+    * ncurses/extra_const.c: use _GNU_SOURCE
+
+Michael Gran <spk121@yahoo.com>	2011-01-21
+
+    Update NEWS and ChangeLog
+    
+    * NEWS
+    * ChangeLog
+
 Michael Gran <spk121@yahoo.com>	2011-01-21
 
     Add copyright for terminfo file
