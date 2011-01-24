@@ -12,6 +12,13 @@
 /* Define if you have curses.h */
 #undef HAVE_CURSES_H
 
+/* Define to 1 if you have the declaration of `BS0', and to 0 if you don't. */
+#undef HAVE_DECL_BS0
+
+/* Define to 1 if you have the declaration of `ECHOCTL', and to 0 if you
+   don't. */
+#undef HAVE_DECL_ECHOCTL
+
 /* Define to 1 if you have the declaration of `ECHOPRT', and to 0 if you
    don't. */
 #undef HAVE_DECL_ECHOPRT

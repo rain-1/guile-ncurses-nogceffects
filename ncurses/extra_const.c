@@ -166,25 +166,58 @@ SCM gucu_B75;
 SCM gucu_B9600;
 
 #define D(x) gucu_ ## x = scm_permanent_object(scm_c_define(#x, scm_from_int(x)))
+#define F(x) gucu_ ## x = scm_permanent_object(scm_c_define(#x, SCM_BOOL_F))
 
 void
 gucu_extra_init_const ()
 {
+#if HAVE_DECL_BS0
   D(BS0);			/* XOPEN */
   D(BS1);			/* XOPEN */
   D(BSDLY);			/* XOPEN */
   D(CR0);			/* XOPEN */
   D(CR1);			/* XOPEN */
-  d(CR2);			/* XOPEN */
+  D(CR2);			/* XOPEN */
   D(CR3);			/* XOPEN */
   D(CRDLY);			/* XOPEN */
   D(FF0);			/* XOPEN */
   D(FF1);			/* XOPEN */
   D(FFDLY);			/* XOPEN */
-  D(IUCLC);
   D(NL0);			/* XOPEN */
   D(NL1);			/* XOPEN */
   D(NLDLY);			/* XOPEN */
+  D(TAB1);			/* XOPEN */
+  D(TAB2);			/* XOPEN */
+  D(TAB3);			/* XOPEN */
+  D(TABDLY);			/* XOPEN */
+#else
+  F(BS0);			/* XOPEN */
+  F(BS1);			/* XOPEN */
+  F(BSDLY);			/* XOPEN */
+  F(CR0);			/* XOPEN */
+  F(CR1);			/* XOPEN */
+  F(CR2);			/* XOPEN */
+  F(CR3);			/* XOPEN */
+  F(CRDLY);			/* XOPEN */
+  F(FF0);			/* XOPEN */
+  F(FF1);			/* XOPEN */
+  F(FFDLY);			/* XOPEN */
+  F(NL0);			/* XOPEN */
+  F(NL1);			/* XOPEN */
+  F(NLDLY);			/* XOPEN */
+  F(TAB1);			/* XOPEN */
+  F(TAB2);			/* XOPEN */
+  F(TAB3);			/* XOPEN */
+  F(TABDLY);			/* XOPEN */
+#endif
+
+#if HAVE_DECL_XCASE
+  D(XCASE);			/* XOPEN */
+#else
+  F(XCASE);
+#endif
+
+  D(IUCLC);
   D(OCRNL);
   D(OFDEL);
   D(OFILL);
@@ -193,10 +226,6 @@ gucu_extra_init_const ()
   D(ONLRET);
   D(ONOCR);
   D(OPOST);
-  D(TAB1);			/* XOPEN */
-  D(TAB2);			/* XOPEN */
-  D(TAB3);			/* XOPEN */
-  D(TABDLY);			/* XOPEN */
   D(TCIFLUSH);
   D(TCIOFF);
   D(TCIOFLUSH);
@@ -210,9 +239,6 @@ gucu_extra_init_const ()
   D(VT0);
   D(VT1);
   D(VTDLY);
-#if HAVE_DECL_XCASE
-  D(XCASE);			/* XOPEN */
-#endif
 
   D(NCCS);
 
@@ -261,23 +287,34 @@ gucu_extra_init_const ()
   D(VTIME);
 
   D(ECHO);
-  D(ECHOCTL);			/* BSD/SVID */
   D(ECHOE);			
   D(ECHOK);
-  D(ECHOKE);			/* BSD/SVID */
   D(ECHONL);
-#if HAVE_DECL_ECHOPRT
-  D(ECHOPRT);			/* BSD/SVID */
-#endif
-  D(FLUSHO);			/* BSD/SVID */
   D(ICANON);
   D(IEXTEN);
   D(ISIG);
   D(NOFLSH);
+  D(TOSTOP);
+
+#if HAVE_DECL_ECHOCTL
+  D(ECHOCTL);			/* BSD/SVID */
+  D(ECHOKE);			/* BSD/SVID */
+  D(FLUSHO);			/* BSD/SVID */
+#else
+  F(ECHOCTL);			/* BSD/SVID */
+  F(ECHOKE);			/* BSD/SVID */
+  F(FLUSHO);			/* BSD/SVID */
+#endif
+#if HAVE_DECL_ECHOPRT
+  D(ECHOPRT);			/* BSD/SVID */
+#else
+  F(ECHOPRT);			/* BSD/SVID */
+#endif
 #if HAVE_DECL_PENDIN
   D(PENDIN);			/* BSD/SVID */
+#else
+  F(PENDIN);			/* BSD/SVID */
 #endif
-  D(TOSTOP);
 
   D(B0);
   D(B110);

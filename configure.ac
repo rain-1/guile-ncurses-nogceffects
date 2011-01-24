@@ -234,8 +234,20 @@ LIBS="$ax_save_LIBS"
 # Later something should be done with this
 # AC_FUNC_MALLOC
 
+# Check for the XOpen and BSD termios constants.
+# Hopefully just one will suffice for the entire set.
+AC_CHECK_DECLS([BS0, ECHOCTL], [], [], 
+[[
+#define _GNU_SOURCE
+#include <termios.h>
+]])
+
 # Check for rarer termios constants
-AC_CHECK_DECLS([XCASE, ECHOPRT, PENDIN], [], [],[[#include <termios.h>]])
+AC_CHECK_DECLS([XCASE, ECHOPRT, PENDIN], [], [], 
+[[
+#define _GNU_SOURCE
+#include <termios.h>
+]])
 
 ##################
 # Check for system services
