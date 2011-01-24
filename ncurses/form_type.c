@@ -289,7 +289,17 @@ mark_form (SCM x)
 
   gf = (struct gucu_form *) SCM_SMOB_DATA (x);
 
-  return (gf->fields);
+  if (gf != (struct  gucu_form *) NULL
+      && gf->fields != NULL)
+    {
+      // Mark each one of the fields in the form
+      size_t i;
+      size_t len = scm_to_size_t (scm_length (gf->fields));
+      for (i = 0; i < len; i ++)
+	scm_gc_mark (scm_list_ref (gf->fields, scm_from_int (i)));
+    }
+
+  return SCM_BOOL_F;
 }
 
 size_t
@@ -302,46 +312,49 @@ gc_free_form (SCM x)
 
   form = (struct gucu_form *) SCM_SMOB_DATA (x);
 
-  assert (form != NULL);
+  //assert (form != NULL);
 
-  retval = free_form (form->form);
+  if (form != NULL && form->form != NULL)
+    {
+      retval = free_form (form->form);
+      form->form = (FORM *) NULL;
+      if (retval == E_BAD_ARGUMENT)
+	{
+	  scm_error_scm (SCM_BOOL_F,
+			 scm_from_locale_string ("garbage collection of form"),
+			 scm_from_locale_string ("bad argument"),
+			 SCM_BOOL_F, SCM_BOOL_F);
+	}
+      else if (retval == E_POSTED)
+	{
+	  scm_error_scm (SCM_BOOL_F,
+			 scm_from_locale_string ("garbage collection of form"),
+			 scm_from_locale_string ("posted"),
+			 SCM_BOOL_F, SCM_BOOL_F);
+	}
 
-  if (retval == E_BAD_ARGUMENT)
-    {
-      scm_error_scm (SCM_BOOL_F,
-		     scm_from_locale_string ("garbage collection of form"),
-		     scm_from_locale_string ("bad argument"),
-		     SCM_BOOL_F, SCM_BOOL_F);
+      /* Release scheme objects from the guardians */
+      /* Detach the fields */
+      if (form->fields)
+	{
+	  while (scm_is_true (scm_call_0 (form->fields_guard)))
+	    ;
+	  form->fields = NULL;
+	}
+      if (form->win != NULL)
+	{
+	  while (scm_is_true (scm_call_0 (form->win_guard)))
+	    ;
+	  form->win = NULL;
+	}
+      if (form->sub != NULL)
+	{
+	  while (scm_is_true (scm_call_0 (form->sub_guard)))
+	    ;
+	  form->sub = NULL;
+	}
     }
-  else if (retval == E_POSTED)
-    {
-      scm_error_scm (SCM_BOOL_F,
-		     scm_from_locale_string ("garbage collection of form"),
-		     scm_from_locale_string ("posted"),
-		     SCM_BOOL_F, SCM_BOOL_F);
-    }
-
-  /* Release scheme objects from the guardians */
-  /* Detach the fields */
-  if (form->fields)
-    {
-      while (scm_is_true (scm_call_0 (form->fields_guard)))
-	;
-      form->fields = NULL;
-    }
-  if (form->win != NULL)
-    {
-      while (scm_is_true (scm_call_0 (form->win_guard)))
-	;
-      form->win = NULL;
-    }
-  if (form->sub != NULL)
-    {
-      while (scm_is_true (scm_call_0 (form->sub_guard)))
-	;
-      form->sub = NULL;
-    }
-
+  scm_gc_free (form->c_fields, sizeof (FORM *) * (form->n_fields + 1), "form");
   SCM_SET_SMOB_DATA (x, NULL);
 
   return 0;
@@ -416,6 +429,8 @@ gucu_new_form (SCM fields)
   c_fields[len] = (FIELD *) NULL;
 
   gf->form = new_form (c_fields);
+  gf->c_fields = c_fields;
+  gf->n_fields = len;
 
   if (gf->form == NULL)
     {
@@ -459,7 +474,9 @@ gucu_new_form (SCM fields)
   gf->sub_guard = scm_make_guardian (SCM_BOOL_F);
 #endif
 
-  scm_call_1 (gf->fields_guard, fields);
+  // Guard each of the fields from being freed
+  for (i = 0; i < len; i ++)
+    scm_call_1 (gf->fields_guard, scm_list_ref (fields, scm_from_int (i)));
 
   return smob;
 }

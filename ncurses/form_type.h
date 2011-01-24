@@ -38,6 +38,8 @@ struct gucu_form
   // Pointer to the FORM structure
   FORM *form;
   // A scheme list containing FIELD SCMs
+  FIELD **c_fields;
+  size_t n_fields;
   SCM fields;
   SCM fields_guard;
   // The windows
