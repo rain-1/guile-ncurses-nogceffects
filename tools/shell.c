@@ -372,6 +372,9 @@ inner_main (void *data, int argc, char **argv)
                     slave_write);
           scm_c_eval_string (cmd);
 
+          printf (_("\nYou should define a shorter name for '%%guile-ncurses-shell-stdscr' \n"));
+	  printf (_("like (define mainwin %%guile-ncurses-shell-stdscr) for example\n"));
+
           scm_shell (argc, argv);
 
           if (!isendwin ())
