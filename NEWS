@@ -13,8 +13,7 @@ Release 1.3
     way to give information if a window is a pad or subwin
   - new feature test constants %is-pad-broken and %is-subwin-broken
     give information if is-pad? and is-subwin? always return true
-- The tests now include their own terminfo file so they can be run
-  chroot.
+- The tests now only run if an xterm terminfo file is avaiable.
 - Tests that gave different results when detached from a terminal
   were disabled.
 - Disable experimental termios library by default.
