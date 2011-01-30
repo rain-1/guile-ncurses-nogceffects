@@ -24,7 +24,8 @@ AC_INIT([GNU Guile-Ncurses],[1.3.pre2],[bug-guile-ncurses@gnu.org])
 AC_CONFIG_AUX_DIR([build_aux])
 AM_INIT_AUTOMAKE([gnu std-options -Wall])
 
-AC_PREREQ(2.59)
+AC_PREREQ(2.60)
+AC_USE_SYSTEM_EXTENSIONS([_GNU_SOURCE])
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_SRCDIR([config.h.in])
 AC_CONFIG_MACRO_DIR([m4])
@@ -205,8 +206,7 @@ AC_CHECK_TYPE([cookie_io_functions_t],
                          [1],
                          [Define if you are have the cookie_io_functions_t type])],
               ,
-              [#define _GNU_SOURCE
-               #include <stdio.h>
+              [#include <stdio.h>
                ])
 AC_CHECK_SIZEOF([int])
 AC_CHECK_SIZEOF([long])
@@ -238,14 +238,12 @@ LIBS="$ax_save_LIBS"
 # Hopefully just one will suffice for the entire set.
 AC_CHECK_DECLS([BS0, ECHOCTL], [], [], 
 [[
-#define _GNU_SOURCE
 #include <termios.h>
 ]])
 
 # Check for rarer termios constants
 AC_CHECK_DECLS([XCASE, ECHOPRT, PENDIN], [], [], 
 [[
-#define _GNU_SOURCE
 #include <termios.h>
 ]])
 

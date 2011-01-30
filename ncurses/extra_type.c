@@ -1,7 +1,7 @@
 /*
   extra_type.c
 
-  Copyright 2009, 2010 Free Software Foundation, Inc.
+  Copyright 2009, 2010, 2011 Free Software Foundation, Inc.
 
   This file is part of GNU Guile-Ncurses.
 
@@ -21,7 +21,6 @@
 */
 #include <config.h>
 
-#define _GNU_SOURCE
 #include <assert.h>
 #include <libguile.h>
 #include <stdio.h>

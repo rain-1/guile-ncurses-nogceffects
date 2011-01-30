@@ -23,7 +23,6 @@
 #include <config.h>
 
 #include <libguile.h>
-#define _GNU_SOURCE /* Only really need _BSD_SOURCE and _XOPEN_SOURCE */
 #include <termios.h>
 
 #if HAVE_CURSES_H
