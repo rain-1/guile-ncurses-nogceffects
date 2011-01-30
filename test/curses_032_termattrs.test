@@ -124,7 +124,7 @@
               (endwin)
               (format #t "Terminal Name: ~a~%" c)
               (maybe-sleep 1)
-              (not (not (string= c "testxterm" 0 4 0 4))))))
+              (not (not (string= c "xterm" 0 4 0 4))))))
  
  (pass-if "term-attrs"
           (begin

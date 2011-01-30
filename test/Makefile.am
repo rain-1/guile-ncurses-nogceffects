@@ -19,15 +19,16 @@
 TESTLIB = lib.scm lib2.scm
 
 TESTS_ENVIRONMENT = ORIGTERM=${TERM} \
-  TERM=testxterm \
-  TERMINFO=${abs_top_srcdir}/test \
+  TERM=xterm \
   GUILE_AUTO_COMPILE=0 \
   ${top_builddir}/libtool \
     -dlopen ${top_builddir}/ncurses/libguile-ncurses.la \
     --mode=execute guile -L $(abs_top_srcdir) -s
 
-NARROWTESTS = curses_000_test_setup.test				\
-curses_001_char_conversion.test curses_002_initscr.test		\
+NOTERMTESTS = curses_000_test_setup.test \
+curses_001_char_conversion.test
+
+NARROWTESTS = curses_002_initscr.test		\
 curses_003_color.test curses_004_characters.test curses_005_addch.test	\
 curses_006_addchstr.test curses_007_addstr.test curses_008_attr.test	\
 curses_009_beep.test curses_010_bkgd.test curses_011_border.test	\
@@ -55,11 +56,15 @@ slk_006_attributes.test
 WIDETESTS = r037_border_set.test r038_get_wch.test r039_get_wstr.test	\
 r040_term_attrs.test
 
-TESTS = $(NARROWTESTS)
+TESTS = $(NOTERMTESTS)
+
+if HAVE_XTERM_TERMINFO
+TESTS += $(NARROWTESTS)
 if WIDE
 if UCS4
 TESTS += $(WIDETESTS)
 endif
 endif
+endif
 
-EXTRA_DIST = $(TESTLIB) $(TESTS) t/testxterm
+EXTRA_DIST = $(TESTLIB) $(TESTS)
