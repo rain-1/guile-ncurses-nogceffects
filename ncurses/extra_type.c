@@ -25,11 +25,14 @@
 #include <libguile.h>
 #include <stdio.h>
 #include <string.h>
+#ifdef ENABLE_TERMIOS
 #include <termios.h>
-
+#endif
 
 #include "compat.h"
 #include "extra_type.h"
+
+#ifdef ENABLE_TERMIOS
 
 scm_t_bits termios_tag;
 
@@ -188,11 +191,12 @@ gucu_new_termios (void)
   /* Step 4: finish the initialization */
   return smob;
 }
-
+#endif ENABLE_TERMIOS
 
 void
 gucu_extra_init_type ()
 {
+#ifdef ENABLE_TERMIOS
   termios_tag = scm_make_smob_type ("termios", sizeof (struct termios *));
   scm_set_smob_mark (termios_tag, mark_termios);
   scm_set_smob_free (termios_tag, gc_free_termios);
@@ -201,4 +205,5 @@ gucu_extra_init_type ()
   scm_c_define_gsubr ("termios?", 1, 0, 0, gucu_is_termios_p);
 
   scm_c_define_gsubr ("new-termios", 0, 0, 0, gucu_new_termios);
+#endif ENABLE_TERMIOS
 }

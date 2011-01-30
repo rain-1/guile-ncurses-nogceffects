@@ -23,7 +23,9 @@
 #include <config.h>
 
 #include <libguile.h>
+#ifdef ENABLE_TERMIOS
 #include <termios.h>
+#endif
 
 #if HAVE_CURSES_H
 #include <curses.h>
@@ -37,6 +39,8 @@
 
 #include "compat.h"
 #include "extra_const.h"
+
+#ifdef ENABLE_TERMIOS
 
 SCM gucu_BS0;
 SCM gucu_BS1;
@@ -332,3 +336,10 @@ gucu_extra_init_const ()
   D(B75);
   D(B9600);
 }
+
+#else /* !ENABLE_TERMIOS */
+void
+gucu_extra_init_const ()
+{
+}
+#endif

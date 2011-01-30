@@ -25,11 +25,13 @@
 #include <assert.h>
 #include <libguile.h>
 #include <sys/types.h>
-#include <termios.h>
 #ifdef GUILE_CHARS_ARE_UCS4
 #include <uniwidth.h>
 #else
 #include <wchar.h>
+#endif
+#ifdef ENABLE_TERMIOS
+#include <termios.h>
 #endif
 
 #include "compat.h"
@@ -37,6 +39,7 @@
 #include "extra_type.h"
 #include "type.h"
 
+#ifdef ENABLE_TERMIOS
 SCM
 gucu_cfgetispeed (SCM s_termios)
 {
@@ -533,6 +536,9 @@ gucu_unlockpt (SCM fd)
   return SCM_UNSPECIFIED;
 }
 #endif
+
+#endif /* ENABLE_TERMIOS */
+
 /* Return the number of character cells that string requires */
 SCM
 gucu_strwidth (SCM str)
@@ -570,6 +576,7 @@ gucu_strwidth (SCM str)
 void
 gucu_extra_init_function ()
 {
+#ifdef ENABLE_TERMIOS
   scm_c_define_gsubr ("cfgetispeed", 1, 0, 0, gucu_cfgetispeed);
   scm_c_define_gsubr ("cfgetospeed", 1, 0, 0, gucu_cfgetospeed);
   scm_c_define_gsubr ("cfmakeraw!", 1, 0, 0, gucu_cfmakeraw_x);
@@ -597,7 +604,6 @@ gucu_extra_init_function ()
 #ifdef HAVE_UNLOCKPT
   scm_c_define_gsubr ("unlockpt", 1, 0, 0, gucu_unlockpt);
 #endif
-  scm_c_define_gsubr ("%strwidth", 1, 0, 0, gucu_strwidth);
 
   scm_c_define_gsubr ("termios-iflag", 1, 0, 0, gucu_termios_iflag);
   scm_c_define_gsubr ("termios-oflag", 1, 0, 0, gucu_termios_oflag);
@@ -610,5 +616,7 @@ gucu_extra_init_function ()
   scm_c_define_gsubr ("termios-cflag-set!", 2, 0, 0, gucu_termios_cflag_set_x);
   scm_c_define_gsubr ("termios-lflag-set!", 2, 0, 0, gucu_termios_lflag_set_x);
   scm_c_define_gsubr ("termios-cc-set!", 3, 0, 0, gucu_termios_cc_set_x);
- 
+#endif /* ENABLE_TERMIOS */
+
+  scm_c_define_gsubr ("%strwidth", 1, 0, 0, gucu_strwidth);
 }

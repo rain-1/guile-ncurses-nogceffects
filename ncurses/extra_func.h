@@ -26,6 +26,7 @@
 #include <libguile.h>
 #include "visibility.h"
 
+#ifdef ENABLE_TERMIOS
 GUCU_API SCM gucu_cfgetispeed (SCM termios);
 GUCU_API SCM gucu_cfgetospeed (SCM termios);
 GUCU_API SCM gucu_cfmakeraw_x (SCM termios);
@@ -46,7 +47,6 @@ GUCU_API SCM gucu_tcgetattr (SCM fd);
 GUCU_API SCM gucu_tcgetsid (SCM fd);
 GUCU_API SCM gucu_tcsendbreak (SCM fd, SCM duration);
 GUCU_API SCM gucu_tcsetattr_x (SCM fd, SCM opt, SCM termios);
-GUCU_API SCM gucu_strwidth (SCM x);
 GUCU_API SCM gucu_termios_iflag (SCM termios);
 GUCU_API SCM gucu_termios_oflag (SCM termios);
 GUCU_API SCM gucu_termios_cflag (SCM termios);
@@ -61,6 +61,9 @@ GUCU_API SCM gucu_termios_cc_set_x (SCM termios, SCM pos, SCM cc);
 #ifdef HAVE_UNLOCKPT
 GUCU_API SCM gucu_unlockpt (SCM fd);
 #endif
+#endif /* ENABLE_TERMIOS */
+
+GUCU_API SCM gucu_strwidth (SCM x);
 
 GUCU_LOCAL void gucu_extra_init_function (void);
 #endif

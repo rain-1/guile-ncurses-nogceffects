@@ -234,18 +234,27 @@ LIBS="$ax_save_LIBS"
 # Later something should be done with this
 # AC_FUNC_MALLOC
 
-# Check for the XOpen and BSD termios constants.
-# Hopefully just one will suffice for the entire set.
-AC_CHECK_DECLS([BS0, ECHOCTL], [], [], 
-[[
-#include <termios.h>
-]])
+AC_ARG_ENABLE([termios],
+              [AS_HELP_STRING([--enable-termios],
+                              [enable experimental support for termios functions])],
+            [],
+            [enable_termios=no])
 
-# Check for rarer termios constants
-AC_CHECK_DECLS([XCASE, ECHOPRT, PENDIN], [], [], 
-[[
-#include <termios.h>
-]])
+AS_IF([test "x$enable_termios" != xno],
+      [AC_DEFINE([ENABLE_TERMIOS], [1],
+                 [Define to enable TERMIOS support])
+       # Check for the XOpen and BSD termios constants.
+       # Hopefully just one will suffice for the entire set.
+       AC_CHECK_DECLS([BS0, ECHOCTL], [], [], 
+       [[
+       #include <termios.h>
+       ]])
+
+       # Check for rarer termios constants
+       AC_CHECK_DECLS([XCASE, ECHOPRT, PENDIN], [], [], 
+       [[
+       #include <termios.h>
+       ]])])
 
 ##################
 # Check for system services

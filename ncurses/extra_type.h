@@ -24,8 +24,11 @@
 
 #include <libguile.h>
 #include "visibility.h"
+#ifdef ENABLE_TERMIOS
 #include <termios.h>
+#endif
 
+#ifdef ENABLE_TERMIOS
 GUCU_LOCAL extern scm_t_bits termios_tag;
 
 GUCU_LOCAL int _scm_is_termios (SCM x);
@@ -35,6 +38,7 @@ GUCU_LOCAL SCM _scm_from_termios (struct termios *x);
 GUCU_API SCM gucu_is_termios_p (SCM x);
 GUCU_API SCM gucu_new_termios (void);
 GUCU_API SCM gucu_del_termios (SCM arg1);
+#endif /* ENABLE_TERMIOS */
 
 GUCU_LOCAL void gucu_extra_init_type (void);
 
