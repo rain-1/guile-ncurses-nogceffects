@@ -117,14 +117,13 @@ size_t
 gc_free_termios (SCM x)
 {
   struct termios *gp;
-  int retval;
 
   scm_assert_smob_type (termios_tag, x);
 
   gp = (struct termios *) SCM_SMOB_DATA (x);
 
   assert (gp != NULL);
-  if (1)
+  if (0)
     {
       fprintf (stderr, "Freeing termios at %p\n", gp);
       fprintf (stderr, "Flags: I %u O %u C %u L %u\n", gp->c_iflag,

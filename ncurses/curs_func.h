@@ -77,7 +77,23 @@ GUCU_API SCM gucu_init_color (SCM arg1, SCM arg2, SCM arg3, SCM arg4);
 GUCU_API SCM gucu_init_pair (SCM arg1, SCM arg2, SCM arg3);
 GUCU_API SCM gucu_intrflush (SCM arg2);
 GUCU_API SCM gucu_isendwin_p (void);
+GUCU_API SCM gucu_is_cleared_p (SCM win);
+GUCU_API SCM gucu_is_idcok_p (SCM win);
+GUCU_API SCM gucu_is_idlok_p (SCM win);
+GUCU_API SCM gucu_is_immedok_p (SCM win);
+GUCU_API SCM gucu_is_keypad_p (SCM win);
+GUCU_API SCM gucu_is_leaveok_p (SCM win);
 GUCU_API SCM gucu_is_linetouched_p (SCM arg1, SCM arg2);
+GUCU_API SCM gucu_is_nodelay_p (SCM win);
+GUCU_API SCM gucu_is_notimeout_p (SCM win);
+#if defined(HAVE_IS_PAD) || ! defined(NCURSES_OPAQUE)
+GUCU_API SCM gucu_is_pad_p (SCM win);
+#endif
+GUCU_API SCM gucu_is_scrollok_p (SCM win);
+#if defined(HAVE_IS_SUBWIN) || ! defined(NCURSES_OPAQUE)
+GUCU_API SCM gucu_is_subwin_p (SCM win);
+#endif
+GUCU_API SCM gucu_is_syncok_p (SCM win);
 GUCU_API SCM gucu_is_wintouched_p (SCM arg1);
 GUCU_API SCM gucu_KEY_F (SCM arg1);
 GUCU_API SCM gucu_key_defined (SCM str);

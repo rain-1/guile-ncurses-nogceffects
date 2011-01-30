@@ -82,9 +82,7 @@ SCM gucu_TCSANOW;
 SCM gucu_VT0;
 SCM gucu_VT1;
 SCM gucu_VTDLY;
-#if HAVE_DECL_XCASE
 SCM gucu_XCASE;
-#endif
 
 SCM gucu_NCCS;
 
@@ -138,17 +136,13 @@ SCM gucu_ECHOE;
 SCM gucu_ECHOK;
 SCM gucu_ECHOKE;
 SCM gucu_ECHONL;
-#if HAVE_DECL_ECHOPRT
 SCM gucu_ECHOPRT;
-#endif
 SCM gucu_FLUSHO;
 SCM gucu_ICANON;
 SCM gucu_IEXTEN;
 SCM gucu_ISIG;
 SCM gucu_NOFLSH;
-#if HAVE_DECL_PENDIN
 SCM gucu_PENDIN;
-#endif
 SCM gucu_TOSTOP;
 
 SCM gucu_B0;

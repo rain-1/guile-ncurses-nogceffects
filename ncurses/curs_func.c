@@ -50,13 +50,6 @@ curs_bad_state_error (const char *funcname)
   scm_misc_error (funcname, "bad curses internal state", SCM_BOOL_F);
 }
 
-static void
-curs_param_or_bad_state_error (const char *funcname)
-{
-  scm_misc_error (funcname,  "invalid parameters or bad curses internal state",
-		  SCM_BOOL_F);
-}
-
 /* Assign the colors to color pair zero */
 SCM
 gucu_assume_default_colors (SCM fg, SCM bg)
@@ -504,10 +497,8 @@ gucu_derwin (SCM orig, SCM nlines, SCM ncols, SCM begin_y, SCM begin_x)
 SCM
 gucu_doupdate ()
 {
-  int ret = doupdate ();
+  doupdate ();
   /* doupdate probably only fails when the screen is NULL */
-  //if (ret == ERR)
-  //  curs_bad_state_error ("doupdate");
 
   return SCM_UNSPECIFIED;
 }
@@ -857,7 +848,6 @@ SCM
 gucu_is_pad_p (SCM win)
 {
   WINDOW *c_pad;
-  int ret;
 
   c_pad = _scm_to_window (win);
 
@@ -880,7 +870,6 @@ SCM
 gucu_is_subwin_p (SCM win)
 {
   WINDOW *c_subwin;
-  int ret;
 
   c_subwin = _scm_to_window (win);
 
