@@ -25,7 +25,6 @@ License along with Guile-Ncurses.  If not, see
 #define _XOPEN_SOURCE
 #include <libguile.h>
 #include <stdlib.h>
-#include <termios.h>
 
 #if HAVE_CURSES_H
 #include <curses.h>
@@ -145,25 +144,6 @@ gucu_getmouse ()
   return s_me;
 }
 
-#ifdef HAVE_GRANTPT
-/* If FD is the file descriptor of a master pseudo-terminal, this
-   changes the mode and permissions of the slave pseudo-terminal
-   so that it can be used.  */
-SCM
-gucu_grantpt (SCM fd)
-{
-  int c_fd;
-  int ret;
-
-  SCM_ASSERT (scm_is_integer (fd), fd, SCM_ARG1, "grantpt");
-  c_fd = scm_to_int (fd);
-  ret = grantpt (c_fd);
-  if (ret == -1)
-    scm_syserror ("grantpt");
-
-  return SCM_UNSPECIFIED;
-}
-#endif
 
 /* Write data to terminal-attached printer */
 SCM
@@ -201,54 +181,6 @@ gucu_pair_content (SCM s_pair)
     return SCM_BOOL_F;
 }
 
-#ifdef HAVE_PTSNAME
-/* If FD, a file descriptor, is a master pseudo-terminal device, this
-   returns a string that contains the name of the slave
-   pseudo-terminal device.  */
-SCM
-gucu_ptsname (SCM fd)
-{
-  int c_fd;
-  char *name;
-
-  SCM_ASSERT (scm_is_integer (fd), fd, SCM_ARG1, "ptsname");
-
-  c_fd = scm_to_int (fd);
-  name = ptsname (c_fd);
-  if (name == NULL)
-    return SCM_BOOL_F;
-
-  return scm_from_locale_string (name);
-}
-#endif
-
-/* IF FD is a file descriptor of a pseudo-terminal device,
-   this sets that pseudoterminal to RAW mode. */
-SCM
-gucu_ptsmakeraw (SCM fd)
-{
-  int c_fd;
-  int ret;
-  struct termios terminal_attributes;
-
-  SCM_ASSERT (scm_is_integer (fd), fd, SCM_ARG1, "ptsmakeraw");
-
-  c_fd = scm_to_int (fd);
-  ret = tcgetattr (c_fd, &terminal_attributes);
-  if (ret == -1)
-    scm_syserror ("ptsmakeraw");
-  terminal_attributes.c_iflag &= ~(IGNBRK | BRKINT | PARMRK | ISTRIP
-				   | INLCR | IGNCR | ICRNL | IXON);
-  terminal_attributes.c_oflag &= ~OPOST;
-  terminal_attributes.c_lflag &= ~(ECHO | ECHONL | ICANON | ISIG | IEXTEN);
-  terminal_attributes.c_cflag &= ~(CSIZE | PARENB);
-  terminal_attributes.c_cflag |= CS8;
-  ret = tcsetattr (c_fd, TCSANOW, &terminal_attributes);
-  if (ret == -1)
-    scm_syserror ("ptsmakeraw");
-  return SCM_UNDEFINED;
-}
-
 #if 0
 SCM
 gucu_tget (SCM id)
@@ -281,23 +213,6 @@ gucu_ungetmouse (SCM event)
   free (me);
   return (scm_from_int (ret));
 }
-
-#ifdef HAVE_UNLOCKPT
-/* If FD is the file descriptor of a master pseudo-terminal, this
-   changes the mode and permissions of the slave pseudo-terminal
-   so that it can be used.  */
-SCM
-gucu_unlockpt (SCM fd)
-{
-  int ret;
-  SCM_ASSERT (scm_is_integer (fd), fd, SCM_ARG1, "unlockpt");
-  ret = unlockpt (scm_to_int (fd));
-  if (ret == -1)
-    scm_syserror ("unlockpt");
-
-  return SCM_UNSPECIFIED;
-}
-#endif
 
 /* Get the attributes and color pair number of a window */
 SCM
@@ -943,20 +858,10 @@ gucu_init_special ()
   scm_c_define_gsubr ("%color-content", 1, 0, 0, gucu_color_content);
   scm_c_define_gsubr ("%delwin", 1, 0, 0, gucu_delwin);
   scm_c_define_gsubr ("%getmouse", 0, 0, 0, gucu_getmouse);
-#ifdef HAVE_GRANTPT
-  scm_c_define_gsubr ("grantpt", 1, 0, 0, gucu_grantpt);
-#endif
   scm_c_define_gsubr ("%mcprint", 1, 0, 0, gucu_mcprint);
   scm_c_define_gsubr ("%mousemask", 1, 0, 0, gucu_mousemask);
-#ifdef HAVE_PTSNAME
-  scm_c_define_gsubr ("ptsname", 1, 0, 0, gucu_ptsname);
-#endif
-  scm_c_define_gsubr ("ptsmakeraw", 1, 0, 0, gucu_ptsmakeraw);
   scm_c_define_gsubr ("%pair-content", 1, 0, 0, gucu_pair_content);
   scm_c_define_gsubr ("ungetmouse", 1, 0, 0, gucu_ungetmouse);
-#ifdef HAVE_UNLOCKPT
-  scm_c_define_gsubr ("unlockpt", 1, 0, 0, gucu_unlockpt);
-#endif
   scm_c_define_gsubr ("%wattr-get", 1, 0, 0, gucu_wattr_get);
   scm_c_define_gsubr ("%wgetnstr", 2, 0, 0, gucu_wgetnstr);
   scm_c_define_gsubr ("%winchnstr", 2, 0, 0, gucu_winchnstr);

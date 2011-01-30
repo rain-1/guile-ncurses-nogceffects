@@ -32,6 +32,13 @@ GUCU_API SCM gucu_cfmakeraw_x (SCM termios);
 GUCU_API SCM gucu_cfsetispeed_x (SCM termios, SCM speed);
 GUCU_API SCM gucu_cfsetospeed_x (SCM termios, SCM speed);
 GUCU_API SCM gucu_cfsetspeed_x (SCM termios, SCM speed);
+#ifdef HAVE_GRANTPT
+GUCU_API SCM gucu_grantpt (SCM fd);
+#endif
+#ifdef HAVE_PTSNAME
+GUCU_API SCM gucu_ptsname (SCM fd);
+#endif
+GUCU_API SCM gucu_ptsmakeraw (SCM fd);
 GUCU_API SCM gucu_tcdrain (SCM fd);
 GUCU_API SCM gucu_tcflow (SCM fd, SCM action);
 GUCU_API SCM gucu_tcflush (SCM fd, SCM queue);
@@ -51,6 +58,9 @@ GUCU_API SCM gucu_termios_oflag_set_x (SCM termios, SCM val);
 GUCU_API SCM gucu_termios_cflag_set_x (SCM termios, SCM val);
 GUCU_API SCM gucu_termios_lflag_set_x (SCM termios, SCM val);
 GUCU_API SCM gucu_termios_cc_set_x (SCM termios, SCM pos, SCM cc);
+#ifdef HAVE_UNLOCKPT
+GUCU_API SCM gucu_unlockpt (SCM fd);
+#endif
 
 GUCU_LOCAL void gucu_extra_init_function (void);
 #endif

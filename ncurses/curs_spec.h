@@ -1,7 +1,7 @@
 /*
 curs_spec.h
 
-Copyright 2009, 2010 Free Software Foundation, Inc.
+Copyright 2009, 2010, 2011 Free Software Foundation, Inc.
 
 This file is part of GNU Guile-Ncurses.
 
@@ -36,21 +36,11 @@ GUCU_API SCM gucu_getparent (SCM win);
 GUCU_API SCM gucu_getscrreg (SCM win);
 GUCU_API SCM gucu_getsyx (void);
 GUCU_API SCM gucu_getyx (SCM win);
-#ifdef HAVE_GRANTPT
-GUCU_API SCM gucu_grantpt (SCM fd);
-#endif
 GUCU_API SCM gucu_innwstr (SCM n);
 GUCU_API SCM gucu_mousemask (SCM x);
 GUCU_API SCM gucu_mvinnwstr (SCM y, SCM x, SCM n);
 GUCU_API SCM gucu_pair_content (SCM s_color);
-#ifdef HAVE_PTSNAME
-GUCU_API SCM gucu_ptsname (SCM fd);
-#endif
-GUCU_API SCM gucu_ptsmakeraw (SCM fd);
 GUCU_API SCM gucu_ungetmouse (SCM event);
-#ifdef HAVE_UNLOCKPT
-GUCU_API SCM gucu_unlockpt (SCM fd);
-#endif
 GUCU_API SCM gucu_wattr_get (SCM win);
 GUCU_API SCM gucu_wattr_set_x (SCM win, SCM attrs, SCM pair);
 GUCU_API SCM gucu_wgetnstr (SCM win, SCM n);

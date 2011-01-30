@@ -2,7 +2,7 @@
 
 ;; extra.scm
 
-;; Copyright 2010 Free Software Foundation, Inc.
+;; Copyright 2010, 2011 Free Software Foundation, Inc.
 
 ;; This file is part of GNU Guile-Ncurses.
 
@@ -149,6 +149,7 @@
             cfmakeraw!
             cfsetispeed!
             cfsetospeed!
+            ptsmakeraw
             tcdrain
             tcflow
             tcflush
@@ -275,3 +276,6 @@
 (if (defined? 'XCASE)           (export XCASE))
 (if (defined? 'ECHOPRT)         (export ECHOPRT))
 (if (defined? 'PENDIN)          (export PENDIN))
+(if (defined? 'unlockpt)        (export unlockpt))
+(if (defined? 'ptsname)         (export ptsname))
+(if (defined? 'grantpt)         (export grantpt))

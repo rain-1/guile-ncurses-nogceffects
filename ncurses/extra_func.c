@@ -121,6 +121,77 @@ SCM gucu_cfsetospeed_x (SCM s_termios, SCM s_speed)
   return SCM_UNSPECIFIED;
 }
 
+#ifdef HAVE_GRANTPT
+/* If FD is the file descriptor of a master pseudo-terminal, this
+   changes the mode and permissions of the slave pseudo-terminal
+   so that it can be used.  */
+SCM
+gucu_grantpt (SCM fd)
+{
+  int c_fd;
+  int ret;
+
+  SCM_ASSERT (scm_is_integer (fd), fd, SCM_ARG1, "grantpt");
+  c_fd = scm_to_int (fd);
+  ret = grantpt (c_fd);
+  if (ret == -1)
+    scm_syserror ("grantpt");
+
+  return SCM_UNSPECIFIED;
+}
+#endif
+
+
+/* IF FD is a file descriptor of a pseudo-terminal device,
+   this sets that pseudoterminal to RAW mode. */
+SCM
+gucu_ptsmakeraw (SCM fd)
+{
+  int c_fd;
+  int ret;
+  struct termios terminal_attributes;
+
+  SCM_ASSERT (scm_is_integer (fd), fd, SCM_ARG1, "ptsmakeraw");
+
+  c_fd = scm_to_int (fd);
+  ret = tcgetattr (c_fd, &terminal_attributes);
+  if (ret == -1)
+    scm_syserror ("ptsmakeraw");
+  terminal_attributes.c_iflag &= ~(IGNBRK | BRKINT | PARMRK | ISTRIP
+				   | INLCR | IGNCR | ICRNL | IXON);
+  terminal_attributes.c_oflag &= ~OPOST;
+  terminal_attributes.c_lflag &= ~(ECHO | ECHONL | ICANON | ISIG | IEXTEN);
+  terminal_attributes.c_cflag &= ~(CSIZE | PARENB);
+  terminal_attributes.c_cflag |= CS8;
+  ret = tcsetattr (c_fd, TCSANOW, &terminal_attributes);
+  if (ret == -1)
+    scm_syserror ("ptsmakeraw");
+  return SCM_UNDEFINED;
+}
+
+#ifdef HAVE_PTSNAME
+/* If FD, a file descriptor, is a master pseudo-terminal device, this
+   returns a string that contains the name of the slave
+   pseudo-terminal device.  */
+SCM
+gucu_ptsname (SCM fd)
+{
+  int c_fd;
+  char *name;
+
+  SCM_ASSERT (scm_is_integer (fd), fd, SCM_ARG1, "ptsname");
+
+  c_fd = scm_to_int (fd);
+  name = ptsname (c_fd);
+  if (name == NULL)
+    return SCM_BOOL_F;
+
+  return scm_from_locale_string (name);
+}
+#endif
+
+
+
 SCM gucu_tcdrain (SCM s_fd_or_port)
 {
   SCM s_fd;
@@ -446,6 +517,22 @@ gucu_termios_cc_set_x (SCM s_termios, SCM s_pos, SCM s_char)
   return SCM_UNSPECIFIED;
 }
 
+#ifdef HAVE_UNLOCKPT
+/* If FD is the file descriptor of a master pseudo-terminal, this
+   changes the mode and permissions of the slave pseudo-terminal
+   so that it can be used.  */
+SCM
+gucu_unlockpt (SCM fd)
+{
+  int ret;
+  SCM_ASSERT (scm_is_integer (fd), fd, SCM_ARG1, "unlockpt");
+  ret = unlockpt (scm_to_int (fd));
+  if (ret == -1)
+    scm_syserror ("unlockpt");
+
+  return SCM_UNSPECIFIED;
+}
+#endif
 /* Return the number of character cells that string requires */
 SCM
 gucu_strwidth (SCM str)
@@ -491,6 +578,13 @@ gucu_extra_init_function ()
   scm_c_define_gsubr ("cfsetspeed!", 2, 0, 0, gucu_cfsetspeed_x);
 #endif
   scm_c_define_gsubr ("cfsetospeed!", 2, 0, 0, gucu_cfsetospeed_x);
+#ifdef HAVE_GRANTPT
+  scm_c_define_gsubr ("grantpt", 1, 0, 0, gucu_grantpt);
+#endif
+  scm_c_define_gsubr ("ptsmakeraw", 1, 0, 0, gucu_ptsmakeraw);
+#ifdef HAVE_PTSNAME
+  scm_c_define_gsubr ("ptsname", 1, 0, 0, gucu_ptsname);
+#endif
   scm_c_define_gsubr ("tcdrain", 1, 0, 0, gucu_tcdrain);
   scm_c_define_gsubr ("tcflow", 2, 0, 0, gucu_tcflow);
   scm_c_define_gsubr ("tcflush", 2, 0, 0, gucu_tcflush);
@@ -500,6 +594,9 @@ gucu_extra_init_function ()
 #endif
   scm_c_define_gsubr ("tcsendbreak", 2, 0, 0, gucu_tcsendbreak);
   scm_c_define_gsubr ("tcsetattr!", 3, 0, 0, gucu_tcsetattr_x);
+#ifdef HAVE_UNLOCKPT
+  scm_c_define_gsubr ("unlockpt", 1, 0, 0, gucu_unlockpt);
+#endif
   scm_c_define_gsubr ("%strwidth", 1, 0, 0, gucu_strwidth);
 
   scm_c_define_gsubr ("termios-iflag", 1, 0, 0, gucu_termios_iflag);
