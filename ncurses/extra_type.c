@@ -190,7 +190,7 @@ gucu_new_termios (void)
   /* Step 4: finish the initialization */
   return smob;
 }
-#endif ENABLE_TERMIOS
+#endif /* ENABLE_TERMIOS */
 
 void
 gucu_extra_init_type ()
@@ -204,5 +204,5 @@ gucu_extra_init_type ()
   scm_c_define_gsubr ("termios?", 1, 0, 0, gucu_is_termios_p);
 
   scm_c_define_gsubr ("new-termios", 0, 0, 0, gucu_new_termios);
-#endif ENABLE_TERMIOS
+#endif /* ENABLE_TERMIOS */
 }
