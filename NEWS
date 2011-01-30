@@ -17,6 +17,10 @@ Release 1.3
   chroot.
 - Tests that gave different results when detached from a terminal
   were disabled.
+- Disable experimental termios library by default.
+- Fix memory double-free error in form library.
+- New functions grantpt, unlockpt, ptsmakeraw, ptsname in undocumented
+  'extra' library
 - Some bugfixes.
 
 Release 1.2

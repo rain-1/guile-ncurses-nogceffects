@@ -1,3 +1,105 @@
+Michael Gran <spk121@yahoo.com>	2011-01-30
+
+    Assorted missing declarations and unused variables
+    
+    * ncurses/curs_func.c (curs_param_or_bad_state_error): removed
+      (gucu_doupdate): unused var
+      (gucu_is_pad_p): unused var
+      (gucu_is_subwin_p): unused var
+    * ncurses/curs_func.h: add missing declarations
+    * ncurses/extra_const.c: always declare ECHOPRT, PENDIN
+    * ncurses/extra_type.c (gc_free_termios): remove debug print
+
+Michael Gran <spk121@yahoo.com>	2011-01-30
+
+    New options --enable-termios
+    
+    * config.h.in: ENABLE_TERMIOS
+    * configure.ac: new --enable-termios
+    * ncurses/extra_const.c:
+    * ncurses/extra_func.c
+    * ncurses/extra_func.h
+    * ncurses/extra_type.h
+    * ncurses/extra_type.c
+    * ncurses/menu_type.c
+
+Michael Gran <spk121@yahoo.com>	2011-01-30
+
+    Move some termios functions out of curses library
+    
+    They're being moved from curses.scm to extra.scm
+    
+    * ncurses/curs_spec.c [HAVE_GRANTPT] (gucu_grantpt): moved
+      [HAVE_PTSNAME] (gucu_ptsname): moved
+      (ptsmakeraw): moved
+      [HAVE_UNLOCKPT] (gucu_unlockpt): moved
+    * ncurses/curs_spec.h: remove declarations for gucu_grantpt, gucu_ptsname
+      gucu_ptsmakeraw, unlockpt
+    * ncurses/curses.scm: remove grantpt, ptsname, ptsmakeraw, unlockpt
+    * ncurses/extra.scm: add ptsmakeraw, unlockpt, ptsname, grantpt
+    * ncurses/extra_func.c [HAVE_GRANTPT] (gucu_grantpt): moved here
+      (gucu_ptsmakeraw): moved here
+      [HAVE_PTSNAME] (gucu_ptsname): moved here
+      [HAVE_UNLOCKPT] (gucu_unlockpt): moved here
+    * ncurses/extra_func.h: add declarations for gucu_grantpt, gucu_ptsname,
+      gucu_ptsmakeraw, gucu_unlockpt
+
+Michael Gran <spk121@yahoo.com>	2011-01-30
+
+    Define _GNU_SOURCE by default
+    
+    * config.h.in: new defines
+    * configure.ac: use AC_USE_SYSTEM_EXTENSIONS
+    * ncurses/extra_const.c: remove _GNU_SOURCE define
+    * ncurses/extra_func.c: remove _GNU_SOURCE define
+    * ncurses/extra_type.c: remove _GNU_SOURCE define
+    * ncurses/form_type.c: remove _GNU_SOURCE define
+    * ncurses/menu_type.c: remove _GNU_SOURCE define
+    * ncurses/panel_type.c: remove _GNU_SOURCE define
+
+Michael Gran <spk121@yahoo.com>	2011-01-23
+
+    Don't fail inopts tests
+    
+    Just print a warning
+    
+    * test/curses_020_inopts.test: shortcut halfdelay! tests
+
+Michael Gran <spk121@yahoo.com>	2011-01-23
+
+    Fix memory segfault in form type
+    
+    There was a problem when free fields because the null that
+    terminates the field list was not protected and was being
+    overwritten.
+    
+    * ncurses/form_type.h (gucu_form): add fields
+    * ncurses/form_type.c (make_form): mark all fields
+      (gc_free_form): free new fields in gucu_form
+      (gucu_new_form): population new fields, guard all fields
+
+Michael Gran <spk121@yahoo.com>	2011-01-23
+
+    Conditionally compile less common termios constants
+    
+    * configure.ac: check for BS0, ECHOCTL, add _GNU_SOURCE
+    * ncurses/extra_const.c: conditionally compile XOPEN and BSD termios
+      constants
+
+Michael Gran <spk121@yahoo.com>	2011-01-23
+
+    Typo regression in termattr test
+    
+    * test/curses_032_termattrs.test
+
+Michael Gran <spk121@yahoo.com>	2011-01-23
+
+    Bump revision
+    
+    * ChangeLog: updated
+    * NEWS: updated
+    * configure.ac: revision number updated
+
 Michael Gran <spk121@yahoo.com>	2011-01-23
 
     Remove tests that are different when run detached from a terminal
