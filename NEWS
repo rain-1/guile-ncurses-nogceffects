@@ -1,10 +1,13 @@
 The NEWS file for GNU Guile-NCurses
 
-  Copyright 2009, 2010, 2011 Free Software Foundation, Inc.
+  Copyright 2009, 2010, 2011, 2013 Free Software Foundation, Inc.
 
   Copying and distribution of this file, with or without modification,
   are permitted in any medium without royalty provided the copyright
   notice and this notice are preserved.
+
+Release 1.4
+- Regenerate autoconfigury to avoid automake-related vulnerability
 
 Release 1.3
 - Reworked support for is-pad? and is-subwin?

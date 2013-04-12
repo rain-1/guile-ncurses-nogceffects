@@ -1,3 +1,18 @@
+Mike Gran <spk121@yahoo.com>	2013-04-12
+
+    Bump revision
+    
+    * ChangeLog: updated
+    * aclocal.m4: updated
+    * configure.ac: updated, bump rev
+
+Michael Gran <spk121@yahoo.com>	2011-01-30
+
+    Update NEWS and ChangeLog
+    
+    * NEWS
+    * ChangeLog
+
 Michael Gran <spk121@yahoo.com>	2011-01-30
 
     Add more help text to shell
