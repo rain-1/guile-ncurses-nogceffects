@@ -5329,11 +5329,11 @@ is not necessary to turn these options off before calling @code{endwin}.
 @cindex Screens, erasing
 @findex refresh
 
-If @code{clearok!} is called with @var{bf} as @code{#t},
-the next call to @code{refresh} with this window will clear the
-screen completely and redraw the entire screen from scratch.  This is
-useful when the contents of the screen are uncertain, or in some cases
-for a more pleasing visual effect.
+If @code{clearok!} is called with @var{bf} as @code{#t}, the next call
+to @code{refresh} with this window will clear the screen completely
+and redraw the entire screen from scratch.  This is useful when the
+contents of the screen are uncertain, or in some cases for a more
+pleasing visual effect.
 
 @c If the @var{win} argument to
 @c @code{clearok} is the global variable @code{curscr}, the next call to

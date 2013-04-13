@@ -1,8 +1,7 @@
 ;;;; -*- Mode: scheme; -*-
 ;;;; curses_026_outopts.test --- test suite for curses's output options
 
-
-;; Copyright 2009, 2010 Free Software Foundation, Inc.
+;; Copyright 2009, 2010, 2013 Free Software Foundation, Inc.
 
 ;; This file is part of Guile-Ncurses.
 
@@ -36,7 +35,8 @@
  (pass-if "clearok! #f"
           (begin
             (clearok! win #f)
-            #t))
+	    ;; Don't know how to test clearok!
+            'untested))
 
  (pass-if "setscrreg! #t"
           (begin
