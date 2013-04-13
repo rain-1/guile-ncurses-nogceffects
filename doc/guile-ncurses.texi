@@ -524,7 +524,7 @@ standard scheme types, while others are represented as opaque types
 @cindex Unicode
 @cindex Characters
 
-The Guile Curses library uses two basic character types, simple
+The Guile Ncurses library uses two basic character types, simple
 characters and complex characters.  Simple characters are the native
 Guile characters, and complex characters are those used to interact
 with the NCurses library.  When using this library, a programmer will
@@ -573,12 +573,13 @@ string, such as @code{"hello"}, which is a sequence of unrendered
 characters.
 
 @item complex characters
+@tindex xchar
 
 Rendered, complex characters usually are a standard character, zero to
 three combining characters, attribute information, and color
 information.  The @emph{attribute information} describes if the
 character is bold, dim, reverse video, etc.  The guile ncurses library
-defines a special record type for complex characters: the xchar.
+defines a special record type for complex characters: the @dfn{xchar}.
 
 Each complex character may contain more than one simple character.
 The first character in the list should be a base character or a
@@ -609,6 +610,12 @@ These constructors will be described in more detail later on.
 > (init-pair! 2 COLOR_WHITE COLOR_GREEN)
 > (bold-on (color 2 #\x))
 ==> #<xchar bold color-pair #2 [white on green] #\x>
+
+;; A letter 'n' overwritten with a tilde
+> (define ntilde (normal #\n))
+> (set-xchar-chars! ntilde '(#\n #\~))
+> ntilde
+==> #<xchar #\n #\~>
 @end example
 
 @item rendered, complex strings
@@ -3438,7 +3445,7 @@ The predicate and accessors for the wrong type error.
 Many curses functions take rendered, complex characters: characters
 with associated color and attribute information.
 
-For those who are familiar with the C API for ncurses, they know that
+For those who are familiar with the C API for ncurses, you know that
 a rendered character is either a @code{chtype}, which is a 32-bit
 integer containing an 8-bit @code{char} and 24-bits of color and
 rendering information, or is a @code{cchar_t}, which is one or more
@@ -3549,6 +3556,43 @@ This procedure should only be used if @code{start-color} has been
 called.
 
 @end deffn
+
+There are a set of primitives to operate directly on complex characters.
+
+@deffn Procedure xchar? c
+
+Returns @code{#t} if @var{c} is a complex character.
+
+@end deffn
+
+@deffn Procedure xchar-attr c
+@deffnx Procedure xchar-color c
+@deffnx Procedure xchar-chars c
+@cindex Complex characters, querying
+
+These three procedures return the attributes, color pair number, and
+list of constiuent characters of a complex character, respectively.
+
+@end deffn
+
+@deffn Procedure set-xchar-attr! c attr
+@deffnx Procedure set-xchar-color! c color-pair-number
+@deffnx Procedure set-xchar-chars! c list-of-chars
+@cindex Complex characters, modifying
+
+These procedures directly set the attributes, color-pair number, and
+the list of characters of a complex character, respectively.
+
+@end deffn
+
+Complex characters can have a base character and a set of accent
+characters that overwrite the base character.  That is why
+@code{set-xchar-chars!} takes a list of characters, instead of a
+single character.  But, for these complex characters to be rendered
+correctly on the terminal, you need both a terminal that can do
+overstrike characters and you need to have compiled with the wide
+Ncurses library.  If either of these conditions are not true, only the
+first character in the list of characters will appear on the screen.
 
 There are also a couple of low-level functions to do conversion
 between C characters and Guile characters.

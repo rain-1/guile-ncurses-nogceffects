@@ -2,7 +2,7 @@
 
 ;; curses.scm
 
-;; Copyright 2009, 2010, 2011 Free Software Foundation, Inc.
+;; Copyright 2009, 2010, 2011, 2013 Free Software Foundation, Inc.
 
 ;; This file is part of GNU Guile-Ncurses.
 
@@ -466,6 +466,9 @@
             right
             right-off
             right-on
+            set-xchar-attr!
+            set-xchar-color!
+            set-xchar-chars!
             standout
             standout-off
             standout-on
@@ -479,6 +482,8 @@
             vertical-off
             vertical-on
             xchar?
+            xchar-attr
+            xchar-color
             xchar-chars
             ))
 
@@ -617,9 +622,9 @@ name of the character as as string."
 (define xchar-attr (record-accessor rtd-xchar 'attr))
 (define xchar-color (record-accessor rtd-xchar 'color))
 (define xchar-chars (record-accessor rtd-xchar 'chars))
-(define set-xchar-attr! (record-modifier rtd-xchar 'attr))
-(define set-xchar-color! (record-modifier rtd-xchar 'color))
-(define set-xchar-chars! (record-modifier rtd-xchar 'chars))
+(define %set-xchar-attr! (record-modifier rtd-xchar 'attr))
+(define %set-xchar-color! (record-modifier rtd-xchar 'color))
+(define %set-xchar-chars! (record-modifier rtd-xchar 'chars))
 
 (define (xchar->list x)
   "Converts a complex charater X to a list of properties"
@@ -1163,6 +1168,13 @@ not modified, but the color pair, if any, is modified."
   (syntax-rules ()
     ((_ val)
      (typecheck val 'integer integer? exact?))))
+(define-syntax assert-list-of-chars
+  (syntax-rules ()
+    ((_ loc)
+     (if (or (not (list? loc)) (not (every char? loc)))
+         (raise (condition (&curses-wrong-type-arg-error
+                            (arg str)
+                            (expected-type 'list))))))))
 (define-syntax assert-pad
   (syntax-rules ()
     ((_ val)
@@ -1193,6 +1205,24 @@ not modified, but the color pair, if any, is modified."
          (raise (condition (&curses-wrong-type-arg-error
                             (arg str)
                             (expected-type 'xstring))))))))
+
+(define (set-xchar-attr! ch attr)
+  "Directly set the attributes for a complex character"
+  (assert-xchar ch)
+  (assert-integer attr)
+  (%set-xchar-attr! ch attr))
+
+(define (set-xchar-color! ch color-pair-number)
+  "Directly set the color pair number for a complex character"
+  (assert-xchar ch)
+  (assert-integer color-pair-number)
+  (%set-xchar-color! ch color-pair-number))
+
+(define (set-xchar-chars! ch list-of-chars)
+  "Directly set the character(s) for a complex character"
+  (assert-xchar ch)
+  (assert-list-of-chars list-of-chars)
+  (%set-xchar-chars! ch list-of-chars))
 
 ;; Scheme calling wrappers for C functions
 
