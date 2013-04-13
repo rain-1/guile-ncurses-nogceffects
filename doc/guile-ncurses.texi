@@ -6073,7 +6073,8 @@ The return value is unspecified.
 @cindex Ncurses, version information
 @cindex Version information
 
-Returns a string that indicates the version of ncurses being used.
+Returns a string that indicates the version of ncurses being used, for
+example ``ncurses 5.9''.
 
 @end deffn
 
