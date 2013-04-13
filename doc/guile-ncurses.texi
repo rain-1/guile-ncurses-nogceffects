@@ -1155,7 +1155,7 @@ and friends as before
 
 These functions output entire strings to the screen.
 
-They can be used effectively in conjuntion with the @code{format}
+They can be used effectively in conjunction with the @code{format}
 procedure from @code{(ice-9 format)}.
 
 @menu
@@ -1510,7 +1510,7 @@ Don't go beyond the screen limits.  Checking for limits is left as an
 exercise for the reader.  Let's dissect it line by line.
 
 The @code{create-newwin} function creates a window with @code{newwin}
-and draws a box around it with @code{box}.  For the horizonal lines in
+and draws a box around it with @code{box}.  For the horizontal lines in
 the box, I chose the special drawing character @code{acs-hline}.  The
 vertical lines are the special drawing character @code{acs-vline}.
 For the corners of the box, the @code{box} procedure will use a guess
@@ -1667,7 +1667,7 @@ to a darker red, you could use this function
 
 If your terminal cannot change the color definitions, the procedure
 will throw and error.  The function @code{can-change-color?} can be
-used to find out whether thet terminal has the capability of changing
+used to find out whether that terminal has the capability of changing
 color content or not.  The RGB content is scaled from 0 to 1000.
 Initially, red is likely defined with content 680 (r), 0 (g), 0 (b).
 
@@ -1910,7 +1910,7 @@ correct visibility order. Do a @code{doupdate} to show it on the
 screen.
 
 @item
-Mainpulate the panels with @code{show-panel}, @code{hide-panel},
+Manipulate the panels with @code{show-panel}, @code{hide-panel},
 @code{move-panel} etc.  Make use of helper functions like
 @code{panel-hidden} and @code{panel-window}.
 
@@ -2040,7 +2040,7 @@ action. The function @code{menu-driver} is the main work horse of the
 menu system. The second parameter to this function tells what's to be
 done with the menu. According to the parameter, @code{menu-driver}
 does the corresponding task. The value can be either a menu
-navigational request, an ascii character, or a @code{KEY_MOUSE}
+navigational request, an ASCII character, or a @code{KEY_MOUSE}
 special key associated with a mouse event.
 
 The menu_driver accepts following navigational requests.
@@ -2134,8 +2134,8 @@ on with @code{set_menu_opts}.
 @item Pattern Requests
 
 Every menu has an associated pattern buffer, which is used to find the
-nearest match to the ascii characters entered by the user. Whenever
-ascii characters are given to menu_driver, it puts in to the pattern
+nearest match to the ASCII characters entered by the user. Whenever
+ASCII characters are given to menu_driver, it puts in to the pattern
 buffer. It also tries to find the nearest match to the pattern in the
 items list and moves current selection to that item. The request
 @code{REQ_CLEAR_PATTERN} clears the pattern buffer. The request
@@ -2209,13 +2209,13 @@ Well, if you have seen those forms on web pages that take input from
 users and do various kinds of things, you might be wondering how one
 would create such form in a text mode display.  It's quite difficult
 to write those nifty forms in plain ncurses.  The forms library tries
-to privide a basic froamework to build and maintain forms with ease.
+to provide a basic framework to build and maintain forms with ease.
 It has lots of features that manage validation, dynamic expression of
 fields, and so on.  Let's see it in full flow.
 
 A form is a collection of fields. Each field can be either a label
 (static text) or a data-entry location.  The forms library also
-provices functions to divide forms into multiple pages.
+provides functions to divide forms into multiple pages.
 
 @menu
 * The Basics (Forms)::          
@@ -2265,10 +2265,10 @@ form with @code{form-driver}.
 @item
 Unpost the menu with @code{form-unpost}
 @item
-If desired, explicity free the memory allocated to menu with
+If desired, explicitly free the memory allocated to menu with
 @code{free-form}.
 @item
-If desired, explicity free the memory allocated to menu item with
+If desired, explicitly free the memory allocated to menu item with
 @code{free-field}.
 @item
 End curses.
@@ -2288,10 +2288,10 @@ form)}.
 @verbatiminclude ex_form.scm
 @end example
 
-The above example is pretty straightformward.  It creates two fields
+The above example is pretty straightforward.  It creates two fields
 with @code{new-field}.  The procedure @code{new-field} takes height,
-width startx, starty, the number of offscreen rows, and number of
-additional working buffers.  The fifth argument number of offscreen
+width startx, starty, the number of off-screen rows, and number of
+additional working buffers.  The fifth argument number of off-screen
 rows specified how much of the field to be shown.  If it is zero, the
 entire field is always displayed; otherwise, the form will be
 scrollable when the user accesses undisplayed part of the field.  The
@@ -2414,10 +2414,10 @@ The procedure @code{field-just} returns the justification mode.
 @node Field Display Attributes, Field Option Bits, Playing with fields, Forms Library
 @subsection Field Display Attributes
 
-As you have seen, in the above example, display attribues for the
+As you have seen, in the above example, display attributes for the
 fields can be set with @code{set-field-fore!} and
 @code{set-field-back!}.  These functions set foreground and background
-attributges of the fields.  You can also specify a pad character that
+attributes of the fields.  You can also specify a pad character that
 will be filled in the unfilled portion of the field.  The pad
 character is set with a call to @code{set-field-pad!}.  Default pad
 value is space.  The functions @code{field-fore} , @code{field-back},
@@ -2491,14 +2491,14 @@ for help messages.
 @item O_WRAP
 
 Controls word-wrapping in multiline fields.  Normally, when any
-character of a (blak-separated) word reaches the end of the current
+character of a (blank-separated) word reaches the end of the current
 line, the entire word is wrapped to the next line (assuming there is
 one).  When this option is off, the word will be split across the line
 break.
 
 @item O_BLANK
 
-Controls field blaking.  When this option is on, entering a character
+Controls field blanking.  When this option is on, entering a character
 at the first field position erases the entire field (except for the
 just-entered character).
 
@@ -2538,7 +2538,7 @@ selected.  However, options may be changed on posted fields that are
 not current.
 
 The option values are bit-masks and can be composed with @code{logior}
-in the obvious way.  You have seen the usage of weitching off
+in the obvious way.  You have seen the usage of watching off
 @code{O_AUTOSKIP} option.  The following example clarified usage of
 some more options.  One field is a constant, uneditable field, that
 you cannot move to by using the arrow keys.  The other field is a
@@ -2643,7 +2643,7 @@ The two procedures that work with field status are
 @subsection Variable-Sized Fields
 
 If you want a dynamically changing field with variable width, this is
-the feature tyou want to put to full use.  This will allow the user to
+the feature you want to put to full use.  This will allow the user to
 enter more data than the original size of the field and let the field
 grow.  According to the field orientation it will scroll horizontally
 or vertically to incorporate the new data.
@@ -2655,7 +2655,7 @@ should be turned off.  This can be done with
 (field-opts-off! field O_STATIC)
 @end example
 
-It is usually not advisable to allow a field tro grow infinitely.. You
+It is usually not advisable to allow a field to grow infinitely.. You
 can set a maximum limit to the growth of the field with
 @code{set-max-field}.
 
@@ -2663,9 +2663,9 @@ The field info for a dynamically growable field can be retrieved with
 the procedure @code{dynamic-field-info}.
 
 Recall the library routine @code{new-field}; a new field created with
-height set to one will be definined to a one line field.  A new field
+height set to one will be defined to a one line field.  A new field
 created with height greater than one will be defined to be a
-nulti-line field.
+multi-line field.
 
 A one line field with @code{O_STATIC} turned off (dynamically
 growable) will contain a single fixed row, but, the number of columns
@@ -2674,7 +2674,7 @@ hole.  The number of columns displayed will remain fixed and the
 additional data will scroll horizontally.
 
 A multiline field with @code{O_STATIC} turned off (dynamically
-growable) will contain a fixed number of columsn, but, the nubmer of
+growable) will contain a fixed number of columns, but, the number of
 rows can increase if the user enters more data than the initial field
 will hold.  The number of rows displayed will remain fixed and the
 additional data will scroll vertically.
@@ -2689,7 +2689,7 @@ user wishes.  The subwindow contains all the fields and displays them
 according to their position.  This gives the flexibility of
 manipulating fancy form  displays easily.
 
-Since this pretty similary to menu windows, I am providing a very
+Since this pretty similar to menu windows, I am providing a very
 similar example.
 
 @example
@@ -2806,7 +2806,7 @@ field.
 Validation can be attached by using the @code{set-field-type!}
 procedure and queried with the @code{field-type} procedure.
 
-The form driver validates te data in a field only when data is entered
+The form driver validates the data in a field only when data is entered
 by the end-user.  Validation does not occur when the application
 program changes the field value with @code{set-field-buffer!}.
 
@@ -2849,8 +2849,8 @@ entered, it is, of course, valid.  But it is also possible to enter a
 prefix of a valid string and have it completed for you.
 
 By default, if you enter such a prefix and it matches more than on
-value in the string list, the prefix will be copmleted to the first
-matching value.  If the check-unique option is choses, the prefix
+value in the string list, the prefix will be completed to the first
+matching value.  If the check-unique option is chosen, the prefix
 match must be unique to be valid.
 
 @example
@@ -2879,7 +2879,7 @@ This accepts a decimal number.
 @end example
 
 Valid characters consist of a leading minus and digits, possibly
-including a deciman point.  The range check is performed on exit.
+including a decimate point.  The range check is performed on exit.
 
 If the value passes its range check, it is padded with as many
 trailing zero digits as necessary to meet the padding argument.
@@ -2911,10 +2911,10 @@ Different request and their usage is explained below.
 These requests cause page-level moves through the form, triggering
 display of a new form screen.  A form can be made of multiple pages.
 If you have a big form with lots of fields and logical sections, then
-yhou can divide the form into pages.  The function @code{set-new-page}
+you can divide the form into pages.  The function @code{set-new-page}
 sets a new page at the field specified.
 
-Also, the following reqests, when passed to the form driver, all you
+Also, the following requests, when passed to the form driver, all you
 to move to different pages.
 @itemize @bullet
 @item REQ_NEXT_PAGE
@@ -2930,7 +2930,7 @@ Move to the last form page.
 These are cyclic.  The moving to the next page after the last page put
 you at the top.
 
-@subsubsection Inter-Field Navication Requests
+@subsubsection Inter-Field Navigation Requests
 @itemize
 @item REQ_NEXT_FIELD
 Move to the next field
@@ -3017,7 +3017,7 @@ a window or screen ends in an exclamation point, e.g. @code{bkgdset!}.
 Any procedure that writes to a window or screen does not in an
 exclamation point, e.g. @code{addch}.
 @item
-Curses integer contstants are capitalized and use underscores, for
+Curses integer constants are capitalized and use underscores, for
 example @code{A_BOLD}.
 @item
 Curses procedures are not capitalized, even if they were capitalized
@@ -3497,7 +3497,7 @@ rest should probably not be used.
 @deffnx Procedure right-on x
 @deffnx Procedure standout-on x
 @deffnx Procedure top-on x
-@deffnx Procecure underline-on x
+@deffnx Procedure underline-on x
 @deffnx Procedure vertical-on x
 
 These procedures take @var{x}, which can be either a simple character,
@@ -3543,7 +3543,7 @@ the resulting rendered character.
 
 These procedure takes @var{x}, which can be either a simple character,
 a complex character, a simple string, or a complex string.  It returns
-a rendered character or string with an assocated color pair @var{n}.
+a rendered character or string with an associated color pair @var{n}.
 
 This procedure should only be used if @code{start-color} has been
 called.
@@ -3647,7 +3647,7 @@ fit on the screen or that would cause a wrap or scroll in a window
 that doesn't wrap or scroll.
 @end deffn
 
-@deffn Procecure tabsize
+@deffn Procedure tabsize
 Returns the current tabsize for this screen.  The default is eight.
 @end deffn
 
@@ -3666,7 +3666,7 @@ characters to the screen with routines of the @code{addch} family.
 Not all terminals have line-graphics characters.  There is a default
 character listed below is used if the @code{acsc} capability doesn't
 define a terminal-specific replacement for it.  The names are taken
-from VT100 nomenclature. Each of these procecures takes no arguments
+from VT100 nomenclature. Each of these procedures takes no arguments
 and returns a rendered character with the 'normal' attribute and with
 the default color pair.  The following prints a less-than-or-equal-to
 sign to the window @code{win}, for example.
@@ -3782,9 +3782,9 @@ The set of line-graphics characters is given in @ref{tab:ACS}.
 @end float
 
 @node Adding strings of characters and attributes, Character and window attribute control routines, Adding characters, The basic curses library
-@subsection Outputing strings
+@subsection Outputting strings
 
-@deffn Procecure addstr win #:key y x n
+@deffn Procedure addstr win #:key y x n
 
 This routine writes the characters of the unrendered simple string
 @var{str} on the given window.  When called with @var{n} it writes at
@@ -4345,13 +4345,13 @@ between 0 (no component) and 1000 (maximum amount of component).
 The @code{pair-content} routine allows programmers to find out what
 colors color-pair @var{pair} consists of.  The value of @var{pair}
 must be between 1 and @code{color-pairs - 1}.  It returns a list of
-two elements: the forground color number and the background color
+two elements: the foreground color number and the background color
 number. The values are between 0 and the value returned by
 @code{colors}.
 
 @end deffn
 
-@deffn Procedre use-default-colors
+@deffn Procedure use-default-colors
 
 @findex init-pair!
 
@@ -4439,7 +4439,7 @@ It returns @code{#f} on failure and @code{#t} on success.
 @cindex Input
 @findex cbreak!
 @findex nocbreak!
-@cindex Inputing characters
+@cindex Inputting characters
 
 The @code{getch} routine reads a character from the terminal
 associated with the given window.  In no-delay mode, if no input is
@@ -4703,7 +4703,7 @@ of these.  IBM PC-style consoles typically support little more than
 
 @findex getch
 
-The proceudre @code{getnstr} is equivalent to a series of calls to
+The procedure @code{getnstr} is equivalent to a series of calls to
 @code{getch}, until a newline or carriage return is received (the
 terminating character is not included in the returned string).  The
 resulting string is returned.
@@ -5229,7 +5229,7 @@ To read the event data and pop the event off the queue, call
 @code{getmouse}.
 
 @deffn Procedure getmouse
-This will retrn either a list of mouse information, or @code{#f}.  If
+This will return either a list of mouse information, or @code{#f}.  If
 it does return a list, it will have the following form:
 @example
 (id                             ; @r{id to distinguish multiple devices}
@@ -6158,7 +6158,7 @@ whenever there is a change in the window.
 
 @end deffn
 
-@deffn Procecure syncok! win bf
+@deffn Procedure syncok! win bf
 
 If @code{syncok!} is called with the second argument @code{#t} then
 @code{syncup} is called automatically whenever there is a change in the
@@ -6199,7 +6199,7 @@ thus the return value of the procedure @code{lines}). curses
 standardizes on eight labels of up to eight characters each. In
 addition to this, the ncurses implementation supports a mode where it
 simulates 12 labels of up to five characters each. This is most common
-for todays PC like enduser devices.  Please note that ncurses
+for today's PC like end-user devices.  Please note that ncurses
 simulates this mode by taking over up to two lines at the bottom of
 the screen, it doesn't try to use any hardware support for this mode.
 
@@ -6749,7 +6749,7 @@ designate the selected item.
 @node Menu creation , Menu options, Menu Procedures, The curses menu library
 @subsection Menu creation
 
-@deffn Procdure new-menu items
+@deffn Procedure new-menu items
 Given a list of items, where each item was created by the procedure
 @code{new-item}, the procedure @code{new-menu} returns a menu.
 
@@ -6817,7 +6817,7 @@ given menu and tries to find the first matching item.  If it succeeds,
 that item becomes current; if not, the current item does not change.
 
 It may return the following error codes: @code{E_OK},
-@code{E_BAD_ARGUMENT}, @code{E_BAD_STATE} if the outine was called
+@code{E_BAD_ARGUMENT}, @code{E_BAD_STATE} if the outline was called
 from an initialization or termination function, @code{E_NO_MATCH} if
 the character failed to match, or @code{E_SYSTEM_ERROR}.
 @end deffn
@@ -6854,7 +6854,7 @@ called from an initialization or termination function,
 @deffn Procedure set-menu-spacing! menu description rows cols
 @deffnx Procedure menu-spacing menu
 
-The procedure @code{set-menu-spacing!} sets the spacing informations
+The procedure @code{set-menu-spacing!} sets the spacing information
 for the menu.  The parameter @var{description} controls the number of
 spaces between an item name and an item description. It must not be
 larger than @code{TABSIZE}.  The menu system puts in the middle of
@@ -7220,7 +7220,7 @@ or @code{E_SYSTEM_ERROR}.
 @end deffn
 
 @deffn Procedure field-fore field
-@deffnx Procecure field-back field
+@deffnx Procedure field-back field
 
 The procedure @code{field-fore} returns the attributes of the contents
 of a field, and @code{field-back} returns the attributes of the unused
@@ -7275,7 +7275,7 @@ to a non-zero value whenever the field changes.
 Sets the field status of @var{field} to @var{status}, a boolean.
 @end deffn
 
-@deffn Procdure set-max-field field max
+@deffn Procedure set-max-field field max
 This procedure sets the maximum size for a dynamic field.  An argument
 of zero turns off any maximum size threshold for that field.
 @end deffn
@@ -7341,7 +7341,7 @@ the garbage collector to take care of it.
 @deffn Procedure set-field-opts! field opts
 @deffnx Procedure field-opts-on! field opts
 @deffnx Procedure field-opts-off! field opts
-@deffnx Procddure field-opts field
+@deffnx Procedure field-opts field
 The function @code{set-field-opts!} sets all the given field's option
 bits (field option bits may be logically-OR'ed together).
 
@@ -7389,7 +7389,7 @@ Validate field only if modified by user.
 @node Data type validation for fields, Creating forms, Color and attribute control for form fields, The curses form library
 @subsection Data type validation for fields
 These functions set a field to be able to contain only a certain type
-of input.  The user will not be avle to move off the field if it
+of input.  The user will not be able to move off the field if it
 contains invalid input.
 
 @deffn Procedure set-field-type! field type @dots{}
@@ -7409,7 +7409,7 @@ Character data.  Requires a third int argument, a minimum field width.
 @item TYPE_ENUM
 Accept one of a specified set of strings.  Requires a third argument
 pointing to a list of strings; a fourth integer flag argument to
-enable case-sensitivity; and a fifth inte flag argument specifying
+enable case-sensitivity; and a fifth int flag argument specifying
 whether a partial match must be a unique one (if this flag is off, a
 prefix matches the first of any set of more than one list elements
 with that prefix). Please notice that the string list is not copied,
@@ -7424,7 +7424,7 @@ than or equal to the minimum value, the range is simply ignored.
 Numeric data (may have a decimal-point part). Requires a third int
 argument controlling the precision, a fourth double argument con-
 straining minimum value, and a fifth double constraining maximum
-value. If your system supports locales, the decimal point charac- ter
+value. If your system supports locales, the decimal point character- 
 to be used must be the one specified by your locale. If the maximum
 value is less than or equal to the minimum value, the range is simply
 ignored.
