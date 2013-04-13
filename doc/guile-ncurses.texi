@@ -20,7 +20,7 @@ This manual is for the GNU Guile-NCurses library, (version
 ncurses library, which provides functionality for updating character
 screens.
 
-Copyright @copyright{} 1998-2010,2011 Free Software Foundation, Inc. @*
+Copyright @copyright{} 1998-2010,2011,2013 Free Software Foundation, Inc. @*
 Copyright @copyright{} 2001-2005 Pradeep Padala @*
 
 @quotation
@@ -309,15 +309,15 @@ The curses form library: @code{(ncurses form)}
 @section Authors, Copyright, and Declarations
 
 Michael Gran assembled this book, but, wrote only small sections of
-text.  Most of reference text of the curses library is taken directly
-from the documentation of ncurses itself, and then modified to make it
+text.  Most of reference text of the curses library was taken directly
+from the documentation of ncurses itself and was modified to make it
 specific to this Guile binding.  The ncurses library is maintained by
 Tom Dickey, and the manual pages in the library note that the Free
 Software Foundation holds the copyright.
 
 I've put his name on the title page, because it would seem rude not to
 do so; however, one should not get the impression that he approves of
-the GUILE Ncurses project or that he is involved with the GUILE
+the Guile Ncurses project or that he is involved with the Guile
 NCurses project, or, indeed, that he is even aware of it.
 
 The license for the original ncurses documentation is as follows.
@@ -351,13 +351,13 @@ authorization.
 @end quotation
 
 The tutorial for the curses library is adapted from the @emph{ncurses
-Programming HowTo} by Pradeep Padala, modified by Michael Gran to make
-it specific to the Guile binding.
+Programming HowTo} by Pradeep Padala.  It was modified by Michael Gran
+to make it specific to the Guile binding.
 
 Again, I've put his name on the title page, because it would seem rude
 not to do so; however, one should not get the impression that he
-approves of the GUILE Ncurses project or that he is involved with the
-GUILE Ncurses project, or, again, that he is even aware of it.
+approves of the Guile Ncurses project or that he is involved with the
+Guile Ncurses project, or, again, that he is even aware of it.
 
 That document holds the following license.
 
@@ -393,22 +393,23 @@ authorization.
 @node Components of a Curses Interface, Types and encodings, Introduction, Top
 @chapter Components of a Curses Interface
 
-The goal of curses is to simplify the task of programming for
+The goal of Ncurses is to simplify the task of programming for
 character-cell terminals.  A character-cell terminal is a combination
 of a display that shows text in a monospaced font and the keyboard and
 mouse that connect to it.  These days, there are three common types of
 terminals.  Actual hardware terminals, such as the DEC VT220 or the
 Boundless Technologies VT525, are dedicated thin clients that interact
 with a networked computer via a serial port.  These are still somewhat
-common in industrial applications where computers would be too
-expensive or too fragile, but, they are becoming less common.  Second
-are the consoles of text-mode operating systems, such as the console
-of GNU/Linux when used without X/Windows or the command prompt of
-FreeDOS.  The third type is the terminal emulation programs that some
-windowing systems have.  The best known terminal emulation program is
-probably XTerm, which does a good emulation of a VT220 terminal.
+common in legacy applications or industrial applications where
+computers would be too expensive or too fragile, but, they are rapidly
+becoming extinct.  Second are the consoles of text-mode operating
+systems, such as the console of GNU/Linux when used without X/Windows
+or the command prompt of FreeDOS.  The third type is the terminal
+emulation programs that some windowing systems have.  The best known
+terminal emulation program is probably XTerm, which does a good
+emulation of a VT220 terminal.
 
-The curses library attempts to create a standardized solution for
+The Ncurses library attempts to create a standardized solution for
 these problems.
 @itemize @bullet
 @item
@@ -435,10 +436,10 @@ color, or to erase the screen?
 @cindex terminfo
 @cindex termcap
 
-The first step in any curses program is to understand the terminal's
-capabilities and attributes.  Curses includes a database of terminals
+The first step in any Ncurses program is to understand the terminal's
+capabilities and attributes.  Ncurses includes a database of terminals
 and their capabilities called @code{terminfo} or perhaps
-@code{termcap}.  When a curses program is initialized, the type of
+@code{termcap}.  When a Ncurses program is initialized, the type of
 terminal is queried, usually by examining the environment variable
 @env{TERM}, and the capabilities are read from the database.
 
@@ -1590,7 +1591,7 @@ To draw a box, it needs to draw four corners, two horizontal lines,
 and two vertical lines.  It uses @code{hline} and @code{vline}.  These
 two functions are simple.  They create a horizontal or vertical line
 of the specified length at the specified position.  The program uses
-more of the special drawing characters like @code{(acs-urcorer)},
+more of the special drawing characters like @code{(acs-urcorner)},
 which is the upper-right corner of a box.
 
 @example
@@ -3362,7 +3363,7 @@ for which @code{endwin} is called.
 @cindex Exiting curses mode
 
 A program should always call @code{endwin} before exiting or escaping
-from curses mode temporarily.  This routine restores tty modes, moves
+from curses mode temporarily.  This routine restores TTY modes, moves
 the cursor to the lower left-hand corner of the screen and resets the
 terminal into the proper non-visual mode.  Calling @code{refresh} or
 @code{doupdate} after a temporary escape causes the program to resume
@@ -4374,13 +4375,13 @@ returns @code{#f}.
 
 @deffn Procedure color-content color
 @findex colors
-The @code{color-content} routine gives programmers a way to find the
-intensity of the red, green, and blue (RGB) components in a color.
-Given @var{color} as its argument, it returns a list of three values
-indicating the red, green, and blue components in the given color.
-The value of the @var{color} argument must be between 0 and the value
-returned by the @code{colors} procedure.  The values returned are
-between 0 (no component) and 1000 (maximum amount of component).
+The @code{color-content} routine returns the intensity of the red,
+green, and blue (RGB) components in a color.  Given @var{color} as its
+argument, it returns a list of three integers indicating the red,
+green, and blue components in the given color.  The value of the
+@var{color} argument must be between 0 and the value returned by the
+@code{colors} procedure.  The values returned are between 0 (no
+component) and 1000 (maximum amount of component).
 
 @end deffn
 
@@ -4728,7 +4729,7 @@ says that KEY_ENTER is @kbd{C-M}, @code{getch} will return
 When using @code{getch}, @code{wgetch}, @code{mvgetch}, or
 @code{mvwgetch}, nocbreak mode (@code{nocbreak!}) and echo mode
 (@code{echo!}) should not be used at the same time.  Depending on the
-state of the tty driver when each character is typed, the program may
+state of the TTY driver when each character is typed, the program may
 produce undesirable results.
 
 Historically, the set of keypad macros was largely defined by the
@@ -4840,7 +4841,7 @@ margin of the window or until @var{n} characters have been found.
 
 Normally, the TTY driver buffers typed characters until a @key{NL} or
 @key{RET} is typed.  The @code{cbreak!} routine disables line
-buffering and erase/kill character-processing (interrupt and flow
+buffering and erase/kill character processing (interrupt and flow
 control characters are unaffected), making characters typed by the
 user immediately available to the program.
 
@@ -4870,7 +4871,7 @@ set the @code{cbreak!} mode.  Note that @code{cbreak!} overrides
 
 The @code{echo!} and @code{noecho!} routines control whether
 characters typed by the user are echoed by getch as they are typed.
-Echoing by the tty driver is always disabled, but initially
+Echoing by the TTY driver is always disabled, but initially
 @code{getch} is in echo mode, so characters typed are echoed.  Authors
 of most interactive programs prefer to do their own echoing in a
 controlled area of the screen, or not to echo at all, so they disable
@@ -4905,11 +4906,11 @@ The return value is unspecified.
 
 If the intrflush option is enabled, (@var{bf} is @code{#t}), when an
 interrupt key is pressed on the keyboard (interrupt, break, quit) all
-output in the tty driver queue will be flushed, giving the effect of
+output in the TTY driver queue will be flushed, giving the effect of
 faster response to the interrupt, but causing curses to have the wrong
 idea of what is on the screen.  Disabling (@var{bf} is @code{#f}), the
 option prevents the flush.  The default for the option is inherited
-from the tty driver settings.
+from the TTY driver settings.
 
 The return value is unspecified.
 
@@ -4945,7 +4946,7 @@ If Guile-Ncurses was compiled with the standard version of the ncurses
 library, and not the wide version, it operates on 8-bit characters.
 
 Initially, whether the terminal returns 7 or 8 significant bits on
-input depends on the control mode of the tty driver.  To force 8 bits
+input depends on the control mode of the TTY driver.  To force 8 bits
 to be returned, invoke @code{(meta! #t)}.  This is equivalent,
 under POSIX, to setting the CS8 flag on the terminal.  To force 7 bits
 to be returned, invoke @code{(meta! #f)}.  This is equivalent,
@@ -4994,7 +4995,7 @@ characters typed are immediately passed through to the user program.
 The differences are that in raw mode, the interrupt, quit, suspend,
 and flow control characters are all passed through uninterpreted,
 instead of generating a signal.  The behavior of the @key{BREAK} key depends
-on other bits in the tty driver that are not set by curses.
+on other bits in the TTY driver that are not set by curses.
 
 The return value is unspecified.
 
@@ -5038,7 +5039,7 @@ milliseconds (where @var{delay} is positive).
 
 The curses library does ``line-breakout optimization'' by looking for
 typeahead periodically while updating the screen.  If input is found,
-and it is coming from a tty, the current update is postponed until
+and it is coming from a TTY, the current update is postponed until
 refresh or doupdate is called again.  This allows faster response to
 commands typed in advance.  Normally, the input file port passed to
 newterm, or @code{stdin} in the case that initscr was used, will be
@@ -7468,7 +7469,7 @@ than or equal to the minimum value, the range is simply ignored.
 Numeric data (may have a decimal-point part). Requires a third int
 argument controlling the precision, a fourth double argument con-
 straining minimum value, and a fifth double constraining maximum
-value. If your system supports locales, the decimal point character- 
+value. If your system supports locales, the decimal point character 
 to be used must be the one specified by your locale. If the maximum
 value is less than or equal to the minimum value, the range is simply
 ignored.

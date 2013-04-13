@@ -1473,8 +1473,9 @@ scratch."
 
 (define (color-content c)
   "Given a color number, this procedure returns a three-element list
-containing the red, green, and blue values of the color on a 0 to 1000 scale.
-It can return #f if the color is out of range or colors aren't initialized."
+containing the red, green, and blue values of the color on a 0 to 1000
+scale.  It can return #f if the color is out of range or colors aren't
+initialized."
   (assert-integer c)
   (%color-content c))  
 
