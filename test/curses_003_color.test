@@ -134,6 +134,15 @@
  (pass-if "assume-default-colors"
 	  (assume-default-colors COLOR_BLACK COLOR_YELLOW)))
 
+(with-test-prefix
+ "color-pair"
+ (pass-if "color-pair"
+	  (attr-set! scr (color-pair 2))
+	  (= (cadr (attr-get scr))
+	     2))
+ (pass-if "pair-number"
+	  (= (pair-number (color-pair 3))
+	     3)))
 
 (endwin)
 
