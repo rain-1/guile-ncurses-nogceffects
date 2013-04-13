@@ -477,7 +477,7 @@
             top-on
             underline
             underline-on
-            underlline-off
+            underline-off
             vertical
             vertical-off
             vertical-on
