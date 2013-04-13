@@ -83,17 +83,18 @@
 ;;;;
 ;;;;    (run-test "integer addition" #t (lambda () (= 2 (+ 1 1))))
 ;;;;
-;;;; To report success, THUNK should either return #t or throw 'pass.  To
-;;;; report failure, THUNK should either return #f or throw 'fail.  If THUNK
-;;;; returns a non boolean value or throws 'unresolved, this indicates that
-;;;; the test did not perform as expected.  For example the property that was
-;;;; to be tested could not be tested because something else went wrong.
-;;;; THUNK may also throw 'untested to indicate that the test was deliberately
-;;;; not performed, for example because the test case is not complete yet.
-;;;; Finally, if THUNK throws 'unsupported, this indicates that this test
-;;;; requires some feature that is not available in the configured testing
-;;;; environment.  All other exceptions thrown by THUNK are considered as
-;;;; errors.
+;;;; To report success, THUNK should either return #t or throw 'pass.
+;;;; To report failure, THUNK should either return #f or throw 'fail.
+;;;; If THUNK returns a non boolean value or throws 'unresolved, this
+;;;; indicates that the test did not perform as expected.  For
+;;;; example, one might throw 'unresolved if the property that was to
+;;;; be tested could not be tested because something else went wrong.
+;;;; THUNK may also throw 'untested to indicate that the test was
+;;;; deliberately not performed, for example because the test case is
+;;;; not complete yet.  Finally, if THUNK throws 'unsupported, this
+;;;; indicates that this test requires some feature that is not
+;;;; available in the configured testing environment.  All other
+;;;; exceptions thrown by THUNK are considered as errors.
 ;;;;
 ;;;;
 ;;;; Convenience macros for tests expected to pass or fail
