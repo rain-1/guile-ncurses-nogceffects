@@ -35,8 +35,9 @@
  (pass-if "def-prog-mode"
 	  ;; If we are detached from a terminal (such as when
 	  ;; being called in nohup) this can return #f.
-          (def-prog-mode)
-	  (throw 'untested)))
+	  (begin
+	    (def-prog-mode)
+	    'untested)))
 
 ;; Should be able to save and reset tty
 (with-test-prefix
@@ -57,7 +58,7 @@
 	    ;; called in nohup) this can return #f.
             (and (savetty)
                  (resetty))
-	    (throw 'untested)))
+	    'untested))
 
  ;; Curs-set should not return #f if this terminal has the capability
  ;; to set the visiblity of the cursor.  Not all terminals have this
