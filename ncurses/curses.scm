@@ -1312,7 +1312,7 @@ the color pair given by COLOR."
       (%wattr-set! win attr (pair-number attr))))
 
 (define (baudrate)
-  "Returns the baudrate of this terminal"
+  "Returns the baudrate of this terminal, or #f on failure."
   (%baudrate))
 
 (define (beep)
@@ -1389,8 +1389,8 @@ character, the default lines will be used."
              (xchar->list (normal-on (acs-llcorner))) (xchar->list (normal-on (acs-lrcorner))))))
 
 (define (can-change-color?)
-  "Returns #t if the terminal can change the RGB of a color number, or #f if
-the terminal has preassigned, unmodifiable colors."
+  "Returns #t if the terminal can change the RGB of a color number, or
+#f if the terminal has preassigned, unmodifiable colors."
   (%can-change-color?))
 
 (define (cbreak!)
