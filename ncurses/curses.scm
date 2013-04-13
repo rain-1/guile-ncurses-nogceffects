@@ -1507,16 +1507,16 @@ of WIN."
 (define (copywin srcwin destwin sminrow smincol dminrow dmincol
 		 dmaxrow dmaxcol overlay)
   "This routine copies text from SRCWIN to DESTWIN.  A rectangle is
-specified in the destination window DMINROW DMINCOL to DMAXROW DMAXCOL, and 
-the upper-left-corner of the source window is specified SMINROW and SMINCOL.
-If OVERLAY is 1, only text and not blanks are copied.  If overlay is 0,
-text and blanks are copied.  Returns #t on success. or #f on failure.  Failure
-usually indicates a problem with your coordinates."
+specified in the destination window DMINROW DMINCOL to DMAXROW
+DMAXCOL, and the upper-left-corner of the source window is specified
+SMINROW and SMINCOL.  If OVERLAY is #t, only text and not blanks are
+copied.  If overlay is #f, text and blanks are copied.  Returns #t on
+success. or #f on failure.  Failure usually indicates a problem with
+your coordinates."
   (assert-window srcwin)
   (assert-window destwin)
   (for-each (lambda (x) (assert-integer x))
-            (list sminrow smincol dminrow dmincol dmaxrow dmaxcol
-                  overlay))
+            (list sminrow smincol dminrow dmincol dmaxrow dmaxcol))
   (%copywin srcwin destwin sminrow smincol dminrow dmincol dmaxrow dmaxcol
 	    overlay))
 

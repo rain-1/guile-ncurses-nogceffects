@@ -81,7 +81,7 @@
             (addstr win "xxx" #:y 0 #:x 0)
             (refresh win)
 
-            (copywin win mainwin 0 0 0 0 4 4 1)
+            (copywin win mainwin 0 0 0 0 4 4 #t)
             (refresh mainwin)
             (delwin win)
             (refresh mainwin)

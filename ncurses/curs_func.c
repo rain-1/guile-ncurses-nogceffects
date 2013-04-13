@@ -346,7 +346,7 @@ gucu_copywin (SCM srcwin, SCM dstwin, SCM sminrow, SCM smincol, SCM dminrow,
 {
   WINDOW *c_srcwin, *c_dstwin;
   int c_sminrow, c_smincol, c_dminrow, c_dmincol, c_dmaxrow, c_dmaxcol;
-  int c_overlay, ret;
+  int ret;
 
   c_srcwin = _scm_to_window (srcwin);
   c_dstwin = _scm_to_window (dstwin);
@@ -356,12 +356,16 @@ gucu_copywin (SCM srcwin, SCM dstwin, SCM sminrow, SCM smincol, SCM dminrow,
   c_dmincol = scm_to_int (dmincol);
   c_dmaxrow = scm_to_int (dmaxrow);
   c_dmaxcol = scm_to_int (dmaxcol);
-  c_overlay = scm_to_int (_overlay);
 
-  ret = copywin (c_srcwin, c_dstwin, c_sminrow, c_smincol, c_dminrow,
-		 c_dmincol, c_dmaxrow, c_dmaxcol, c_overlay);
-  /* copywin fails if the windows are NULL, the rectangle doesn't fit in
-     the source, or it doesn't fit in the destination  */
+  if (scm_is_true (_overlay))
+    ret = copywin ((const WINDOW *)c_srcwin, c_dstwin, c_sminrow, c_smincol,
+		   c_dminrow, c_dmincol, c_dmaxrow, c_dmaxcol, 1);
+  else
+    ret = copywin ((const WINDOW *)c_srcwin, c_dstwin, c_sminrow, c_smincol,
+		   c_dminrow, c_dmincol, c_dmaxrow, c_dmaxcol, 0);
+
+  /* copywin fails if the windows are NULL, the rectangle doesn't fit
+     in the source, or it doesn't fit in the destination */
   RETURNTF (ret);
 }
 
@@ -1857,7 +1861,7 @@ gucu_waddch (SCM win, SCM ch)
 #ifdef HAVE_NCURSESW
   {
     cchar_t *c_ch = _scm_xchar_to_cchar (ch);
-    ret = wadd_wch (c_win, c_ch);
+    ret = wadd_wch (c_win, (const cchar_t *) c_ch);
     free (c_ch);
   }
 #else
