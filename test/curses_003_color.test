@@ -1,7 +1,7 @@
 ;;;; -*- Mode: scheme; -*-
 ;;;; curses_003_color.test --- test suite for curses's color functions
 
-;; Copyright 2009, 2010, 2011 Free Software Foundation, Inc.
+;; Copyright 2009, 2010, 2011, 2013 Free Software Foundation, Inc.
 
 ;; This file is part of Guile-Ncurses.
 
@@ -104,13 +104,13 @@
 ;; ability to  set colors on xterm depends on how xterm was compiled
 (with-test-prefix
  "init-color!"
- (expect-fail "set color #1"
-	      (begin
-		(false-if-exception (init-color! 1 200 200 200))
-		(lset= equal?
-		       '(200 200 200)
-		       (color-content 1))
-		*unspecified*)))
+ (pass-if "set color #1"
+	  (begin
+	    (false-if-exception (init-color! 1 200 200 200))
+	    (lset= equal?
+		   '(200 200 200)
+		   (color-content 1))
+	    'untested)))
 
 ;; can set color pairs on xterm
 (with-test-prefix
