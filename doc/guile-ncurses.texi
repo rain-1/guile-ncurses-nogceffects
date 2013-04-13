@@ -5178,11 +5178,11 @@ doesn't have a previous state.
 @cindex Cursor, hiding
 @cindex Cursor, visiblity
 
-The @code{curs-set} routine sets the cursor state is set to invisible,
-normal, or very visible for @var{visibility} equal to 0, 1, or 2
-respectively.  If the terminal supports the visibility requested, the
-previous cursor state is returned; otherwise, @code{#f} is
-returned.
+The @code{curs-set} routine changes the visibility of the cursor.  If
+@var{visibility} is 0, the cursor is set to invisible.  For 1, the
+cursor is visible.  For 2, the cursor is very visible.  If the
+terminal supports the visibility requested, the previous cursor state
+is returned; otherwise, @code{#f} is returned.
 
 @end deffn
 

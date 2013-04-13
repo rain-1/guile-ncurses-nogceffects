@@ -2,7 +2,7 @@
 ;;;; curses_024_kernel.test --- test suite for curses's low level functions
 
 
-;; Copyright 2009, 2010, 2011 Free Software Foundation, Inc.
+;; Copyright 2009, 2010, 2011, 2013 Free Software Foundation, Inc.
 
 ;; This file is part of Guile-Ncurses.
 
@@ -59,15 +59,17 @@
                  (resetty))
 	    (throw 'untested)))
 
- ;; Curs-set should not return #f if this terminal
- ;; has the capability to set the visiblity of the
- ;; cursor.  Not all terminals have this capability.
+ ;; Curs-set should not return #f if this terminal has the capability
+ ;; to set the visiblity of the cursor.  Not all terminals have this
+ ;; capability.
  (pass-if "curs-set"
           (begin
             (let ((x1 (curs-set 0))
                   (x2 (curs-set 1))
                   (x3 (curs-set 2)))
+	      ;; This restores the cursor to the original setting.
               (if x1 (curs-set x1))
+	      ;; This is true if the cursor could be set.
               (and x1 x2 x3)))))
 
 (endwin)
