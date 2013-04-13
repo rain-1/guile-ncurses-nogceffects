@@ -599,7 +599,7 @@ These constructors will be described in more detail later on.
 ;; The display format of the resulting complex character
 ==> #<xchar #\x>
 
-;; A constrctor for a bold letter 'L' using default colors
+;; A constructor for a bold letter 'L' using default colors
 > (bold #\L)
 
 ;; The display format of the resulting bold 'L' character
@@ -638,7 +638,7 @@ display format of that string
 @cindex Opaque types
 
 These are types from system libraries that are complex or
-system-depentent.  They are implemented as @code{SMOB}s.
+system-dependent.  They are implemented as @code{SMOB}s.
 
 @table @code
 
@@ -836,7 +836,7 @@ must be called after you are done with curses mode.
 @cindex guile-ncurses-shell
 
 If you would like to try out these functions interactively by typing
-them into the scheme schell, instead of typing them and running them
+them into the scheme shell, instead of typing them and running them
 as scripts, the program @code{guile-ncurses-shell} can be used.  The
 problem with interactive Guile sessions using @code{curses} is that
 you are typing into the same screen that curses is trying to manage,
@@ -999,7 +999,7 @@ following sections.
 A window is an imaginary screen defined by the curses system.  A
 window does not mean a bordered window which you usually see in GNOME
 or KDE system.  When curses is initialized, it creates a default
-window conventially named @code{stdscr} which represents your 80x25
+window conventionally named @code{stdscr} which represents your 80x25
 (or the size of window in which you are running) screen. If you are
 doing simple tasks like printing a few strings, reading input, etc.,
 you can safely use this single window for all of your purposes.  You
@@ -1033,7 +1033,7 @@ For many functions, there are optional key parameters.
 @node Output functions, Input functions, A word about windows, Curses Tutorial
 @section Output functions
 
-@cindex Output procecures
+@cindex Output procedures
 @cindex Print procedures
 
 I guess you can't wait any more to see some action.  Back to our
@@ -1092,7 +1092,7 @@ associated with the attributes until it is turned off.
 @end enumerate
 
 Additionally, curses provides some special characters for
-character-based graphics.  You can draw tables, horizonal or vertical
+character-based graphics.  You can draw tables, horizontal or vertical
 lines.  Try looking for the procedures beginning with @code{acs-}.
 
 @subsubsection Moving the cursor addch
@@ -1115,7 +1115,7 @@ can be replaced by
 There are really two version of the NCurses library: a standard
 version and a @emph{wide} version.  When @code{guile ncurses} was
 compiled, it was associated with either the standard version
-@file{libcurses} or the wide version @file{libncursesw}.  The wide
+@file{libncurses} or the wide version @file{libncursesw}.  The wide
 version has greater capability to print non-Latin characters than the
 standard version.
 
@@ -1386,7 +1386,7 @@ which turns off all attributes and brings you back to normal mode.
 
 The function @code{attr-get} gets the current attributes and color
 pair of the window.  Though we might not use this as often as the
-above runctions, this is useful in scanning areas of a screen.  Say we
+above functions, this is useful in scanning areas of a screen.  Say we
 wanted to do some complex update on the screen and we are not sure
 what attribute each character is associated with.  Then this function
 can be used with either @code{attr-set!} or @code{attr-on!} to produce the
@@ -4323,9 +4323,9 @@ video attribute.
 @cindex Color capabilities
 @cindex Terminal capabilities, color
 
-The @code{can-change-color?} routine returns @code{#t}
-if the terminal supports colors and can change their definitions;
-otherwise, it returns @code{#f}.
+The @code{can-change-color?} routine returns @code{#t} if the terminal
+supports colors and can change their definitions; otherwise, it
+returns @code{#f}.
 @end deffn
 
 @deffn Procedure color-content color
@@ -4374,7 +4374,8 @@ the capability to set color pair 0.
 @findex init-pair!
 
 This procedure allow the modification of special color pair 0, which
-cannot be modified by @code{init-pair!}.
+cannot be modified by @code{init-pair!}.  Color pair 0 is the default
+foreground and background color for the window.
 
 It returns @code{#t} if successful or @code{#f} is the terminal lacks
 the capability to set color pair 0.
@@ -4793,11 +4794,11 @@ margin of the window or until @var{n} characters have been found.
 @cindex Line buffering
 @cindex Control character processing
 
-Normally, the tty driver buffers typed characters until a @key{NL} or
-@key{RET} is typed.  The @code{cbreak!} routine disables line buffering
-and erase/kill character-processing (interrupt and flow control
-characters are unaffected), making characters typed by the user
-immediately available to the program.
+Normally, the TTY driver buffers typed characters until a @key{NL} or
+@key{RET} is typed.  The @code{cbreak!} routine disables line
+buffering and erase/kill character-processing (interrupt and flow
+control characters are unaffected), making characters typed by the
+user immediately available to the program.
 
 The @code{nocbreak!} routine returns the terminal to normal (cooked)
 mode.
