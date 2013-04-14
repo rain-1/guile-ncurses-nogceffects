@@ -36,7 +36,7 @@
  (pass-if "delay-output"
           (begin
             (delay-output 1)
-            #t))
+            'untested))
 
  (pass-if "curses-version"
           (string? (curses-version)))
