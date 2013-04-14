@@ -76,65 +76,65 @@ authorization.
 @end ifnottex
 
 @menu
-* Introduction::                
-* Components of a Curses Interface::  
-* Types and encodings::         
-* Curses Tutorial::             
-* Curses Reference::            
-* Index::                       
+* Introduction::
+* Components of a Curses Interface::
+* Types and encodings::
+* Curses Tutorial::
+* Curses Reference::
+* Index::
 
 @detailmenu
  --- The Detailed Node Listing ---
 
 Introduction
 
-* Authors::                     
+* Authors::
 
 Components of a Curses Interface
 
-* Terminal Capabilities::       
-* Keyboards and Keys::          
-* Characters::                  
-* Windows::                     
+* Terminal Capabilities::
+* Keyboards and Keys::
+* Characters::
+* Windows::
 
 Types and encodings
 
-* Character types::             
-* Opaque types::                
+* Character types::
+* Opaque types::
 
 Curses Tutorial
 
-* Hello World!!!::              
-* Interactive sessions and @code{guile-ncurses-shell}::  
-* The Gory Details::            
-* Initialization::              
-* A word about windows::        
-* Output functions::            
-* Input functions::             
-* Attributes::                  
-* Windows Tutorial::            
-* Colors::                      
-* Interfacing with the keyboard::  
-* Interfacing with the mouse::  
-* Panels Library::              
-* Menu Library::                
-* Forms Library::               
+* Hello World!!!::
+* Interactive sessions and @code{guile-ncurses-shell}::
+* The Gory Details::
+* Initialization::
+* A word about windows::
+* Output functions::
+* Input functions::
+* Attributes::
+* Windows Tutorial::
+* Colors::
+* Interfacing with the keyboard::
+* Interfacing with the mouse::
+* Panels Library::
+* Menu Library::
+* Forms Library::
 
 Hello World!!!
 
-* Using the Guile Curses module::  
+* Using the Guile Curses module::
 
 Initialization
 
-* Initialization Functions::    
-* An example::                  
+* Initialization Functions::
+* An example::
 
 Output functions
 
-* The @code{addch} procedure::  
-* @code{addstr} class of functions::  
-* A simple @code{addstr} example::  
-* A word of caution::           
+* The @code{addch} procedure::
+* @code{addstr} class of functions::
+* A simple @code{addstr} example::
+* A word of caution::
 
 @code{addstr} class of functions
 
@@ -143,157 +143,158 @@ Output functions
 
 Input functions
 
-* @code{getch} class of functions::  
-* @code{getnstr} class of functions::  
-* An example of @code{getnstr} and @code{getch}::  
+* @code{getch} class of functions::
+* @code{getnstr} class of functions::
+* An example of @code{getnstr} and @code{getch}::
 
 Attributes
 
-* The details::                 
-* @code{attr-on!} vs @code{attr-set!}::  
-* @code{attr-get}::             
-* @code{chgat} function::       
+* The details::
+* @code{attr-on!} vs @code{attr-set!}::
+* @code{attr-get}::
+* @code{chgat} function::
 
 Windows Tutorial
 
-* The basics::                  
-* Let there be a window::       
-* Other functions::             
-* Other border functions::      
+* The basics::
+* Let there be a window::
+* Other functions::
+* Other border functions::
 
 Colors
 
-* The basics of color::         
-* Changing color definitions::  
+* The basics of color::
+* Changing color definitions::
 
 Interfacing with the keyboard
 
-* The basics of keys::          
-* A simple key usage example::  
+* The basics of keys::
+* A simple key usage example::
 
 Interfacing with the mouse
 
-* The basics of the mouse::     
-* Getting the events::          
-* Miscellaneous functions::     
+* The basics of the mouse::
+* Getting the events::
+* Miscellaneous functions::
 
 Panels Library
 
-* Panels Basics::               
-* Compiling With the Panels Library::  
-* Moving and Resizing Panels::  
+* Panels Basics::
+* Compiling With the Panels Library::
+* Moving and Resizing Panels::
 
 Menu Library
 
-* Menu Basics::                 
-* Menu Driver::                 
-* Menu Windows::                
-* Scrolling Menus::             
+* Menu Basics::
+* Menu Driver::
+* Menu Windows::
+* Scrolling Menus::
 
 Forms Library
 
-* The Basics (Forms)::          
-* A Form Example::              
-* Making it useful::            
-* Playing with fields::         
-* Field Display Attributes::    
-* Field Option Bits::           
-* Field Status::                
-* Variable-Sized Fields::       
-* Form Windows::                
-* Field Validation::            
-* The Form Driver::             
+* The Basics (Forms)::
+* A Form Example::
+* Making it useful::
+* Playing with fields::
+* Field Display Attributes::
+* Field Option Bits::
+* Field Status::
+* Variable-Sized Fields::
+* Form Windows::
+* Field Validation::
+* The Form Driver::
 
 Curses Reference
 
-* The naming of routines::      
-* The basic curses library::    
-* Function key labels library::  
-* The curses panel library::    
-* The curses menu library::     
-* The curses form library::     
+* The naming of routines::
+* The basic curses library::
+* Function key labels library::
+* The curses panel library::
+* The curses menu library::
+* The curses form library::
 
 The basic curses library: @code{(ncurses curses)}
 
-* Overview::                    
-* Features determined at compile time::  
-* Curses screen initialization and manipulation routines::  
-* Errors and Exceptions::       
-* Making rendered characters::  
-* Adding characters::           
-* Adding strings of characters and attributes::  
-* Character and window attribute control routines::  
-* Bell and screen flash routines::  
-* Window background manipulation routines::  
-* Borders and lines::           
-* Clearing windows and parts of window::  
-* Color manipulation routines::  
-* Deleting the character under the cursor::  
-* Deleting and inserting lines::  
-* Getting characters from the keyboard::  
-* Receiving strings from the keyboard::  
-* Cursor location and window coordinates::  
-* Getting a rendered character from the window::  
-* Getting a string of characters and attributes from a window::  
-* Input options::               
-* Inserting a character before the cursor::  
-* Inserting a string before the cursor::  
-* Getting a string of characters from the screen::  
-* Low-level routines::          
-* Mouse handling::              
-* Moving the cursor ::          
-* Output options::              
-* Overlay and manipulate overlapped windows::  
-* Create and display pads::     
-* Print data to a terminal-attached ports::  
-* Refresh windows and lines::   
-* Reading and writing a curses screen to a file::  
-* Scroll a window::             
-* Terminal attributes::         
-* Refresh routines::            
-* Miscellaneous utilities::     
-* Window creation::             
+* Overview::
+* Features determined at compile time::
+* Curses screen initialization and manipulation routines::
+* Errors and Exceptions::
+* Making rendered characters::
+* Adding characters::
+* Adding strings of characters and attributes::
+* Character and window attribute control routines::
+* Bell and screen flash routines::
+* Window background manipulation routines::
+* Borders and lines::
+* Clearing windows and parts of window::
+* Color manipulation routines::
+* Deleting the character under the cursor::
+* Deleting and inserting lines::
+* Getting characters from the keyboard::
+* Handling unmapped keys::
+* Receiving strings from the keyboard::
+* Cursor location and window coordinates::
+* Getting a rendered character from the window::
+* Getting a string of characters and attributes from a window::
+* Input options::
+* Inserting a character before the cursor::
+* Inserting a string before the cursor::
+* Getting a string of characters from the screen::
+* Low-level routines::
+* Mouse handling::
+* Moving the cursor ::
+* Output options::
+* Overlay and manipulate overlapped windows::
+* Create and display pads::
+* Print data to a terminal-attached ports::
+* Refresh windows and lines::
+* Reading and writing a curses screen to a file::
+* Scroll a window::
+* Terminal attributes::
+* Refresh routines::
+* Miscellaneous utilities::
+* Window creation::
 
 The Coordinate System
 
 
 The curses menu library: @code{(ncurses menu)}
 
-* Menus Overview::              
-* Menu Item Procedures::        
-* Menu Procedures::             
-* Menu creation ::              
-* Menu options::                
+* Menus Overview::
+* Menu Item Procedures::
+* Menu Procedures::
+* Menu creation ::
+* Menu options::
 
 Menu Procedures
 
-* Menu Colors and Attributes::  
-* Positioning a menu cursor::   
-* The menu driver::             
-* Menu sizes::                  
-* Menu mark strings::           
+* Menu Colors and Attributes::
+* Positioning a menu cursor::
+* The menu driver::
+* Menu sizes::
+* Menu mark strings::
 
 Menu options
 
-* Menu pattern buffer::         
-* Writing or erasing menus from window::  
-* Control spacing between menu items::  
-* Associate menus with window::  
+* Menu pattern buffer::
+* Writing or erasing menus from window::
+* Control spacing between menu items::
+* Associate menus with window::
 
 The curses form library: @code{(ncurses form)}
 
-* Forms Overview::              
-* Form procedures::             
-* Making or breaking connections between forms and fields::  
-* Color and attribute control for form fields::  
-* Data type validation for fields::  
-* Creating forms::              
-* Form pagination functions::   
-* Setting and getting form options::  
-* Setting the page number and field::  
-* Writing or erasing forms from associated subwindows::  
-* Printable form request names::  
-* Form windows::                
+* Forms Overview::
+* Form procedures::
+* Making or breaking connections between forms and fields::
+* Color and attribute control for form fields::
+* Data type validation for fields::
+* Creating forms::
+* Form pagination functions::
+* Setting and getting form options::
+* Setting the page number and field::
+* Writing or erasing forms from associated subwindows::
+* Printable form request names::
+* Form windows::
 
 @end detailmenu
 @end menu
@@ -302,7 +303,7 @@ The curses form library: @code{(ncurses form)}
 @chapter Introduction
 
 @menu
-* Authors::                     
+* Authors::
 @end menu
 
 @node Authors,  , Introduction, Introduction
@@ -424,10 +425,10 @@ color, or to erase the screen?
 @end itemize
 
 @menu
-* Terminal Capabilities::       
-* Keyboards and Keys::          
-* Characters::                  
-* Windows::                     
+* Terminal Capabilities::
+* Keyboards and Keys::
+* Characters::
+* Windows::
 @end menu
 
 @node Terminal Capabilities, Keyboards and Keys, Components of a Curses Interface, Components of a Curses Interface
@@ -514,8 +515,8 @@ standard scheme types, while others are represented as opaque types
 (SMOBs).
 
 @menu
-* Character types::             
-* Opaque types::                
+* Character types::
+* Opaque types::
 @end menu
 
 
@@ -720,21 +721,21 @@ elements of type @code{#<field>}.
 @chapter Curses Tutorial
 
 @menu
-* Hello World!!!::              
-* Interactive sessions and @code{guile-ncurses-shell}::  
-* The Gory Details::            
-* Initialization::              
-* A word about windows::        
-* Output functions::            
-* Input functions::             
-* Attributes::                  
-* Windows Tutorial::            
-* Colors::                      
-* Interfacing with the keyboard::  
-* Interfacing with the mouse::  
-* Panels Library::              
-* Menu Library::                
-* Forms Library::               
+* Hello World!!!::
+* Interactive sessions and @code{guile-ncurses-shell}::
+* The Gory Details::
+* Initialization::
+* A word about windows::
+* Output functions::
+* Input functions::
+* Attributes::
+* Windows Tutorial::
+* Colors::
+* Interfacing with the keyboard::
+* Interfacing with the mouse::
+* Panels Library::
+* Menu Library::
+* Forms Library::
 @end menu
 
 @node Hello World!!!, Interactive sessions and @code{guile-ncurses-shell}, Curses Tutorial, Curses Tutorial
@@ -745,7 +746,7 @@ look into its various features, let's write a simple program and say
 hello to the world.
 
 @menu
-* Using the Guile Curses module::  
+* Using the Guile Curses module::
 @end menu
 
 @node Using the Guile Curses module,  , Hello World!!!, Hello World!!!
@@ -923,8 +924,8 @@ initialize the mouse, etc.  Let's discuss some of the functions that
 are normally called immediately after @code{initscr}.
 
 @menu
-* Initialization Functions::    
-* An example::                  
+* Initialization Functions::
+* An example::
 @end menu
 
 @node Initialization Functions, An example, Initialization, Initialization
@@ -1060,10 +1061,10 @@ characters and strings to the screen.
 @end enumerate
 
 @menu
-* The @code{addch} procedure::  
-* @code{addstr} class of functions::  
-* A simple @code{addstr} example::  
-* A word of caution::           
+* The @code{addch} procedure::
+* @code{addstr} class of functions::
+* A simple @code{addstr} example::
+* A word of caution::
 @end menu
 
 @node The @code{addch} procedure, @code{addstr} class of functions, Output functions, Output functions
@@ -1222,9 +1223,9 @@ which allow us to get input from the user.
 
 
 @menu
-* @code{getch} class of functions::  
-* @code{getnstr} class of functions::  
-* An example of @code{getnstr} and @code{getch}::  
+* @code{getch} class of functions::
+* @code{getnstr} class of functions::
+* An example of @code{getnstr} and @code{getch}::
 @end menu
 
 @node @code{getch} class of functions, @code{getnstr} class of functions, Input functions, Input functions
@@ -1303,10 +1304,10 @@ these lines once could write a more useful program which reads a scheme
 file, parses it, and prints it in different colors.
 
 @menu
-* The details::                 
-* @code{attr-on!} vs @code{attr-set!}::  
-* @code{attr-get}::             
-* @code{chgat} function::       
+* The details::
+* @code{attr-on!} vs @code{attr-set!}::
+* @code{attr-get}::
+* @code{chgat} function::
 @end menu
 
 @node The details, @code{attr-on!} vs @code{attr-set!}, Attributes, Attributes
@@ -1467,10 +1468,10 @@ Second, curses windows don't normally overlap.  They are usually
 distinct, non-overlapping regions of the screen.
 
 @menu
-* The basics::                  
-* Let there be a window::       
-* Other functions::             
-* Other border functions::      
+* The basics::
+* Let there be a window::
+* Other functions::
+* Other border functions::
 @end menu
 
 @node The basics, Let there be a window, Windows Tutorial, Windows Tutorial
@@ -1602,8 +1603,8 @@ which is the upper-right corner of a box.
 @section Colors
 
 @menu
-* The basics of color::         
-* Changing color definitions::  
+* The basics of color::
+* Changing color definitions::
 @end menu
 
 @node The basics of color, Changing color definitions, Colors, Colors
@@ -1687,8 +1688,8 @@ combination of a color pair.
 @section Interfacing with the keyboard
 
 @menu
-* The basics of keys::          
-* A simple key usage example::  
+* The basics of keys::
+* A simple key usage example::
 @end menu
 
 @node The basics of keys, A simple key usage example, Interfacing with the keyboard, Interfacing with the keyboard
@@ -1750,9 +1751,9 @@ the mouse.  Usually each UI allows the user to interact with both
 keyboard and mouse.
 
 @menu
-* The basics of the mouse::     
-* Getting the events::          
-* Miscellaneous functions::     
+* The basics of the mouse::
+* Getting the events::
+* Miscellaneous functions::
 @end menu
 
 @node The basics of the mouse, Getting the events, Interfacing with the mouse, Interfacing with the mouse
@@ -1882,9 +1883,9 @@ their overlapping and update the screen properly. So why wait? Let's
 take a close peek into panels.
 
 @menu
-* Panels Basics::               
-* Compiling With the Panels Library::  
-* Moving and Resizing Panels::  
+* Panels Basics::
+* Compiling With the Panels Library::
+* Moving and Resizing Panels::
 @end menu
 
 @node Panels Basics, Compiling With the Panels Library, Panels Library, Panels Library
@@ -1986,10 +1987,10 @@ more than one item as the preferred choice. This is dealt with in a
 later section. Now it is time for some rudiments.
 
 @menu
-* Menu Basics::                 
-* Menu Driver::                 
-* Menu Windows::                
-* Scrolling Menus::             
+* Menu Basics::
+* Menu Driver::
+* Menu Windows::
+* Scrolling Menus::
 @end menu
 
 @node Menu Basics, Menu Driver, Menu Library, Menu Library
@@ -2226,17 +2227,17 @@ A form is a collection of fields. Each field can be either a label
 provides functions to divide forms into multiple pages.
 
 @menu
-* The Basics (Forms)::          
-* A Form Example::              
-* Making it useful::            
-* Playing with fields::         
-* Field Display Attributes::    
-* Field Option Bits::           
-* Field Status::                
-* Variable-Sized Fields::       
-* Form Windows::                
-* Field Validation::            
-* The Form Driver::             
+* The Basics (Forms)::
+* A Form Example::
+* Making it useful::
+* Playing with fields::
+* Field Display Attributes::
+* Field Option Bits::
+* Field Status::
+* Variable-Sized Fields::
+* Form Windows::
+* Field Validation::
+* The Form Driver::
 @end menu
 
 @node  The Basics (Forms), A Form Example, Forms Library, Forms Library
@@ -2993,12 +2994,12 @@ The guile-ncurses package provides the following modules:
 @end enumerate
 
 @menu
-* The naming of routines::      
-* The basic curses library::    
-* Function key labels library::  
-* The curses panel library::    
-* The curses menu library::     
-* The curses form library::     
+* The naming of routines::
+* The basic curses library::
+* Function key labels library::
+* The curses panel library::
+* The curses menu library::
+* The curses form library::
 @end menu
 
 @node The naming of routines, The basic curses library, Curses Reference, Curses Reference
@@ -3045,44 +3046,45 @@ approximately the same name and arguments as the functions in the
 C-language API.
 
 @menu
-* Overview::                    
-* Features determined at compile time::  
-* Curses screen initialization and manipulation routines::  
-* Errors and Exceptions::       
-* Making rendered characters::  
-* Adding characters::           
-* Adding strings of characters and attributes::  
-* Character and window attribute control routines::  
-* Bell and screen flash routines::  
-* Window background manipulation routines::  
-* Borders and lines::           
-* Clearing windows and parts of window::  
-* Color manipulation routines::  
-* Deleting the character under the cursor::  
-* Deleting and inserting lines::  
-* Getting characters from the keyboard::  
-* Receiving strings from the keyboard::  
-* Cursor location and window coordinates::  
-* Getting a rendered character from the window::  
-* Getting a string of characters and attributes from a window::  
-* Input options::               
-* Inserting a character before the cursor::  
-* Inserting a string before the cursor::  
-* Getting a string of characters from the screen::  
-* Low-level routines::          
-* Mouse handling::              
-* Moving the cursor ::          
-* Output options::              
-* Overlay and manipulate overlapped windows::  
-* Create and display pads::     
-* Print data to a terminal-attached ports::  
-* Refresh windows and lines::   
-* Reading and writing a curses screen to a file::  
-* Scroll a window::             
-* Terminal attributes::         
-* Refresh routines::            
-* Miscellaneous utilities::     
-* Window creation::             
+* Overview::
+* Features determined at compile time::
+* Curses screen initialization and manipulation routines::
+* Errors and Exceptions::
+* Making rendered characters::
+* Adding characters::
+* Adding strings of characters and attributes::
+* Character and window attribute control routines::
+* Bell and screen flash routines::
+* Window background manipulation routines::
+* Borders and lines::
+* Clearing windows and parts of window::
+* Color manipulation routines::
+* Deleting the character under the cursor::
+* Deleting and inserting lines::
+* Getting characters from the keyboard::
+* Handling unmapped keys::
+* Receiving strings from the keyboard::
+* Cursor location and window coordinates::
+* Getting a rendered character from the window::
+* Getting a string of characters and attributes from a window::
+* Input options::
+* Inserting a character before the cursor::
+* Inserting a string before the cursor::
+* Getting a string of characters from the screen::
+* Low-level routines::
+* Mouse handling::
+* Moving the cursor ::
+* Output options::
+* Overlay and manipulate overlapped windows::
+* Create and display pads::
+* Print data to a terminal-attached ports::
+* Refresh windows and lines::
+* Reading and writing a curses screen to a file::
+* Scroll a window::
+* Terminal attributes::
+* Refresh routines::
+* Miscellaneous utilities::
+* Window creation::
 @end menu
 
 @node Overview, Features determined at compile time, The basic curses library, The basic curses library
@@ -4477,7 +4479,7 @@ It returns @code{#f} on failure and @code{#t} on success.
 @end deffn
 
 
-@node Getting characters from the keyboard, Receiving strings from the keyboard, Deleting and inserting lines, The basic curses library
+@node Getting characters from the keyboard, Handling unmapped keys, Deleting and inserting lines, The basic curses library
 @subsection Getting characters from the keyboard
 
 @deffn Procedure getch win #:key y x
@@ -4547,28 +4549,6 @@ It returns @code{#f} if there is no more space in the buffer, or
 @deffn Procedure key-f n
 This procedure returns the keycode for function key @var{n}.
 @end deffn
-
-@deffn Procedure define-key defn keycode
-@cindex Keycodes, customizing
-This procedure defines a new, custom @var{keycode}.  When the string
-in @code{defn} is input, routines like @code{getch} will return the
-keycode instead, if the keypad is on.
-
-If @var{keycode} is an existing keycode, its @var{defn} replaces its
-previous definition.
-
-The return value is unspecified.  An exception could be thrown if
-curses is in a bad state.
-@end deffn
-
-@deffn Procedure key-defined defn
-@cindex Keycodes, lookup
-
-If the string @var{defn} is a character sequence that is bound to a keycode,
-that keycode is returned.  Otherwise @code{#f} is returned.
-
-@end deffn
-
 
 @findex getch
 @findex keypad!
@@ -4696,8 +4676,6 @@ Also, a common terminal is more likely to return @kbd{C-M} than
 @caption{the keypad constants, part 2}
 @end float
 
-
-
 @deffn Procedure has-key? ch
 @cindex Terminal capabilities, keys
 @cindex Keys
@@ -4712,7 +4690,6 @@ and @code{KEY_MOUSE}.  See @code{resizeterm} for more details about
 @ref{Mouse handling}.
 
 @end deffn
-
 
 Use of the @key{ESC} key by a programmer for a single character function
 is discouraged, as it will cause a delay of up to one second while the
@@ -4741,7 +4718,67 @@ of these.  IBM PC-style consoles typically support little more than
 @code{KEY_NPAGE}, @code{KEY_PPAGE}, and function keys 1 through
 12.  The ins key is usually mapped to @code{KEY_IC}
 
-@node Receiving strings from the keyboard, Cursor location and window coordinates, Getting characters from the keyboard, The basic curses library
+@node Handling unmapped keys, Receiving strings from the keyboard, Getting characters from the keyboard, The basic curses library
+@subsection Handling unmapped keys
+
+@cindex Keys, unmapped
+@cindex Keys, custom
+
+For most every modern-day terminal, you'll find that if you get the
+@env{TERM} environment variable set correctly, then each of the
+function keys on the keyboard will be interpreted as a key code.
+
+But in rare circumstances, you may find that a function key on your
+keyboard is not being mapped to a keycode.  As an example, on some
+keyboards there is a special ``menu'' key in between @key{Ctrl} and
+@key{Alt}.  On my keyboard, pressing ``menu'' returns ``@key{ESC}
+@key{[} @key{2} @key{9} @key{~}'', which @code{getch} returns as a
+that 5 separate characters, instead of a single keycode like
+@code{KEY_MENU}.
+
+When this happens, the problem is most often that you've set your
+@env{TERM} incorrectly.  Next most likely is that your terminfo or
+termcap database is out of date.  That is where you should first seek
+your solution.
+
+But, if that fails, and you need a quick-and-dirty workaround,
+@code{define-key} can help.  It lets you map an escape sequence to a
+key code.
+
+Continuing my example, if I choose to map this menu key to a keycode,
+I can choose the keycode of a key that that doesn't appear on my
+keyboard, like @code{KEY_FIND}, and associate with that string, using
+@code{define-key}.
+
+@deffn Procedure define-key defn keycode
+@cindex Keycodes, customizing
+This procedure defines a new, custom @var{keycode}.  When the string
+in @code{defn} is input, routines like @code{getch} will return the
+keycode instead, if the keypad is on.  If @var{defn} is an empty
+string, the keycode will be cleared.
+
+If @var{keycode} is an existing keycode, its @var{defn} replaces its
+previous definition.
+
+The return value is @code{#t} on success.
+@end deffn
+
+For the example, I can use the command
+@lisp
+ (define-key (string #\esc #\[ #\2 #\9 #\~) KEY_FIND)
+@end lisp
+From that point on, when the Menu key is pressed, @code{getch} will
+return the integer @code{KEY_FIND}.
+
+@deffn Procedure key-defined defn
+@cindex Keycodes, lookup
+
+If the string @var{defn} is a character sequence that is bound to a keycode,
+that keycode is returned.  Otherwise @code{#f} is returned.
+
+@end deffn
+
+@node Receiving strings from the keyboard, Cursor location and window coordinates, Handling unmapped keys, The basic curses library
 @subsection Receiving strings from the keyboard
 
 @deffn Procedure getnstr win n #:key y x
@@ -5500,7 +5537,7 @@ curses will then be able to detect the return key.
 
 The return values are unspecified;
 
-@end deffn 
+@end deffn
 
 There are a set of procedures to test the output options of a given window.
 
@@ -6435,11 +6472,11 @@ Returns the window of a given panel
 These are the functions in the @code{(ncurses menu)} module.
 
 @menu
-* Menus Overview::              
-* Menu Item Procedures::        
-* Menu Procedures::             
-* Menu creation ::              
-* Menu options::                
+* Menus Overview::
+* Menu Item Procedures::
+* Menu Procedures::
+* Menu creation ::
+* Menu options::
 @end menu
 
 @node Menus Overview, Menu Item Procedures, The curses menu library, The curses menu library
@@ -6556,11 +6593,11 @@ menu items will be mapped onto the screen.
 @subsection Menu Procedures
 
 @menu
-* Menu Colors and Attributes::  
-* Positioning a menu cursor::   
-* The menu driver::             
-* Menu sizes::                  
-* Menu mark strings::           
+* Menu Colors and Attributes::
+* Positioning a menu cursor::
+* The menu driver::
+* Menu sizes::
+* Menu mark strings::
 @end menu
 
 @node Menu Colors and Attributes, Positioning a menu cursor, Menu Procedures, Menu Procedures
@@ -6843,10 +6880,10 @@ Returns the bitmask of the @var{menu}'s options.
 @end deffn
 
 @menu
-* Menu pattern buffer::         
-* Writing or erasing menus from window::  
-* Control spacing between menu items::  
-* Associate menus with window::  
+* Menu pattern buffer::
+* Writing or erasing menus from window::
+* Control spacing between menu items::
+* Associate menus with window::
 @end menu
 
 @node Menu pattern buffer, Writing or erasing menus from window, Menu options, Menu options
@@ -6951,18 +6988,18 @@ or @code{E_POSTED} if the menu has already been posted.
 These are the functions in the @code{(ncurses form)} module.
 
 @menu
-* Forms Overview::              
-* Form procedures::             
-* Making or breaking connections between forms and fields::  
-* Color and attribute control for form fields::  
-* Data type validation for fields::  
-* Creating forms::              
-* Form pagination functions::   
-* Setting and getting form options::  
-* Setting the page number and field::  
-* Writing or erasing forms from associated subwindows::  
-* Printable form request names::  
-* Form windows::                
+* Forms Overview::
+* Form procedures::
+* Making or breaking connections between forms and fields::
+* Color and attribute control for form fields::
+* Data type validation for fields::
+* Creating forms::
+* Form pagination functions::
+* Setting and getting form options::
+* Setting the page number and field::
+* Writing or erasing forms from associated subwindows::
+* Printable form request names::
+* Form windows::
 @end menu
 
 @node Forms Overview, Form procedures, The curses form library, The curses form library
@@ -7470,7 +7507,7 @@ than or equal to the minimum value, the range is simply ignored.
 Numeric data (may have a decimal-point part). Requires a third int
 argument controlling the precision, a fourth double argument con-
 straining minimum value, and a fifth double constraining maximum
-value. If your system supports locales, the decimal point character 
+value. If your system supports locales, the decimal point character
 to be used must be the one specified by your locale. If the maximum
 value is less than or equal to the minimum value, the range is simply
 ignored.
