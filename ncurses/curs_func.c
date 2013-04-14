@@ -425,12 +425,13 @@ gucu_define_key (SCM defn, SCM keycode)
 
   if (scm_c_string_length (defn) == 0)
     {
-      ret = define_key (NULL, c_keycode);
+      ret = define_key ((const char *) NULL, c_keycode);
     }
   else
     {
       c_defn = scm_to_locale_string (defn);
-      ret = define_key (c_defn, c_keycode);
+      ret = define_key ((const char *) c_defn, c_keycode);
+      free (c_defn);
     }
 
   RETURNTF (ret);
