@@ -173,14 +173,11 @@ open_terminal (char *pseudo_terminal_slave_name,
                int slave_file_descriptor)
 {
   int process_id;
-  int name_length;
   struct termios terminal_attributes;
   char *s_flag;
   const size_t unix98_offset = strlen("/dev/pts/");
   const size_t bsd_offset = strlen("/dev/tty");
   const size_t cygwin_offset = strlen("/dev/tty");
-
-  name_length = strlen(pseudo_terminal_slave_name);
 
   if (is_unix98_pty (pseudo_terminal_slave_name))
     {
