@@ -5840,7 +5840,6 @@ has been written to since the preceding @code{scr-dump} call.
 
 @end deffn
 
-
 @deffn Procedure scr-set filename
 
 @findex scr-restore
@@ -5921,8 +5920,8 @@ return @code{#f}.
 @cindex Insert character
 @cindex Terminal capabilities, insert
 
-The has-ic routine is true if the terminal has insert- and delete-
-character capabilities.
+The @code{has-ic?} routine is true if the terminal has insert- and
+delete- character capabilities.
 
 @end deffn
 
@@ -6208,7 +6207,6 @@ between the subwindows and the derived windows.
 
 It returns a window that shares memory with @var{orig}, or @code{#f}
 if the window could not be created.
-
 @end deffn
 
 
@@ -6227,7 +6225,8 @@ The return value is unspecified.
 @deffn Procedure dupwin win
 @cindex Windows, duplication
 
-Calling @code{dupwin} creates an exact duplicate of the window @var{win}.
+Calling @code{dupwin} returns a new window that is an exact duplicate
+of the window @var{win}.
 
 @end deffn
 
