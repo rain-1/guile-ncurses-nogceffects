@@ -292,7 +292,7 @@ inner_main (void *data, int argc, char **argv)
       if (strcmp (argv[i], "--version") == 0
           || strcmp (argv[i], "-v") == 0)
         {
-          printf (_("guile-ncurses-shell 0.4\n"
+          printf (_("guile-ncurses-shell 0.5\n"
                     "Copyright (C) 2010 Free Software Foundation, Inc.\n"
                     "License LGPLv3+: GNU LGPL version 3 or later <http://www.gnu.org/licenses/lgpl.html>"
                     "This is free software: you are free to change and redistribute it.\n"
