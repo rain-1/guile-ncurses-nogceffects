@@ -2348,7 +2348,7 @@ gucu_init_function ()
   scm_c_define_gsubr ("define-key", 2, 0, 0, gucu_define_key);
   scm_c_define_gsubr ("delay-output", 1, 0, 0, gucu_delay_output);
   scm_c_define_gsubr ("%delscreen", 1, 0, 0, gucu_delscreen);
-  scm_c_define_gsubr ("derwin", 5, 0, 0, gucu_derwin);
+  scm_c_define_gsubr ("%derwin", 5, 0, 0, gucu_derwin);
   scm_c_define_gsubr ("%doupdate", 0, 0, 0, gucu_doupdate);
   scm_c_define_gsubr ("%dupwin", 1, 0, 0, gucu_dupwin);
   scm_c_define_gsubr ("%echo!", 0, 0, 0, gucu_echo);
