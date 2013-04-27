@@ -112,23 +112,28 @@ then
                [-lncurses])
   AC_CHECK_LIB([form], [new_form],
                [FORM_LIB="-lform"],
-               [AC_MSG_ERROR([the ncurses form library is required])])
+               [AC_MSG_ERROR([the ncurses form library is required])],
+               [-lncurses])
   AC_CHECK_LIB([panel], [new_panel],
                [PANEL_LIB="-lpanel"],
-               [AC_MSG_ERROR([the ncurses panel library is required])])
+               [AC_MSG_ERROR([the ncurses panel library is required])],
+               [-lncurses])
 else
   AC_CHECK_LIB([unistring], [u32_strconv_from_locale],
                [UNISTRING_LIB="-lunistring"],
                [AC_MSG_ERROR([the unistring library is required when wide curses is used])])
   AC_CHECK_LIB([menuw], [new_menu],
                [MENU_LIB="-lmenuw"],
-               [AC_MSG_ERROR([the ncurses menuw library is required])])
+               [AC_MSG_ERROR([the ncurses menuw library is required])],
+               [-lncursesw])
   AC_CHECK_LIB([formw], [new_form],
                [FORM_LIB="-lformw"],
-               [AC_MSG_ERROR([the ncurses formw library is required])])
+               [AC_MSG_ERROR([the ncurses formw library is required])],
+               [-lncursesw])
   AC_CHECK_LIB([panelw], [new_panel],
                [PANEL_LIB="-lpanelw"],
-               [AC_MSG_ERROR([the ncurses panelw library is required])])
+               [AC_MSG_ERROR([the ncurses panelw library is required])],
+               [-lncursesw])
 fi
 
 AC_SUBST([NCURSES_LIB])
