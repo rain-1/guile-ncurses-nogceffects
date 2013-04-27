@@ -54,22 +54,22 @@
               ;; (format #t "Baudrate: ~a (expected ~a)~%" b expected-baudrate)
               (maybe-sleep 1)
               (eqv? b expected-baudrate)
-	      (throw 'untested))))
+	      'untested)))
 
  ;; erasechar and killchar get their data from the terminal line
  ;; settings, so it isn't possible to say what the 'correct' response
  ;; should be, yet.  (In the future, we can compare this to the
- ;; response from the termios functions.)  
- ;; Gnu/Linux xterm gives #\del. Cygwin gives ERR.
+ ;; response from the termios functions.)  Gnu/Linux xterm gives
+ ;; #\del. Cygwin gives ERR.
  (pass-if "erasechar"
           (begin
             (clear win)
             (let ((c (erasechar)))
               (endwin)
               ;; (format #t "Erasechar: ~s (expected ~s)~%" c expected-erasechar)
-              ;; (maybe-sleep 1)
-              ;; (eqv? c expected-erasechar)
-	      (throw 'unresolved))))
+              (maybe-sleep 1)
+              (eqv? c expected-erasechar)
+	      'untested)))
  
  ;; erasechar and killchar get their data from the terminal line
  ;; settings, so it isn't possible to say what the 'correct' response
@@ -80,9 +80,9 @@
             (let ((c (killchar)))
               (endwin)
               ;; (format #t "Killchar: ~s (expected ~s)~%" c expected-killchar)
-              ;; (maybe-sleep 1)
-              ;; (eqv? c expected-killchar)
-	      (throw 'unresolved))))
+              (maybe-sleep 1)
+              (eqv? c expected-killchar)
+	      'untested)))
 
  (pass-if "has-ic?"
           (begin
@@ -108,7 +108,7 @@
             (clear win)
             (let ((c (longname)))
               (endwin)
-              (format #t "Long Terminal Name: ~a~%" c)
+              ;; (format #t "Long Terminal Name: ~a~%" c)
               (maybe-sleep 1)
               (not (not (string= c "xterm"
                                  0
@@ -122,7 +122,7 @@
             (clear win)
             (let ((c (termname)))
               (endwin)
-              (format #t "Terminal Name: ~a~%" c)
+              ;; (format #t "Terminal Name: ~a~%" c)
               (maybe-sleep 1)
               (not (not (string= c "xterm" 0 4 0 4))))))
  
@@ -141,23 +141,32 @@
                         A_REVERSE
                         A_STANDOUT
                         A_UNDERLINE)))
+	      (define (yn attrib)
+		(string-append
+		 (if (logtest attrib ta)
+		     "yes"
+		     " no")
+		 " "
+		 (if (logtest attrib ta2)
+		     "yes"
+		     " no")))
+
               (endwin)
               ;; (format #t "~%")
-              ;; (format #t "Terminal Capabilities Bit Mask~%")
+              ;; (format #t "Terminal Capabilities~%")
+	      ;; (format #t "this term vs xterm~%")
               ;; (format #t "------------------------------~%")
-              ;; (format #t "this term ~32,'0b~%" ta)
-              ;; (format #t "  PROTECT ~32,'0b~%" A_PROTECT)
-              ;; (format #t "INVISIBLE ~32,'0b~%" A_INVIS)
-              ;; (format #t "      ALT ~32,'0b~%" A_ALTCHARSET)
-              ;; (format #t "     BOLD ~32,'0b~%" A_BOLD)
-              ;; (format #t "      DIM ~32,'0b~%" A_DIM)
-              ;; (format #t "    BLINK ~32,'0b~%" A_BLINK)
-              ;; (format #t "  REVERSE ~32,'0b~%" A_REVERSE)
-              ;; (format #t "UNDERLINE ~32,'0b~%" A_UNDERLINE)
-              ;; (format #t " STANDOUT ~32,'0b~%" A_STANDOUT)
-              ;; (format #t "    COLOR ~32,'0b~%" A_COLOR)
-              ;; (format #t "std xterm ~32,'0b~%" ta2)
-              ;; (maybe-sleep 10)
+              ;; (format #t "  PROTECT ~a~%" (yn A_PROTECT))
+              ;; (format #t "INVISIBLE ~a~%" (yn A_INVIS))
+              ;; (format #t "      ALT ~a~%" (yn A_ALTCHARSET))
+              ;; (format #t "     BOLD ~a~%" (yn A_BOLD))
+              ;; (format #t "      DIM ~a~%" (yn A_DIM))
+              ;; (format #t "    BLINK ~a~%" (yn A_BLINK))
+              ;; (format #t "  REVERSE ~a~%" (yn A_REVERSE))
+              ;; (format #t "UNDERLINE ~a~%" (yn A_UNDERLINE))
+              ;; (format #t " STANDOUT ~a~%" (yn A_STANDOUT))
+              ;; (format #t "    COLOR ~a~%" (yn A_COLOR))
+              (maybe-sleep 10)
               (eqv? ta ta2)))))
 
 (curses-test-end test "curses_032_termattrs.out")
