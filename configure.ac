@@ -42,6 +42,7 @@ AC_PROG_CC
 AC_CANONICAL_HOST
 AC_PROG_INSTALL
 AC_PROG_MKDIR_P
+AM_PROG_AR
 
 AC_ARG_WITH([guilesitedir],
             [AS_HELP_STRING([--with-guilesitedir],
