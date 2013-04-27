@@ -82,20 +82,20 @@ AC_ARG_WITH(ncursesw,
             [with_ncursesw=no])
 
 AS_IF([test "$with_ncursesw" = check],
-      [AC_CHECK_LIB([ncursesw], 
+      [AC_CHECK_LIB([ncursesw],
                     [initscr],
                     [AC_SUBST([NCURSES_LIB], ["-lncursesw"])
-                     AC_DEFINE([HAVE_NCURSESW], 
+                     AC_DEFINE([HAVE_NCURSESW],
                                [1],
                                [Define if you have libncursesw])
                      with_ncursesw=yes],
                     [AC_MSG_FAILURE([--with-ncursesw was given, but, test for ncursesw failed])])])
 
 AS_IF([test "$with_ncursesw" = no],
-      [AC_CHECK_LIB([ncurses], 
+      [AC_CHECK_LIB([ncurses],
                     [initscr],
                     [AC_SUBST([NCURSES_LIB], ["-lncurses"])
-                     AC_DEFINE([HAVE_NCURSES], 
+                     AC_DEFINE([HAVE_NCURSES],
                                [1],
                                [Define if you have libncurses])],
                     [AC_MSG_FAILURE([the ncurses library was not found])])])
@@ -108,7 +108,8 @@ if test "$with_ncursesw" = no
 then
   AC_CHECK_LIB([menu], [new_menu],
                [MENU_LIB="-lmenu"],
-               [AC_MSG_ERROR([the ncurses menu library is required])])
+               [AC_MSG_ERROR([the ncurses menu library is required])],
+               [-lncurses])
   AC_CHECK_LIB([form], [new_form],
                [FORM_LIB="-lform"],
                [AC_MSG_ERROR([the ncurses form library is required])])
@@ -218,7 +219,7 @@ then
 else
   AC_CHECK_SIZEOF([chtype], ,[#include <ncurses/curses.h>])
   AC_CHECK_SIZEOF([attr_t], ,[#include <ncurses/curses.h>])
-fi  
+fi
 AC_CHECK_SIZEOF([wchar_t], ,[#include <stddef.h>])
 AC_CHECK_SIZEOF([wint_t], ,[#include <wchar.h>])
 
@@ -246,13 +247,13 @@ AS_IF([test "x$enable_termios" != xno],
                  [Define to enable TERMIOS support])
        # Check for the XOpen and BSD termios constants.
        # Hopefully just one will suffice for the entire set.
-       AC_CHECK_DECLS([BS0, ECHOCTL], [], [], 
+       AC_CHECK_DECLS([BS0, ECHOCTL], [], [],
        [[
        #include <termios.h>
        ]])
 
        # Check for rarer termios constants
-       AC_CHECK_DECLS([XCASE, ECHOPRT, PENDIN], [], [], 
+       AC_CHECK_DECLS([XCASE, ECHOPRT, PENDIN], [], [],
        [[
        #include <termios.h>
        ]])])
