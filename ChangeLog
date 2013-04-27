@@ -1,3 +1,195 @@
+Mike Gran <spk121@yahoo.com>	2013-04-27
+
+    only do configure check for xterm terminfo if toe is present
+    
+    * configure.ac: add test for toe, make test for xterm terminfo conditional
+      on having toe
+
+Mike Gran <spk121@yahoo.com>	2013-04-27
+
+    [OpenBSD] explicitly add ncurses lib to panel, menu, and form config tests
+    
+    * configure.ac: panel, menu, and form tests modified
+
+Mike Gran <spk121@yahoo.com>	2013-04-27
+
+    [OpenBSD] explicitly add ncurses lib in menu lib autoconf test
+    
+    The linker there will error on missing shared ncurses objects even
+    though those objects are not used
+    
+    * configure.ac: libmenu test modified
+
+Mike Gran <spk121@yahoo.com>	2013-04-27
+
+    [OpenBSD] Add AM_PROG_AR to configure.ac
+    
+    * configure.ac: modified
+
+Mike Gran <spk121@yahoo.com>	2013-04-27
+
+    Update NEWS and TODO
+    
+    * NEWS: updated
+    * TODO: updated
+
+Mike Gran <spk121@yahoo.com>	2013-04-27
+
+    Prefer returning 'untested over throwing 'untested in termattr test
+    
+    * test/curses_032_termattrs.test: modified
+
+Mike Gran <spk121@yahoo.com>	2013-04-27
+
+    Add TYPE_* variable defines for forms
+    
+    * ncurses/form.scm (TYPE_ALNUM, TYPE_ALPHA, TYPE_ENUM, TYPE_INTEGER)
+      (TYPE_NUMERIC, TYPE_REGEXP, TYPE_IPV4, TYPE_NUMERIC): new variables
+
+Mike Gran <spk121@yahoo.com>	2013-04-14
+
+    More startup terminal info for test suite
+    
+    * test/curses_000_test_setup.test: more debug info
+
+Mike Gran <spk121@yahoo.com>	2013-04-14
+
+    Unused var in shell
+    
+    * tools/shell.c (open_terminal): var removed
+
+Mike Gran <spk121@yahoo.com>	2013-04-14
+
+    Bump version of guile-ncurses-shell
+    
+    * tools/shell.c (inner_main): modified
+
+Mike Gran <spk121@yahoo.com>	2013-04-14
+
+    Fix doc for dupwin and has-ic?
+    
+    * doc/guile-ncurses.texi: modified
+
+Mike Gran <spk121@yahoo.com>	2013-04-14
+
+    Fix competing definitions of `derwin'
+    
+    * ncurses/curs_func.c (gucu_init_function): derwin -> %derwin
+
+Mike Gran <spk121@yahoo.com>	2013-04-13
+
+    Nerf test for delay-output
+    
+    * test/curses_034_util.test: modify test
+
+Mike Gran <spk121@yahoo.com>	2013-04-13
+
+    New documentation and example for define-key
+    
+    * doc/guile-ncurses.texi: new docs and example
+
+Mike Gran <spk121@yahoo.com>	2013-04-13
+
+    memory leak in define-key
+    
+    * ncurses/curs_func.c (gucu_define_key): modified
+
+Mike Gran <spk121@yahoo.com>	2013-04-13
+
+    Properly nerf def-prog-mode test
+    
+    * test/curses_024_kernel.test
+
+Mike Gran <spk121@yahoo.com>	2013-04-13
+
+    Triv doc fix for curses-version
+    
+    * doc/guile-ncurses.texi: doc curses-version
+
+Mike Gran <spk121@yahoo.com>	2013-04-13
+
+    Doc cleanup for curs-set
+    
+    * doc/guile-ncurses.texi: clarify docs for curs-set
+    * test/curses_024_kernel.test: comments and whitespace
+
+Mike Gran <spk121@yahoo.com>	2013-04-13
+
+    Last arg of copywin should be boolean
+    
+    It was integer.
+    
+    * ncurses/curses.scm (copywin): change last arg to boolean
+    * test/curses_027_overlay.test: change copywin test
+    * ncurses/curs_func.c (gucu_copywin): modified
+
+Mike Gran <spk121@yahoo.com>	2013-04-13
+
+    Nerf color-content test
+    
+    It is set to untested
+    
+    * test/curses_003_color.test: updated
+
+Mike Gran <spk121@yahoo.com>	2013-04-13
+
+    Documentation typos
+    
+    * doc/guile-ncurses.texi: fix typos
+    * ncurses/curses.scm (color-content): fix docstring
+
+Mike Gran <spk121@yahoo.com>	2013-04-13
+
+    Properly export underline-off
+    
+    * ncurses/curses.scm (underline-off): export
+
+Mike Gran <spk121@yahoo.com>	2013-04-13
+
+    Export xchar record accessors
+    
+    * ncurses/curses.scm (xchar-attr, xchar-color, set-xchar-attr!)
+      (set-xchar-color!, set-xchar-chars!): typecheck and export
+      (assert-list-of-chars): new procedure
+    * doc/guile-ncurses.texi: document new procedures
+
+Mike Gran <spk121@yahoo.com>	2013-04-13
+
+    More spellcheck of manual
+    
+    * doc/guile-ncurses.texi: modified
+
+Mike Gran <spk121@yahoo.com>	2013-04-13
+
+    Spellcheck manual
+    
+    * doc/guile-ncurses.text: spellcheck
+
+Mike Gran <spk121@yahoo.com>	2013-04-13
+
+    Incomplete docstring for baudrate
+    
+    * ncurses/curses.scm (baudrate): fix docstring
+
+Mike Gran <spk121@yahoo.com>	2013-04-13
+
+    Add tests for color-pair and pair-number
+    
+    * test/curses_003_color.test: new tests
+
+Mike Gran <spk121@yahoo.com>	2013-04-13
+
+    Comment-only fix in lib.scm
+    
+    * test/lib.scm: grammar, word-wrap
+
+Mike Gran <spk121@yahoo.com>	2013-04-13
+
+    clearok! is untested
+    
+    * doc/guile-ncurses.texi: whitespace
+    * test/curses_026_outputs.test: clearok! test from autopass to untested
+
 Mike Gran <spk121@yahoo.com>	2013-04-12
 
     Bump revision
