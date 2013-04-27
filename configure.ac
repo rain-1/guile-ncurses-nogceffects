@@ -266,12 +266,14 @@ AS_IF([test "x$enable_termios" != xno],
 ##################
 # Check for system services
 
-AC_MSG_CHECKING([for the terminfo of xterm])
-havexterm=no
-if toe -a | grep -q xterm
-then havexterm=yes
-fi
-AC_MSG_RESULT([$havexterm])
+AC_CHECK_PROG([TOE],[toe],[yes],[no])
+AS_IF([test "$TOE" = yes],
+      [AC_MSG_CHECKING([for the terminfo of xterm])
+       havexterm=no
+       if toe -a | grep -q xterm
+       then havexterm=yes
+       fi
+       AC_MSG_RESULT([$havexterm])])
 AM_CONDITIONAL([HAVE_XTERM_TERMINFO],[test "$havexterm" = yes])
 
 ##################
