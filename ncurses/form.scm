@@ -2,7 +2,7 @@
 
 ;; form.scm
 
-;; Copyright 2009, 2010 Free Software Foundation, Inc.
+;; Copyright 2009, 2010, 2013 Free Software Foundation, Inc.
 
 ;; This file is part of GNU Guile-Ncurses.
 
@@ -155,7 +155,14 @@
 	    new-form
 	    form?
 	    field?
-
+	    TYPE_ALNUM
+	    TYPE_ALPHA
+	    TYPE_ENUM
+	    TYPE_INTEGER
+	    TYPE_NUMERIC
+	    TYPE_REGEXP
+	    TYPE_IPV4
+	    TYPE_NUMERIC
 	    )
   #:re-export (
 
@@ -179,3 +186,12 @@
 
 (load-extension "libguile-ncurses" "gucu_form_init")
 (define set-field-type set-field-type!)
+
+(define TYPE_ALNUM 'TYPE_ALNUM)
+(define TYPE_ALPHA 'TYPE_ALPHA)
+(define TYPE_ENUM 'TYPE_ENUM)
+(define TYPE_INTEGER 'TYPE_INTEGER)
+(define TYPE_NUMERIC 'TYPE_NUMERIC)
+(define TYPE_REGEXP 'TYPE_REGEXP)
+(define TYPE_IPV4 'TYPE_IPV4)
+(define TYPE_NUMERIC 'TYPE_NUMERIC)
