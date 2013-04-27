@@ -7,7 +7,19 @@ The NEWS file for GNU Guile-NCurses
   notice and this notice are preserved.
 
 Release 1.4
+
 - Regenerate autoconfigury to avoid automake-related vulnerability
+
+- copywin's last argument is now a boolean, not an integer
+
+- new xchar field getter/setters: xchar-attr, xchar-color,
+  xchar-chars, set-xchar-attr!, set-xchar-color!, set-xchar-chars!
+
+- underline-off is now properly exported
+
+- added missing alias variables TYPE_ALNUM, TYPE_ALPHA, TYPE_ENUM,
+  TYPE_INTEGER, TYPE_NUMERIC, TYPE_REGEXP, and TYPE_IPV4
+
 
 Release 1.3
 - Reworked support for is-pad? and is-subwin?
@@ -29,7 +41,7 @@ Release 1.2
 - Add many docstrings for curses library
 - Convert curses library to use srfi-34/35 conditions.  Curses
   predicate functions added: curses-wrong-type-arg-error?,
-  curses-bad-state-error? 
+  curses-bad-state-error?
 - New curses functions: mcprint, is-subwin?, is-pad?, is-cleared?,
   is-idlok?, is-idcok?, is-immedok?, is-leaveok?, is-scrollok?,
   getscrreg, has-mouse?, is-keypad?, is-meta?, is-nodelay?,
