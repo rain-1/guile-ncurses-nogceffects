@@ -1,6 +1,6 @@
 # Process this file with autoconf to produce a configure script
 
-# Copyright (C) 2009, 2010, 2011, 2013 Free Software Foundation, Inc.
+# Copyright (C) 2009, 2010, 2011, 2013, 2014 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU Lesser General Public License as
@@ -168,6 +168,18 @@ AM_CONDITIONAL([BUILDING_DLL], [test "$building_dll" = yes])
 GUILE_PROGS
 GUILE_FLAGS
 GUILE_SITE_DIR
+
+# Some versions of Cygwin have a bad guile-config
+AC_MSG_CHECKING([if Guile flags have the janneke's path problem])
+ac_cv_janneke_test="`echo $GUILE_CFLAGS | grep janneke`"
+ac_cv_janneke_fix=no
+if test -n "$ac_cv_janneke_test"
+then
+  GUILE_CFLAGS=/usr/include
+  GUILE_LDFLAGS="-lguile -L/usr/lib -L/usr/bin -L/usr/lib/w32api -lgmp -lcrypt -lm -lltdl"
+  ac_cv_janneke_fix=yes
+fi
+AC_MSG_RESULT([$ac_cv_janneke_fix])
 
 AC_MSG_CHECKING([if guile can handle UCS4 characters])
 GUILE_CHECK([ac_cv_guile_ucs4],
