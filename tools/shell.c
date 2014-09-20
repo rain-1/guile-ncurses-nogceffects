@@ -1,7 +1,7 @@
 /*
   shell.c
 
-  Copyright 2009, 2010 Free Software Foundation, Inc.
+  Copyright 2009, 2010, 2014 Free Software Foundation, Inc.
 
   This file is part of GNU Guile-Ncurses.
 
@@ -68,6 +68,7 @@ int open_terminal (char *, int, int);
 int is_unix98_pty (const char *);
 int is_bsd_pty (const char *);
 int is_cygwin_pty (const char *);
+int is_cygwin_tty (const char *);
 
 #ifdef HAVE_NCURSESW
 const int _HAVE_NCURSESW = TRUE;
@@ -131,12 +132,43 @@ is_bsd_pty (const char *name)
   return (isalnum (X) && isalnum (Y));
 }
 
-/* This function checks if NAME looks like a Cygwin pseudo-terminal
+/* This function checks if NAME looks like a Cygwin serial interface
    device name, aka "/dev/ttyN".  Returns TRUE or FALSE. */
+int
+is_cygwin_tty (const char *name)
+{
+  const char cygwin_pty_root[] = "/dev/tty";
+  const size_t cygwin_pty_root_length = strlen (cygwin_pty_root);
+  size_t name_length = strlen (name);
+  char const *slave_name;
+  size_t i;
+
+  name_length = strlen (name);
+
+  if (name_length < cygwin_pty_root_length)
+      return FALSE;
+
+  if (strncmp (name, cygwin_pty_root, cygwin_pty_root_length) != 0)
+    return FALSE;
+
+  slave_name = name + cygwin_pty_root_length;
+  if (strlen (slave_name) == 0)
+    return FALSE;
+
+  /* All the remaining characters in NAME should be numeric */
+  for (i = 0; i < name_length - cygwin_pty_root_length; i++)
+    if (!isdigit ((int) slave_name[i]))
+      return FALSE;
+
+  return TRUE;
+}
+
+/* This function checks if NAME looks like a Cygwin pseudo-terminal
+   device name, aka "/dev/ptyN".  Returns TRUE or FALSE. */
 int
 is_cygwin_pty (const char *name)
 {
-  const char cygwin_pty_root[] = "/dev/tty";
+  const char cygwin_pty_root[] = "/dev/pty";
   const size_t cygwin_pty_root_length = strlen (cygwin_pty_root);
   size_t name_length = strlen (name);
   char const *slave_name;
@@ -192,7 +224,8 @@ open_terminal (char *pseudo_terminal_slave_name,
 	       pseudo_terminal_slave_name[bsd_offset+1],
 	       master_file_descriptor);
     }
-  else if (is_cygwin_pty (pseudo_terminal_slave_name))
+  else if (is_cygwin_pty (pseudo_terminal_slave_name)
+	   || is_cygwin_tty (pseudo_terminal_slave_name))
     {
       asprintf (&s_flag, "-S%s/%d",
 		pseudo_terminal_slave_name + cygwin_offset,
