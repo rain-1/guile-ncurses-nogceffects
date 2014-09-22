@@ -1,7 +1,7 @@
 /*
   panel_spec.c
 
-  Copyright 2009, 2010 Free Software Foundation, Inc.
+  Copyright 2009, 2010, 2014 Free Software Foundation, Inc.
 
   This file is part of GNU Guile-Ncurses.
 
@@ -26,11 +26,14 @@
 #if HAVE_CURSES_H
 #include <curses.h>
 #include <panel.h>
-#endif
-
-#if HAVE_NCURSES_CURSES_H
+#elif HAVE_NCURSES_CURSES_H
 #include <ncurses/curses.h>
 #include <ncurses/panel.h>
+#elif HAVE_NCURSESW_CURSES_H
+#include <ncursesw/curses.h>
+#include <ncursesw/panel.h>
+#else
+#error "No panel.h file included"
 #endif
 
 #include "panel_spec.h"

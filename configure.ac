@@ -71,7 +71,17 @@ then
   AC_CHECK_HEADER([ncurses/curses.h],
                   [AC_DEFINE([HAVE_NCURSES_CURSES_H],
                              [1],
-                             [Define if you have ncurses/curses.h])],
+                             [Define if you have ncurses/curses.h])
+                 have_curses_h=yes],
+                [have_curses_h=no])
+fi
+
+if test "$have_curses_h" = no
+then
+  AC_CHECK_HEADER([ncursesw/curses.h],
+                  [AC_DEFINE([HAVE_NCURSESW_CURSES_H],
+                             [1],
+                             [Define if you have ncursesw/curses.h])],
                   [AC_MSG_FAILURE([curses.h could not be found])])
 fi
 
@@ -229,13 +239,20 @@ AC_CHECK_TYPE([cookie_io_functions_t],
                ])
 AC_CHECK_SIZEOF([int])
 AC_CHECK_SIZEOF([long])
+AC_CHECK_SIZEOF([void *])
 if test "$have_curses_h" = yes
 then
   AC_CHECK_SIZEOF([chtype], ,[#include <curses.h>])
   AC_CHECK_SIZEOF([attr_t], ,[#include <curses.h>])
 else
+if test "$have_ncurses_curses_h" = yes
+then
   AC_CHECK_SIZEOF([chtype], ,[#include <ncurses/curses.h>])
   AC_CHECK_SIZEOF([attr_t], ,[#include <ncurses/curses.h>])
+else
+  AC_CHECK_SIZEOF([chtype], ,[#include <ncursesw/curses.h>])
+  AC_CHECK_SIZEOF([attr_t], ,[#include <ncursesw/curses.h>])
+fi
 fi
 AC_CHECK_SIZEOF([wchar_t], ,[#include <stddef.h>])
 AC_CHECK_SIZEOF([wint_t], ,[#include <wchar.h>])
