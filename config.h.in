@@ -118,6 +118,9 @@
 /* Define to 1 if you have the <util.h> header file. */
 #undef HAVE_UTIL_H
 
+/* Define to 1 if you have the `wcwidth' function. */
+#undef HAVE_WCWIDTH
+
 /* define if your compiler has __attribute__ */
 #undef HAVE___ATTRIBUTE__
 
