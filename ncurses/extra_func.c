@@ -1,7 +1,7 @@
 /*
   extra_func.c
 
-  Copyright 2010, 2011 Free Software Foundation, Inc.
+  Copyright 2010, 2011, 2014 Free Software Foundation, Inc.
 
   This file is part of GNU Guile-Ncurses.
 
@@ -558,6 +558,7 @@ gucu_strwidth (SCM str)
   free (s);
   return s_siz;
 #else
+#ifdef HAVE_WCWIDTH
   size_t i, len, s, siz;
 
   SCM_ASSERT (scm_is_string (str), str, SCM_ARG1, "%strwidth");
@@ -570,6 +571,9 @@ gucu_strwidth (SCM str)
 	siz += s;
     }
   return scm_from_int (siz);
+#else
+  return scm_c_string_length(str);
+#endif
 #endif
 }
 
@@ -618,5 +622,7 @@ gucu_extra_init_function ()
   scm_c_define_gsubr ("termios-cc-set!", 3, 0, 0, gucu_termios_cc_set_x);
 #endif /* ENABLE_TERMIOS */
 
+#if defined(GUILE_CHARS_ARE_UCS4) || define (HAVE_WCWIDTH)
   scm_c_define_gsubr ("%strwidth", 1, 0, 0, gucu_strwidth);
+#endif
 }

@@ -169,7 +169,6 @@
             termios-lflag-set!
             termios-cc-set!
 
-            wcwidth
             %termios-debug
             ))
 
@@ -279,3 +278,4 @@
 (if (defined? 'unlockpt)        (export unlockpt))
 (if (defined? 'ptsname)         (export ptsname))
 (if (defined? 'grantpt)         (export grantpt))
+(if (defined? '%strwidth)       (export wcwidth))
