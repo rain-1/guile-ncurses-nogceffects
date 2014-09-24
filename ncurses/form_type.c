@@ -196,7 +196,7 @@ int
 print_field (SCM x, SCM port, scm_print_state * pstate UNUSED)
 {
   FIELD *fld = (FIELD *) SCM_SMOB_DATA (x);
-  char *str;
+  char str[SIZEOF_VOID_P*2+3];
 
   scm_puts ("#<field ", port);
 
@@ -204,7 +204,7 @@ print_field (SCM x, SCM port, scm_print_state * pstate UNUSED)
     scm_puts ("(freed)", port);
   else
     {
-      if (asprintf (&str, "%p", (void *) fld) < 0)
+      if (snprintf (str, sizeof(str), "%p", (void *) fld) < 0)
 	scm_puts ("???", port);
       else
 	scm_puts (str, port);
@@ -366,13 +366,13 @@ int
 print_form (SCM x, SCM port, scm_print_state * pstate UNUSED)
 {
   struct gucu_form *frm = (struct gucu_form *) SCM_SMOB_DATA (x);
-  char *str;
+  char str[SIZEOF_VOID_P*2+3];
 
   assert (frm != NULL);
 
   scm_puts ("#<form ", port);
 
-  if (asprintf (&str, "%p", (void *) frm->form) < 0)
+  if (snprintf (str, sizeof(str), "%p", (void *) frm->form) < 0)
     scm_puts ("???", port);
   else
     scm_puts (str, port);

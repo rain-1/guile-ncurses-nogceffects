@@ -875,7 +875,7 @@ int
 print_screen (SCM x, SCM port, scm_print_state * pstate UNUSED)
 {
   SCREEN *screen;
-  char *str;
+  char str[SIZEOF_VOID_P*2+3];
 
   /* Don't use _scm_is_screen in this assert, because it says freed screens aren't
      screens.  */
@@ -890,7 +890,7 @@ print_screen (SCM x, SCM port, scm_print_state * pstate UNUSED)
     }
   else
     {
-      if (asprintf (&str, "%p", (void *) screen) < 0)
+      if (snprintf (str, sizeof(str), "%p", (void *) screen) < 0)
 	scm_puts ("???", port);
       else
 	scm_puts (str, port);
@@ -1019,7 +1019,7 @@ int
 print_window (SCM x, SCM port, scm_print_state * pstate UNUSED)
 {
   WINDOW *win = (WINDOW *) SCM_SMOB_DATA (x);
-  char *str;
+  char str[SIZEOF_VOID_P*2+3];
 
   assert (SCM_SMOB_PREDICATE (window_tag, x));
 
@@ -1029,7 +1029,7 @@ print_window (SCM x, SCM port, scm_print_state * pstate UNUSED)
     scm_puts ("(freed)", port);
   else
     {
-      if (asprintf (&str, "%p", (void *) win) < 0)
+      if (snprintf (str, sizeof(str), "%p", (void *) win) < 0)
 	scm_puts ("???", port);
       else
 	scm_puts (str, port);

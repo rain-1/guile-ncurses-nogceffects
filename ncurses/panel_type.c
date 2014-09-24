@@ -178,7 +178,7 @@ int
 print_panel (SCM x, SCM port, scm_print_state * pstate UNUSED)
 {
   PANEL *pnl = (PANEL *) _scm_to_panel (x);
-  char *str;
+  char str[SIZEOF_VOID_P*2+3];
 
   scm_puts ("#<panel ", port);
 
@@ -186,7 +186,7 @@ print_panel (SCM x, SCM port, scm_print_state * pstate UNUSED)
     scm_puts ("(freed)", port);
   else
     {
-      if (asprintf (&str, "%p", (void *) pnl) < 0)
+      if (snprintf (str, sizeof(str), "%p", (void *) pnl) < 0)
 	scm_puts ("???", port);
       else
 	scm_puts (str, port);
