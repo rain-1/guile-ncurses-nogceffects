@@ -22,7 +22,9 @@ else
 noinst_SCRIPTS = ncurses-keyboard-test
 endif
 
+if BUILDING_SHELL
 bin_PROGRAMS = guile-ncurses-shell
+endif
 guile_ncurses_shell_SOURCES = shell.c
 
 AM_CPPFLAGS = $(GUILE_CFLAGS) -I $(top_builddir)/lib \
