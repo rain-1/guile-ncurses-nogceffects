@@ -72,11 +72,11 @@ then
                   [AC_DEFINE([HAVE_NCURSES_CURSES_H],
                              [1],
                              [Define if you have ncurses/curses.h])
-                 have_curses_h=yes],
-                [have_curses_h=no])
+                 have_ncurses_curses_h=yes],
+                [have_ncurses_curses_h=no])
 fi
 
-if test "$have_curses_h" = no
+if test "$have_curses_h" = no && test "$have_ncurses_curses_h" = no
 then
   AC_CHECK_HEADER([ncursesw/curses.h],
                   [AC_DEFINE([HAVE_NCURSESW_CURSES_H],
