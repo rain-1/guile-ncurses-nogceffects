@@ -161,6 +161,9 @@
 /* The size of `long', as computed by sizeof. */
 #undef SIZEOF_LONG
 
+/* The size of `void *', as computed by sizeof. */
+#undef SIZEOF_VOID_P
+
 /* The size of `wchar_t', as computed by sizeof. */
 #undef SIZEOF_WCHAR_T
 
