@@ -1,10 +1,21 @@
 The NEWS file for GNU Guile-NCurses
 
-  Copyright 2009, 2010, 2011, 2013 Free Software Foundation, Inc.
+  Copyright 2009, 2010, 2011, 2013, 2014 Free Software Foundation, Inc.
 
   Copying and distribution of this file, with or without modification,
   are permitted in any medium without royalty provided the copyright
   notice and this notice are preserved.
+
+Release 1.5
+- support cygwin pty devices with guile-ncurses-shell
+- avoid C library functions that are unavailable on MinGW
+- building guile-ncurses-shell is no longer attempted on MinGW
+- support for parallel 'make check' is added
+- will now look for ncurses headers in <ncursesw/curses.h> as well
+- A crippled wcwidth procedure is added for systems that lack
+  the C library function
+- update autoconfigury
+
 
 Release 1.4
 
