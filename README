@@ -1,12 +1,12 @@
 The README file for GNU Guile-Ncurses
 
-  Copyright (C) 2009, 2010, 2011 Free Software Foundation, Inc.
+  Copyright (C) 2009, 2010, 2011, 2014 Free Software Foundation, Inc.
 
   Copying and distribution of this file, with or without modification,
   are permitted in any medium without royalty provided the copyright
   notice and this notice are preserved.
 
-This is GNU Guile-Ncurses v1.2.  It provides functionality to allow
+This is GNU Guile-Ncurses v1.5.  It provides functionality to allow
 programs written in the Guile interpreter to interact with character
 screens in a terminal-independent manner.  It is a wrapper to the
 underlying ncurses library.
@@ -23,7 +23,7 @@ The Unicode-enabled version is know to work on the following system:
 The 8-bit version is known to work on the following systems
 
   Fedora 14 on i686-pc-linux-gnu with Guile 1.9.14 and NCurses 5.7.20100703
-  Cygwin 1.7.7 on i686-pc-cygwin with Guile 1.8.7 and NCurses 5.7.20091227
+  Cygwin 1.7.32 on i686-pc-cygwin with Guile 1.8.7 and NCurses 5.9.20140524
 
 This distribution has the following subdirectories:
 - ncurses: the source code for the library
@@ -45,10 +45,6 @@ support, you need to run configure using the "--with-ncursesw" option.
 Guile's default path.  But, if you don't know where your Guile site
 directory is, run "configure" without the option, and it will give you
 a suggestion.
-
-*important* Cygwin has special problems.  Read the special
-README.cygwin to figure out why the build fails with "texinfo.tex
-appears to be broken".
 
 For an explanation of the copying restrictions for this package, see
 COPYING.LESSER.
