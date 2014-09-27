@@ -20,10 +20,12 @@ TESTLIB = lib.scm lib2.scm
 
 TESTS_ENVIRONMENT = ORIGTERM=${TERM} \
   TERM=xterm \
-  GUILE_AUTO_COMPILE=0 \
-  ${top_builddir}/libtool \
+  GUILE_AUTO_COMPILE=0
+TEST_EXTENSIONS = .test
+TEST_LOG_COMPILER = ${top_builddir}/libtool \
     -dlopen ${top_builddir}/ncurses/libguile-ncurses.la \
-    --mode=execute guile -L $(abs_top_srcdir) -s
+    --mode=execute guile
+AM_TEST_LOG_FLAGS = -L $(abs_top_srcdir) -s
 
 NOTERMTESTS = curses_000_test_setup.test \
 curses_001_char_conversion.test
@@ -67,4 +69,5 @@ endif
 endif
 endif
 
-EXTRA_DIST = $(TESTLIB) $(TESTS)
+EXTRA_DIST = $(TESTLIB) $(NOTERMTESTS) $(NARROWTESTS) $(WIDETESTS)
+
