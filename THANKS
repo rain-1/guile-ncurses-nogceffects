@@ -1,12 +1,11 @@
 Additional contributors to GNU Guile-Ncurses
 
-  Copyright (C) 2010 Free Software Foundation, Inc.
+  Copyright (C) 2010,2014 Free Software Foundation, Inc.
 
   Copying and distribution of this file, with or without modification,
   are permitted in any medium without royalty provided the copyright
   notice and this notice are preserved.
 
-[This file is currently blank.]
+Release 1.5
 
-[Did I just slap an FSF copyright onto an empty file?  LOL.  I've
-copyrighted nothingness.  All you nothing are belong to us.]
+Thanks to Eli Zaretskii and Ludovic Courtès for suggestions.

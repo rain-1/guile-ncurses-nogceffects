@@ -1,3 +1,43 @@
+Mike Gran <spk121@yahoo.com>	2014-09-28
+
+    Ignore  wide killchar and erasechar test if upstream ncurses fails
+    
+    Upstream ncurses sometimes fails during killwchar and erasewchar
+    
+    * test/r040_term_attrs.test: nerf tests if upstream fails
+
+Mike Gran <spk121@yahoo.com>	2014-09-28
+
+    Fix inclusion of windows header in unicode.c
+    
+    * ncurses/unicode.c: fix #includes for windows.h
+
+Mike Gran <spk121@yahoo.com>	2014-09-28
+
+    Fix wchar to schar conversion
+    
+    * ncurses/type.c (_scm_schar_from_wchar): clarify logic
+      (_scm_schar_from_wchar): invert logic
+
+Mike Gran <spk121@yahoo.com>	2014-09-28
+
+    Missing newline at end of file
+    
+    * doc/ex_menu3.scm: modified
+
+Michael Gran <spk121@yahoo.com>	2014-09-28
+
+    Update README
+    
+    * README
+
+Michael Gran <spk121@yahoo.com>	2014-09-28
+
+    Update ChangeLog and NEWS
+    
+    * ChangeLog: regenerated
+    * NEWS: updated
+
 Michael Gran <spk121@yahoo.com>	2014-09-28
 
     Don't build versioned DLL on MinGW since Guile won't find them
