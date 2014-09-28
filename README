@@ -23,9 +23,9 @@ The Unicode-enabled version is know to work on the following system:
 
 The 8-bit version is known to work on the following systems
 
-  Fedora 14 on i686-pc-linux-gnu with Guile 1.9.14 and NCurses 5.7.20100703
   Cygwin 1.7.32 on i686-pc-cygwin with Guile 1.8.7 and NCurses 5.9.20140524
   MinGW version MINGW32_NT-6.1 on i686 with Guile 1.8.8 and Ncurses 5.9.20140920
+  OpenBSD 5.5 on i386 with Guile 1.8.8 and NCurses 5.7.20081102
 
 This distribution has the following subdirectories:
 - ncurses: the source code for the library
