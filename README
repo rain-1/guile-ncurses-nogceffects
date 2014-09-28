@@ -7,9 +7,10 @@ The README file for GNU Guile-Ncurses
   notice and this notice are preserved.
 
 This is GNU Guile-Ncurses v1.5.  It provides functionality to allow
-programs written in the Guile interpreter to interact with character
-screens in a terminal-independent manner.  It is a wrapper to the
-underlying ncurses library.
+programs written in the GNU Guile interpreter of the Scheme
+programming language to interact with character screens in a
+terminal-independent manner.  It is a wrapper to the underlying
+ncurses library.
 
 This library can be found at http://www.gnu.org/software/guile-ncurses/
 
@@ -24,6 +25,7 @@ The 8-bit version is known to work on the following systems
 
   Fedora 14 on i686-pc-linux-gnu with Guile 1.9.14 and NCurses 5.7.20100703
   Cygwin 1.7.32 on i686-pc-cygwin with Guile 1.8.7 and NCurses 5.9.20140524
+  MinGW version MINGW32_NT-6.1 on i686 with Guile 1.8.8 and Ncurses 5.9.20140920
 
 This distribution has the following subdirectories:
 - ncurses: the source code for the library
