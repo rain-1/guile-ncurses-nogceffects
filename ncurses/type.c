@@ -173,7 +173,7 @@ _scm_xchar_from_cchar (cchar_t * x)
       {
 	uint32_t cp;
 	ret = wchar_to_codepoint (wch[i], &cp);
-	if (!ret)
+	if (ret == 0)
 	  element = SCM_MAKE_CHAR (GUCU_REPLACEMENT_CODEPOINT);
 	else
 	  element = SCM_MAKE_CHAR (cp);
@@ -258,7 +258,7 @@ _scm_schar_from_wchar (wchar_t ch)
   uint32_t cp;
 
   ret = wchar_to_codepoint (ch, &cp);
-  if (!ret)
+  if (ret == 0)
     return SCM_BOOL_F;
 
   return SCM_MAKE_CHAR (cp);
