@@ -173,9 +173,16 @@ mingw* | os2* | pw32* | cegcc*)
 *)
 	[building_shell=yes] ;;
 esac
+case $host_os in
+mingw* )
+	[dll_version_info=no] ;;
+*)
+	[dll_version_info=yes] ;;
+esac
 
 AM_CONDITIONAL([BUILDING_DLL], [test "$building_dll" = yes])
 AM_CONDITIONAL([BUILDING_SHELL], [test "$building_shell" = yes])
+AM_CONDITIONAL([DLL_VERSION_INFO], [test "$dll_version_info" = yes])
 ##################
 # Check for libraries
 

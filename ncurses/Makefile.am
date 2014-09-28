@@ -53,6 +53,10 @@ endif
 libguile_ncurses_la_LDFLAGS = -no-undefined -version-info	\
 $(LIBGUILE_NCURSES_INTERFACE) $(GUILE_LDFLAGS)
 
+if !DLL_VERSION_INFO
+libguile_ncurses_la_LDFLAGS += -avoid-version
+endif
+
 libguile_ncurses_la_LIBADD = $(NCURSES_LIB) $(PANEL_LIB) $(MENU_LIB)	\
 $(FORM_LIB)
 
