@@ -1,3 +1,176 @@
+Michael Gran <spk121@yahoo.com>	2014-09-28
+
+    Don't build versioned DLL on MinGW since Guile won't find them
+    
+    * configure.ac (DLL_VERSION_INFO): new automake conditional
+    * ncurses/Makefile.am (libguile_ncurses_la_LDFLAGS): add -avoid-version for
+      MinGW
+
+Michael Gran <spk121@yahoo.com>	2014-09-28
+
+    Update READMEs for MinGW
+    
+    * README: updated
+    * README.mingw: new file
+    * Makefile.am: distribute new README.mingw
+
+Michael Gran <spk121@yahoo.com>	2014-09-28
+
+    Update .gitignore
+
+Michael Gran <spk121@yahoo.com>	2014-09-28
+
+    Don't build the library as a libtool module
+    
+    It causes the Cygwin DLL to be installed in the wrong place
+    
+    * ncurses/Makefile.am (libguile_ncurses_la_LDFLAGS): remove -module
+
+Michael Gran <spk121@yahoo.com>	2014-09-27
+
+    Update files that shouldn't be in revision control anyway
+    
+    * aclocal.m4
+    * config.h.in
+
+Michael Gran <spk121@yahoo.com>	2014-09-27
+
+    Update EADME for Cygwin
+    
+    * README: updated
+    * README.cygwin: updated
+
+Michael Gran <spk121@yahoo.com>	2014-09-27
+
+    Update NEWS
+
+Michael Gran <spk121@yahoo.com>	2014-09-27
+
+    Bump version and library version
+    
+    * configure.ac (AC_INIT): bump version to 1.5
+      (LIBGUILE_NCURSES_INTERFACE): bump to 8:1:0
+    * tools/shell.c: bump to 0.6
+
+Michael Gran <spk121@yahoo.com>	2014-09-27
+
+    Modify tests to work with automake's parallel-tests framework
+    
+    * test/Makefile.am (TESTS_ENVIRONMENT): make env only
+    (TEST_EXTENSIONS): new variable
+    (TEST_LOG_COMPILER): new variable
+    (AM_TEST_LOG_FLAGS): new variable
+
+Michael Gran <spk121@yahoo.com>	2014-09-24
+
+    Use windows code pages for 8-bit locales on Microsoft Windows
+    
+    * unicode.c (codepoint_to_locale_char): use GetACP instead of langinfo
+
+Merge: 4473369 77ee9e8
+Michael Gran <spk121@yahoo.com>	2014-09-23
+
+    Merge branch 'master' of git.sv.gnu.org:/srv/git/guile-ncurses
+    
+    Conflicts:
+ncurses/extra_func.c           
+
+Michael Gran <spk121@yahoo.com>	2014-09-23
+
+    Avoid asprintf
+    
+    * ncurses/form_type.c (gc_free_field): avoid asprintf
+      (gc_free_form): ditto
+    * ncurses/menu_type (gc_free_item): avoid asprintf
+      (gc_free_menu): ditto
+    * ncurses/panel_type.c (gucu_del_panel): avoid asprintf
+    * ncurses/type.c (_scm_from_screen): avoid asprintf
+      (print_screen, free_window): avoid asprintf
+
+Michael Gran <spk121@yahoo.com>	2014-09-23
+
+    Don't build the xterm shell for MinGW
+    
+    * configure.ac: new conditional BUILDING_SHELL for non-MinGW
+    * tools/Makefile.am: use new conditional BUILDING_SHELL
+
+Michael Gran <spk121@yahoo.com>	2014-09-23
+
+    Configure error searching for ncurses headers
+    
+    * configure.ac: modified
+
+Michael Gran <spk121@yahoo.com>	2014-09-21
+
+    check existence of wcwidth procedure
+    
+    * configure.ac: check for wcwidth C library function
+    * ncurses/extra_func (gucu_strwidth): adjust for missing wcwidth
+    * ncurses/extra.scm (wcwidth): make conditional on existence of %strwidth
+
+Michael Gran <spk121@yahoo.com>	2014-09-21
+
+    check existence of wcwidth procedure
+    
+    * configure.ac: check for wcwidth C library function
+    * ncurses/extra_func (gucu_strwidth): adjust for missing wcwidth
+    * ncurses/extra.scm (wcwidth): make conditional on existence of %strwidth
+
+Michael Gran <spk121@yahoo.com>	2014-09-21
+
+    Add ncursesw as a possible path for ncurses headers
+    
+    * configure.ac: check ncursesw directory for curses.h headers
+    * ncurses/curs_const.c: modified
+    * ncurses/curs_func.c: modified
+    * ncurses/curs_main.c: modified
+    * ncurses/curs_port.c: modified
+    * ncurses/curs_spec.c: modified
+    * ncurses/eti_const.c: modified
+    * ncurses/extra_const.c: modified
+    * ncurses/form_const.c: modified
+    * ncurses/form_func.c: modified
+    * ncurses/form_spec.c: modified
+    * ncurses/form_type.c: modified
+    * ncurses/form_type.h: modified
+    * ncurses/menu_const.c: modified
+    * ncurses/menu_func.c: modified
+    * ncurses/menu_type.c: modified
+    * ncurses/menu_type.h: modified
+    * ncurses/panel_func.c: modified
+    * ncurses/panel_spec.c: modified
+    * ncurses/panel_type.c: modified
+    * ncurses/panel_type.h: modified
+    * ncurses/slk_func.c: modified
+    * ncurses/type.c: modified
+    * ncurses/type.h: modified
+
+Michael Gran <spk121@yahoo.com>	2014-09-20
+
+    [cygwin] make shell work with pty devices
+    
+    Apparently newer cygwin creates /dev/ptyX devices.
+    guile-ncurses-shell needs to handle these
+    
+    * tools/shell.c (is_cygwin_tty): update
+    (is_cygwin_pty): new function
+    (open_terminal): use new cygwin tty checks
+
+Michael Gran <spk121@yahoo.com>	2014-09-20
+
+    [cygwin] work around guile-config janneke path bug
+    
+    On Cygwin, guile-1.8.7's guile-config gives incorrect information
+    for Guile CFLAGS and LDFLAGS
+    
+    * configure.ac: add guile paths fix
+
+Mike Gran <spk121@yahoo.com>	2013-04-27
+
+    Update ChangeLog
+    
+    * ChangeLog: updated
+
 Mike Gran <spk121@yahoo.com>	2013-04-27
 
     only do configure check for xterm terminfo if toe is present

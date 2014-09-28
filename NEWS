@@ -7,14 +7,16 @@ The NEWS file for GNU Guile-NCurses
   notice and this notice are preserved.
 
 Release 1.5
-- support cygwin pty devices with guile-ncurses-shell
-- avoid C library functions that are unavailable on MinGW
-- building guile-ncurses-shell is no longer attempted on MinGW
-- support for parallel 'make check' is added
+- parallel 'make check' is now supported
 - will now look for ncurses headers in <ncursesw/curses.h> as well
-- A crippled wcwidth procedure is added for systems that lack
-  the C library function
+- the wcwidth procedure is not provided if it is not supported by the
+  underlying libraries
 - update autoconfigury
+- Cygwin: support pty devices with guile-ncurses-shell
+- MinGW: avoid C library functions that are unavailable
+- MinGW: building guile-ncurses-shell is no longer attempted
+- MinGW: the libguile-ncurses dll is now unversioned so that Guile can
+  find it
 
 
 Release 1.4
