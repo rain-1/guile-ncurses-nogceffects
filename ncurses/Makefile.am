@@ -50,7 +50,7 @@ if BUILDING_DLL
 libguile_ncurses_la_CPPFLAGS += -DGUCU_DLL -DGUCU_DLL_EXPORTS
 endif
 
-libguile_ncurses_la_LDFLAGS = -module -no-undefined -version-info	\
+libguile_ncurses_la_LDFLAGS = -no-undefined -version-info	\
 $(LIBGUILE_NCURSES_INTERFACE) $(GUILE_LDFLAGS)
 
 libguile_ncurses_la_LIBADD = $(NCURSES_LIB) $(PANEL_LIB) $(MENU_LIB)	\
