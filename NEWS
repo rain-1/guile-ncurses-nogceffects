@@ -6,6 +6,10 @@ The NEWS file for GNU Guile-NCurses
   are permitted in any medium without royalty provided the copyright
   notice and this notice are preserved.
 
+Release 1.6
+- new procedure 'unctrl'
+- new procedure 'resizeterm'
+
 Release 1.5
 - parallel 'make check' is now supported
 - will now look for ncurses headers in <ncursesw/curses.h> as well
