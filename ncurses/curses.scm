@@ -2,7 +2,7 @@
 
 ;; curses.scm
 
-;; Copyright 2009, 2010, 2011, 2013 Free Software Foundation, Inc.
+;; Copyright 2009, 2010, 2011, 2013, 2014 Free Software Foundation, Inc.
 
 ;; This file is part of GNU Guile-Ncurses.
 
@@ -374,6 +374,7 @@
             reset-prog-mode
             reset-shell-mode
             resetty
+            resizeterm
             savetty
             scr-dump
             scr-init

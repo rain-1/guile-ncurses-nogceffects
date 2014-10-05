@@ -20,7 +20,7 @@ This manual is for the GNU Guile-NCurses library, (version
 ncurses library, which provides functionality for updating character
 screens.
 
-Copyright @copyright{} 1998-2010,2011,2013 Free Software Foundation, Inc. @*
+Copyright @copyright{} 1998-2010,2011,2013,2014 Free Software Foundation, Inc. @*
 Copyright @copyright{} 2001-2005 Pradeep Padala @*
 
 @quotation
@@ -254,6 +254,7 @@ The basic curses library: @code{(ncurses curses)}
 * Refresh routines::
 * Miscellaneous utilities::
 * Window creation::
+* Terminal resizing::
 
 The Coordinate System
 
@@ -3085,6 +3086,7 @@ C-language API.
 * Refresh routines::
 * Miscellaneous utilities::
 * Window creation::
+* Terminal resizing::
 @end menu
 
 @node Overview, Features determined at compile time, The basic curses library, The basic curses library
@@ -6126,9 +6128,8 @@ curses to a single line, instead of the to the entire screen.
 
 @end deffn
 
-@node Window creation,  , Miscellaneous utilities, The basic curses library
+@node Window creation, Terminal resizing, Miscellaneous utilities, The basic curses library
 @subsection Window creation
-
 
 @deffn Procedure newwin nlines ncols begin-y begin-x
 @cindex Windows, creation
@@ -6273,6 +6274,23 @@ all the ancestors of the window to reflect the current cursor position
 of the window.
 
 The return value is unspecified.
+@end deffn
+
+@node Terminal resizing,  , Window creation, The basic curses library
+@subsection Terminal resizing
+
+@deffn Procedure resizeterm lines columns
+@cindex Windows, resizing
+@cindex Resizing windows
+@cindex Terminals, resizing
+
+The function @code{resizeterm} resizes the standard and current windows to
+the specified dimensions @var{lines} and @var{columns}.  If the windows
+are increased in size, the extended areas are blank-filled.
+
+It returns @code{#t} on success or @code{#f} on failure.  It could fail
+for memory allocation failures or for dimensions that are too small.
+
 @end deffn
 
 @node Function key labels library, The curses panel library, The basic curses library, Curses Reference

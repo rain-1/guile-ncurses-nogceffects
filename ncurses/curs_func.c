@@ -1497,6 +1497,21 @@ gucu_resetty ()
   RETURNTF (resetty ());
 }
 
+/* Resize the standard and current windows. */
+SCM
+gucu_resizeterm(SCM lines, SCM columns)
+{
+  int c_lines, c_columns, ret;
+
+  SCM_ASSERT (scm_is_integer (lines), lines, SCM_ARG1, "resizeterm");
+  SCM_ASSERT (scm_is_integer (columns), columns, SCM_ARG2, "resizeterm");
+  c_lines = scm_to_int (lines);
+  c_columns = scm_to_int (columns);
+  ret = resizeterm (c_lines, c_columns);
+
+  RETURNTF(ret);
+}
+
 /* Save the state of the terminal modes */
 SCM
 gucu_savetty ()
@@ -2455,6 +2470,7 @@ gucu_init_function ()
   scm_c_define_gsubr ("%reset-prog-mode", 0, 0, 0, gucu_reset_prog_mode);
   scm_c_define_gsubr ("%reset-shell-mode", 0, 0, 0, gucu_reset_shell_mode);
   scm_c_define_gsubr ("%resetty", 0, 0, 0, gucu_resetty);
+  scm_c_define_gsubr ("resizeterm", 2, 0, 0, gucu_resizeterm);
   scm_c_define_gsubr ("%savetty", 0, 0, 0, gucu_savetty);
   scm_c_define_gsubr ("%scr-dump", 1, 0, 0, gucu_scr_dump);
   scm_c_define_gsubr ("%scr-init", 1, 0, 0, gucu_scr_init);
