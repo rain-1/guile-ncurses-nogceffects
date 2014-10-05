@@ -1779,6 +1779,29 @@ gucu_typeahead_x (SCM fd)
   RETURNTF (ret);
 }
 
+/* Returns a character string which is a printable representation of the
+   character, ignoring attributes. */
+SCM
+gucu_unctrl (SCM ch)
+{
+  SCM_ASSERT (_scm_is_xchar (ch), ch, SCM_ARG1, "%unctrl");
+#ifdef HAVE_NCURSESW
+  {
+    cchar_t *c_ch = _scm_xchar_to_cchar (ch);
+    wchar_t *c_wname;
+    c_wname = wunctrl (c_ch);
+    free (c_ch);
+    return _scm_sstring_from_wstring (c_wname);
+  }
+#else
+  {
+    chtype c_ch = _scm_xchar_to_chtype (ch);
+    char *c_name;
+    return scm_from_locale_string (unctrl (c_ch));
+  }
+#endif
+}
+
 /* Places a char back on the input queue */
 SCM
 gucu_ungetch (SCM ch)
@@ -2450,6 +2473,7 @@ gucu_init_function ()
   scm_c_define_gsubr ("%termname", 0, 0, 0, gucu_termname);
   scm_c_define_gsubr ("%timeout!", 2, 0, 0, gucu_timeout_x);
   scm_c_define_gsubr ("%typeahead!", 1, 0, 0, gucu_typeahead_x);
+  scm_c_define_gsubr ("%unctrl", 1, 0, 0, gucu_unctrl);
   scm_c_define_gsubr ("%ungetch", 1, 0, 0, gucu_ungetch);
   scm_c_define_gsubr ("use-default-colors", 0, 0, 0, gucu_use_default_colors);
   scm_c_define_gsubr ("use-env", 1, 0, 0, gucu_use_env);

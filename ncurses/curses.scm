@@ -401,6 +401,7 @@
             touchline
             touchwin
             typeahead!
+            unctrl
             ungetch
             ungetmouse
             untouchline
@@ -2529,6 +2530,20 @@ checking."
   (cond
    ((port? port-or-fd) (%typeahead! (fileno port-or-fd)))
    (else (%typeahead! port-or-fd))))
+
+(define (unctrl ch)
+  "Returns a character string which is a printable representation of
+the character CH. Control character will be escaped with the ^X notation.
+The DEL character will be displayed as ^?."
+  (cond
+   ((char? ch)
+    (%unctrl (xchar->list (make-xchar A_NORMAL 0 (list ch)))))
+   ((xchar? ch)
+    (%unctrl (xchar->list ch)))
+   (else
+    (raise (condition (&curses-wrong-type-arg-error
+                       (arg ch)
+                       (expected-type 'xchar)))))))
 
 (define (ungetch ch)
   "Pushes back a character onto the input queue so that it can later

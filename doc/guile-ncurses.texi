@@ -6029,8 +6029,11 @@ starting at line @var{y}, look as if they have (@var{changed}=1) or have not
 
 The @code{unctrl} routine returns a character string which is a
 printable representation of the character @var{ch}, ignoring
-attributes.  Control characters are displayed in the @code{^X} notation.
-Printing characters are displayed as is.
+attributes.  @var{ch} is either a simple Guile character or an
+@code{xchar}.  Control characters are displayed in the @code{^X}
+notation.  Printing characters are displayed as is.
+
+Compare this to @code{keyname}.
 
 @end deffn
 
@@ -6038,7 +6041,9 @@ Printing characters are displayed as is.
 @cindex Key names
 
 The @code{keyname} routine returns a character string corresponding to
-the key @var{ch}.  Control characters are displayed in the @code{^X}
+the key @var{ch}.  @var{ch} is either a simple Guile character or an
+integer key constant like @code{KEY_HOME}, and can not be an
+@code{xchar}.  Control characters are displayed in the @code{^X}
 notation.  Values above 128 are either meta characters, shown in the
 @code{M-X} notation, or the names of function keys, or null.
 
