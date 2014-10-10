@@ -40,6 +40,9 @@
 /* Define to 1 if you have the `fopencookie' function. */
 #undef HAVE_FOPENCOOKIE
 
+/* Define to 1 if you have the `form_driver_w' function. */
+#undef HAVE_FORM_DRIVER_W
+
 /* Define to 1 if you have the `grantpt' function. */
 #undef HAVE_GRANTPT
 

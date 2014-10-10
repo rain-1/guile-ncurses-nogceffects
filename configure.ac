@@ -259,10 +259,7 @@ AC_CHECK_SIZEOF([wint_t], ,[#include <wchar.h>])
 AC_CHECK_FUNCS([cfmakeraw fopencookie ptsname grantpt unlockpt tcgetsid cfsetspeed wcwidth])
 
 # Check for ncurses library functions
-ax_save_LIBS="$LIBS"
-LIBS="$ax_save_LIBS $NCURSES_LIB"
-AC_CHECK_FUNCS([key_defined term_attrs set_tabsize is_pad is_subwin])
-LIBS="$ax_save_LIBS"
+AC_CHECK_FUNCS([key_defined term_attrs set_tabsize is_pad is_subwin form_driver_w])
 
 # Later something should be done with this
 # AC_FUNC_MALLOC

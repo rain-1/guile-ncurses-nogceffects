@@ -7077,9 +7077,7 @@ The input is a form navigation request.  Navigation request codes are
 constants defined below, which are distinct from the key and character
 codes returned by @code{wgetch}.
 @item
-The input is a printable character.  Printable characters (which must
-be positive, less than 256) are checked according to the program's
-locale settings.
+The input is a printable character.
 @item
 The input is the KEY_MOUSE special key associated with an mouse event.
 @end itemize
@@ -7208,6 +7206,18 @@ If the second argument is a printable character, the driver places it
 in the current position in the current field.  If it is one of the
 forms requests listed above, that request is executed.
 
+@findex curses-version
+@findex %wide-ncurses
+@findex %ucs4-chars
+
+It is important to note that when characters are Unicode codepoints
+greater than U+00FF, the form driver will only use them for versions
+of the wide ncurses form library that are 2014 or newer.  For older
+version of ncurses, only printable characters (which must be positive,
+less than 256) are allowed.  The @code{curses-version} procedure and
+the @code{%wide-ncurses} constant describe the underlying ncurses
+version's properties. The constant @code{%ucs4-chars} can be used to
+check if this version of Guile uses Unicode characters.
 
 If the second argument is the @code{KEY_MOUSE} special key, the associated
 mouse event is translated into one of the above pre-defined requests.
@@ -7252,7 +7262,6 @@ the result of this request.
 
 If you clicked outside the user window or the mouse event could not  be
 translated into a form request an @code{E_REQUEST_DENIED} is returned.
-
 
 If the second argument is neither printable nor one of the above
 predefined form requests, the driver assumes it is an
