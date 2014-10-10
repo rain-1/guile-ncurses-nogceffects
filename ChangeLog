@@ -1,3 +1,135 @@
+Mike Gran <spk121@yahoo.com>	2014-10-09
+
+    Fix termattrs tests
+    
+    The term-attrs test is incorrect, and with the new parallel driver,
+    there is no reason not to be verbose.
+    
+    * test/curses_032_termattrs.test: updated
+
+Mike Gran <spk121@yahoo.com>	2014-10-09
+
+    The ncurses shell shouldn't link both to ncurses and guile-ncurses
+    
+    For some combination of LIBS and LT_LIBRARY_PATH, it might be possible
+    that they are linking of different versions of ncurses.
+    
+    * tools/shell.c (TRUE, FALSE): add if missing
+      Don't include curses headers
+      (HAVE_HCURSESW): removed, unnecessary
+      (inner_main): use guile-ncurses functions and not ncurses functions
+    * TODO: document weird hex input bug
+
+Mike Gran <spk121@yahoo.com>	2014-10-09
+
+    Add test for resizeterm
+    
+    * test/curses_039_resizeterm.test: new test
+
+Mike Gran <spk121@yahoo.com>	2014-10-09
+
+    ncurses requires <#screen> I/O to be on file-streams only
+    
+    Also, it requires that those streams exist for the lifetime of
+    the screen.
+    
+    * ncurses/type.c (struct screen_and_ports): new SCREEN container
+      (_scm_to_screen, print_screen): use new container
+      (_scm_to_screen_and_ports): new procedure
+      (_scm_from_screen_and_ports): new procedure
+      (_scm_from_screen): removed
+      (_scm_free_screen, free_screen): new cleanup procedures
+      (gucu_init_type): use new cleanup procedures for screen
+    * ncurses/type.h: new declarations for _scm_from_screen_and_ports, _scm_to_screen_and_ports
+      and _scm_free_screen
+      declaration for _scm_from_screen removed
+    * ncurses/curs_func.c (gucu_delscreen): use new cleanup procedures
+    * ncurses/curs_port.c (gucu_newterm): new gynmastics to store input and output FILE * with SCREEN
+    * ncurses/curs_port.h: gucu_newterm is now available even when fopencookie is not availbe
+    * doc/guile-ncurses.texi (Curses screen initialization and manipulation routines):
+      note that ports must be file ports
+    * test/curses_036_ports.test: make input/output ports into file ports
+
+Mike Gran <spk121@yahoo.com>	2014-10-09
+
+    Whitespace in ncurses/type.c
+    
+    * ncurses/type.c: whitespace
+
+Mike Gran <spk121@yahoo.com>	2014-10-09
+
+    Reorder check for %newterm primitive to make it compilation friendly
+    
+    * ncurses/curses.scm (newterm): don't check for existence of %newterm here
+
+Mike Gran <spk121@yahoo.com>	2014-10-09
+
+    Use Unicode-enabled form driver when available
+    
+    * configure.ac: check form form_driver_w
+    * config.h.in (HAVE_FORM_DRIVER_W): new define
+    * doc/guile-ncurses.texi (Form procedures): document Unicode form driver
+    * ncurses/form_func.c (gucu_form_driver): use form_driver_w when available
+
+Mike Gran <spk121@yahoo.com>	2014-10-09
+
+    Accrue configure-detected ncurses libraries in the LIBS var
+    
+    This makes is slightly more friendly to putting LDFLAGS and
+    LIBS on the configure line.
+    
+    * configure.ac (NCURSES_LIB, MENU_LIB, FORM_LIB, PANEL_LIB, UNISTRING_LIB): removed
+    * ncurses/Makefile.am (libguile_ncurses_la_LIBADD): removed
+    * tools/Makefile.am (LIBS, LDADD): clear out configure-detected ncurses libraries
+
+Mike Gran <spk121@yahoo.com>	2014-10-05
+
+    Update NEWS for unctrl, resizeterm
+    
+    * NEWS: updated
+
+Mike Gran <spk121@yahoo.com>	2014-10-05
+
+    Add resizeterm procedure
+    
+    * ncurses/curs_func.c (gucu_resizeterm, gucu_init_function): new function
+    * test/curses_039_resizeterm.test: add tests for resizeterm
+    * doc/guile-ncurses.texi (Terminal resizing): document resizeterm
+    * ncurses/curses.scm (ncurses): export resizeterm
+    * ncurses/curs_func.h: add declaration for gucu_resizeterm
+
+Mike Gran <spk121@yahoo.com>	2014-10-05
+
+    uninstalled-env script incorrectly ignores Guile's system directories
+    
+    * tools/uninstalled-env.in: don't overwrite GUILE_SYSTEM_COMPILED_PATH
+      and GUILE_SYSTEM_EXTENSIONS_PATH
+
+Mike Gran <spk121@yahoo.com>	2014-10-05
+
+    Add missing 'unctrl' procedure
+    
+    * doc/guile-ncurses.texi (Miscellaneous utilities): document unctrl
+    * ncurses/curs_func.c (gucu_unctrl): new function
+      (gucu_init_function): export %unctrl
+    * ncurses/curses.scm (ncurses): export unctrl
+      (unctrl): new procedure
+    * test/curses_034_util.test ("util"): add new unctrl tests
+
+Mike Gran <spk121@yahoo.com>	2014-09-28
+
+    Clean TODO
+    
+    * TODO: mostly deleted
+
+Mike Gran <spk121@yahoo.com>	2014-09-28
+
+    Update ChangeLog, README, and THANKS
+    
+    * ChangeLog: updated
+    * README: updated
+    * THANKS: updated
+
 Mike Gran <spk121@yahoo.com>	2014-09-28
 
     Ignore  wide killchar and erasechar test if upstream ncurses fails

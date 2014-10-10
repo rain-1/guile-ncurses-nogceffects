@@ -9,6 +9,10 @@ The NEWS file for GNU Guile-NCurses
 Release 1.6
 - new procedure 'unctrl'
 - new procedure 'resizeterm'
+- 'form-driver' now handles Unicode if the ncurses form_driver_w
+  function is available
+- 'newterm' now operates only on file ports, and will close those
+  ports if newterm is successful
 
 Release 1.5
 - parallel 'make check' is now supported
