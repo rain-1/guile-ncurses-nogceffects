@@ -2,7 +2,7 @@
 ;;;; curses_032_termattrs.test --- test suite for curses's term attrs
 
 
-;; Copyright 2009, 2010, 2011 Free Software Foundation, Inc.
+;; Copyright 2009, 2010, 2011, 2014 Free Software Foundation, Inc.
 
 ;; This file is part of Guile-Ncurses.
 
@@ -51,7 +51,7 @@
             (clear win)
             (let ((b (baudrate)))
               (endwin)
-              ;; (format #t "Baudrate: ~a (expected ~a)~%" b expected-baudrate)
+              (format #t "Baudrate: ~a (expected ~a)~%" b expected-baudrate)
               (maybe-sleep 1)
               (eqv? b expected-baudrate)
 	      'untested)))
@@ -66,7 +66,7 @@
             (clear win)
             (let ((c (erasechar)))
               (endwin)
-              ;; (format #t "Erasechar: ~s (expected ~s)~%" c expected-erasechar)
+              (format #t "Erasechar: ~s (expected ~s)~%" c expected-erasechar)
               (maybe-sleep 1)
               (eqv? c expected-erasechar)
 	      'untested)))
@@ -79,7 +79,7 @@
             (clear win)
             (let ((c (killchar)))
               (endwin)
-              ;; (format #t "Killchar: ~s (expected ~s)~%" c expected-killchar)
+              (format #t "Killchar: ~s (expected ~s)~%" c expected-killchar)
               (maybe-sleep 1)
               (eqv? c expected-killchar)
 	      'untested)))
@@ -89,7 +89,7 @@
             (clear win)
             (let ((h (has-ic?)))
               (endwin)
-              ;; (format #t "Has IC: ~a (expected ~a)~%" h expected-has-ic)
+              (format #t "Has IC: ~a (expected ~a)~%" h expected-has-ic)
               (maybe-sleep 1)
               (eqv? h expected-has-ic))))
 
@@ -99,7 +99,7 @@
             (move win 0 0)
             (let ((h (has-il?)))
               (endwin)
-              ;; (format #t "Has IL: ~a (expected ~a)~%" h expected-has-il)
+              (format #t "Has IL: ~a (expected ~a)~%" h expected-has-il)
               (maybe-sleep 1)
               (eqv? h expected-has-il))))
 
@@ -108,7 +108,7 @@
             (clear win)
             (let ((c (longname)))
               (endwin)
-              ;; (format #t "Long Terminal Name: ~a~%" c)
+              (format #t "Long Terminal Name: ~a~%" c)
               (maybe-sleep 1)
               (not (not (string= c "xterm"
                                  0
@@ -122,7 +122,7 @@
             (clear win)
             (let ((c (termname)))
               (endwin)
-              ;; (format #t "Terminal Name: ~a~%" c)
+              (format #t "Terminal Name: ~a~%" c)
               (maybe-sleep 1)
               (not (not (string= c "xterm" 0 4 0 4))))))
  
@@ -134,7 +134,7 @@
                         A_ALTCHARSET
                         A_BLINK
                         A_BOLD
-                        ;; A_DIM
+                        A_DIM
                         A_COLOR
                         A_INVIS
                         ;; A_PROTECT
@@ -152,21 +152,30 @@
 		     " no")))
 
               (endwin)
-              ;; (format #t "~%")
-              ;; (format #t "Terminal Capabilities~%")
-	      ;; (format #t "this term vs xterm~%")
-              ;; (format #t "------------------------------~%")
-              ;; (format #t "  PROTECT ~a~%" (yn A_PROTECT))
-              ;; (format #t "INVISIBLE ~a~%" (yn A_INVIS))
-              ;; (format #t "      ALT ~a~%" (yn A_ALTCHARSET))
-              ;; (format #t "     BOLD ~a~%" (yn A_BOLD))
-              ;; (format #t "      DIM ~a~%" (yn A_DIM))
-              ;; (format #t "    BLINK ~a~%" (yn A_BLINK))
-              ;; (format #t "  REVERSE ~a~%" (yn A_REVERSE))
-              ;; (format #t "UNDERLINE ~a~%" (yn A_UNDERLINE))
-              ;; (format #t " STANDOUT ~a~%" (yn A_STANDOUT))
-              ;; (format #t "    COLOR ~a~%" (yn A_COLOR))
+              (format #t "~%")
+              (format #t "Terminal Capabilities~%")
+	      (format #t "this term vs xterm~%")
+              (format #t "------------------------------~%")
+              (format #t "  PROTECT ~a~%" (yn A_PROTECT))
+              (format #t "INVISIBLE ~a~%" (yn A_INVIS))
+              (format #t "      ALT ~a~%" (yn A_ALTCHARSET))
+              (format #t "     BOLD ~a~%" (yn A_BOLD))
+              (format #t "      DIM ~a~%" (yn A_DIM))
+              (format #t "    BLINK ~a~%" (yn A_BLINK))
+              (format #t "  REVERSE ~a~%" (yn A_REVERSE))
+              (format #t "UNDERLINE ~a~%" (yn A_UNDERLINE))
+              (format #t " STANDOUT ~a~%" (yn A_STANDOUT))
+              (format #t "    COLOR ~a~%" (yn A_COLOR))
               (maybe-sleep 10)
-              (eqv? ta ta2)))))
+              (and (logtest ta A_ALTCHARSET)
+                   (logtest ta A_BLINK)
+                   (logtest ta A_BOLD)
+                   ;; (logtest ta A_DIM)
+                   (logtest ta A_COLOR)
+                   (logtest ta A_INVIS)
+                   (not (logtest ta A_PROTECT))
+                   (logtest ta A_REVERSE)
+                   (logtest ta A_STANDOUT)
+                   (logtest ta A_UNDERLINE))))))
 
 (curses-test-end test "curses_032_termattrs.out")
