@@ -2153,9 +2153,9 @@ or #f on failure"
 
 (define (newterm type outport inport)
   "Create a new terminal whose input and output are Guile ports."
-  (if (not (defined? '%newterm))
-      (raise (condition (&curses-missing-function-error
-                         (function '%newterm)))))
+  ;; (if (not (defined? '%newterm))
+  ;;     (raise (condition (&curses-missing-function-error
+  ;;                        (function '%newterm)))))
   (assert-string type)
   (if (not (output-port? outport))
       (raise (condition (&curses-wrong-type-arg-error
@@ -2600,3 +2600,4 @@ by the given window."
 (if (defined? 'KEY_EVENT)    (export KEY_EVENT))
 (if (defined? 'key-defined)  (export key-defined))
 (if (defined? 'ptsraw)       (export ptsraw))
+(if (defined? '%newterm)     (export newterm))
