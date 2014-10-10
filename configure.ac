@@ -92,23 +92,19 @@ AC_ARG_WITH(ncursesw,
             [with_ncursesw=no])
 
 AS_IF([test "$with_ncursesw" = check],
-      [AC_CHECK_LIB([ncursesw],
-                    [initscr],
-                    [AC_SUBST([NCURSES_LIB], ["-lncursesw"])
-                     AC_DEFINE([HAVE_NCURSESW],
-                               [1],
-                               [Define if you have libncursesw])
-                     with_ncursesw=yes],
-                    [AC_MSG_FAILURE([--with-ncursesw was given, but, test for ncursesw failed])])])
+      [AC_SEARCH_LIBS([initscr], [ncursesw],
+                      [AC_DEFINE([HAVE_NCURSESW],
+                                 [1],
+                                 [Define if you have libncursesw])
+                       with_ncursesw=yes],
+                      [AC_MSG_FAILURE([--with-ncursesw was given, but, test for ncursesw failed])])])
 
 AS_IF([test "$with_ncursesw" = no],
-      [AC_CHECK_LIB([ncurses],
-                    [initscr],
-                    [AC_SUBST([NCURSES_LIB], ["-lncurses"])
-                     AC_DEFINE([HAVE_NCURSES],
-                               [1],
-                               [Define if you have libncurses])],
-                    [AC_MSG_FAILURE([the ncurses library was not found])])])
+      [AC_SEARCH_LIBS([initscr], [ncurses],
+                      [AC_DEFINE([HAVE_NCURSES],
+                                 [1],
+                                 [Define if you have libncurses])],
+                      [AC_MSG_FAILURE([the ncurses library was not found])])])
 
 AM_CONDITIONAL([WIDE], [test "$with_ncursesw" = yes])
 
@@ -116,41 +112,29 @@ AM_CONDITIONAL([WIDE], [test "$with_ncursesw" = yes])
 # Check for the menu, panel, and form libraries
 if test "$with_ncursesw" = no
 then
-  AC_CHECK_LIB([menu], [new_menu],
-               [MENU_LIB="-lmenu"],
-               [AC_MSG_ERROR([the ncurses menu library is required])],
-               [-lncurses])
-  AC_CHECK_LIB([form], [new_form],
-               [FORM_LIB="-lform"],
-               [AC_MSG_ERROR([the ncurses form library is required])],
-               [-lncurses])
-  AC_CHECK_LIB([panel], [new_panel],
-               [PANEL_LIB="-lpanel"],
-               [AC_MSG_ERROR([the ncurses panel library is required])],
-               [-lncurses])
+  AC_SEARCH_LIBS([new_menu], [menu],
+                 [],
+                 [AC_MSG_ERROR([the ncurses menu library is required])])
+  AC_SEARCH_LIBS([new_form], [form],
+                 [],
+                 [AC_MSG_ERROR([the ncurses form library is required])])
+  AC_SEARCH_LIBS([new_panel], [panel],
+                 [],
+                 [AC_MSG_ERROR([the ncurses panel library is required])])
 else
-  AC_CHECK_LIB([unistring], [u32_strconv_from_locale],
-               [UNISTRING_LIB="-lunistring"],
-               [AC_MSG_ERROR([the unistring library is required when wide curses is used])])
-  AC_CHECK_LIB([menuw], [new_menu],
-               [MENU_LIB="-lmenuw"],
-               [AC_MSG_ERROR([the ncurses menuw library is required])],
-               [-lncursesw])
-  AC_CHECK_LIB([formw], [new_form],
-               [FORM_LIB="-lformw"],
-               [AC_MSG_ERROR([the ncurses formw library is required])],
-               [-lncursesw])
-  AC_CHECK_LIB([panelw], [new_panel],
-               [PANEL_LIB="-lpanelw"],
-               [AC_MSG_ERROR([the ncurses panelw library is required])],
-               [-lncursesw])
+  AC_SEARCH_LIBS([u32_strconv_from_locale], [unistring],
+                 [],
+                 [AC_MSG_ERROR([the unistring library is required when wide curses is used])])
+  AC_SEARCH_LIBS([new_menu], [menuw],
+                 [],
+                 [AC_MSG_ERROR([the ncurses menuw library is required])])
+  AC_SEARCH_LIBS([new_form], [formw],
+                 [],
+                 [AC_MSG_ERROR([the ncurses formw library is required])])
+  AC_SEARCH_LIBS([new_panel], [panelw],
+                 [],
+                 [AC_MSG_ERROR([the ncurses panelw library is required])])
 fi
-
-AC_SUBST([NCURSES_LIB])
-AC_SUBST([MENU_LIB])
-AC_SUBST([PANEL_LIB])
-AC_SUBST([FORM_LIB])
-AC_SUBST([UNISTRING_LIB])
 
 ##################
 # Check for Libtool
