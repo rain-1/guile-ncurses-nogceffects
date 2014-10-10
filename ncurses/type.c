@@ -836,7 +836,20 @@ gucu_is_mevent_p (SCM x)
 }
 
 
-// screen -- in C, a SCREEN *.	In Scheme, a smob that contains that pointer.
+// screen -- in C, a SCREEN * and the associated input and output FILE
+// * used to open it.  In Scheme, a pointer to a structure containing
+// the same.
+
+// The ncurses SCREEN type depends on file descriptors for input and
+// output.  To make sure these file descriptors aren't closed or
+// garbage collected prematurely, we carry references to them along
+// with the SCREEN structure.  They must all exist as a set.
+
+struct screen_and_ports {
+  SCREEN *screen;               /* the SCREEN* created by ncurses newterm */
+  FILE *ifp;                    /* The associated input file stream */
+  FILE *ofp;                    /* The associated output file stream */
+};
 
 int
 _scm_is_screen (SCM x)
@@ -856,24 +869,86 @@ SCREEN *
 _scm_to_screen (SCM x)
 {
   assert (_scm_is_screen (x));
+  struct screen_and_ports *sp = (struct screen_and_ports *) SCM_SMOB_DATA (x);
+  return sp->screen;
+}
 
-  return (SCREEN *) SCM_SMOB_DATA (x);
+void
+_scm_to_screen_and_ports (SCM x, SCREEN **screen, FILE **ofp, FILE **ifp)
+{
+  assert (_scm_is_screen (x));
+  assert (screen != NULL);
+  assert (ofp != NULL);
+  assert (ifp != NULL);
+  struct screen_and_ports *sp = (struct screen_and_ports *) SCM_SMOB_DATA (x);
+  *screen = sp->screen;
+  *ofp = sp->ofp;
+  *ifp = sp->ifp;
 }
 
 SCM
-_scm_from_screen (SCREEN * x)
+_scm_from_screen_and_ports (SCREEN * x, FILE *ofp, FILE *ifp)
 {
   SCM s_screen;
 
   assert (x != NULL);
+  assert (ofp != NULL);
+  assert (ifp != NULL);
 
-  SCM_NEWSMOB (s_screen, screen_tag, x);
+  struct screen_and_ports *sp = scm_malloc (sizeof(struct screen_and_ports));
+  sp->screen = x;
+  sp->ofp = ofp;
+  sp->ifp = ifp;
+  SCM_NEWSMOB (s_screen, screen_tag, sp);
   return s_screen;
 }
+
+void
+_scm_free_screen (SCM x)
+{
+  assert (_scm_is_screen (x));
+  struct screen_and_ports *sp = (struct screen_and_ports *) SCM_SMOB_DATA (x);
+
+  if (sp->screen)
+    {
+      delscreen (sp->screen);
+      /* delscreen returns void */
+      sp->screen = NULL;
+    }
+  if (sp->ifp)
+    {
+      fclose (sp->ifp);
+      sp->ifp = NULL;
+    }
+  if (sp->ofp)
+    {
+      fclose (sp->ofp);
+      sp->ofp = NULL;
+    }
+}
+
+size_t
+free_screen (SCM x)
+{
+  assert (SCM_SMOB_PREDICATE (screen_tag, x));
+  struct screen_and_ports *sp = (struct screen_and_ports *) SCM_SMOB_DATA (x);
+
+  /* Screens should already be null if delwin has been called on them */
+  if (sp != NULL)
+    {
+      _scm_free_screen (x);
+      free (sp);
+      SCM_SET_SMOB_DATA (x, 0);
+    }
+
+  return 0;
+}
+
 
 int
 print_screen (SCM x, SCM port, scm_print_state * pstate UNUSED)
 {
+  struct screen_and_ports *sp;
   SCREEN *screen;
   char str[SIZEOF_VOID_P*2+3];
 
@@ -881,7 +956,8 @@ print_screen (SCM x, SCM port, scm_print_state * pstate UNUSED)
      screens.  */
   assert (SCM_SMOB_PREDICATE (screen_tag, x));
 
-  screen = (SCREEN *) SCM_SMOB_DATA (x);
+  sp = (struct screen_and_ports *) SCM_SMOB_DATA (x);
+  screen = sp->screen;
   scm_puts ("#<screen ", port);
 
   if (screen == NULL)
@@ -1059,6 +1135,7 @@ gucu_init_type ()
 
       screen_tag = scm_make_smob_type ("screen", sizeof (SCREEN *));
       scm_set_smob_print (screen_tag, print_screen);
+      scm_set_smob_free (screen_tag, free_screen);
       scm_c_define_gsubr ("screen?", 1, 0, 0, gucu_is_screen_p);
 
       window_tag = scm_make_smob_type ("window", sizeof (WINDOW *));

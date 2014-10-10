@@ -464,16 +464,13 @@ SCM
 gucu_delscreen (SCM scr)
 {
   SCREEN *c_scr;
-
-  c_scr = _scm_to_screen (scr);
+  FILE *c_ifp, *c_ofp;
 
   if (!isendwin ())
     /* terminal was freed while still in curses mode */
     return SCM_BOOL_F;
 
-  delscreen (c_scr);
-  /* delscreen returns void */
-  SCM_SET_SMOB_DATA (scr, 0);
+  _scm_free_screen (scr);
 
   return SCM_BOOL_T;
 }
@@ -2082,15 +2079,15 @@ gucu_wgetch (SCM win)
 
     if (ret == OK)
       {
-	return _scm_schar_from_wchar (wch);
+        return _scm_schar_from_wchar (wch);
       }
     else if (ret == KEY_CODE_YES)
       {
-	return scm_from_unsigned_integer (wch);
+        return scm_from_unsigned_integer (wch);
       }
     else
       {
-	return SCM_BOOL_F;
+        return SCM_BOOL_F;
       }
   }
 #else

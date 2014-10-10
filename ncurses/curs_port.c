@@ -1,33 +1,24 @@
 /*
-curs_port.c
+  curs_port.c
 
-Copyright 2009, 2010, 2011, 2014 Free Software Foundation, Inc.
+  Copyright 2009, 2010, 2011, 2014 Free Software Foundation, Inc.
 
-This file is part of GNU Guile-Ncurses.
+  This file is part of GNU Guile-Ncurses.
 
-Guile-Ncurses is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as
-published by the Free Software Foundation, either version 3 of the
-License, or (at your option) any later version.
+  Guile-Ncurses is free software: you can redistribute it and/or modify
+  it under the terms of the GNU Lesser General Public License as
+  published by the Free Software Foundation, either version 3 of the
+  License, or (at your option) any later version.
 
-Guile-Ncurses is distributed in the hope that it will be useful, but
-WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-Lesser General Public License for more details.
+  Guile-Ncurses is distributed in the hope that it will be useful, but
+  WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+  Lesser General Public License for more details.
 
-You should have received a copy of the GNU Lesser General Public
-License along with Guile-Ncurses.  If not, see
-<http://www.gnu.org/licenses/>.
+  You should have received a copy of the GNU Lesser General Public
+  License along with Guile-Ncurses.  If not, see
+  <http://www.gnu.org/licenses/>.
 */
-
-#if defined HAVE_FOPENCOOKIE && defined HAVE_COOKIE_IO_FUNCTIONS_T && defined HAVE_OFF64_T
-#define GUCU_USE_COOKIE
-#endif
-
-#ifdef GUCU_USE_COOKIE
-#define _GNU_SOURCE
-#define _LARGEFILE64_SOURCE
-#endif
 
 #include <config.h>
 
@@ -73,9 +64,9 @@ port_read (void *cookie, char *buf, size_t siz)
       c = scm_get_byte_or_eof (port);
 
       if (c == EOF)
-	return 0;
+        return 0;
       else
-	buf[0] = c;
+        buf[0] = c;
 
       return 1;
     }
@@ -90,9 +81,9 @@ port_read (void *cookie, char *buf, size_t siz)
       c = scm_read_char (port);
 
       if (scm_is_true (scm_eof_object_p (c)))
-	return 0;
+        return 0;
       else
-	buf[0] = scm_to_char (c);
+        buf[0] = scm_to_char (c);
 
       return 1;
     }
@@ -123,7 +114,7 @@ port_write (void *cookie, const char *buf, size_t siz)
 
     for (i = 0; i < siz; i++)
       {
-	scm_write_char (scm_integer_to_char (scm_from_char (buf[i])), port);
+        scm_write_char (scm_integer_to_char (scm_from_char (buf[i])), port);
       }
   }
 
@@ -159,26 +150,47 @@ SCM
 gucu_newterm (SCM type, SCM outp, SCM inp)
 {
   char *c_type;
-  FILE *c_inp, *c_outp;
   SCREEN *ret;
 
-  /* Convert the input port to a special stream */
-  c_inp = fopencookie (SCM2PTR (inp), "rb", port_funcs);
-  if (c_inp == NULL)
-    return scm_from_int (1);
+  /* IMPORTANT! (10/09/2014) Curses's newterm requires that the output
+     FILE * is based on a true file.  In the _nc_setupscreen function
+     called by newterm, it uses fileno() to extract the file number
+     from the output port.
 
-  /* Convert the output port to a special stream */
-  c_outp = fopencookie (SCM2PTR (outp), "w", port_funcs);
+     (That's why this newterm didn't work with the old code based on
+     fopencookie().  fopencookie() ports don't necessarily have file
+     descriptors.) */
+
+  /* Will throw exception if not a file port. */
+  SCM outp_fileno = scm_fileno (outp);
+  int c_outp_fileno_orig = scm_to_int (outp_fileno);
+  int c_outp_fileno = dup (c_outp_fileno_orig);
+  FILE *c_outp = fdopen(c_outp_fileno, "wb+");
   if (c_outp == NULL)
     return scm_from_int (2);
 
+  SCM inp_fileno = scm_fileno (inp);
+  int c_inp_fileno_orig = scm_to_int (inp_fileno);
+  int c_inp_fileno = dup (c_inp_fileno_orig);
+  FILE *c_inp = fdopen(c_inp_fileno, "rb");
+
+  if (c_inp == NULL)
+    return scm_from_int (1);
+
+  /* N.B.: Since we've duplicated these file descriptors, we need
+     to close the ports on which the originals were based, so that
+     there aren't competing reads and writes to those files. */
+  scm_close (scm_from_int (c_inp_fileno_orig));
+  scm_close (scm_from_int (c_outp_fileno_orig));
+
   c_type = scm_to_locale_string (type);
+
   ret = newterm (c_type, c_outp, c_inp);
   free (c_type);
   if (ret == NULL)
     return scm_from_int (3);
 
-  SCM s_ret = _scm_from_screen (ret);
+  SCM s_ret = _scm_from_screen_and_ports (ret, c_outp, c_inp);
 
   return s_ret;
 }
@@ -195,7 +207,7 @@ gucu_getwin (SCM port)
   unsigned char c;
 
   SCM_ASSERT (scm_is_true (scm_input_port_p (port)), port, SCM_ARG1,
-	      "getwin");
+              "getwin");
 
 #ifdef GUCU_USE_COOKIE
   fp = fopencookie (&port, "rb", port_funcs);
@@ -214,14 +226,14 @@ gucu_getwin (SCM port)
       s_c = scm_read_char (port);
 
       if (scm_is_true (scm_eof_object_p (s_c)))
-	break;
+        break;
 
       c = scm_to_uint8 (scm_char_to_integer (s_c));
 
       if (fwrite (&c, sizeof (char), 1, fp) != 1)
-	{
-	  scm_syserror ("getwin");
-	}
+        {
+          scm_syserror ("getwin");
+        }
     }
   rewind (fp);
 
@@ -247,7 +259,7 @@ gucu_putwin (SCM win, SCM port)
 
   SCM_ASSERT (_scm_is_window (win), win, SCM_ARG1, "putwin");
   SCM_ASSERT (scm_is_true (scm_output_port_p (port)), port, SCM_ARG2,
-	      "putwin");
+              "putwin");
 
   c_win = _scm_to_window (win);
 
@@ -281,9 +293,9 @@ gucu_putwin (SCM win, SCM port)
       char c;
       rewind (fp);
       while (fread (&c, sizeof (char), 1, fp) == 1)
-	{
-	  scm_write_char (SCM_MAKE_CHAR (c), port);
-	}
+        {
+          scm_write_char (SCM_MAKE_CHAR (c), port);
+        }
     }
   fclose (fp);
 #endif
@@ -306,9 +318,8 @@ gucu_init_port ()
       port_funcs.write = port_write;
       port_funcs.seek = port_seek;
       port_funcs.close = port_close;
-
-      scm_c_define_gsubr ("%newterm", 3, 0, 0, gucu_newterm);
 #endif
+      scm_c_define_gsubr ("%newterm", 3, 0, 0, gucu_newterm);
       scm_c_define_gsubr ("getwin", 1, 0, 0, gucu_getwin);
       scm_c_define_gsubr ("putwin", 2, 0, 0, gucu_putwin);
       first = 0;

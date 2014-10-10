@@ -3325,10 +3325,12 @@ The routine @code{newterm} should be called once for each terminal.
 It returns a variable of type @code{#<screen>} which should be saved
 as a reference to that terminal.  @var{type} is the type of the
 terminal to be used in place of @env{$TERM}.  @var{outport} is a port
-that will receive the output to the terminal.  It can be a port of any
-type (file, string, etc.). @var{inport} is a port that will hold the
-input to the terminal.  It must be a file port, and cannot be a string
-port.
+that will receive the output to the terminal.
+
+IMPORTANT: These ports must be file ports.  The underlying ncurses
+library extracts the file descriptor from the port and uses that to
+write to the screen.  Also, these ports will be closed by
+@code{newterm} and cannot be reused.
 
 @code{newterm} will internally use a duplicate port to the file
 pointed to by @var{inport}.  @var{inport} won't be used except to get a
