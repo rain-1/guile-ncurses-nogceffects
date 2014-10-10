@@ -22,6 +22,8 @@ else
 noinst_SCRIPTS = ncurses-keyboard-test
 endif
 
+noinst_SCRIPTS = posix-explorer.scm
+
 if BUILDING_SHELL
 bin_PROGRAMS = guile-ncurses-shell
 endif
