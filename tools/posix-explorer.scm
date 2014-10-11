@@ -37,6 +37,9 @@
 (define PROGRAM_NAME "posix-explorer")
 (define PROGRAM_VERSION "0.0")
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; MAIN WINDOW
+
 (define (mainwin-initialize)
   "Initialize curses. Return the main window."
   (let ([mainwin (if (defined? '%guile-ncurses-shell-stdscr)
@@ -53,12 +56,8 @@
 (define (mainwin-finalize mainwin)
   (endwin))
 
-(define (do-noop win)
-  (erase win)
-  (addstr win "NOOP" #:x 0 #:y 0)
-  (refresh win)
-  (sleep 10)
-  #t)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; SUBMENU DATA GATHERING PROCEDURES
 
 (define (get-locale-information)
   (list
@@ -117,7 +116,9 @@
 (define (get-environment-variables)
   (let ([EV (sort! (environ) string-locale-ci<?)])
     (map (lambda (entry)
-           (string-split entry #\=))
+           (let ([split-location (string-index entry #\=)])
+             (list (string-take entry split-location)
+                   (string-drop entry (1+ split-location)))))
          EV)))
 
 (define (get-time-entries)
@@ -183,69 +184,96 @@
        (list "Effective Group ID" (number->string (group:gid egid-gr)))))))
 
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; MENU RENDERING AND CONTROL
+
 (define (do-single-item win entry)
-  (clear win)
-  (addstr win (first entry) #:y 0 #:x 0)
-  (addstr win (second entry) #:y (1+ (getcury win)) #:x 0)
-  (refresh win)
-  (getch win))
-        
+  "Draw a screen containing information on a single item, where an
+ENTRY's KEY is the top title, and the ENTRY's VALUE is inside of a
+box."
+  (let* ([margin 1]                      ; outside the box
+         [padding 2]                     ; inside the box
+         [box-height (- (lines) (* 2 margin))]
+         [box-width (- (cols) (* 2 margin))]
+         [box-win (derwin win box-height box-width margin margin)]
+         [inner-win (derwin box-win
+                            (- (lines) (* 2 margin) (* 2 padding))
+                            (- (cols) (* 2 margin) (* 2 padding))
+                            padding
+                            padding)])
+    (clear win)
+    (addchstr win (bold (first entry)) #:x 1 #:y 0)
+    (box box-win 0 0)
+    (addstr inner-win (second entry))
+     (addchstr win (bold "Press any key to return.") #:x 1 #:y (1- (lines)))
+    (refresh win)
+    (getch win)))
 
 (define (do-sub-menu win title entries-list)
-      (let* ([menu-items 
-              (map (lambda (entry)
-                     (new-item (first entry) (second entry)))
-                   entries-list)]
-             [menu (new-menu menu-items)]
-             [menu-margin 1]                ; outside the box
-             [menu-padding 2]               ; inside the box
-             [menu-height (- (lines) (* 2 menu-margin))]
-             [menu-width (- (cols) (* 2 menu-margin))]
-             [menu-win (newwin menu-height menu-width menu-margin menu-margin)])
-    
-        ;; Set the outer and inner menu windows
-        (clear win)
-        (keypad! menu-win #t)
-        (set-menu-win! menu menu-win)
-        (set-menu-sub! menu (derwin menu-win
-                                    (- menu-height (* 2 menu-padding))
-                                    (- menu-width (* 2 menu-padding))
-                                    menu-padding
-                                    menu-padding))
-        (box menu-win 0 0)
-        (addchstr win (bold title) #:x 1 #:y 0)
-    
-        (post-menu menu)
-        (refresh win)
-        
-        (let loop ([c (getch menu-win)])
-          (cond
-           ;; Motion controls
-           ([eqv? c KEY_DOWN]
-            (begin
-              (menu-driver menu REQ_DOWN_ITEM)
-              (loop (getch menu-win))))
-           ([eqv? c KEY_UP]
-            (begin
-              (menu-driver menu REQ_UP_ITEM)
-              (loop (getch menu-win))))
-           
-           ;; Menu item selection
-           ([or (eqv? c KEY_ENTER)
-                (eqv? c #\cr)
-                (eqv? c #\nl)]
-            (begin
-              (unpost-menu menu)
-              ;; Call handler
-              (let ([entry (list-ref entries-list (item-index (current-item menu)))])
-                (do-single-item win entry))))
+  "Draw a sub-menu of a group entries on a specific topic."
+  (let* ([menu-items 
+          (map (lambda (entry)
+                 (new-item (first entry) (second entry)))
+               entries-list)]
+         [menu (new-menu menu-items)]
+         [menu-margin 1]                ; outside the box
+         [menu-padding 2]               ; inside the box
+         [menu-height (- (lines) (* 2 menu-margin))]
+         [menu-width (- (cols) (* 2 menu-margin))]
+         [menu-win (newwin menu-height menu-width menu-margin menu-margin)])
+    (define (_draw_sub_menu)
+      (clear win)
+      (addchstr win (bold title) #:x 1 #:y 0)
+      (box menu-win 0 0)
+      (post-menu menu)
+      (addchstr win (bold "Use the arrow keys.") #:x 1 #:y (1- (lines)))
+      (refresh win))
 
-           (else
-            (display c)
-            (loop (getch menu-win)))))))
+    ;; Set the outer and inner menu windows
+    (clear win)
+    (keypad! menu-win #t)
+    (set-menu-win! menu menu-win)
+    (set-menu-sub! menu (derwin menu-win
+                                (- menu-height (* 2 menu-padding))
+                                (- menu-width (* 2 menu-padding))
+                                menu-padding
+                                menu-padding))
+    (set-menu-format! menu (- menu-height (* 2 menu-padding)) 1)
+    
+    (_draw_sub_menu)
 
+    (let loop ([c (getch menu-win)])
+      (cond
+       ;; Motion controls
+       ([eqv? c KEY_DOWN]
+        (begin
+          (menu-driver menu REQ_DOWN_ITEM)
+          (loop (getch menu-win))))
+       ([eqv? c KEY_UP]
+        (begin
+          (menu-driver menu REQ_UP_ITEM)
+          (loop (getch menu-win))))
+       
+       ;; Menu item selection
+       ([or (eqv? c KEY_ENTER)
+            (eqv? c KEY_RIGHT)
+            (eqv? c #\cr)
+            (eqv? c #\nl)]
+        (begin
+          (unpost-menu menu)
+          ;; Call handler
+          (let ([entry (list-ref entries-list (item-index (current-item menu)))])
+            (do-single-item win entry)
+            (_draw_sub_menu)
+            (loop (getch menu-win)))))
+       ([eqv? c KEY_LEFT]
+        #t)
+
+       (else
+        (loop (getch menu-win)))))))
 
 (define (do-main-menu win)
+  "Draw the top-level menu"
   (let* ([entries-list
           ;; Name    Description         Handler
           `(
@@ -267,9 +295,15 @@
          [menu-height (- (lines) (* 2 menu-margin))]
          [menu-width (- (cols) (* 2 menu-margin))]
          [menu-win (newwin menu-height menu-width menu-margin menu-margin)])
+    (define (_draw_menu)
+      (clear win)
+      (addchstr win (bold "Main Menu") #:x 1 #:y 0)
+      (box menu-win 0 0)
+      (post-menu menu)
+      (addchstr win (bold "Use the arrow keys.") #:x 1 #:y (1- (lines)))
+      (refresh win))
     
     ;; Set the outer and inner menu windows
-    (clear win)
     (keypad! menu-win #t)
     (set-menu-win! menu menu-win)
     (set-menu-sub! menu (derwin menu-win
@@ -277,14 +311,8 @@
                                 (- menu-width (* 2 menu-padding))
                                 menu-padding
                                 menu-padding))
-    (box menu-win 0 0)
-    (attr-on! menu-win (color-pair 1))
-    (move menu-win 1 16)
-    (addstr win "Main Menu")
-    (attr-off! menu-win (color-pair 1))
-    
-    (post-menu menu)
-    (refresh win)
+
+    (_draw_menu)
     
     (let loop ([c (getch menu-win)])
       (cond
@@ -300,18 +328,26 @@
        
        ;; Menu item selection
        ([or (eqv? c KEY_ENTER)
+            (eqv? c KEY_RIGHT)
             (eqv? c #\cr)
             (eqv? c #\nl)]
         (begin
           (unpost-menu menu)
           ;; Call handler
           (let ([entry (list-ref entries-list (item-index (current-item menu)))])
-            (do-sub-menu win (second entry) ((third entry))))))
+            (do-sub-menu win (second entry) ((third entry)))
+            (_draw_menu)
+            (loop (getch menu-win)))))
+
+       ([eqv? c KEY_LEFT]
+        #t)
 
        (else
-        (display c)
         (loop (getch menu-win)))))
     #t))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; MAIN
 
 (define (main args)
   (let* ((option-spec '((version (single-char #\v) (value #f))
