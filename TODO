@@ -3,4 +3,5 @@ TODO
 * write a meaningful TODO
 * find the mysterious bug in guile-ncurses-shell where getch will fetch a few hex
   digits after the shell starts up
-
+* make test f009_form_wide.test do something sensible if the en_US.UTF-8 locale
+  isn't available

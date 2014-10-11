@@ -56,7 +56,7 @@ slk_003_init.test slk_004_init.test slk_005_demo.test			\
 slk_006_attributes.test
 
 WIDETESTS = r037_border_set.test r038_get_wch.test r039_get_wstr.test	\
-r040_term_attrs.test
+r040_term_attrs.test f009_form_wide.test
 
 TESTS = $(NOTERMTESTS)
 
