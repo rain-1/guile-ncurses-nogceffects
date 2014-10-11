@@ -7067,6 +7067,11 @@ size (not O_STATIC) and not all text from the entry is being displayed.
 
 @subsection Command-processing loop of the form system
 
+@defvr Constant %is-form-driver-wide
+This constant is @code{#t} if the @code{form-driver} function is capable
+of processing characters with representations that are greater than 8 bits.
+@end defvr
+
 @deffn Procedure form-driver form c
 
 Once a form has been posted (displayed), you should funnel input
@@ -7208,18 +7213,15 @@ If the second argument is a printable character, the driver places it
 in the current position in the current field.  If it is one of the
 forms requests listed above, that request is executed.
 
-@findex curses-version
-@findex %wide-ncurses
-@findex %ucs4-chars
+@findex %is-form-driver-wide
 
 It is important to note that when characters are Unicode codepoints
 greater than U+00FF, the form driver will only use them for versions
 of the wide ncurses form library that are 2014 or newer.  For older
 version of ncurses, only printable characters (which must be positive,
-less than 256) are allowed.  The @code{curses-version} procedure and
-the @code{%wide-ncurses} constant describe the underlying ncurses
-version's properties. The constant @code{%ucs4-chars} can be used to
-check if this version of Guile uses Unicode characters.
+less than 256) are allowed.  The @code{%is-form-driver-wide} constant
+can be used to check if @code{form-driver} can handle characters whose
+numerical representations are greater than 256.
 
 If the second argument is the @code{KEY_MOUSE} special key, the associated
 mouse event is translated into one of the above pre-defined requests.
