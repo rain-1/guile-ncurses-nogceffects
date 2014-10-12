@@ -210,7 +210,7 @@ gucu_getwin (SCM port)
               "getwin");
 
 #ifdef GUCU_USE_COOKIE
-  fp = fopencookie (&port, "rb", port_funcs);
+  fp = fopencookie (SCM2PTR(port), "rb", port_funcs);
 
   if (fp == NULL)
     return SCM_BOOL_F;
@@ -267,8 +267,16 @@ gucu_putwin (SCM win, SCM port)
   {
     char *debug_str;
     size_t debug_len;
+    SCM out_string_port;
+    size_t i;
 
-    fp = fopencookie (&port, "wb", port_funcs);
+    /* Create an output port that is based on our custom FILE *
+       port type. We have to create a new port here, instead of just
+       writing to the port parameter received by the function, because
+       closing this opencookie port destroys it. */
+    out_string_port = scm_open_output_string ();
+
+    fp = fopencookie (SCM2PTR(out_string_port), "wb", port_funcs);
 
     if (fp == NULL)
       return SCM_BOOL_F;
@@ -278,12 +286,22 @@ gucu_putwin (SCM win, SCM port)
     if (ret == ERR)
       return SCM_BOOL_F;
 
-    debug_str =
-      scm_to_locale_stringn (scm_get_output_string (port), &debug_len);
-    scm_display (scm_from_size_t (debug_len), scm_current_output_port ());
+    /* Push any remaining unbuffered contents from the FILE * into the
+       Guile string port before closing the FILE *. */
+    fflush (fp);
 
-    /* The string is not closed here, so that its contents can be read */
-    /* fclose (fp); */
+    /* Get the output */
+    SCM out_string = scm_get_output_string (out_string_port);
+
+    /* Shutdown the FILE * stream. */
+    fclose (fp);
+
+    for (i = 0; i < scm_c_string_length (out_string); i ++)
+      {
+        SCM c = scm_c_string_ref (out_string, i);
+        scm_write_char (c, port);
+      }
+
   }
 #else
   fp = tmpfile ();
