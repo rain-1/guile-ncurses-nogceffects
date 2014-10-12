@@ -1105,6 +1105,16 @@ print_window (SCM x, SCM port, scm_print_state * pstate UNUSED)
     scm_puts ("(freed)", port);
   else
     {
+      int y, x;
+      getmaxyx (win, y, x);
+      snprintf (str, sizeof (str), "%d by %d ", y, x);
+      scm_puts (str, port);
+      if (win == stdscr)
+        scm_puts ("stdscr ", port);
+      else if (win == newscr)
+        scm_puts ("newscr ", port);
+      else if (win == curscr)
+        scm_puts ("curscr ", port);
       if (snprintf (str, sizeof(str), "%p", (void *) win) < 0)
         scm_puts ("???", port);
       else
