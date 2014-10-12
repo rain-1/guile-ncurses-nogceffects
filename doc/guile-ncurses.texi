@@ -5860,8 +5860,8 @@ inheritance function.
 @findex getwin
 @findex putwin
 
-To read (write) a window from (to) a file, use the @code{getwin} and
-@code{putwin} routines.
+To read (write) the contents of a window from (to) a port, use the
+@code{getwin} and @code{putwin} routines.
 
 All routines return the integer @code{#f} upon failure and @code{#t}
 upon success.
@@ -6069,24 +6069,29 @@ from the operating system.
 
 @end deffn
 
-@deffn Procedure putwin win file
+@deffn Procedure putwin win output-port
 
 @findex getwin
 
 The @code{putwin} routine writes all data associated with window
-@var{win} into the @code{#<file>} @var{file}.  This information can
-be later retrieved using the @code{getwin} function.
+@var{win} into an output port, such as a file or string port.  This
+information can be later retrieved using the @code{getwin} function.
+
+The storage format is binary and is not described.
 
 @end deffn
 
 
-@deffn Procedure getwin file
+@deffn Procedure getwin input-port
 
 @findex putwin
 
-The @code{getwin} routine reads window related data stored in the file
-by @code{putwin}. The routine then creates and initializes a new
-window using that data.  It returns a new @code{#<window>}
+The @code{getwin} routine reads window related data from an input
+port.  The input port should be backed by a file or string created by
+@code{putwin}. The routine then creates and initializes a new window
+using that data.  It returns a new @code{#<window>}
+
+The storage format is binary and is not described.
 
 @end deffn
 
