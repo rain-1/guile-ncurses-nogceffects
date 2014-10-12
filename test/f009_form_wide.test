@@ -27,6 +27,8 @@
              (ncurses curses)
              (ncurses form))
 
+(setlocale LC_ALL "en_US.utf8")
+
 (define test (curses-test-start))
 
 (define mainwin (initscr))
