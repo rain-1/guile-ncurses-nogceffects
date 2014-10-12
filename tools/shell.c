@@ -343,7 +343,7 @@ inner_main (void *data, int argc, char **argv)
           /* Need to wait for xterm to be ready before trying to
              initalize curses */
           printf (_("Waiting for xterm to be ready...\n"));
-          sleep (5);
+          sleep (2);
 
           /* Set up an ncurses environment in Guile */
           scm_c_eval_string ("(set! %load-path (append %load-path (list \".\")))");
@@ -361,6 +361,11 @@ inner_main (void *data, int argc, char **argv)
                     "(define %%guile-ncurses-shell-write-port (fdopen %d \"w0\"))",
                     slave_write);
           scm_c_eval_string (cmd);
+
+          /* There is a bug somewhere that I can't find where the read
+             port has an 8-digit hex number in the queue on
+             startup.  */
+          scm_c_eval_string ("(while (char-ready? %guile-ncurses-shell-read-port) (read-char %guile-ncurses-shell-read-port))");
 
           printf (_("Setting %%guile-ncurses-shell-stdscr to the xterm\n"));
           scm_c_eval_string ("(define %guile-ncurses-shell-screen (newterm \"xterm\" %guile-ncurses-shell-write-port %guile-ncurses-shell-read-port))");
