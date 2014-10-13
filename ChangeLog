@@ -1,3 +1,80 @@
+Mike Gran <spk121@yahoo.com>	2014-10-12
+
+    Clear out input character queue when opening ncurses shell
+    
+    * tools/shell.c (inner_main): read off input characters at start
+
+Mike Gran <spk121@yahoo.com>	2014-10-12
+
+    form driver's wide character test needs locale
+    
+    * test/f009_form_wide.test: set locale
+
+Mike Gran <spk121@yahoo.com>	2014-10-12
+
+    Make #<window> type's give size and stdscr information
+    
+    * ncurses/type.c (print_window): add more info to print
+
+Mike Gran <spk121@yahoo.com>	2014-10-12
+
+    Better test for wide characters in form driver
+    
+    * test/f009_form_wide.test: improved
+
+Mike Gran <spk121@yahoo.com>	2014-10-12
+
+    Clarify getwin/putwin docs that they work on ports
+    
+    * doc/guile-ncurses.texi: modified
+
+Mike Gran <spk121@yahoo.com>	2014-10-12
+
+    Fix for never-closed port in getwin/putwin
+    
+    The previous implementation leaked FILE *.
+    
+    * ncurses/curs_port.c (gucu_getwin, gucu_putwin): modified
+
+Mike Gran <spk121@yahoo.com>	2014-10-10
+
+    Add test for entering wide characters into form driver
+    
+    * test/Makefile.am: run new wide test
+    * test/f009_form_wide.test: new wide test
+    * TODO: note TODO
+
+Mike Gran <spk121@yahoo.com>	2014-10-10
+
+    Add %is-form-driver-wide test variable
+    
+    It indicates if form-driver can handle wide characters
+    
+    * ncurses/form.scm: export %is-form-driver-wide
+    * ncurses/form_const.c (gucu_wide_form_driver): new global
+      (gucu_form_init_constant): initialize new global
+    * doc/guile-ncurses.texi: document %is-form-driver-wide
+
+Mike Gran <spk121@yahoo.com>	2014-10-10
+
+    Cleanup posix-explorer demo
+    
+    * tools/posix-explorer.scm: fix arrow key handling and other cleanup
+
+Mike Gran <spk121@yahoo.com>	2014-10-10
+
+    Add 'posix-explorer' demo
+    
+    * tools/Makefile.am (noinst_SCRIPTS): add posix-explorer demo
+    * tools/posix-explorer.scm: new demo
+
+Mike Gran <spk121@yahoo.com>	2014-10-09
+
+    Update NEWS and ChangeLog
+    
+    * NEWS: updated
+    * ChangeLog: updated
+
 Mike Gran <spk121@yahoo.com>	2014-10-09
 
     Fix termattrs tests
