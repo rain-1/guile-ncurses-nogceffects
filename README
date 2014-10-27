@@ -6,7 +6,7 @@ The README file for GNU Guile-Ncurses
   are permitted in any medium without royalty provided the copyright
   notice and this notice are preserved.
 
-This is GNU Guile-Ncurses v1.5.  It provides functionality to allow
+This is GNU Guile-Ncurses v1.6.  It provides functionality to allow
 programs written in the GNU Guile interpreter of the Scheme
 programming language to interact with character screens in a
 terminal-independent manner.  It is a wrapper to the underlying
