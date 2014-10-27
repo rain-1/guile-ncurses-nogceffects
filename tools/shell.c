@@ -260,7 +260,6 @@ open_terminal (char *pseudo_terminal_slave_name,
   else
   {
     /* This is the parent process */
-    close (master_file_descriptor);
 
     /* Set to raw mode */
     tcgetattr (slave_file_descriptor, &terminal_attributes);
@@ -380,7 +379,7 @@ inner_main (void *data, int argc, char **argv)
           close (slave_read);
 
           scm_shell (argc, argv);
-
+          close (master);
           kill (pid, SIGTERM);
         }
     }
