@@ -1,3 +1,63 @@
+Mike Gran <spk121@yahoo.com>	2014-10-27
+
+    finish posix-explorer demo
+    
+    * tools/posix-explorer.scm: renamed to posix-explorer
+    * tools/posix-explorer: add shebang exec initialization
+    * tools/Makefile.am: add posix-explorer to dist
+
+Michael Gran <spk121@yahoo.com>	2014-10-27
+
+    Bad order of operations in noinst_SCRIPTS in makefile
+    
+    * tools/Makefile.am (noinst_SCRIPTS): reorder
+
+Michael Gran <spk121@yahoo.com>	2014-10-27
+
+    Avoid unnecessary file descriptor dup
+    
+    * tools/shell.c (inner_main): modified
+
+Michael Gran <spk121@yahoo.com>	2014-10-27
+
+    Comments on shell
+    
+    * tools/shell.c: modified
+
+Michael Gran <spk121@yahoo.com>	2014-10-27
+
+    Whitespace
+    
+    * tools/shell.c
+
+Michael Gran <spk121@yahoo.com>	2014-10-27
+
+    Don't prematurely close master file descriptor
+    
+    On Cygwin, apparently, it leads to SIGHUP on all reads from slave
+    
+    * tools/shell.c (open_terminal, inner_main): don't close master FD early
+
+Michael Gran <spk121@yahoo.com>	2014-10-26
+
+    Incorrect #endif disables newterm
+    
+    * ncurses/curs_port.c (gucu_newterm): badly place #endif
+
+Mike Gran <spk121@yahoo.com>	2014-10-12
+
+    Bump version numbers
+    
+    * configure.ac (AC_INIT): bump version
+      (LIBGUILE_NCURSES_INTERFACE): bump library version
+
+Mike Gran <spk121@yahoo.com>	2014-10-12
+
+    Update ChangeLog and NEWS
+    
+    * ChangeLog: updated
+    * NEWS: updated
+
 Mike Gran <spk121@yahoo.com>	2014-10-12
 
     Clear out input character queue when opening ncurses shell
