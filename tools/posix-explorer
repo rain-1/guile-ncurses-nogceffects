@@ -1,6 +1,9 @@
+#!/bin/sh
+GUILE_AUTO_COMPILE=0 exec guile -e main -s $0 "$@"
+!#
 ;; -*- Mode: scheme; indent-tabs-mode: nil -*-
 
-;; posix-explorer.scm
+;; posix-explorer
 
 ;; Copyright 2014 Free Software Foundation, Inc.
 
@@ -19,8 +22,6 @@
 ;; You should have received a copy of the GNU Lesser General Public
 ;; License along with Guile-Ncurses.  If not, see
 ;; <http://www.gnu.org/licenses/>.
-
-
 
 ;;; This program displays information about the system using POSIX
 ;;; calls.  This is really just a demo for the ncurses menus, but, I
@@ -45,7 +46,6 @@
   (let ([mainwin (if (defined? '%guile-ncurses-shell-stdscr)
                      %guile-ncurses-shell-stdscr
                      (initscr))])
-    (getnstr mainwin 80)
     (when (has-colors?)
           (start-color!))
     (cbreak!)

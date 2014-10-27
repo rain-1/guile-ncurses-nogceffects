@@ -16,14 +16,13 @@
 # License along with this program.  If not, see
 # <http://www.gnu.org/licenses/>.
 
-noinst_SCRIPTS = posix-explorer.scm
+noinst_SCRIPTS = posix-explorer
 
 if DEMO_INSTALL
 bin_SCRIPTS = ncurses-keyboard-test
 else
 noinst_SCRIPTS += ncurses-keyboard-test
 endif
-
 
 if BUILDING_SHELL
 bin_PROGRAMS = guile-ncurses-shell
@@ -50,5 +49,5 @@ endif
 LIBS=
 LDADD = -lutil $(GUILE_LDFLAGS)
 
-EXTRA_DIST = uninstalled-env.in ncurses-keyboard-test
+EXTRA_DIST = uninstalled-env.in ncurses-keyboard-test posix-explorer
 ETAGS_ARGS = shell.[ch] --language=scheme ncurses-keyboard-test
