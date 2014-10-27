@@ -144,6 +144,8 @@ port_close (void *cookie)
   return PORT_OK;
 }
 
+#endif
+
 
 /* Create a new terminal whose inputs and output are Guile ports */
 SCM
@@ -195,7 +197,6 @@ gucu_newterm (SCM type, SCM outp, SCM inp)
   return s_ret;
 }
 
-#endif
 
 /* Create a window based on data saved by putwin */
 SCM
