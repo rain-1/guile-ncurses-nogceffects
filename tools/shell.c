@@ -27,15 +27,16 @@
 
 /* libc and libutil */
 #include <ctype.h>
+#include <fcntl.h>
 #include <locale.h>
 #include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <termios.h>
-#include <unistd.h>
 #include <sys/ioctl.h>
 #include <sys/types.h>
+#include <termios.h>
+#include <unistd.h>
 
 #ifndef TRUE
 #define TRUE (1)
@@ -200,87 +201,87 @@ open_terminal (char *pseudo_terminal_slave_name,
   const size_t cygwin_offset = strlen("/dev/tty");
 
   if (is_unix98_pty (pseudo_terminal_slave_name))
-  {
-    asprintf (&s_flag, "-S%s/%d",
-              pseudo_terminal_slave_name + unix98_offset,
-              master_file_descriptor);
-  }
+    {
+      asprintf (&s_flag, "-S%s/%d",
+                pseudo_terminal_slave_name + unix98_offset,
+                master_file_descriptor);
+    }
   else if (is_bsd_pty (pseudo_terminal_slave_name))
-  {
-    asprintf(&s_flag, "-S%c%c%d",
-             pseudo_terminal_slave_name[bsd_offset],
-             pseudo_terminal_slave_name[bsd_offset+1],
-             master_file_descriptor);
-  }
+    {
+      asprintf(&s_flag, "-S%c%c%d",
+               pseudo_terminal_slave_name[bsd_offset],
+               pseudo_terminal_slave_name[bsd_offset+1],
+               master_file_descriptor);
+    }
   else if (is_cygwin_pty (pseudo_terminal_slave_name)
            || is_cygwin_tty (pseudo_terminal_slave_name))
-  {
-    asprintf (&s_flag, "-S%s/%d",
-              pseudo_terminal_slave_name + cygwin_offset,
-              master_file_descriptor);
-  }
+    {
+      asprintf (&s_flag, "-S%s/%d",
+                pseudo_terminal_slave_name + cygwin_offset,
+                master_file_descriptor);
+    }
   else
-  {
-    fprintf (stderr, _("Unrecognized pseudo-terminal name: %s\n"),
-             pseudo_terminal_slave_name);
-    _exit (EXIT_FAILURE);
-  }
+    {
+      fprintf (stderr, _("Unrecognized pseudo-terminal name: %s\n"),
+               pseudo_terminal_slave_name);
+      _exit (EXIT_FAILURE);
+    }
 
 
   process_id = fork ();
 
   if (process_id == -1)
-  {
-    perror("fork");
-    return 0;
-  }
-  else if (process_id == 0)
-  {
-    int ret;
-
-    /* This is the child process */
-    close (slave_file_descriptor);
-
-    printf (_("Attemping to connect an xterm to %s\n"),
-            pseudo_terminal_slave_name);
-    printf (_("Calling 'xterm %s'\n"), s_flag);
-    ret = execlp ("xterm", "xterm", s_flag, NULL);
-    /* Should not return */
-    if (ret == -1)
     {
-      fprintf (stderr, "+---------------------------------------------------\n");
-      fprintf (stderr, "The xterm program failed to start!\n");
-      perror ("Error");
-      fprintf (stderr, "Thus, this program won't display any ncurses output.\n");
-      fprintf (stderr, "+---------------------------------------------------\n");
-      close (master_file_descriptor);
+      perror("fork");
+      return 0;
     }
-    return 0;
-  }
-  else
-  {
-    /* This is the parent process */
+  else if (process_id == 0)
+    {
+      int ret;
 
-    /* Set to raw mode */
-    tcgetattr (slave_file_descriptor, &terminal_attributes);
+      /* This is the child process */
+      close (slave_file_descriptor);
+
+      printf (_("Attemping to connect an xterm to %s\n"),
+              pseudo_terminal_slave_name);
+      printf (_("Calling 'xterm %s'\n"), s_flag);
+      ret = execlp ("xterm", "xterm", s_flag, NULL);
+      /* Should not return */
+      if (ret == -1)
+        {
+          fprintf (stderr, "+---------------------------------------------------\n");
+          fprintf (stderr, "The xterm program failed to start!\n");
+          perror ("Error");
+          fprintf (stderr, "Thus, this program won't display any ncurses output.\n");
+          fprintf (stderr, "+---------------------------------------------------\n");
+          close (master_file_descriptor);
+        }
+      return 0;
+    }
+  else
+    {
+      /* This is the parent process */
+
+      /* Set to raw mode */
+      tcgetattr (slave_file_descriptor, &terminal_attributes);
 #ifdef HAVE_CFMAKERAW
-    cfmakeraw (&terminal_attributes);
+      cfmakeraw (&terminal_attributes);
 #else
-    terminal_attributes.c_iflag &= ~(IGNBRK|BRKINT|PARMRK|ISTRIP
-                                     |INLCR|IGNCR|ICRNL|IXON);
-    terminal_attributes.c_oflag &= ~OPOST;
-    terminal_attributes.c_lflag &= ~(ECHO|ECHONL|ICANON|ISIG|IEXTEN);
-    terminal_attributes.c_cflag &= ~(CSIZE|PARENB);
-    terminal_attributes.c_cflag |= CS8;
+      terminal_attributes.c_iflag &= ~(IGNBRK|BRKINT|PARMRK|ISTRIP
+                                       |INLCR|IGNCR|ICRNL|IXON);
+      terminal_attributes.c_oflag &= ~OPOST;
+      terminal_attributes.c_lflag &= ~(ECHO|ECHONL|ICANON|ISIG|IEXTEN);
+      terminal_attributes.c_cflag &= ~(CSIZE|PARENB);
+      terminal_attributes.c_cflag |= CS8;
 #endif
 
-    tcsetattr (slave_file_descriptor, TCSANOW, &terminal_attributes);
-    /* Have to wait for xterm to be created */
-    sleep (1);
-    /* FIXME: this is a classic race condition.  Need to rewrite
-       this with proper threads and a mutex. */
-    return process_id;
-  }
+      tcsetattr (slave_file_descriptor, TCSANOW, &terminal_attributes);
+      /* Have to wait for xterm to be created */
+      sleep (1);
+      /* FIXME: this is a classic race condition.  Need to rewrite
+         this with proper threads and a mutex. */
+      return process_id;
+    }
   return 0;
 }
 
@@ -303,21 +304,21 @@ inner_main (void *data, int argc, char **argv)
   /* The command line arguments are going to be passed down to Guile,
      but, we need to check here for --version and --help. */
   for (i=1; i<argc; i++)
-  {
-    if (strcmp (argv[i], "--version") == 0
-        || strcmp (argv[i], "-v") == 0)
     {
-      printf (_("guile-ncurses-shell 0.7\n"
-                "Copyright (C) 2010,2014 Free Software Foundation, Inc.\n"
-                "License LGPLv3+: GNU LGPL version 3 or later <http://www.gnu.org/licenses/lgpl.html>"
-                "This is free software: you are free to change and redistribute it.\n"
-                "There is NO WARRANTY, to the extent permitted by law.\n"));
-      return;
-    }
-    if (strcmp (argv[i], "--help") == 0
-        || strcmp (argv[i], "-h") == 0)
-    {
-      printf (_("Usage: guile-ncurses-shell OPTION...\n"));
+      if (strcmp (argv[i], "--version") == 0
+          || strcmp (argv[i], "-v") == 0)
+        {
+          printf (_("guile-ncurses-shell 0.7\n"
+                    "Copyright (C) 2010,2014 Free Software Foundation, Inc.\n"
+                    "License LGPLv3+: GNU LGPL version 3 or later <http://www.gnu.org/licenses/lgpl.html>"
+                    "This is free software: you are free to change and redistribute it.\n"
+                    "There is NO WARRANTY, to the extent permitted by law.\n"));
+          return;
+        }
+      if (strcmp (argv[i], "--help") == 0
+          || strcmp (argv[i], "-h") == 0)
+        {
+          printf (_("Usage: guile-ncurses-shell OPTION...\n"));
           printf (_("This program starts a Guile-Ncurses session and redirects its output into\n"
                     "a terminal window.  Any options on the command line are passed on the to\n"
                     "Guile interpreter.  Type 'guile --help' to see its command line interface.\n"));
@@ -327,7 +328,6 @@ inner_main (void *data, int argc, char **argv)
           return;
         }
     }
-
 
   /* Create a pseudo-terminal */
   if (openpty (&master, &slave, name, &tio, &win) >= 0)
