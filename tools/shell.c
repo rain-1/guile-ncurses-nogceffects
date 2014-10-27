@@ -292,7 +292,7 @@ inner_main (void *data, int argc, char **argv)
   pid_t pid;
   char name[512], cmd[512];
   char *termtype;
-  int slave_read, slave_write;
+  int slave_read = -1, slave_write = -1;
   struct termios tio;
   struct winsize win;
   int i;
@@ -335,14 +335,23 @@ inner_main (void *data, int argc, char **argv)
       /* Connect the pseudo-terminal to an xterm */
       if ((pid = open_terminal (name, master, slave)))
         {
-          slave_read = dup (slave);
-          slave_write = dup (slave);
-          close (slave);
+          slave_write = slave;
+          if (slave_write == -1)
+            {
+              perror ("creating write port for terminal");
+              exit (1);
+            }
+          slave_read = open (name, O_RDONLY);
+          if (slave_read == -1)
+            {
+              perror ("connecting read port for terminal");
+              exit (1);
+            }
 
           /* Need to wait for xterm to be ready before trying to
              initalize curses */
           printf (_("Waiting for xterm to be ready...\n"));
-          sleep (2);
+          sleep (5);
 
           /* Set up an ncurses environment in Guile */
           scm_c_eval_string ("(set! %load-path (append %load-path (list \".\")))");
@@ -354,7 +363,7 @@ inner_main (void *data, int argc, char **argv)
                     "(define %%guile-ncurses-shell-read-port (fdopen %d \"r0\"))",
                     slave_read);
           scm_c_eval_string (cmd);
-            
+
           printf (_("Setting %%guile-ncurses-shell-write-port\n"));
           snprintf (cmd, sizeof(cmd),
                     "(define %%guile-ncurses-shell-write-port (fdopen %d \"w0\"))",
