@@ -16,13 +16,14 @@
 # License along with this program.  If not, see
 # <http://www.gnu.org/licenses/>.
 
+noinst_SCRIPTS = posix-explorer.scm
+
 if DEMO_INSTALL
 bin_SCRIPTS = ncurses-keyboard-test
 else
-noinst_SCRIPTS = ncurses-keyboard-test
+noinst_SCRIPTS += ncurses-keyboard-test
 endif
 
-noinst_SCRIPTS = posix-explorer.scm
 
 if BUILDING_SHELL
 bin_PROGRAMS = guile-ncurses-shell
