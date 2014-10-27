@@ -361,9 +361,10 @@ inner_main (void *data, int argc, char **argv)
                     slave_write);
           scm_c_eval_string (cmd);
 
-          /* There is a bug somewhere that I can't find where the read
-             port has an 8-digit hex number in the queue on
-             startup.  */
+          /* For some reason, a read port to a freshly opened pty will
+             often have a set of several hex digits followed by a
+             newline already enqueued.  I can't find where this comes
+             from. */
           scm_c_eval_string ("(while (char-ready? %guile-ncurses-shell-read-port) (read-char %guile-ncurses-shell-read-port))");
 
           printf (_("Setting %%guile-ncurses-shell-stdscr to the xterm\n"));
