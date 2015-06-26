@@ -1,6 +1,6 @@
 # Makefile for the toolsdirectory of GNU Guile-Ncurses.
 #
-# Copyright 2009, 2010 Free Software Foundation, Inc.
+# Copyright 2009, 2010, 2014 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU Lesser General Public License as
@@ -16,13 +16,17 @@
 # License along with this program.  If not, see
 # <http://www.gnu.org/licenses/>.
 
+noinst_SCRIPTS = posix-explorer
+
 if DEMO_INSTALL
 bin_SCRIPTS = ncurses-keyboard-test
 else
-noinst_SCRIPTS = ncurses-keyboard-test
+noinst_SCRIPTS += ncurses-keyboard-test
 endif
 
+if BUILDING_SHELL
 bin_PROGRAMS = guile-ncurses-shell
+endif
 guile_ncurses_shell_SOURCES = shell.c
 
 AM_CPPFLAGS = $(GUILE_CFLAGS) -I $(top_builddir)/lib \
@@ -39,7 +43,11 @@ if WIDE
 AM_CPPFLAGS += -D_XOPEN_SOURCE_EXTENDED
 endif
 
-LDADD = $(NCURSES_LIB) -lutil $(GUILE_LDFLAGS)
+# Clear out the autoconf-detected ncurses libraries, since
+# guile-ncurses-shell doesn't link to them directly.  It relies on the
+# Guile ncurses module to pull in the ncurses libraries.
+LIBS=
+LDADD = -lutil $(GUILE_LDFLAGS)
 
-EXTRA_DIST = uninstalled-env.in ncurses-keyboard-test
+EXTRA_DIST = uninstalled-env.in ncurses-keyboard-test posix-explorer
 ETAGS_ARGS = shell.[ch] --language=scheme ncurses-keyboard-test

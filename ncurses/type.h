@@ -1,7 +1,7 @@
 /*
   type.h
 
-  Copyright 2009, 2010, 2011 Free Software Foundation, Inc.
+  Copyright 2009, 2010, 2011, 2014 Free Software Foundation, Inc.
 
   This file is part of GNU Guile-Ncurses.
 
@@ -32,10 +32,12 @@
 
 #if HAVE_CURSES_H
 #include <curses.h>
-#endif
-
-#if HAVE_NCURSES_CURSES_H
+#elif HAVE_NCURSES_CURSES_H
 #include <ncurses/curses.h>
+#elif HAVE_NCURSESW_CURSES_H
+#include <ncursesw/curses.h>
+#else
+#error "No curses.h file included"
 #endif
 
 #include "visibility.h"
@@ -124,7 +126,9 @@ GUCU_API SCM gucu_is_mevent_p (SCM x);
 
 GUCU_LOCAL int _scm_is_screen (SCM x);
 GUCU_LOCAL SCREEN *_scm_to_screen (SCM x);
-GUCU_LOCAL SCM _scm_from_screen (SCREEN * x);
+GUCU_LOCAL SCM _scm_from_screen_and_ports (SCREEN * x, FILE *ofp, FILE *ifp);
+GUCU_LOCAL void _scm_to_screen_and_ports (SCM x, SCREEN **screen, FILE **ofp, FILE **ifp);
+GUCU_LOCAL void _scm_free_screen (SCM x);
 
 GUCU_API SCM gucu_is_screen_p (SCM x);
 

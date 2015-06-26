@@ -1,7 +1,7 @@
 /*
   curs_func.h
 
-  Copyright 2009, 2010, 2011 Free Software Foundation, Inc.
+  Copyright 2009, 2010, 2011, 2014 Free Software Foundation, Inc.
 
   This file is part of GNU Guile-Ncurses.
 
@@ -134,6 +134,7 @@ GUCU_API SCM gucu_refresh (SCM arg1);
 GUCU_API SCM gucu_reset_prog_mode (void);
 GUCU_API SCM gucu_reset_shell_mode (void);
 GUCU_API SCM gucu_resetty (void);
+GUCU_API SCM gucu_resizeterm(SCM lines, SCM columns);
 GUCU_API SCM gucu_savetty (void);
 GUCU_API SCM gucu_scr_dump (SCM arg1);
 GUCU_API SCM gucu_scr_init (SCM arg1);
@@ -154,6 +155,7 @@ GUCU_API SCM gucu_term_attrs (void);
 GUCU_API SCM gucu_termname (void);
 GUCU_API SCM gucu_timeout_x (SCM arg1, SCM arg2);
 GUCU_API SCM gucu_typeahead_x (SCM arg1);
+GUCU_API SCM gucu_unctrl (SCM arg1);
 GUCU_API SCM gucu_ungetch (SCM arg1);
 GUCU_API SCM gucu_use_default_colors (void);
 GUCU_API SCM gucu_use_extended_names (SCM bf);

@@ -1,7 +1,7 @@
 /*
   menu_func.c
 
-  Copyright 2009, 2010 Free Software Foundation, Inc.
+  Copyright 2009, 2010, 2014 Free Software Foundation, Inc.
 
   This file is part of GNU Guile-Ncurses.
 
@@ -27,11 +27,14 @@
 #if HAVE_CURSES_H
 #include <curses.h>
 #include <menu.h>
-#endif
-
-#if HAVE_NCURSES_CURSES_H
+#elif HAVE_NCURSES_CURSES_H
 #include <ncurses/curses.h>
 #include <ncurses/menu.h>
+#elif HAVE_NCURSESW_CURSES_H
+#include <ncursesw/curses.h>
+#include <ncursesw/menu.h>
+#else
+#error "No menu.h file included"
 #endif
 
 #include "compat.h"

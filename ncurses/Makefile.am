@@ -2,7 +2,7 @@
 
 # Makefile.am for GNU Guile-Ncurses.
 #
-# Copyright 2009, 2010 Free Software Foundation, Inc.
+# Copyright 2009, 2010, 2014 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU Lesser General Public License as
@@ -50,16 +50,12 @@ if BUILDING_DLL
 libguile_ncurses_la_CPPFLAGS += -DGUCU_DLL -DGUCU_DLL_EXPORTS
 endif
 
-libguile_ncurses_la_LDFLAGS = -module -no-undefined -version-info	\
+libguile_ncurses_la_LDFLAGS = -no-undefined -version-info	\
 $(LIBGUILE_NCURSES_INTERFACE) $(GUILE_LDFLAGS)
 
-libguile_ncurses_la_LIBADD = $(NCURSES_LIB) $(PANEL_LIB) $(MENU_LIB)	\
-$(FORM_LIB)
-
-if WIDE
-libguile_ncurses_la_LIBADD += $(UNISTRING_LIB)
+if !DLL_VERSION_INFO
+libguile_ncurses_la_LDFLAGS += -avoid-version
 endif
-
 
 ### scheme files ###
 pkgguilesitedir = $(guilesitedir)/ncurses

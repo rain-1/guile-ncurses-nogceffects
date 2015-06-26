@@ -40,6 +40,9 @@
 /* Define to 1 if you have the `fopencookie' function. */
 #undef HAVE_FOPENCOOKIE
 
+/* Define to 1 if you have the `form_driver_w' function. */
+#undef HAVE_FORM_DRIVER_W
+
 /* Define to 1 if you have the `grantpt' function. */
 #undef HAVE_GRANTPT
 
@@ -63,6 +66,9 @@
 
 /* Define if you have libncursesw */
 #undef HAVE_NCURSESW
+
+/* Define if you have ncursesw/curses.h */
+#undef HAVE_NCURSESW_CURSES_H
 
 /* Define if you have ncurses/curses.h */
 #undef HAVE_NCURSES_CURSES_H
@@ -115,6 +121,9 @@
 /* Define to 1 if you have the <util.h> header file. */
 #undef HAVE_UTIL_H
 
+/* Define to 1 if you have the `wcwidth' function. */
+#undef HAVE_WCWIDTH
+
 /* define if your compiler has __attribute__ */
 #undef HAVE___ATTRIBUTE__
 
@@ -154,6 +163,9 @@
 
 /* The size of `long', as computed by sizeof. */
 #undef SIZEOF_LONG
+
+/* The size of `void *', as computed by sizeof. */
+#undef SIZEOF_VOID_P
 
 /* The size of `wchar_t', as computed by sizeof. */
 #undef SIZEOF_WCHAR_T

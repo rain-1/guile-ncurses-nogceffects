@@ -1,3 +1,485 @@
+Mike Gran <spk121@yahoo.com>	2014-10-27
+
+    finish posix-explorer demo
+    
+    * tools/posix-explorer.scm: renamed to posix-explorer
+    * tools/posix-explorer: add shebang exec initialization
+    * tools/Makefile.am: add posix-explorer to dist
+
+Michael Gran <spk121@yahoo.com>	2014-10-27
+
+    Bad order of operations in noinst_SCRIPTS in makefile
+    
+    * tools/Makefile.am (noinst_SCRIPTS): reorder
+
+Michael Gran <spk121@yahoo.com>	2014-10-27
+
+    Avoid unnecessary file descriptor dup
+    
+    * tools/shell.c (inner_main): modified
+
+Michael Gran <spk121@yahoo.com>	2014-10-27
+
+    Comments on shell
+    
+    * tools/shell.c: modified
+
+Michael Gran <spk121@yahoo.com>	2014-10-27
+
+    Whitespace
+    
+    * tools/shell.c
+
+Michael Gran <spk121@yahoo.com>	2014-10-27
+
+    Don't prematurely close master file descriptor
+    
+    On Cygwin, apparently, it leads to SIGHUP on all reads from slave
+    
+    * tools/shell.c (open_terminal, inner_main): don't close master FD early
+
+Michael Gran <spk121@yahoo.com>	2014-10-26
+
+    Incorrect #endif disables newterm
+    
+    * ncurses/curs_port.c (gucu_newterm): badly place #endif
+
+Mike Gran <spk121@yahoo.com>	2014-10-12
+
+    Bump version numbers
+    
+    * configure.ac (AC_INIT): bump version
+      (LIBGUILE_NCURSES_INTERFACE): bump library version
+
+Mike Gran <spk121@yahoo.com>	2014-10-12
+
+    Update ChangeLog and NEWS
+    
+    * ChangeLog: updated
+    * NEWS: updated
+
+Mike Gran <spk121@yahoo.com>	2014-10-12
+
+    Clear out input character queue when opening ncurses shell
+    
+    * tools/shell.c (inner_main): read off input characters at start
+
+Mike Gran <spk121@yahoo.com>	2014-10-12
+
+    form driver's wide character test needs locale
+    
+    * test/f009_form_wide.test: set locale
+
+Mike Gran <spk121@yahoo.com>	2014-10-12
+
+    Make #<window> type's give size and stdscr information
+    
+    * ncurses/type.c (print_window): add more info to print
+
+Mike Gran <spk121@yahoo.com>	2014-10-12
+
+    Better test for wide characters in form driver
+    
+    * test/f009_form_wide.test: improved
+
+Mike Gran <spk121@yahoo.com>	2014-10-12
+
+    Clarify getwin/putwin docs that they work on ports
+    
+    * doc/guile-ncurses.texi: modified
+
+Mike Gran <spk121@yahoo.com>	2014-10-12
+
+    Fix for never-closed port in getwin/putwin
+    
+    The previous implementation leaked FILE *.
+    
+    * ncurses/curs_port.c (gucu_getwin, gucu_putwin): modified
+
+Mike Gran <spk121@yahoo.com>	2014-10-10
+
+    Add test for entering wide characters into form driver
+    
+    * test/Makefile.am: run new wide test
+    * test/f009_form_wide.test: new wide test
+    * TODO: note TODO
+
+Mike Gran <spk121@yahoo.com>	2014-10-10
+
+    Add %is-form-driver-wide test variable
+    
+    It indicates if form-driver can handle wide characters
+    
+    * ncurses/form.scm: export %is-form-driver-wide
+    * ncurses/form_const.c (gucu_wide_form_driver): new global
+      (gucu_form_init_constant): initialize new global
+    * doc/guile-ncurses.texi: document %is-form-driver-wide
+
+Mike Gran <spk121@yahoo.com>	2014-10-10
+
+    Cleanup posix-explorer demo
+    
+    * tools/posix-explorer.scm: fix arrow key handling and other cleanup
+
+Mike Gran <spk121@yahoo.com>	2014-10-10
+
+    Add 'posix-explorer' demo
+    
+    * tools/Makefile.am (noinst_SCRIPTS): add posix-explorer demo
+    * tools/posix-explorer.scm: new demo
+
+Mike Gran <spk121@yahoo.com>	2014-10-09
+
+    Update NEWS and ChangeLog
+    
+    * NEWS: updated
+    * ChangeLog: updated
+
+Mike Gran <spk121@yahoo.com>	2014-10-09
+
+    Fix termattrs tests
+    
+    The term-attrs test is incorrect, and with the new parallel driver,
+    there is no reason not to be verbose.
+    
+    * test/curses_032_termattrs.test: updated
+
+Mike Gran <spk121@yahoo.com>	2014-10-09
+
+    The ncurses shell shouldn't link both to ncurses and guile-ncurses
+    
+    For some combination of LIBS and LT_LIBRARY_PATH, it might be possible
+    that they are linking of different versions of ncurses.
+    
+    * tools/shell.c (TRUE, FALSE): add if missing
+      Don't include curses headers
+      (HAVE_HCURSESW): removed, unnecessary
+      (inner_main): use guile-ncurses functions and not ncurses functions
+    * TODO: document weird hex input bug
+
+Mike Gran <spk121@yahoo.com>	2014-10-09
+
+    Add test for resizeterm
+    
+    * test/curses_039_resizeterm.test: new test
+
+Mike Gran <spk121@yahoo.com>	2014-10-09
+
+    ncurses requires <#screen> I/O to be on file-streams only
+    
+    Also, it requires that those streams exist for the lifetime of
+    the screen.
+    
+    * ncurses/type.c (struct screen_and_ports): new SCREEN container
+      (_scm_to_screen, print_screen): use new container
+      (_scm_to_screen_and_ports): new procedure
+      (_scm_from_screen_and_ports): new procedure
+      (_scm_from_screen): removed
+      (_scm_free_screen, free_screen): new cleanup procedures
+      (gucu_init_type): use new cleanup procedures for screen
+    * ncurses/type.h: new declarations for _scm_from_screen_and_ports, _scm_to_screen_and_ports
+      and _scm_free_screen
+      declaration for _scm_from_screen removed
+    * ncurses/curs_func.c (gucu_delscreen): use new cleanup procedures
+    * ncurses/curs_port.c (gucu_newterm): new gynmastics to store input and output FILE * with SCREEN
+    * ncurses/curs_port.h: gucu_newterm is now available even when fopencookie is not availbe
+    * doc/guile-ncurses.texi (Curses screen initialization and manipulation routines):
+      note that ports must be file ports
+    * test/curses_036_ports.test: make input/output ports into file ports
+
+Mike Gran <spk121@yahoo.com>	2014-10-09
+
+    Whitespace in ncurses/type.c
+    
+    * ncurses/type.c: whitespace
+
+Mike Gran <spk121@yahoo.com>	2014-10-09
+
+    Reorder check for %newterm primitive to make it compilation friendly
+    
+    * ncurses/curses.scm (newterm): don't check for existence of %newterm here
+
+Mike Gran <spk121@yahoo.com>	2014-10-09
+
+    Use Unicode-enabled form driver when available
+    
+    * configure.ac: check form form_driver_w
+    * config.h.in (HAVE_FORM_DRIVER_W): new define
+    * doc/guile-ncurses.texi (Form procedures): document Unicode form driver
+    * ncurses/form_func.c (gucu_form_driver): use form_driver_w when available
+
+Mike Gran <spk121@yahoo.com>	2014-10-09
+
+    Accrue configure-detected ncurses libraries in the LIBS var
+    
+    This makes is slightly more friendly to putting LDFLAGS and
+    LIBS on the configure line.
+    
+    * configure.ac (NCURSES_LIB, MENU_LIB, FORM_LIB, PANEL_LIB, UNISTRING_LIB): removed
+    * ncurses/Makefile.am (libguile_ncurses_la_LIBADD): removed
+    * tools/Makefile.am (LIBS, LDADD): clear out configure-detected ncurses libraries
+
+Mike Gran <spk121@yahoo.com>	2014-10-05
+
+    Update NEWS for unctrl, resizeterm
+    
+    * NEWS: updated
+
+Mike Gran <spk121@yahoo.com>	2014-10-05
+
+    Add resizeterm procedure
+    
+    * ncurses/curs_func.c (gucu_resizeterm, gucu_init_function): new function
+    * test/curses_039_resizeterm.test: add tests for resizeterm
+    * doc/guile-ncurses.texi (Terminal resizing): document resizeterm
+    * ncurses/curses.scm (ncurses): export resizeterm
+    * ncurses/curs_func.h: add declaration for gucu_resizeterm
+
+Mike Gran <spk121@yahoo.com>	2014-10-05
+
+    uninstalled-env script incorrectly ignores Guile's system directories
+    
+    * tools/uninstalled-env.in: don't overwrite GUILE_SYSTEM_COMPILED_PATH
+      and GUILE_SYSTEM_EXTENSIONS_PATH
+
+Mike Gran <spk121@yahoo.com>	2014-10-05
+
+    Add missing 'unctrl' procedure
+    
+    * doc/guile-ncurses.texi (Miscellaneous utilities): document unctrl
+    * ncurses/curs_func.c (gucu_unctrl): new function
+      (gucu_init_function): export %unctrl
+    * ncurses/curses.scm (ncurses): export unctrl
+      (unctrl): new procedure
+    * test/curses_034_util.test ("util"): add new unctrl tests
+
+Mike Gran <spk121@yahoo.com>	2014-09-28
+
+    Clean TODO
+    
+    * TODO: mostly deleted
+
+Mike Gran <spk121@yahoo.com>	2014-09-28
+
+    Update ChangeLog, README, and THANKS
+    
+    * ChangeLog: updated
+    * README: updated
+    * THANKS: updated
+
+Mike Gran <spk121@yahoo.com>	2014-09-28
+
+    Ignore  wide killchar and erasechar test if upstream ncurses fails
+    
+    Upstream ncurses sometimes fails during killwchar and erasewchar
+    
+    * test/r040_term_attrs.test: nerf tests if upstream fails
+
+Mike Gran <spk121@yahoo.com>	2014-09-28
+
+    Fix inclusion of windows header in unicode.c
+    
+    * ncurses/unicode.c: fix #includes for windows.h
+
+Mike Gran <spk121@yahoo.com>	2014-09-28
+
+    Fix wchar to schar conversion
+    
+    * ncurses/type.c (_scm_schar_from_wchar): clarify logic
+      (_scm_schar_from_wchar): invert logic
+
+Mike Gran <spk121@yahoo.com>	2014-09-28
+
+    Missing newline at end of file
+    
+    * doc/ex_menu3.scm: modified
+
+Michael Gran <spk121@yahoo.com>	2014-09-28
+
+    Update README
+    
+    * README
+
+Michael Gran <spk121@yahoo.com>	2014-09-28
+
+    Update ChangeLog and NEWS
+    
+    * ChangeLog: regenerated
+    * NEWS: updated
+
+Michael Gran <spk121@yahoo.com>	2014-09-28
+
+    Don't build versioned DLL on MinGW since Guile won't find them
+    
+    * configure.ac (DLL_VERSION_INFO): new automake conditional
+    * ncurses/Makefile.am (libguile_ncurses_la_LDFLAGS): add -avoid-version for
+      MinGW
+
+Michael Gran <spk121@yahoo.com>	2014-09-28
+
+    Update READMEs for MinGW
+    
+    * README: updated
+    * README.mingw: new file
+    * Makefile.am: distribute new README.mingw
+
+Michael Gran <spk121@yahoo.com>	2014-09-28
+
+    Update .gitignore
+
+Michael Gran <spk121@yahoo.com>	2014-09-28
+
+    Don't build the library as a libtool module
+    
+    It causes the Cygwin DLL to be installed in the wrong place
+    
+    * ncurses/Makefile.am (libguile_ncurses_la_LDFLAGS): remove -module
+
+Michael Gran <spk121@yahoo.com>	2014-09-27
+
+    Update files that shouldn't be in revision control anyway
+    
+    * aclocal.m4
+    * config.h.in
+
+Michael Gran <spk121@yahoo.com>	2014-09-27
+
+    Update EADME for Cygwin
+    
+    * README: updated
+    * README.cygwin: updated
+
+Michael Gran <spk121@yahoo.com>	2014-09-27
+
+    Update NEWS
+
+Michael Gran <spk121@yahoo.com>	2014-09-27
+
+    Bump version and library version
+    
+    * configure.ac (AC_INIT): bump version to 1.5
+      (LIBGUILE_NCURSES_INTERFACE): bump to 8:1:0
+    * tools/shell.c: bump to 0.6
+
+Michael Gran <spk121@yahoo.com>	2014-09-27
+
+    Modify tests to work with automake's parallel-tests framework
+    
+    * test/Makefile.am (TESTS_ENVIRONMENT): make env only
+    (TEST_EXTENSIONS): new variable
+    (TEST_LOG_COMPILER): new variable
+    (AM_TEST_LOG_FLAGS): new variable
+
+Michael Gran <spk121@yahoo.com>	2014-09-24
+
+    Use windows code pages for 8-bit locales on Microsoft Windows
+    
+    * unicode.c (codepoint_to_locale_char): use GetACP instead of langinfo
+
+Merge: 4473369 77ee9e8
+Michael Gran <spk121@yahoo.com>	2014-09-23
+
+    Merge branch 'master' of git.sv.gnu.org:/srv/git/guile-ncurses
+    
+    Conflicts:
+ncurses/extra_func.c           
+
+Michael Gran <spk121@yahoo.com>	2014-09-23
+
+    Avoid asprintf
+    
+    * ncurses/form_type.c (gc_free_field): avoid asprintf
+      (gc_free_form): ditto
+    * ncurses/menu_type (gc_free_item): avoid asprintf
+      (gc_free_menu): ditto
+    * ncurses/panel_type.c (gucu_del_panel): avoid asprintf
+    * ncurses/type.c (_scm_from_screen): avoid asprintf
+      (print_screen, free_window): avoid asprintf
+
+Michael Gran <spk121@yahoo.com>	2014-09-23
+
+    Don't build the xterm shell for MinGW
+    
+    * configure.ac: new conditional BUILDING_SHELL for non-MinGW
+    * tools/Makefile.am: use new conditional BUILDING_SHELL
+
+Michael Gran <spk121@yahoo.com>	2014-09-23
+
+    Configure error searching for ncurses headers
+    
+    * configure.ac: modified
+
+Michael Gran <spk121@yahoo.com>	2014-09-21
+
+    check existence of wcwidth procedure
+    
+    * configure.ac: check for wcwidth C library function
+    * ncurses/extra_func (gucu_strwidth): adjust for missing wcwidth
+    * ncurses/extra.scm (wcwidth): make conditional on existence of %strwidth
+
+Michael Gran <spk121@yahoo.com>	2014-09-21
+
+    check existence of wcwidth procedure
+    
+    * configure.ac: check for wcwidth C library function
+    * ncurses/extra_func (gucu_strwidth): adjust for missing wcwidth
+    * ncurses/extra.scm (wcwidth): make conditional on existence of %strwidth
+
+Michael Gran <spk121@yahoo.com>	2014-09-21
+
+    Add ncursesw as a possible path for ncurses headers
+    
+    * configure.ac: check ncursesw directory for curses.h headers
+    * ncurses/curs_const.c: modified
+    * ncurses/curs_func.c: modified
+    * ncurses/curs_main.c: modified
+    * ncurses/curs_port.c: modified
+    * ncurses/curs_spec.c: modified
+    * ncurses/eti_const.c: modified
+    * ncurses/extra_const.c: modified
+    * ncurses/form_const.c: modified
+    * ncurses/form_func.c: modified
+    * ncurses/form_spec.c: modified
+    * ncurses/form_type.c: modified
+    * ncurses/form_type.h: modified
+    * ncurses/menu_const.c: modified
+    * ncurses/menu_func.c: modified
+    * ncurses/menu_type.c: modified
+    * ncurses/menu_type.h: modified
+    * ncurses/panel_func.c: modified
+    * ncurses/panel_spec.c: modified
+    * ncurses/panel_type.c: modified
+    * ncurses/panel_type.h: modified
+    * ncurses/slk_func.c: modified
+    * ncurses/type.c: modified
+    * ncurses/type.h: modified
+
+Michael Gran <spk121@yahoo.com>	2014-09-20
+
+    [cygwin] make shell work with pty devices
+    
+    Apparently newer cygwin creates /dev/ptyX devices.
+    guile-ncurses-shell needs to handle these
+    
+    * tools/shell.c (is_cygwin_tty): update
+    (is_cygwin_pty): new function
+    (open_terminal): use new cygwin tty checks
+
+Michael Gran <spk121@yahoo.com>	2014-09-20
+
+    [cygwin] work around guile-config janneke path bug
+    
+    On Cygwin, guile-1.8.7's guile-config gives incorrect information
+    for Guile CFLAGS and LDFLAGS
+    
+    * configure.ac: add guile paths fix
+
+Mike Gran <spk121@yahoo.com>	2013-04-27
+
+    Update ChangeLog
+    
+    * ChangeLog: updated
+
 Mike Gran <spk121@yahoo.com>	2013-04-27
 
     only do configure check for xterm terminfo if toe is present

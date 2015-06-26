@@ -1,7 +1,7 @@
 /*
   panel_type.c
 
-  Copyright 2009, 2010, 2011 Free Software Foundation, Inc.
+  Copyright 2009, 2010, 2011, 2014 Free Software Foundation, Inc.
 
   This file is part of GNU Guile-Ncurses.
 
@@ -29,11 +29,14 @@
 #if HAVE_CURSES_H
 #include <curses.h>
 #include <panel.h>
-#endif
-
-#if HAVE_NCURSES_CURSES_H
+#elif HAVE_NCURSES_CURSES_H
 #include <ncurses/curses.h>
 #include <ncurses/panel.h>
+#elif HAVE_NCURSESW_CURSES_H
+#include <ncursesw/curses.h>
+#include <ncursesw/panel.h>
+#else
+#error "No panel.h file included"
 #endif
 
 #include "compat.h"
@@ -175,7 +178,7 @@ int
 print_panel (SCM x, SCM port, scm_print_state * pstate UNUSED)
 {
   PANEL *pnl = (PANEL *) _scm_to_panel (x);
-  char *str;
+  char str[SIZEOF_VOID_P*2+3];
 
   scm_puts ("#<panel ", port);
 
@@ -183,7 +186,7 @@ print_panel (SCM x, SCM port, scm_print_state * pstate UNUSED)
     scm_puts ("(freed)", port);
   else
     {
-      if (asprintf (&str, "%p", (void *) pnl) < 0)
+      if (snprintf (str, sizeof(str), "%p", (void *) pnl) < 0)
 	scm_puts ("???", port);
       else
 	scm_puts (str, port);

@@ -1,7 +1,7 @@
 /*
   curs_func.c
 
-  Copyright 2009, 2010, 2011 Free Software Foundation, Inc.
+  Copyright 2009, 2010, 2011, 2014 Free Software Foundation, Inc.
 
   This file is part of GNU Guile-Ncurses.
 
@@ -27,10 +27,12 @@
 
 #if HAVE_CURSES_H
 #include <curses.h>
-#endif
-
-#if HAVE_NCURSES_CURSES_H
+#elif HAVE_NCURSES_CURSES_H
 #include <ncurses/curses.h>
+#elif HAVE_NCURSESW_CURSES_H
+#include <ncursesw/curses.h>
+#else
+#error "No curses.h file included"
 #endif
 
 #include "compat.h"
@@ -462,16 +464,13 @@ SCM
 gucu_delscreen (SCM scr)
 {
   SCREEN *c_scr;
-
-  c_scr = _scm_to_screen (scr);
+  FILE *c_ifp, *c_ofp;
 
   if (!isendwin ())
     /* terminal was freed while still in curses mode */
     return SCM_BOOL_F;
 
-  delscreen (c_scr);
-  /* delscreen returns void */
-  SCM_SET_SMOB_DATA (scr, 0);
+  _scm_free_screen (scr);
 
   return SCM_BOOL_T;
 }
@@ -1495,6 +1494,21 @@ gucu_resetty ()
   RETURNTF (resetty ());
 }
 
+/* Resize the standard and current windows. */
+SCM
+gucu_resizeterm(SCM lines, SCM columns)
+{
+  int c_lines, c_columns, ret;
+
+  SCM_ASSERT (scm_is_integer (lines), lines, SCM_ARG1, "resizeterm");
+  SCM_ASSERT (scm_is_integer (columns), columns, SCM_ARG2, "resizeterm");
+  c_lines = scm_to_int (lines);
+  c_columns = scm_to_int (columns);
+  ret = resizeterm (c_lines, c_columns);
+
+  RETURNTF(ret);
+}
+
 /* Save the state of the terminal modes */
 SCM
 gucu_savetty ()
@@ -1777,6 +1791,29 @@ gucu_typeahead_x (SCM fd)
   RETURNTF (ret);
 }
 
+/* Returns a character string which is a printable representation of the
+   character, ignoring attributes. */
+SCM
+gucu_unctrl (SCM ch)
+{
+  SCM_ASSERT (_scm_is_xchar (ch), ch, SCM_ARG1, "%unctrl");
+#ifdef HAVE_NCURSESW
+  {
+    cchar_t *c_ch = _scm_xchar_to_cchar (ch);
+    wchar_t *c_wname;
+    c_wname = wunctrl (c_ch);
+    free (c_ch);
+    return _scm_sstring_from_wstring (c_wname);
+  }
+#else
+  {
+    chtype c_ch = _scm_xchar_to_chtype (ch);
+    char *c_name;
+    return scm_from_locale_string (unctrl (c_ch));
+  }
+#endif
+}
+
 /* Places a char back on the input queue */
 SCM
 gucu_ungetch (SCM ch)
@@ -2042,15 +2079,15 @@ gucu_wgetch (SCM win)
 
     if (ret == OK)
       {
-	return _scm_schar_from_wchar (wch);
+        return _scm_schar_from_wchar (wch);
       }
     else if (ret == KEY_CODE_YES)
       {
-	return scm_from_unsigned_integer (wch);
+        return scm_from_unsigned_integer (wch);
       }
     else
       {
-	return SCM_BOOL_F;
+        return SCM_BOOL_F;
       }
   }
 #else
@@ -2430,6 +2467,7 @@ gucu_init_function ()
   scm_c_define_gsubr ("%reset-prog-mode", 0, 0, 0, gucu_reset_prog_mode);
   scm_c_define_gsubr ("%reset-shell-mode", 0, 0, 0, gucu_reset_shell_mode);
   scm_c_define_gsubr ("%resetty", 0, 0, 0, gucu_resetty);
+  scm_c_define_gsubr ("resizeterm", 2, 0, 0, gucu_resizeterm);
   scm_c_define_gsubr ("%savetty", 0, 0, 0, gucu_savetty);
   scm_c_define_gsubr ("%scr-dump", 1, 0, 0, gucu_scr_dump);
   scm_c_define_gsubr ("%scr-init", 1, 0, 0, gucu_scr_init);
@@ -2448,6 +2486,7 @@ gucu_init_function ()
   scm_c_define_gsubr ("%termname", 0, 0, 0, gucu_termname);
   scm_c_define_gsubr ("%timeout!", 2, 0, 0, gucu_timeout_x);
   scm_c_define_gsubr ("%typeahead!", 1, 0, 0, gucu_typeahead_x);
+  scm_c_define_gsubr ("%unctrl", 1, 0, 0, gucu_unctrl);
   scm_c_define_gsubr ("%ungetch", 1, 0, 0, gucu_ungetch);
   scm_c_define_gsubr ("use-default-colors", 0, 0, 0, gucu_use_default_colors);
   scm_c_define_gsubr ("use-env", 1, 0, 0, gucu_use_env);

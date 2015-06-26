@@ -1,7 +1,7 @@
 /*
   form_type.c
 
-  Copyright 2009, 2010, 2011 Free Software Foundation, Inc.
+  Copyright 2009, 2010, 2011, 2014 Free Software Foundation, Inc.
 
   This file is part of GNU Guile-Ncurses.
 
@@ -30,11 +30,14 @@
 #if HAVE_CURSES_H
 #include <curses.h>
 #include <form.h>
-#endif
-
-#if HAVE_NCURSES_CURSES_H
+#elif HAVE_NCURSES_CURSES_H
 #include <ncurses/curses.h>
 #include <ncurses/form.h>
+#elif HAVE_NCURSESW_CURSES_H
+#include <ncursesw/curses.h>
+#include <ncursesw/form.h>
+#else
+#error "No curses.h file included"
 #endif
 
 #include "compat.h"
@@ -193,7 +196,7 @@ int
 print_field (SCM x, SCM port, scm_print_state * pstate UNUSED)
 {
   FIELD *fld = (FIELD *) SCM_SMOB_DATA (x);
-  char *str;
+  char str[SIZEOF_VOID_P*2+3];
 
   scm_puts ("#<field ", port);
 
@@ -201,7 +204,7 @@ print_field (SCM x, SCM port, scm_print_state * pstate UNUSED)
     scm_puts ("(freed)", port);
   else
     {
-      if (asprintf (&str, "%p", (void *) fld) < 0)
+      if (snprintf (str, sizeof(str), "%p", (void *) fld) < 0)
 	scm_puts ("???", port);
       else
 	scm_puts (str, port);
@@ -363,13 +366,13 @@ int
 print_form (SCM x, SCM port, scm_print_state * pstate UNUSED)
 {
   struct gucu_form *frm = (struct gucu_form *) SCM_SMOB_DATA (x);
-  char *str;
+  char str[SIZEOF_VOID_P*2+3];
 
   assert (frm != NULL);
 
   scm_puts ("#<form ", port);
 
-  if (asprintf (&str, "%p", (void *) frm->form) < 0)
+  if (snprintf (str, sizeof(str), "%p", (void *) frm->form) < 0)
     scm_puts ("???", port);
   else
     scm_puts (str, port);

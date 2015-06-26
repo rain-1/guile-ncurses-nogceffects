@@ -1,6 +1,6 @@
 # Makefile.am for guile-ncurses/test.
 #
-# Copyright 2009, 2010, 2011 Free Software Foundation, Inc.
+# Copyright 2009, 2010, 2011, 2014 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU Lesser General Public License as
@@ -20,10 +20,12 @@ TESTLIB = lib.scm lib2.scm
 
 TESTS_ENVIRONMENT = ORIGTERM=${TERM} \
   TERM=xterm \
-  GUILE_AUTO_COMPILE=0 \
-  ${top_builddir}/libtool \
+  GUILE_AUTO_COMPILE=0
+TEST_EXTENSIONS = .test
+TEST_LOG_COMPILER = ${top_builddir}/libtool \
     -dlopen ${top_builddir}/ncurses/libguile-ncurses.la \
-    --mode=execute guile -L $(abs_top_srcdir) -s
+    --mode=execute guile
+AM_TEST_LOG_FLAGS = -L $(abs_top_srcdir) -s
 
 NOTERMTESTS = curses_000_test_setup.test \
 curses_001_char_conversion.test
@@ -38,10 +40,10 @@ curses_018_inch.test curses_019_inchstr.test curses_020_inopts.test	\
 curses_021_insch.test curses_022_insstr.test curses_023_instr.test	\
 curses_024_kernel.test curses_025_move.test curses_026_outputs.test	\
 curses_027_overlay.test curses_028_pad.test curses_029_refresh.test	\
-curses_030_scr_dump.test curses_031_scroll.test			\
+curses_030_scr_dump.test curses_031_scroll.test			        \
 curses_032_termattrs.test curses_033_touch.test curses_034_util.test	\
 curses_035_attributes.test curses_036_ports.test curses_037_mouse.test	\
-curses_038_properties.test \
+curses_038_properties.test curses_039_resizeterm.test                   \
 p001_panel.test f001_new_form.test f002_data.test			\
 f003_field_attributes.test f004_form_field.test f005_form_page.test	\
 f006_form_field_just.test f007_form_field_opts.test			\
@@ -54,7 +56,7 @@ slk_003_init.test slk_004_init.test slk_005_demo.test			\
 slk_006_attributes.test
 
 WIDETESTS = r037_border_set.test r038_get_wch.test r039_get_wstr.test	\
-r040_term_attrs.test
+r040_term_attrs.test f009_form_wide.test
 
 TESTS = $(NOTERMTESTS)
 
@@ -67,4 +69,5 @@ endif
 endif
 endif
 
-EXTRA_DIST = $(TESTLIB) $(TESTS)
+EXTRA_DIST = $(TESTLIB) $(NOTERMTESTS) $(NARROWTESTS) $(WIDETESTS)
+

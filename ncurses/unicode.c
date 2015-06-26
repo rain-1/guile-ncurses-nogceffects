@@ -27,7 +27,12 @@
 
 #ifdef GUILE_CHARS_ARE_UCS4
 #include <assert.h>
+#if defined(_WIN32) || defined(__WIN32__) && !defined(__CYGWIN__)
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+#else
 #include <langinfo.h>
+#endif
 #include <stddef.h>
 #include <stdint.h>
 #include <stdlib.h>
@@ -130,10 +135,19 @@ codepoint_to_locale_char (uint32_t codepoint, char *p_c)
     }
   u32_str[0] = codepoint;
   u32_str[1] = 0;
+#if defined(_WIN32) || defined(__WIN32__) && !defined(__CYGWIN__)
+  enc = malloc(100);
+  snprintf(enc, 100, "CP%u", GetACP());
+#else
   enc = nl_langinfo (CODESET);
+#endif
   str = u32_conv_to_encoding (enc,
 			      iconveh_error,
 			      u32_str, 1, NULL, NULL, &str_len);
+#if defined(_WIN32) || defined(__WIN32__) && !defined(__CYGWIN__)
+  free(enc);
+#endif
+  
   if (str == NULL)
     {
       return 0;

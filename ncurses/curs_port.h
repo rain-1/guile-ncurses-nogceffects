@@ -1,7 +1,7 @@
 /*
 curs_port.h
 
-Copyright 2009, 2010 Free Software Foundation, Inc.
+Copyright 2009, 2010, 2014 Free Software Foundation, Inc.
 
 This file is part of GNU Guile-Ncurses.
 
@@ -25,13 +25,20 @@ License along with Guile-Ncurses.  If not, see
 
 #include <config.h>
 
+#if defined HAVE_FOPENCOOKIE && defined HAVE_COOKIE_IO_FUNCTIONS_T && defined HAVE_OFF64_T
+#define GUCU_USE_COOKIE
+#endif
+
+#ifdef GUCU_USE_COOKIE
+#define _GNU_SOURCE
+#define _LARGEFILE64_SOURCE
+#endif
+
 #include <libguile.h>
 
 #include "visibility.h"
 
-#ifdef HAVE_FOPENCOOKIE
 GUCU_API SCM gucu_newterm (SCM a, SCM b, SCM c);
-#endif
 GUCU_API SCM gucu_getwin (SCM port);
 GUCU_API SCM gucu_putwin (SCM win, SCM port);
 

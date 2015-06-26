@@ -21,6 +21,6 @@
 ACLOCAL_AMFLAGS = -I m4 --install
 
 # Additional files to distribute
-EXTRA_DIST = README.cygwin
+EXTRA_DIST = README.cygwin README.mingw
 
 SUBDIRS = ncurses doc m4 build_aux tools test

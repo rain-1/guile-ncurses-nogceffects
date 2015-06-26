@@ -1,7 +1,7 @@
 /*
   menu_type.c
 
-  Copyright 2009, 2010, 2011 Free Software Foundation, Inc.
+  Copyright 2009, 2010, 2011, 2014 Free Software Foundation, Inc.
 
   This file is part of GNU Guile-Ncurses.
 
@@ -30,10 +30,12 @@
 
 #if HAVE_CURSES_H
 #include <menu.h>
-#endif
-
-#if HAVE_NCURSES_CURSES_H
+#elif HAVE_NCURSES_CURSES_H
 #include <ncurses/menu.h>
+#elif HAVE_NCURSESW_CURSES_H
+#include <ncursesw/menu.h>
+#else
+#error "No menu.h file included"
 #endif
 
 #include "compat.h"
@@ -164,13 +166,13 @@ int
 print_item (SCM x, SCM port, scm_print_state * pstate UNUSED)
 {
   ITEM *frm = (ITEM *) SCM_SMOB_DATA (x);
-  char *str;
+  char str[SIZEOF_VOID_P*2+3];
 
   assert (frm != NULL);
 
   scm_puts ("#<item ", port);
 
-  if (asprintf (&str, "%p", (void *) frm) < 0)
+  if (snprintf (str, sizeof(str), "%p", (void *) frm) < 0)
     scm_puts ("???", port);
   else
     scm_puts (str, port);
@@ -309,13 +311,13 @@ int
 print_menu (SCM x, SCM port, scm_print_state * pstate UNUSED)
 {
   MENU *menu = _scm_to_menu (x);
-  char *str;
+  char str[SIZEOF_VOID_P*2+3];
 
   assert (menu != NULL);
 
   scm_puts ("#<menu ", port);
 
-  if (asprintf (&str, "%p", (void *) menu) < 0)
+  if (snprintf (str, sizeof(str), "%p", (void *) menu) < 0)
     scm_puts ("???", port);
   else
     scm_puts (str, port);

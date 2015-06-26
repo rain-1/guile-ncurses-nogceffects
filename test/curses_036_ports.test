@@ -40,8 +40,9 @@
     (begin
 
       (set! tmpl "gucuXXXXXX")
+
       (set! input-port (mkstemp! tmpl))
-      (set! output-port (open-output-string))
+      (set! output-port input-port)
 
       (with-test-prefix
        "newterm"

@@ -1,6 +1,6 @@
 # Process this file with autoconf to produce a configure script
 
-# Copyright (C) 2009, 2010, 2011, 2013 Free Software Foundation, Inc.
+# Copyright (C) 2009, 2010, 2011, 2013, 2014 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU Lesser General Public License as
@@ -19,7 +19,7 @@
 
 ##################
 # Package info
-AC_INIT([GNU Guile-Ncurses],[1.4],[bug-guile-ncurses@gnu.org])
+AC_INIT([GNU Guile-Ncurses],[1.6],[bug-guile-ncurses@gnu.org])
 
 AC_CONFIG_AUX_DIR([build_aux])
 AM_INIT_AUTOMAKE([gnu std-options -Wall])
@@ -32,7 +32,7 @@ AC_CONFIG_MACRO_DIR([m4])
 
 ##################
 # Set the library libtool version constant
-LIBGUILE_NCURSES_INTERFACE="8:0:0"
+LIBGUILE_NCURSES_INTERFACE="9:0:0"
 AC_SUBST(LIBGUILE_NCURSES_INTERFACE)
 
 ##################
@@ -71,7 +71,17 @@ then
   AC_CHECK_HEADER([ncurses/curses.h],
                   [AC_DEFINE([HAVE_NCURSES_CURSES_H],
                              [1],
-                             [Define if you have ncurses/curses.h])],
+                             [Define if you have ncurses/curses.h])
+                 have_ncurses_curses_h=yes],
+                [have_ncurses_curses_h=no])
+fi
+
+if test "$have_curses_h" = no && test "$have_ncurses_curses_h" = no
+then
+  AC_CHECK_HEADER([ncursesw/curses.h],
+                  [AC_DEFINE([HAVE_NCURSESW_CURSES_H],
+                             [1],
+                             [Define if you have ncursesw/curses.h])],
                   [AC_MSG_FAILURE([curses.h could not be found])])
 fi
 
@@ -82,23 +92,19 @@ AC_ARG_WITH(ncursesw,
             [with_ncursesw=no])
 
 AS_IF([test "$with_ncursesw" = check],
-      [AC_CHECK_LIB([ncursesw],
-                    [initscr],
-                    [AC_SUBST([NCURSES_LIB], ["-lncursesw"])
-                     AC_DEFINE([HAVE_NCURSESW],
-                               [1],
-                               [Define if you have libncursesw])
-                     with_ncursesw=yes],
-                    [AC_MSG_FAILURE([--with-ncursesw was given, but, test for ncursesw failed])])])
+      [AC_SEARCH_LIBS([initscr], [ncursesw],
+                      [AC_DEFINE([HAVE_NCURSESW],
+                                 [1],
+                                 [Define if you have libncursesw])
+                       with_ncursesw=yes],
+                      [AC_MSG_FAILURE([--with-ncursesw was given, but, test for ncursesw failed])])])
 
 AS_IF([test "$with_ncursesw" = no],
-      [AC_CHECK_LIB([ncurses],
-                    [initscr],
-                    [AC_SUBST([NCURSES_LIB], ["-lncurses"])
-                     AC_DEFINE([HAVE_NCURSES],
-                               [1],
-                               [Define if you have libncurses])],
-                    [AC_MSG_FAILURE([the ncurses library was not found])])])
+      [AC_SEARCH_LIBS([initscr], [ncurses],
+                      [AC_DEFINE([HAVE_NCURSES],
+                                 [1],
+                                 [Define if you have libncurses])],
+                      [AC_MSG_FAILURE([the ncurses library was not found])])])
 
 AM_CONDITIONAL([WIDE], [test "$with_ncursesw" = yes])
 
@@ -106,41 +112,29 @@ AM_CONDITIONAL([WIDE], [test "$with_ncursesw" = yes])
 # Check for the menu, panel, and form libraries
 if test "$with_ncursesw" = no
 then
-  AC_CHECK_LIB([menu], [new_menu],
-               [MENU_LIB="-lmenu"],
-               [AC_MSG_ERROR([the ncurses menu library is required])],
-               [-lncurses])
-  AC_CHECK_LIB([form], [new_form],
-               [FORM_LIB="-lform"],
-               [AC_MSG_ERROR([the ncurses form library is required])],
-               [-lncurses])
-  AC_CHECK_LIB([panel], [new_panel],
-               [PANEL_LIB="-lpanel"],
-               [AC_MSG_ERROR([the ncurses panel library is required])],
-               [-lncurses])
+  AC_SEARCH_LIBS([new_menu], [menu],
+                 [],
+                 [AC_MSG_ERROR([the ncurses menu library is required])])
+  AC_SEARCH_LIBS([new_form], [form],
+                 [],
+                 [AC_MSG_ERROR([the ncurses form library is required])])
+  AC_SEARCH_LIBS([new_panel], [panel],
+                 [],
+                 [AC_MSG_ERROR([the ncurses panel library is required])])
 else
-  AC_CHECK_LIB([unistring], [u32_strconv_from_locale],
-               [UNISTRING_LIB="-lunistring"],
-               [AC_MSG_ERROR([the unistring library is required when wide curses is used])])
-  AC_CHECK_LIB([menuw], [new_menu],
-               [MENU_LIB="-lmenuw"],
-               [AC_MSG_ERROR([the ncurses menuw library is required])],
-               [-lncursesw])
-  AC_CHECK_LIB([formw], [new_form],
-               [FORM_LIB="-lformw"],
-               [AC_MSG_ERROR([the ncurses formw library is required])],
-               [-lncursesw])
-  AC_CHECK_LIB([panelw], [new_panel],
-               [PANEL_LIB="-lpanelw"],
-               [AC_MSG_ERROR([the ncurses panelw library is required])],
-               [-lncursesw])
+  AC_SEARCH_LIBS([u32_strconv_from_locale], [unistring],
+                 [],
+                 [AC_MSG_ERROR([the unistring library is required when wide curses is used])])
+  AC_SEARCH_LIBS([new_menu], [menuw],
+                 [],
+                 [AC_MSG_ERROR([the ncurses menuw library is required])])
+  AC_SEARCH_LIBS([new_form], [formw],
+                 [],
+                 [AC_MSG_ERROR([the ncurses formw library is required])])
+  AC_SEARCH_LIBS([new_panel], [panelw],
+                 [],
+                 [AC_MSG_ERROR([the ncurses panelw library is required])])
 fi
-
-AC_SUBST([NCURSES_LIB])
-AC_SUBST([MENU_LIB])
-AC_SUBST([PANEL_LIB])
-AC_SUBST([FORM_LIB])
-AC_SUBST([UNISTRING_LIB])
 
 ##################
 # Check for Libtool
@@ -157,9 +151,22 @@ mingw* | cygwin* | os2* | pw32* | cegcc*)
 *)
 	[building_dll=no] ;;
 esac
+case $host_os in
+mingw* | os2* | pw32* | cegcc*)
+	[building_shell=no] ;;
+*)
+	[building_shell=yes] ;;
+esac
+case $host_os in
+mingw* )
+	[dll_version_info=no] ;;
+*)
+	[dll_version_info=yes] ;;
+esac
 
 AM_CONDITIONAL([BUILDING_DLL], [test "$building_dll" = yes])
-
+AM_CONDITIONAL([BUILDING_SHELL], [test "$building_shell" = yes])
+AM_CONDITIONAL([DLL_VERSION_INFO], [test "$dll_version_info" = yes])
 ##################
 # Check for libraries
 
@@ -168,6 +175,18 @@ AM_CONDITIONAL([BUILDING_DLL], [test "$building_dll" = yes])
 GUILE_PROGS
 GUILE_FLAGS
 GUILE_SITE_DIR
+
+# Some versions of Cygwin have a bad guile-config
+AC_MSG_CHECKING([if Guile flags have the janneke's path problem])
+ac_cv_janneke_test="`echo $GUILE_CFLAGS | grep janneke`"
+ac_cv_janneke_fix=no
+if test -n "$ac_cv_janneke_test"
+then
+  GUILE_CFLAGS=/usr/include
+  GUILE_LDFLAGS="-lguile -L/usr/lib -L/usr/bin -L/usr/lib/w32api -lgmp -lcrypt -lm -lltdl"
+  ac_cv_janneke_fix=yes
+fi
+AC_MSG_RESULT([$ac_cv_janneke_fix])
 
 AC_MSG_CHECKING([if guile can handle UCS4 characters])
 GUILE_CHECK([ac_cv_guile_ucs4],
@@ -217,26 +236,30 @@ AC_CHECK_TYPE([cookie_io_functions_t],
                ])
 AC_CHECK_SIZEOF([int])
 AC_CHECK_SIZEOF([long])
+AC_CHECK_SIZEOF([void *])
 if test "$have_curses_h" = yes
 then
   AC_CHECK_SIZEOF([chtype], ,[#include <curses.h>])
   AC_CHECK_SIZEOF([attr_t], ,[#include <curses.h>])
 else
+if test "$have_ncurses_curses_h" = yes
+then
   AC_CHECK_SIZEOF([chtype], ,[#include <ncurses/curses.h>])
   AC_CHECK_SIZEOF([attr_t], ,[#include <ncurses/curses.h>])
+else
+  AC_CHECK_SIZEOF([chtype], ,[#include <ncursesw/curses.h>])
+  AC_CHECK_SIZEOF([attr_t], ,[#include <ncursesw/curses.h>])
+fi
 fi
 AC_CHECK_SIZEOF([wchar_t], ,[#include <stddef.h>])
 AC_CHECK_SIZEOF([wint_t], ,[#include <wchar.h>])
 
 ##################
 # Check for C library functions
-AC_CHECK_FUNCS([cfmakeraw fopencookie ptsname grantpt unlockpt tcgetsid cfsetspeed])
+AC_CHECK_FUNCS([cfmakeraw fopencookie ptsname grantpt unlockpt tcgetsid cfsetspeed wcwidth])
 
 # Check for ncurses library functions
-ax_save_LIBS="$LIBS"
-LIBS="$ax_save_LIBS $NCURSES_LIB"
-AC_CHECK_FUNCS([key_defined term_attrs set_tabsize is_pad is_subwin])
-LIBS="$ax_save_LIBS"
+AC_CHECK_FUNCS([key_defined term_attrs set_tabsize is_pad is_subwin form_driver_w])
 
 # Later something should be done with this
 # AC_FUNC_MALLOC

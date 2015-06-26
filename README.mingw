@@ -1,0 +1,41 @@
+A README file for using GNU Guile-Ncurses on MinGW
+
+  Copyright (C) 2014 Free Software Foundation, Inc.
+
+  Copying and distribution of this file, with or without modification,
+  are permitted in any medium without royalty provided the copyright
+  notice and this notice are preserved.
+
+There are some special things to watch out for when building on
+MinGW.
+
+1. A very recent Ncurses is required.  The pre-release versions
+   of Ncurses are distributed at
+
+   ftp://invisible-island.net/ncurses/current
+
+   This release was tested with 5.9.-20140920.  You need to enabme
+   the "--enable-term-driver" option on MinGW to get the Windows
+   console to work.
+
+2. The environment variable TERM=#w32con for the windows console.
+
+3. Current Guile 2.0.x won't build without modification.  The last
+   version of Guile that could be built on MinGW was 1.8.8.
+
+4. If you've installed Guile 1.8.8 with the prefix /mingw, then the
+   configure call for guile-ncurses is
+
+   ./configure --prefix=/mingw --with-guilesitedir=/mingw/share/guile/site
+
+5. Several tests will fail.  This is because Guile 1.8.8 on MinGW
+   may lack regular expressions, and because the windows console
+   driver on Cygwin is different than on xterm.
+
+   These tests fail:
+   * curses_003_color.test
+   * curses_032_termattrs.test
+   * f001_new_form.test
+   * m001_new_menu.text
+   
+Neither current Guile nor current ncurses come with MinGW

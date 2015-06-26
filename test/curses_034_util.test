@@ -41,6 +41,18 @@
  (pass-if "curses-version"
           (string? (curses-version)))
 
+ (pass-if "unctrl #\\bel"
+          (string=? "^G" (unctrl #\bel)))
+
+ (pass-if "unctrl x"
+          (string=? "x" (unctrl #\x)))
+ 
+ (pass-if "unctrl xchar #\\bel"
+          (string=? "^G" (unctrl (normal #\bel))))
+
+ (pass-if "unctrl xchar x"
+          (string=? "x" (unctrl (normal #\x))))
+ 
  (pass-if "keyname #\\bel"
           (string=? "^G" (keyname #\bel)))
 

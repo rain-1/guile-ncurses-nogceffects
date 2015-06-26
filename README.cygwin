@@ -1,6 +1,6 @@
 A README file for using GNU Guile-Ncurses on Cygwin
 
-  Copyright (C) 2010, 2011 Free Software Foundation, Inc.
+  Copyright (C) 2010, 2011, 2014 Free Software Foundation, Inc.
 
   Copying and distribution of this file, with or without modification,
   are permitted in any medium without royalty provided the copyright
@@ -9,10 +9,19 @@ A README file for using GNU Guile-Ncurses on Cygwin
 There are some special things to watch out for when building on
 Cygwin.
 
-1. The mysterious error "texinfo.tex appears to be broken, quitting"
+1. The packaged Guile on Cygwin is 8-bit characters only
 
-  This is a problem with how Cygwin packages the typesetting program
-  'tex'.
+  The version of Guile that comes with Cygwin is from the 1.8.x
+  release series.  This version of Guile uses 8-bit characters, so
+  the full Unicode is not available.
+
+  Thus, you should not try to use the --with-ncursesw configure flag
+  on Cygwin.
+  
+2. The mysterious error "texinfo.tex appears to be broken, quitting"
+
+  This is a very old problem with how Cygwin packages the typesetting
+  program 'tex'.
 
   Cygwin's texi2dvi can try to call etex, resulting in this error:
   "texinfo.tex appears to be broken, quitting"
@@ -30,25 +39,3 @@ Cygwin.
   Or, you can put it all on the configure line, like the below.
 
   TEX=tex TEXI2DVI="TEX=tex texi2dvi" ./configure
-
-2. Lack of libunistring
-
-  Even though Cygwin includes the wide versions of ncurses, the narrow
-  one must be used if the libunistring library is not available.
-  guile-ncurses uses libunistring to convert locale characters to
-  Ncurses wide characters.  Libunistring is not currently part of the
-  Cygwin distro.
-
-  Until Cygwin moves to Guile 2.0.x, the wide version of Unicode isn't
-  going to be of any benefit anyway, since Guile 1.8.x uses only 8-bit
-  characters.
-
-3. The location of ncurses header files
-
-   The upstream ncurses package has the option of installing its
-   header either as curses.h or ncurses/curses.h.  In practice though,
-   few systems install the headers in ncurses/curses.h.  Cygwin 1.7.x
-   is one of the systems that install header files as ncurses/curses.h
-
-   The configure script should correctly detect it.
-

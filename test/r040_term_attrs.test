@@ -47,7 +47,9 @@
               (addstr win (format #f "expecting #\\del\n"))
               (refresh win)
               (maybe-sleep 1)
-              pass)))
+              (if c
+                  pass
+                  *unspecified*))))
 
  ;; Not sure what the correct answer for killwchar
  ;; should be.  Gnu/Linux xterm give #\nak.
@@ -61,7 +63,9 @@
               (addstr win "expecting #\\nak\n")
               (refresh win)
               (maybe-sleep 1)
-              pass)))
+              (if c
+                  pass
+                  *unspecified*))))
 
  (pass-if "term-attrs"
           (begin

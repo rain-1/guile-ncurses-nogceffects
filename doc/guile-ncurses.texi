@@ -20,7 +20,7 @@ This manual is for the GNU Guile-NCurses library, (version
 ncurses library, which provides functionality for updating character
 screens.
 
-Copyright @copyright{} 1998-2010,2011,2013 Free Software Foundation, Inc. @*
+Copyright @copyright{} 1998-2010,2011,2013,2014 Free Software Foundation, Inc. @*
 Copyright @copyright{} 2001-2005 Pradeep Padala @*
 
 @quotation
@@ -254,6 +254,7 @@ The basic curses library: @code{(ncurses curses)}
 * Refresh routines::
 * Miscellaneous utilities::
 * Window creation::
+* Terminal resizing::
 
 The Coordinate System
 
@@ -3085,6 +3086,7 @@ C-language API.
 * Refresh routines::
 * Miscellaneous utilities::
 * Window creation::
+* Terminal resizing::
 @end menu
 
 @node Overview, Features determined at compile time, The basic curses library, The basic curses library
@@ -3323,10 +3325,12 @@ The routine @code{newterm} should be called once for each terminal.
 It returns a variable of type @code{#<screen>} which should be saved
 as a reference to that terminal.  @var{type} is the type of the
 terminal to be used in place of @env{$TERM}.  @var{outport} is a port
-that will receive the output to the terminal.  It can be a port of any
-type (file, string, etc.). @var{inport} is a port that will hold the
-input to the terminal.  It must be a file port, and cannot be a string
-port.
+that will receive the output to the terminal.
+
+IMPORTANT: These ports must be file ports.  The underlying ncurses
+library extracts the file descriptor from the port and uses that to
+write to the screen.  Also, these ports will be closed by
+@code{newterm} and cannot be reused.
 
 @code{newterm} will internally use a duplicate port to the file
 pointed to by @var{inport}.  @var{inport} won't be used except to get a
@@ -5856,8 +5860,8 @@ inheritance function.
 @findex getwin
 @findex putwin
 
-To read (write) a window from (to) a file, use the @code{getwin} and
-@code{putwin} routines.
+To read (write) the contents of a window from (to) a port, use the
+@code{getwin} and @code{putwin} routines.
 
 All routines return the integer @code{#f} upon failure and @code{#t}
 upon success.
@@ -6029,8 +6033,11 @@ starting at line @var{y}, look as if they have (@var{changed}=1) or have not
 
 The @code{unctrl} routine returns a character string which is a
 printable representation of the character @var{ch}, ignoring
-attributes.  Control characters are displayed in the @code{^X} notation.
-Printing characters are displayed as is.
+attributes.  @var{ch} is either a simple Guile character or an
+@code{xchar}.  Control characters are displayed in the @code{^X}
+notation.  Printing characters are displayed as is.
+
+Compare this to @code{keyname}.
 
 @end deffn
 
@@ -6038,7 +6045,9 @@ Printing characters are displayed as is.
 @cindex Key names
 
 The @code{keyname} routine returns a character string corresponding to
-the key @var{ch}.  Control characters are displayed in the @code{^X}
+the key @var{ch}.  @var{ch} is either a simple Guile character or an
+integer key constant like @code{KEY_HOME}, and can not be an
+@code{xchar}.  Control characters are displayed in the @code{^X}
 notation.  Values above 128 are either meta characters, shown in the
 @code{M-X} notation, or the names of function keys, or null.
 
@@ -6060,24 +6069,29 @@ from the operating system.
 
 @end deffn
 
-@deffn Procedure putwin win file
+@deffn Procedure putwin win output-port
 
 @findex getwin
 
 The @code{putwin} routine writes all data associated with window
-@var{win} into the @code{#<file>} @var{file}.  This information can
-be later retrieved using the @code{getwin} function.
+@var{win} into an output port, such as a file or string port.  This
+information can be later retrieved using the @code{getwin} function.
+
+The storage format is binary and is not described.
 
 @end deffn
 
 
-@deffn Procedure getwin file
+@deffn Procedure getwin input-port
 
 @findex putwin
 
-The @code{getwin} routine reads window related data stored in the file
-by @code{putwin}. The routine then creates and initializes a new
-window using that data.  It returns a new @code{#<window>}
+The @code{getwin} routine reads window related data from an input
+port.  The input port should be backed by a file or string created by
+@code{putwin}. The routine then creates and initializes a new window
+using that data.  It returns a new @code{#<window>}
+
+The storage format is binary and is not described.
 
 @end deffn
 
@@ -6121,9 +6135,8 @@ curses to a single line, instead of the to the entire screen.
 
 @end deffn
 
-@node Window creation,  , Miscellaneous utilities, The basic curses library
+@node Window creation, Terminal resizing, Miscellaneous utilities, The basic curses library
 @subsection Window creation
-
 
 @deffn Procedure newwin nlines ncols begin-y begin-x
 @cindex Windows, creation
@@ -6268,6 +6281,23 @@ all the ancestors of the window to reflect the current cursor position
 of the window.
 
 The return value is unspecified.
+@end deffn
+
+@node Terminal resizing,  , Window creation, The basic curses library
+@subsection Terminal resizing
+
+@deffn Procedure resizeterm lines columns
+@cindex Windows, resizing
+@cindex Resizing windows
+@cindex Terminals, resizing
+
+The function @code{resizeterm} resizes the standard and current windows to
+the specified dimensions @var{lines} and @var{columns}.  If the windows
+are increased in size, the extended areas are blank-filled.
+
+It returns @code{#t} on success or @code{#f} on failure.  It could fail
+for memory allocation failures or for dimensions that are too small.
+
 @end deffn
 
 @node Function key labels library, The curses panel library, The basic curses library, Curses Reference
@@ -7042,6 +7072,11 @@ size (not O_STATIC) and not all text from the entry is being displayed.
 
 @subsection Command-processing loop of the form system
 
+@defvr Constant %is-form-driver-wide
+This constant is @code{#t} if the @code{form-driver} function is capable
+of processing characters with representations that are greater than 8 bits.
+@end defvr
+
 @deffn Procedure form-driver form c
 
 Once a form has been posted (displayed), you should funnel input
@@ -7054,9 +7089,7 @@ The input is a form navigation request.  Navigation request codes are
 constants defined below, which are distinct from the key and character
 codes returned by @code{wgetch}.
 @item
-The input is a printable character.  Printable characters (which must
-be positive, less than 256) are checked according to the program's
-locale settings.
+The input is a printable character.
 @item
 The input is the KEY_MOUSE special key associated with an mouse event.
 @end itemize
@@ -7185,6 +7218,15 @@ If the second argument is a printable character, the driver places it
 in the current position in the current field.  If it is one of the
 forms requests listed above, that request is executed.
 
+@findex %is-form-driver-wide
+
+It is important to note that when characters are Unicode codepoints
+greater than U+00FF, the form driver will only use them for versions
+of the wide ncurses form library that are 2014 or newer.  For older
+version of ncurses, only printable characters (which must be positive,
+less than 256) are allowed.  The @code{%is-form-driver-wide} constant
+can be used to check if @code{form-driver} can handle characters whose
+numerical representations are greater than 256.
 
 If the second argument is the @code{KEY_MOUSE} special key, the associated
 mouse event is translated into one of the above pre-defined requests.
@@ -7229,7 +7271,6 @@ the result of this request.
 
 If you clicked outside the user window or the mouse event could not  be
 translated into a form request an @code{E_REQUEST_DENIED} is returned.
-
 
 If the second argument is neither printable nor one of the above
 predefined form requests, the driver assumes it is an

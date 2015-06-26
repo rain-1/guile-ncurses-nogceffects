@@ -2,7 +2,7 @@
 
 ;; curses.scm
 
-;; Copyright 2009, 2010, 2011, 2013 Free Software Foundation, Inc.
+;; Copyright 2009, 2010, 2011, 2013, 2014 Free Software Foundation, Inc.
 
 ;; This file is part of GNU Guile-Ncurses.
 
@@ -374,6 +374,7 @@
             reset-prog-mode
             reset-shell-mode
             resetty
+            resizeterm
             savetty
             scr-dump
             scr-init
@@ -401,6 +402,7 @@
             touchline
             touchwin
             typeahead!
+            unctrl
             ungetch
             ungetmouse
             untouchline
@@ -2151,9 +2153,9 @@ or #f on failure"
 
 (define (newterm type outport inport)
   "Create a new terminal whose input and output are Guile ports."
-  (if (not (defined? '%newterm))
-      (raise (condition (&curses-missing-function-error
-                         (function '%newterm)))))
+  ;; (if (not (defined? '%newterm))
+  ;;     (raise (condition (&curses-missing-function-error
+  ;;                        (function '%newterm)))))
   (assert-string type)
   (if (not (output-port? outport))
       (raise (condition (&curses-wrong-type-arg-error
@@ -2530,6 +2532,20 @@ checking."
    ((port? port-or-fd) (%typeahead! (fileno port-or-fd)))
    (else (%typeahead! port-or-fd))))
 
+(define (unctrl ch)
+  "Returns a character string which is a printable representation of
+the character CH. Control character will be escaped with the ^X notation.
+The DEL character will be displayed as ^?."
+  (cond
+   ((char? ch)
+    (%unctrl (xchar->list (make-xchar A_NORMAL 0 (list ch)))))
+   ((xchar? ch)
+    (%unctrl (xchar->list ch)))
+   (else
+    (raise (condition (&curses-wrong-type-arg-error
+                       (arg ch)
+                       (expected-type 'xchar)))))))
+
 (define (ungetch ch)
   "Pushes back a character onto the input queue so that it can later
 be retrieved with getch.  CH must either be a character or a curses
@@ -2584,3 +2600,4 @@ by the given window."
 (if (defined? 'KEY_EVENT)    (export KEY_EVENT))
 (if (defined? 'key-defined)  (export key-defined))
 (if (defined? 'ptsraw)       (export ptsraw))
+(if (defined? '%newterm)     (export newterm))

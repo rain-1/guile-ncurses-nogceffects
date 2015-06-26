@@ -1,0 +1,54 @@
+;;;; -*- Mode: scheme; -*-
+;;;; curses_039_resizeterm.test --- test suite for curses's
+;;;; terminal resizing function
+
+;; Copyright 2014 Free Software Foundation, Inc.
+
+;; This file is part of Guile-Ncurses.
+
+;; Guile-Ncurses is free software: you can redistribute it and/or
+;; modify it under the terms of the GNU Lesser General Public License
+;; as published by the Free Software Foundation, either version 3 of
+;; the License, or (at your option) any later version.
+
+;; Guile-Ncurses is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+;; Lesser General Public License for more details.
+
+;; You should have received a copy of the GNU Lesser General Public
+;; License along with Guile-Ncurses.  If not, see
+;; <http://www.gnu.org/licenses/>.
+
+(use-modules (test lib)
+             (test lib2)
+             (ncurses curses)
+             (srfi srfi-1))
+
+(define test (curses-test-start))
+
+(define mainwin (initscr))
+(set! *sleep* #f)
+
+(define win (newwin 10 10 1 1))
+
+(endwin)
+
+(with-test-prefix
+ "resize terminal"
+
+ (pass-if "resizeterm (lines) (cols)"
+          (let ((ret (resizeterm (lines) (cols))))
+            ret))
+
+ (pass-if "resizeterm -1 -1"
+          (let ((ret (resizeterm -1 -1)))
+            (not ret)
+            'untested))                 ; upstream ncurses should
+                                        ; return ERR, but doesn't yet.
+
+ (pass-if "resizeterm 23 81"
+          (let ((ret (resizeterm 23 81)))
+            (and (= (lines) 23) (= (cols) 81)))))
+
+(curses-test-end test "curses_039_resizeterm.out")

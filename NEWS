@@ -1,10 +1,42 @@
 The NEWS file for GNU Guile-NCurses
 
-  Copyright 2009, 2010, 2011, 2013 Free Software Foundation, Inc.
+  Copyright 2009, 2010, 2011, 2013, 2014 Free Software Foundation, Inc.
 
   Copying and distribution of this file, with or without modification,
   are permitted in any medium without royalty provided the copyright
   notice and this notice are preserved.
+
+Release 1.6
+- new procedure 'unctrl'
+- new procedure 'resizeterm'
+- new constant '%is-form-driver-wide' denotes if the form driver
+  can handle wide characters
+- 'form-driver' now handles Unicode if the ncurses form_driver_w
+  function is available
+- 'newterm' now operates only on file ports, and will close those
+  ports if newterm is successful.  String ports are no longer
+  supported because they never worked properly; the underlying library
+  expects that newterm's ports have file descriptors.
+- 'getwin' and 'putwin' don't leak file descriptors now
+- the default printer for #<window> now displays window size
+  and if it is stdscr
+- the 'guile-ncurses-shell' no longer links to ncurses directly:
+  it uses guile-ncurses to handle ncurses interactions
+- the configure script no longer ignores LIBS and LDFLAGS
+  specified on the command line
+
+Release 1.5
+- parallel 'make check' is now supported
+- will now look for ncurses headers in <ncursesw/curses.h> as well
+- the wcwidth procedure is not provided if it is not supported by the
+  underlying libraries
+- update autoconfigury
+- Cygwin: support pty devices with guile-ncurses-shell
+- MinGW: avoid C library functions that are unavailable
+- MinGW: building guile-ncurses-shell is no longer attempted
+- MinGW: the libguile-ncurses dll is now unversioned so that Guile can
+  find it
+
 
 Release 1.4
 

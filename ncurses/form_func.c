@@ -1,7 +1,7 @@
 /*
   form_func.c
 
-  Copyright 2009, 2010 Free Software Foundation, Inc.
+  Copyright 2009, 2010, 2014 Free Software Foundation, Inc.
 
   This file is part of GNU Guile-Ncurses.
 
@@ -26,11 +26,14 @@
 #if HAVE_CURSES_H
 #include <curses.h>
 #include <form.h>
-#endif
-
-#if HAVE_NCURSES_CURSES_H
+#elif HAVE_NCURSES_CURSES_H
 #include <ncurses/curses.h>
 #include <ncurses/form.h>
+#elif HAVE_NCURSESW_CURSES_H
+#include <ncursesw/curses.h>
+#include <ncursesw/form.h>
+#else
+#error "No curses.h file included"
 #endif
 
 #include "compat.h"
@@ -275,14 +278,23 @@ gucu_form_driver (SCM form, SCM c)
   SCM_ASSERT (SCM_CHARP (c) || scm_is_integer (c), c, SCM_ARG2,
 	      "form-driver");
 
-  int c_c;
   FORM *c_form = _scm_to_form (form);
+  int ret;
+
+#if (HAVE_NCURSESW == 1) && (HAVE_FORM_DRIVER_W)
+  if (SCM_CHARP (c))
+    ret = form_driver_w (c_form, OK, _scm_schar_to_wchar (c));
+  else
+    ret = form_driver_w (c_form, KEY_CODE_YES, (wchar_t) scm_to_int (c));
+#else
+  int c_c;
   if (SCM_CHARP (c))
     c_c = (unsigned char) _scm_schar_to_char (c);
   else
     c_c = scm_to_int (c);
 
-  int ret = form_driver (c_form, c_c);
+  ret = form_driver (c_form, c_c);
+#endif
 
   if (ret == E_BAD_ARGUMENT)
     scm_out_of_range ("form-driver", c);
