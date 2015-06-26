@@ -2598,14 +2598,14 @@ password-like field where the characters are hidden from view.
 ;; Create the new form and post it
 (define my-form (new-form field))
 (post-form my-form)
-(refresh)
+(refresh stdscr)
 
 (set-field-just! (first field) JUSTIFY_CENTER)
 (set-field-buffer! (first field) 0 "This is a static field")
 
 (addstr "Field 1:" #:y STARTY #:x (- STARTX 10))
 (addstr "Field 2:" #:y (+ STARTY 2) #:x (- STARTX 10))
-(refresh)
+(refresh stdscr)
 
 ;; Loop through to get user requests
 (let loop ((ch (getch)))
@@ -2720,7 +2720,7 @@ similar example.
             #:x (+ startx (/ (- width length) 2)))
 
     (attr-off! win color)
-    (refresh)))
+    (refresh stdscr)))
 
 
 ;; Initialize curses
