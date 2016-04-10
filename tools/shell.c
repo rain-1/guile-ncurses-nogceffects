@@ -1,7 +1,7 @@
 /*
   shell.c
 
-  Copyright 2009, 2010, 2014 Free Software Foundation, Inc.
+  Copyright 2009, 2010, 2014, 2016 Free Software Foundation, Inc.
 
   This file is part of GNU Guile-Ncurses.
 
@@ -22,7 +22,6 @@
 
 #include <config.h>
 
-#include <libintl.h>
 #include <locale.h>
 
 /* libc and libutil */
@@ -56,8 +55,6 @@
 #endif
 
 #include <libguile.h>  /* all: scm_shell; */
-
-#define _(s) gettext (s)
 
 int open_terminal (char *, int, int);
 int is_unix98_pty (const char *);
@@ -222,7 +219,7 @@ open_terminal (char *pseudo_terminal_slave_name,
     }
   else
     {
-      fprintf (stderr, _("Unrecognized pseudo-terminal name: %s\n"),
+      fprintf (stderr, "Unrecognized pseudo-terminal name: %s\n",
                pseudo_terminal_slave_name);
       _exit (EXIT_FAILURE);
     }
@@ -242,9 +239,9 @@ open_terminal (char *pseudo_terminal_slave_name,
       /* This is the child process */
       close (slave_file_descriptor);
 
-      printf (_("Attemping to connect an xterm to %s\n"),
+      printf ("Attemping to connect an xterm to %s\n",
               pseudo_terminal_slave_name);
-      printf (_("Calling 'xterm %s'\n"), s_flag);
+      printf ("Calling 'xterm %s'\n", s_flag);
       ret = execlp ("xterm", "xterm", s_flag, NULL);
       /* Should not return */
       if (ret == -1)
@@ -298,8 +295,6 @@ inner_main (void *data, int argc, char **argv)
   int i;
 
   setlocale (LC_ALL, "");
-  bindtextdomain (PACKAGE, LOCALEDIR);
-  textdomain (PACKAGE);
 
   /* The command line arguments are going to be passed down to Guile,
      but, we need to check here for --version and --help. */
@@ -308,22 +303,22 @@ inner_main (void *data, int argc, char **argv)
       if (strcmp (argv[i], "--version") == 0
           || strcmp (argv[i], "-v") == 0)
         {
-          printf (_("guile-ncurses-shell 0.7\n"
-                    "Copyright (C) 2010,2014 Free Software Foundation, Inc.\n"
-                    "License LGPLv3+: GNU LGPL version 3 or later <http://www.gnu.org/licenses/lgpl.html>"
-                    "This is free software: you are free to change and redistribute it.\n"
-                    "There is NO WARRANTY, to the extent permitted by law.\n"));
+          printf ("guile-ncurses-shell 0.8\n"
+		  "Copyright (C) 2010,2014,2016 Free Software Foundation, Inc.\n"
+		  "License LGPLv3+: GNU LGPL version 3 or later <http://www.gnu.org/licenses/lgpl.html>"
+		  "This is free software: you are free to change and redistribute it.\n"
+		  "There is NO WARRANTY, to the extent permitted by law.\n");
           return;
         }
       if (strcmp (argv[i], "--help") == 0
           || strcmp (argv[i], "-h") == 0)
         {
-          printf (_("Usage: guile-ncurses-shell OPTION...\n"));
-          printf (_("This program starts a Guile-Ncurses session and redirects its output into\n"
-                    "a terminal window.  Any options on the command line are passed on the to\n"
-                    "Guile interpreter.  Type 'guile --help' to see its command line interface.\n"));
+          printf ("Usage: guile-ncurses-shell OPTION...\n");
+          printf ("This program starts a Guile-Ncurses session and redirects its output into\n"
+		  "a terminal window.  Any options on the command line are passed on the to\n"
+		  "Guile interpreter.  Type 'guile --help' to see its command line interface.\n");
           printf ("\n");
-          printf (_("Report bugs to <%s>.\n"), PACKAGE_BUGREPORT);
+          printf ("Report bugs to <%s>.\n", PACKAGE_BUGREPORT);
           printf ("\n");
           return;
         }
@@ -350,21 +345,21 @@ inner_main (void *data, int argc, char **argv)
 
           /* Need to wait for xterm to be ready before trying to
              initalize curses */
-          printf (_("Waiting for xterm to be ready...\n"));
+          printf ("Waiting for xterm to be ready...\n");
           sleep (5);
 
           /* Set up an ncurses environment in Guile */
           scm_c_eval_string ("(set! %load-path (append %load-path (list \".\")))");
-          printf (_("Loading (ncurses curses)\n"));
+          printf ("Loading (ncurses curses)\n");
           scm_c_eval_string ("(use-modules (ncurses curses))");
 
-          printf (_("Setting %%guile-ncurses-shell-read-port\n"));
+          printf ("Setting %%guile-ncurses-shell-read-port\n");
           snprintf (cmd, sizeof(cmd),
                     "(define %%guile-ncurses-shell-read-port (fdopen %d \"r0\"))",
                     slave_read);
           scm_c_eval_string (cmd);
 
-          printf (_("Setting %%guile-ncurses-shell-write-port\n"));
+          printf ("Setting %%guile-ncurses-shell-write-port\n");
           snprintf (cmd, sizeof(cmd),
                     "(define %%guile-ncurses-shell-write-port (fdopen %d \"w0\"))",
                     slave_write);
@@ -376,13 +371,13 @@ inner_main (void *data, int argc, char **argv)
              from. */
           scm_c_eval_string ("(while (char-ready? %guile-ncurses-shell-read-port) (read-char %guile-ncurses-shell-read-port))");
 
-          printf (_("Setting %%guile-ncurses-shell-stdscr to the xterm\n"));
+          printf ("Setting %%guile-ncurses-shell-stdscr to the xterm\n");
           scm_c_eval_string ("(define %guile-ncurses-shell-screen (newterm \"xterm\" %guile-ncurses-shell-write-port %guile-ncurses-shell-read-port))");
           scm_c_eval_string ("(set-term %guile-ncurses-shell-screen)");
           scm_c_eval_string ("(define %guile-ncurses-shell-stdscr (stdscr))");
-          printf (_("\nYou should define a shorter name for '%%guile-ncurses-shell-stdscr' \n"));
-          printf (_("like (define mainwin %%guile-ncurses-shell-stdscr) for example\n"));
-          printf (  "---------------------------------------------------------------\n\n");
+          printf ("\nYou should define a shorter name for '%%guile-ncurses-shell-stdscr' \n");
+          printf ("like (define mainwin %%guile-ncurses-shell-stdscr) for example\n");
+          printf ("---------------------------------------------------------------\n\n");
 
           /* These all get duplicated inside of guile-ncurses. */
           close (slave_write);
