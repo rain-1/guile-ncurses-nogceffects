@@ -463,9 +463,6 @@ gucu_delay_output (SCM ms)
 SCM
 gucu_delscreen (SCM scr)
 {
-  SCREEN *c_scr;
-  FILE *c_ifp, *c_ofp;
-
   if (!isendwin ())
     /* terminal was freed while still in curses mode */
     return SCM_BOOL_F;
@@ -1808,7 +1805,6 @@ gucu_unctrl (SCM ch)
 #else
   {
     chtype c_ch = _scm_xchar_to_chtype (ch);
-    char *c_name;
     return scm_from_locale_string (unctrl (c_ch));
   }
 #endif
