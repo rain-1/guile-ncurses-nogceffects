@@ -288,7 +288,6 @@ inner_main (void *data, int argc, char **argv)
   int master, slave;
   pid_t pid;
   char name[512], cmd[512];
-  char *termtype;
   int slave_read = -1, slave_write = -1;
   struct termios tio;
   struct winsize win;
