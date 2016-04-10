@@ -1092,12 +1092,12 @@ free_window (SCM x)
 }
 
 int
-print_window (SCM x, SCM port, scm_print_state * pstate UNUSED)
+print_window (SCM _win, SCM port, scm_print_state * pstate UNUSED)
 {
-  WINDOW *win = (WINDOW *) SCM_SMOB_DATA (x);
+  WINDOW *win = (WINDOW *) SCM_SMOB_DATA (_win);
   char str[SIZEOF_VOID_P*2+3];
 
-  assert (SCM_SMOB_PREDICATE (window_tag, x));
+  assert (SCM_SMOB_PREDICATE (window_tag, _win));
 
   scm_puts ("#<window ", port);
 
