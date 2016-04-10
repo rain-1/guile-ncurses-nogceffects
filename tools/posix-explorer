@@ -5,7 +5,7 @@ GUILE_AUTO_COMPILE=0 exec guile -e main -s $0 "$@"
 
 ;; posix-explorer
 
-;; Copyright 2014 Free Software Foundation, Inc.
+;; Copyright 2014, 2016 Free Software Foundation, Inc.
 
 ;; This file is part of GNU Guile-Ncurses.
 
@@ -29,24 +29,24 @@ GUILE_AUTO_COMPILE=0 exec guile -e main -s $0 "$@"
 
 (use-modules 
  (ice-9 getopt-long)
- (ice-9 i18n)
+ ;; (ice-9 i18n)
  (ncurses curses)
  (ncurses menu)
  (srfi srfi-1)
  )
 
 (define PROGRAM_NAME "posix-explorer")
-(define PROGRAM_VERSION "0.0")
+(define PROGRAM_VERSION "0.1")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; MAIN WINDOW
 
 (define (mainwin-initialize)
   "Initialize curses. Return the main window."
-  (let ([mainwin (if (defined? '%guile-ncurses-shell-stdscr)
+  (let ((mainwin (if (defined? '%guile-ncurses-shell-stdscr)
                      %guile-ncurses-shell-stdscr
-                     (initscr))])
-    (when (has-colors?)
+                     (initscr))))
+    (if (has-colors?)
           (start-color!))
     (cbreak!)
     (noecho!)
@@ -70,7 +70,7 @@ GUILE_AUTO_COMPILE=0 exec guile -e main -s $0 "$@"
    (list "LC_TIME" (setlocale LC_TIME))))
 
 (define (get-system-information)
-  (let ([un (uname)])
+  (let ((un (uname)))
     (list
      (list "OS Name" (utsname:sysname un))
      (list "Node Name" (utsname:nodename un))
@@ -110,33 +110,34 @@ GUILE_AUTO_COMPILE=0 exec guile -e main -s $0 "$@"
    (list "EGID" (number->string (getegid)))
    (list "EGID Name" (group:name (getgrgid (getegid))))
    (list "PGRP" (number->string (getpgrp)))
-   (list "Processor Count" (number->string (total-processor-count)))
-   (list "Processors Used" (number->string (current-processor-count)))))
+   ;; (list "Processor Count" (number->string (total-processor-count)))
+   ;; (list "Processors Used" (number->string (current-processor-count)))
+))
 
 (define (get-environment-variables)
-  (let ([EV (sort! (environ) string-locale-ci<?)])
+  (let ((EV (sort! (environ) string-ci<?)))
     (map (lambda (entry)
-           (let ([split-location (string-index entry #\=)])
+           (let ((split-location (string-index entry #\=)))
              (list (string-take entry split-location)
                    (string-drop entry (1+ split-location)))))
          EV)))
 
 (define (get-time-entries)
-  (let* ([curtime (current-time)]
-         [timeofday (gettimeofday)]
-         [timeofday-sec (car timeofday)]
-         [timeofday-usec (cdr timeofday)]
-         [now-local (localtime curtime)]
-         [now-gmt (gmtime curtime)]
-         [now-cpu (times)])
+  (let* ((curtime (current-time))
+         (timeofday (gettimeofday))
+         (timeofday-sec (car timeofday))
+         (timeofday-usec (cdr timeofday))
+         (now-local (localtime curtime))
+         (now-gmt (gmtime curtime))
+         (now-cpu (times)))
     (list
      (list "Current Time in Epoch" (number->string curtime))
      (list "Seconds in Epoch" (format #f "~S.~S" timeofday-sec timeofday-usec))
      (list "Local Time" (strftime "%c" now-local))
      (list "Local Day of Year" (number->string (tm:yday now-local)))
-     (list "Daylight Savings" (cond ([= 0 (tm:isdst now-local)] "no")
-                                    ([< 0 (tm:isdst now-local)] "yes")
-                                    ([> 0 (tm:isdst now-local)] "unknown")))
+     (list "Daylight Savings" (cond ((= 0 (tm:isdst now-local)) "no")
+                                    ((< 0 (tm:isdst now-local)) "yes")
+                                    ((> 0 (tm:isdst now-local)) "unknown")))
      (list "Seconds from GMT" (number->string (tm:gmtoff now-local)))
      (list "Time Zone" (tm:zone now-local))
      (list "GMT" (strftime "%c" now-gmt))
@@ -151,15 +152,15 @@ GUILE_AUTO_COMPILE=0 exec guile -e main -s $0 "$@"
      (list "Guile Run Time" (number->string (get-internal-run-time))))))
 
 (define (get-user-information-entries)
-  (let ([uid (getuid)]
-        [euid (geteuid)]
-        [gid (getgid)]
-        [egid (getegid)]
-        [login (getlogin)])
-    (let ([uid-pw (getpw uid)]
-          [euid-pw (getpw euid)]
-          [gid-gr (getgr gid)]
-          [egid-gr (getgr egid)])
+  (let ((uid (getuid))
+        (euid (geteuid))
+        (gid (getgid))
+        (egid (getegid))
+        (login (getlogin)))
+    (let ((uid-pw (getpw uid))
+          (euid-pw (getpw euid))
+          (gid-gr (getgr gid))
+          (egid-gr (getgr egid)))
       (list
        (list "Login Name" login)
        (list "User Name" (passwd:name uid-pw))
@@ -191,16 +192,16 @@ GUILE_AUTO_COMPILE=0 exec guile -e main -s $0 "$@"
   "Draw a screen containing information on a single item, where an
 ENTRY's KEY is the top title, and the ENTRY's VALUE is inside of a
 box."
-  (let* ([margin 1]                      ; outside the box
-         [padding 2]                     ; inside the box
-         [box-height (- (lines) (* 2 margin))]
-         [box-width (- (cols) (* 2 margin))]
-         [box-win (derwin win box-height box-width margin margin)]
-         [inner-win (derwin box-win
+  (let* ((margin 1)                      ; outside the box
+         (padding 2)                     ; inside the box
+         (box-height (- (lines) (* 2 margin)))
+         (box-width (- (cols) (* 2 margin)))
+         (box-win (derwin win box-height box-width margin margin))
+         (inner-win (derwin box-win
                             (- (lines) (* 2 margin) (* 2 padding))
                             (- (cols) (* 2 margin) (* 2 padding))
                             padding
-                            padding)])
+                            padding)))
     (clear win)
     (addchstr win (bold (first entry)) #:x 1 #:y 0)
     (box box-win 0 0)
@@ -211,16 +212,16 @@ box."
 
 (define (do-sub-menu win title entries-list)
   "Draw a sub-menu of a group entries on a specific topic."
-  (let* ([menu-items 
+  (let* ((menu-items 
           (map (lambda (entry)
                  (new-item (first entry) (second entry)))
-               entries-list)]
-         [menu (new-menu menu-items)]
-         [menu-margin 1]                ; outside the box
-         [menu-padding 2]               ; inside the box
-         [menu-height (- (lines) (* 2 menu-margin))]
-         [menu-width (- (cols) (* 2 menu-margin))]
-         [menu-win (newwin menu-height menu-width menu-margin menu-margin)])
+               entries-list))
+         (menu (new-menu menu-items))
+         (menu-margin 1)                ; outside the box
+         (menu-padding 2)               ; inside the box
+         (menu-height (- (lines) (* 2 menu-margin)))
+         (menu-width (- (cols) (* 2 menu-margin)))
+         (menu-win (newwin menu-height menu-width menu-margin menu-margin)))
     (define (_draw_sub_menu)
       (clear win)
       (addchstr win (bold title) #:x 1 #:y 0)
@@ -242,31 +243,31 @@ box."
     
     (_draw_sub_menu)
 
-    (let loop ([c (getch menu-win)])
+    (let loop ((c (getch menu-win)))
       (cond
        ;; Motion controls
-       ([eqv? c KEY_DOWN]
+       ((eqv? c KEY_DOWN)
         (begin
           (menu-driver menu REQ_DOWN_ITEM)
           (loop (getch menu-win))))
-       ([eqv? c KEY_UP]
+       ((eqv? c KEY_UP)
         (begin
           (menu-driver menu REQ_UP_ITEM)
           (loop (getch menu-win))))
        
        ;; Menu item selection
-       ([or (eqv? c KEY_ENTER)
+       ((or (eqv? c KEY_ENTER)
             (eqv? c KEY_RIGHT)
             (eqv? c #\cr)
-            (eqv? c #\nl)]
+            (eqv? c #\nl))
         (begin
           (unpost-menu menu)
           ;; Call handler
-          (let ([entry (list-ref entries-list (item-index (current-item menu)))])
+          (let ((entry (list-ref entries-list (item-index (current-item menu)))))
             (do-single-item win entry)
             (_draw_sub_menu)
             (loop (getch menu-win)))))
-       ([eqv? c KEY_LEFT]
+       ((eqv? c KEY_LEFT)
         #t)
 
        (else
@@ -274,7 +275,7 @@ box."
 
 (define (do-main-menu win)
   "Draw the top-level menu"
-  (let* ([entries-list
+  (let* ((entries-list
           ;; Name    Description         Handler
           `(
             ("USER"  "User Information"  ,get-user-information-entries)
@@ -284,17 +285,17 @@ box."
             ("TTY"  "This Terminal Information"  ,get-tty-information)
             ("HOST" "System Identification" ,get-system-information)
             ("LOCALE" "Internationalization information" ,get-locale-information)
-            )]
-         [menu-items 
+            ))
+         (menu-items 
           (map (lambda (entry)
                  (new-item (first entry) (second entry)))
-               entries-list)]
-         [menu (new-menu menu-items)]
-         [menu-margin 1]                ; outside the box
-         [menu-padding 2]               ; inside the box
-         [menu-height (- (lines) (* 2 menu-margin))]
-         [menu-width (- (cols) (* 2 menu-margin))]
-         [menu-win (newwin menu-height menu-width menu-margin menu-margin)])
+               entries-list))
+         (menu (new-menu menu-items))
+         (menu-margin 1)                ; outside the box
+         (menu-padding 2)               ; inside the box
+         (menu-height (- (lines) (* 2 menu-margin)))
+         (menu-width (- (cols) (* 2 menu-margin)))
+         (menu-win (newwin menu-height menu-width menu-margin menu-margin)))
     (define (_draw_menu)
       (clear win)
       (addchstr win (bold "Main Menu") #:x 1 #:y 0)
@@ -314,32 +315,32 @@ box."
 
     (_draw_menu)
     
-    (let loop ([c (getch menu-win)])
+    (let loop ((c (getch menu-win)))
       (cond
        ;; Motion controls
-       ([eqv? c KEY_DOWN]
+       ((eqv? c KEY_DOWN)
         (begin
           (menu-driver menu REQ_DOWN_ITEM)
           (loop (getch menu-win))))
-       ([eqv? c KEY_UP]
+       ((eqv? c KEY_UP)
         (begin
           (menu-driver menu REQ_UP_ITEM)
           (loop (getch menu-win))))
        
        ;; Menu item selection
-       ([or (eqv? c KEY_ENTER)
+       ((or (eqv? c KEY_ENTER)
             (eqv? c KEY_RIGHT)
             (eqv? c #\cr)
-            (eqv? c #\nl)]
+            (eqv? c #\nl))
         (begin
           (unpost-menu menu)
           ;; Call handler
-          (let ([entry (list-ref entries-list (item-index (current-item menu)))])
+          (let ((entry (list-ref entries-list (item-index (current-item menu)))))
             (do-sub-menu win (second entry) ((third entry)))
             (_draw_menu)
             (loop (getch menu-win)))))
 
-       ([eqv? c KEY_LEFT]
+       ((eqv? c KEY_LEFT)
         #t)
 
        (else
@@ -361,13 +362,13 @@ box."
               (display (string-append PROGRAM_NAME " version " PROGRAM_VERSION "\n")))
           (if help-wanted
               (display (string-append "\n"
-                                      PROGRAM_NAME " [options]\n"
+                                      PROGRAM_NAME " (options)\n"
                                       "  -v, --version   Display version\n"
                                       "  -h, --help      Display this help\n"))))
         ;; else
         (begin
           (setlocale LC_ALL "")
-          (let ([mainwin (mainwin-initialize)])
+          (let ((mainwin (mainwin-initialize)))
             (do-main-menu mainwin)
             (mainwin-finalize mainwin))))))
 
