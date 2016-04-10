@@ -320,7 +320,7 @@ gucu_winchnstr (SCM win, SCM n)
   {
     int ret;
     chtype *c_chstr = (chtype *) scm_malloc (sizeof (chtype) * (c_n + 1));
-    ret = winchnstr (_scm_to_window (win), c_chstr, scm_to_int (n));
+    ret = winchnstr (c_win, c_chstr, scm_to_int (n));
     if (ret != ERR)
       {
 	s_str = _scm_xstring_from_chstring (c_chstr);
