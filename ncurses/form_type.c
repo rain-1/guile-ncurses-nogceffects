@@ -181,11 +181,6 @@ gc_free_field (SCM field)
 
   if (f != NULL)
     {
-      int ret = free_field (f);
-      if (ret != E_OK)
-	{
-	  /* ??? --- what should happen when free fails? */
-	}
       SCM_SET_SMOB_DATA (field, NULL);
     }
 
@@ -318,23 +313,6 @@ gc_free_form (SCM x)
 
   if (form != NULL && form->form != NULL)
     {
-      retval = free_form (form->form);
-      form->form = (FORM *) NULL;
-      if (retval == E_BAD_ARGUMENT)
-	{
-	  scm_error_scm (SCM_BOOL_F,
-			 scm_from_locale_string ("garbage collection of form"),
-			 scm_from_locale_string ("bad argument"),
-			 SCM_BOOL_F, SCM_BOOL_F);
-	}
-      else if (retval == E_POSTED)
-	{
-	  scm_error_scm (SCM_BOOL_F,
-			 scm_from_locale_string ("garbage collection of form"),
-			 scm_from_locale_string ("posted"),
-			 SCM_BOOL_F, SCM_BOOL_F);
-	}
-
       /* Release scheme objects from the guardians */
       /* Detach the fields */
       if (form->fields)

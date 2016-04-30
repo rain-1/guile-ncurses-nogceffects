@@ -911,18 +911,14 @@ _scm_free_screen (SCM x)
 
   if (sp->screen)
     {
-      delscreen (sp->screen);
-      /* delscreen returns void */
       sp->screen = NULL;
     }
   if (sp->ifp)
     {
-      fclose (sp->ifp);
       sp->ifp = NULL;
     }
   if (sp->ofp)
     {
-      fclose (sp->ofp);
       sp->ofp = NULL;
     }
 }
@@ -1075,15 +1071,10 @@ free_window (SCM x)
     {
       if (win == stdscr)
         {
-          endwin ();
-          fprintf (stderr, "Freeing stdscr #<window %p>", (void *) stdscr);
-          delwin (stdscr);
           SCM_SET_SMOB_DATA (x, 0);
         }
       else
         {
-          /* This is going to break something */
-          delwin (win);
           SCM_SET_SMOB_DATA (x, 0);
         }
     }

@@ -157,8 +157,6 @@ gc_free_item (SCM item)
 
   assert (m != NULL);
 
-  free_item (m);
-
   return 0;
 }
 
@@ -269,30 +267,6 @@ gc_free_menu (SCM x)
   gm = (struct gucu_menu *) SCM_SMOB_DATA (x);
 
   assert (gm != NULL);
-
-  retval = free_menu (gm->menu);
-
-  if (retval == E_BAD_ARGUMENT)
-    {
-      scm_error_scm (SCM_BOOL_F,
-		     scm_from_locale_string ("garbage collection of menu"),
-		     scm_from_locale_string ("bad argument"),
-		     SCM_BOOL_F, SCM_BOOL_F);
-    }
-  else if (retval == E_POSTED)
-    {
-      scm_error_scm (SCM_BOOL_F,
-		     scm_from_locale_string ("garbage collection of menu"),
-		     scm_from_locale_string ("posted"),
-		     SCM_BOOL_F, SCM_BOOL_F);
-    }
-  else if (retval == E_SYSTEM_ERROR)
-    {
-      scm_error_scm (SCM_BOOL_F,
-		     scm_from_locale_string ("garbage collection of menu"),
-		     scm_from_locale_string ("system error"),
-		     SCM_BOOL_F, SCM_BOOL_F);
-    }
 
   /* Release scheme objects from the guardians */
   while (scm_is_true (scm_call_0 (gm->items_guard)))
